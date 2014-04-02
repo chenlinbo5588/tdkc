@@ -7,7 +7,11 @@
     <meta name="keywords" content="{$KEYWORDS}">
     <meta name="description" content="{$DESCRIPTION}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {foreach from=$cssFiles item=cssItem}<link href="css/{$cssItem}.css" rel='stylesheet' type='text/css'>
-    {/foreach}
 </head>
 <body>
+    <p>这里是首页</p>
+    <div class="footer">
+        
+    </div>
+</body>
+</html>

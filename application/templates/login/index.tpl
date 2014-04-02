@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/css/bootstrap.min.css" rel='stylesheet' type='text/css'>
+    <link href="/css/bootstrap.css" rel='stylesheet' type='text/css'>
     <link href="/css/login.css" rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -29,14 +29,19 @@
                 <label>密码</label>
                 <input type="password" name="password" class="form-control"  placeholder="密码">
             </div>
-            {*
             <label class="checkbox">
                 <input type="checkbox" name="remember-me" value="remember-me" checked="checked"> 记住用户名
             </label>
-            *}
             <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
         </form>
     </div>
-    {include file="section_footer.tpl"}
+    <!--[if lte IE 9]>
+    <script src="js/jquery.placeholder.1.3.js"></script>
+    <script>
+        $(function(){
+            $.Placeholder.init();
+        });
+    </script>
+    <![endif]-->
 </body>
 </html>

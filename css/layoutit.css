@@ -28,7 +28,7 @@ body {
 	width:200px;
 	left:0px;
 	bottom:0;
-	top:67px;
+	top:66px;
     z-index:10;
     border-right:1px solid #0099FF;
 	-webkit-transition: all 500ms ease;
@@ -63,7 +63,7 @@ body {
 }
 
 #topmenu,#profile {
-    margin:25px 0 0 200px;
+    margin:25px 0 0 199px;
     border-bottom: 0;
 }
 

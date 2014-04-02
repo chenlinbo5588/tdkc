@@ -17,7 +17,6 @@ class Login extends TZ_Controller {
         }
         */
         $this->setSEO('登录');
-        $this->assign('cssFiles',array('bootstrap','login'));
         $this->display();
     }
     

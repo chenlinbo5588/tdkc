@@ -11,8 +11,6 @@ class Logout extends TZ_Controller {
     {
         $this->session->sess_destroy();
         
-        $this->setSEO('登录');
-        $this->assign('cssFiles',array('bootstrap.min','login'));
         $this->display('index','login');
     }
     

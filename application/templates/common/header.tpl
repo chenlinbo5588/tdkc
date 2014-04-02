@@ -34,3 +34,4 @@
 <![endif]-->
 </head>
 <body>
+{include file="common/menu.tpl"}
