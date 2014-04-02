@@ -1,10 +1,5 @@
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
+    <div class="footer">
         
-        
-    </footer>
+    </div>
 </body>
 </html>

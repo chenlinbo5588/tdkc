@@ -8,10 +8,14 @@ require(APPPATH.'third_party/smarty'.TZ_SMATY_VERSION.'/Smarty.class.php');
  */
 class TZ_Controller extends CI_Controller {
     public $_smarty = null;
-    
+    public $tpldir = '';
+    public $tplName = '';
     
     public function __construct(){
         parent::__construct();
+        
+        $this->tpldir = strtolower(get_class($this));
+        
         $this->_init_smarty();
         $this->_init_config();
         $this->setDefaultSEO();
@@ -115,10 +119,25 @@ class TZ_Controller extends CI_Controller {
      *
      * @param type $pageTplName 
      */
-    public function display($pageTplName){
-        $this->_smarty->display(TZ_TPL_PATH.$pageTplName.'.tpl');
+    public function display($pageTplName = 'index',$dir = ''){
+        if($dir){
+            $file = TZ_TPL_PATH.trim($dir,'/').'/'.$pageTplName.'.tpl';
+        }else{
+            $file = TZ_TPL_PATH.trim($this->tpldir,'/').'/'.$pageTplName.'.tpl';
+        }
+        
+        if(file_exists($file)){
+            $this->_smarty->display($file);
+        }else{
+            echo "$file not found";
+            die();
+        }
+        
     }
     
+    public function setMainPage($mainPageName = 'index'){
+        $this->assign('MAIN_PAGE_NAME',$mainPageName.'.tpl');
+    }
     
     /**
      *

@@ -3,13 +3,13 @@
 
           <div class="row placeholders">
             <ul class="nav nav-pills">
-                <li><a href="{url_path('news','add',array(),true)}">+增加新闻公告</a></li>
+                <li><a href="{url_path('news','add','',true)}">+增加新闻公告</a></li>
              </ul>
           </div>
 
           <!--<h2 class="sub-header">新闻公告列表</h2>-->
           <div class="table-responsive">
-            <form role="form" class="form-inline" name="searchForm" action="{url_path('news','search',array(),true)}" method="get">
+            <form role="form" class="form-inline" name="searchForm" action="{url_path('news','search','',true)}" method="get">
                 <input type="hidden" name="c" value="news"/>
                 <input type="hidden" name="m" value="search"/>
                 <div class="form-group">

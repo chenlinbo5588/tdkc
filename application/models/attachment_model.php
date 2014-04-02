@@ -6,7 +6,7 @@
  */
 class Attachment_Model extends TZ_Model {
     
-    public $_tableName = 'attachment';
+    public $_tableName = 'tb_attachment';
     
     public function __construct(){
         parent::__construct();

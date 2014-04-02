@@ -1,10 +1,6 @@
           <h1 class="page-header">修改密码</h1>
           <div class="row placeholders">
-            {*
-            <ul class="nav nav-pills">
-                <!--<li><a href="javascript:history.go(-1);">返回</a></li>-->
-             </ul>
-             *}
+            
           </div>
           
           <div class="table-responsive">
@@ -24,7 +20,7 @@
                 });
             </script>
             {/if}
-            <form role="form" name="editForm" action="{url_path('admin','save_password',array(),true)}" method="post">
+            <form role="form" name="editForm" action="{url_path('admin','save_password','',true)}" method="post">
                 <div class="form-group">
                     <label for="old_psw">原密码</label>
                     <input type="password" class="form-control" name="old_psw" value="" data-required id="old_psw" style="width:600px;" placeholder="请输入原密码"/>

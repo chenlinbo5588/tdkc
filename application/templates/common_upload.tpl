@@ -5,7 +5,7 @@
         <script type="text/javascript" src="/js/swfup/handlers.js"></script>
 
         <script>
-        var upload_url = '{url_path('file','upload',array(),true)}';
+        var upload_url = '{url_path('file','upload','',true)}';
         
         function createSwfUpload(index,allowSize, allowFile,successHandler){
             var upload = new SWFUpload({

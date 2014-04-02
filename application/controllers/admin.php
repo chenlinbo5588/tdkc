@@ -2,22 +2,20 @@
 
 
 class Admin extends TZ_Admin_Controller {
+    
     public function __construct(){
-	parent::__construct();
-
+        parent::__construct();
     }
    
     public function index()
     {
-        $this->setMainPage('index');
-        $this->displayAdmin();
+        $this->display();
     }
     
     public function change_password()
     {
         
-        $this->setMainPage('change_password');
-        $this->displayAdmin();
+        $this->display();
     }
     
     
@@ -86,9 +84,7 @@ class Admin extends TZ_Admin_Controller {
         }
         
         $this->assign('message',$message);
-        $this->setMainPage('change_password');
-        $this->displayAdmin();
-        
+        $this->display('change_password');
         
     }
     

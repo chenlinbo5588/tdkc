@@ -13,7 +13,7 @@ class Logout extends TZ_Controller {
         
         $this->setSEO('登录');
         $this->assign('cssFiles',array('bootstrap.min','login'));
-        $this->display('login');
+        $this->display('index','login');
     }
     
 }

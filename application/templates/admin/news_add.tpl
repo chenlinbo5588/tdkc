@@ -21,7 +21,7 @@
                 });
             </script>
             {/if}
-            <form role="form" name="addForm" action="{url_path('news','save',array(),true)}" method="post">
+            <form role="form" name="addForm" action="{url_path('news','save','',true)}" method="post">
                 <div class="form-group">
                     {if $action == 'edit' }
                     <input type="hidden" id="news_id" name="news_id" value="{$info['news_id']}" />
@@ -59,7 +59,7 @@
                     
                     $.ajax({
                         type:"POST",
-                        url:'{url_path('news','save',array(),true)}',
+                        url:'{url_path('news','save','',true)}',
                         data:{
                             title:"",
                             id: $("#news_id").length ? $("#news_id").val() : 0,
@@ -77,7 +77,7 @@
             KindEditor.ready(function(K) {
                 editor1 = K.create('textarea[name="content"]', {
                     cssPath : '/js/plugins/code/prettify.css',
-                    uploadJson : '{url_path('file','upload',array(),true)}',
+                    uploadJson : '{url_path('file','upload','',true)}',
                     //uploadJson:'/upload_json.php',
                     allowFileManager : false,
                     afterCreate : function() {

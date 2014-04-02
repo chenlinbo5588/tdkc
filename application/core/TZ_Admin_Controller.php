@@ -7,9 +7,10 @@
 class TZ_Admin_Controller extends TZ_Controller {
     
     public $_userProfile = null;
+    public $_userMenu = array();
     
     public function __construct(){
-	parent::__construct();
+        parent::__construct();
         
         /*
          * 登录检查
@@ -26,7 +27,7 @@ class TZ_Admin_Controller extends TZ_Controller {
         
         $user = $this->User_Model->getUserByAccount($session['account']);
         
-        if($user[0]['password'] != $this->encrypt->decode($session['password'])){
+        if($user[0]['psw'] != $this->encrypt->decode($session['psw'])){
             redirect(url_path('login'));
         }
         
@@ -34,11 +35,4 @@ class TZ_Admin_Controller extends TZ_Controller {
         $this->assign('userProfile',$session);
     }
     
-    public function setMainPage($mainPageName = 'index'){
-        $this->assign('MAIN_PAGE_NAME',$mainPageName.'.tpl');
-    }
-    
-    public function displayAdmin(){
-        $this->_smarty->display(TZ_TPL_PATH.'/admin/main_page.tpl');
-    }
 }

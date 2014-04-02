@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container">
-        <form class="form-signin" role="form" name="login-form" action="{url_path('login','submit')}" method="post">
+        <form class="form-signin" role="form" name="login-form" action="{url_path('login','submit','',true)}" method="post">
             <h2 class="form-signin-heading">系统登录</h2>
 
             {if (!empty($errorMsg)) }

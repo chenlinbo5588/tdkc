@@ -17,8 +17,8 @@ class Login extends TZ_Controller {
         }
         */
         $this->setSEO('登录');
-        $this->assign('cssFiles',array('bootstrap.min','login'));
-        $this->display('login');
+        $this->assign('cssFiles',array('bootstrap','login'));
+        $this->display();
     }
     
     
@@ -35,7 +35,7 @@ class Login extends TZ_Controller {
         }else{
             $user = $this->User_Model->getUserByAccount($_POST['username']);
             
-            if($user && md5(config_item('encryption_key').$_POST['password']) == $user[0]['password']){
+            if($user && md5(config_item('encryption_key').$_POST['password']) == $user[0]['psw']){
                 
                 /*
                 if($_POST['remember-me'] == 'remember-me'){
@@ -44,7 +44,7 @@ class Login extends TZ_Controller {
                 */
                 
                 $this->load->library('encrypt');
-                $user[0]['password'] = $this->encrypt->encode($user[0]['password']);
+                $user[0]['psw'] = $this->encrypt->encode($user[0]['psw']);
                 $profile['profile'] = $user[0];
                 
                 $this->session->set_userdata($profile);
@@ -57,11 +57,11 @@ class Login extends TZ_Controller {
         $this->assign('errorMsg',$errorMsg);
         
         if($loginSuccess){
-            redirect(url_path('admin'));
+            redirect(url_path('admin','index','',false));
         }else{
             $this->setSEO('登录');
-            $this->assign('cssFiles',array('bootstrap.min','login'));
-            $this->display('login');
+            $this->assign('cssFiles',array('bootstrap','login'));
+            $this->display();
         }
     }
     

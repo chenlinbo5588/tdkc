@@ -634,7 +634,7 @@ function location($url, $method = 1, $extend = 2) {
  * @param type $param 
  * @param type $widthEntrance 
  */
-function url_path($control = 'index',$method = 'index',$param = array(),$widthEntrance = false){
+function url_path($control = 'index',$method = 'index',$param = '',$widthEntrance = true){
     
     $url_path = array();
     $s = array();
@@ -643,17 +643,16 @@ function url_path($control = 'index',$method = 'index',$param = array(),$widthEn
         $url_path[config_item('controller_trigger')] = $control;
         $url_path[config_item('function_trigger')] = $method;
         
-        $url_path = array_merge($url_path,$param);
-        
         foreach($url_path as $k => $v){
             $s[] = $k.'='.urlencode($v);
         }
         
-        return ($widthEntrance == true ? '/index.php?': '').implode('&', $s);
+        return ($widthEntrance == true ? '/index.php?': '').implode('&', $s).'&'.$param;
     }else{
         $string  = '/'.$control.'/'.$method.'/';
-       
-        foreach($param as $k => $v){
+        $tparam = explode('&',$param);
+        
+        foreach($tparam as $k => $v){
             $s[] = $k .'/'.$v;
         }
         

@@ -263,6 +263,9 @@ class CI_Config {
 		}
 		else
 		{
+            if(strpos($uri,'?') !== false){
+                $uri = substr($uri,strpos($uri,'?') + 1);
+            }
 			return $this->slash_item('base_url').$this->item('index_page').'?'.$this->_uri_string($uri);
 		}
 	}
