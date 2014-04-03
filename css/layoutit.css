@@ -7,7 +7,23 @@ body {
 	-ms-transition: margin 500ms ease;
 	-o-transition: margin 500ms ease;
 	transition: margin 500ms ease;
+    font-size:62.5%;
 }
+
+ul,ol {
+    list-style: none;
+}
+
+.required em {
+    color:#f00;
+    font-weight: bold;
+    padding:0 2px;
+}
+
+.validate_error {
+    color:#f00;
+}
+
 
 .navbar-inverse .brand {width:180px; color:#fff; }
 .brand img {float:left; margin:2px 10px 0 0; }
@@ -28,7 +44,7 @@ body {
 	width:200px;
 	left:0px;
 	bottom:0;
-	top:66px;
+	top:63px;
     z-index:10;
     border-right:1px solid #0099FF;
 	-webkit-transition: all 500ms ease;
@@ -43,7 +59,7 @@ body {
     display:block;
     padding:10px 15px;
 }
-.sidebar-nav li a:hover {
+.sidebar-nav li a:hover ,.sidebar-nav li.active a {
     border-top:1px solid #0099FF;
     border-bottom: 1px solid #0099FF;
     border-right:1px solid transparent;
@@ -52,7 +68,7 @@ body {
     
 }
 
-.sidebar-nav li.first a:hover {
+.sidebar-nav li.first a:hover,.sidebar-nav li.first a {
     border-top:0px;
 }
 

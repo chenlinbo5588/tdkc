@@ -638,6 +638,17 @@ function url_path($control = 'index',$method = 'index',$param = '',$widthEntranc
     
     $url_path = array();
     $s = array();
+    $t = array();
+    
+    if(is_array($param)){
+        foreach($param as $k => $v){
+            $t[] = $k.'='.urlencode($v);
+        }
+        
+        if(!empty($t)){
+            $param = implode('&',$t);
+        }
+    }
     
     if(config_item('enable_query_strings')){
         $url_path[config_item('controller_trigger')] = $control;
@@ -647,7 +658,7 @@ function url_path($control = 'index',$method = 'index',$param = '',$widthEntranc
             $s[] = $k.'='.urlencode($v);
         }
         
-        return ($widthEntrance == true ? '/index.php?': '').implode('&', $s).'&'.$param;
+        return ($widthEntrance == true ? '/'.config_item('index_page').'?': '').implode('&', $s).'&'.$param;
     }else{
         $string  = '/'.$control.'/'.$method.'/';
         $tparam = explode('&',$param);
@@ -656,7 +667,7 @@ function url_path($control = 'index',$method = 'index',$param = '',$widthEntranc
             $s[] = $k .'/'.$v;
         }
         
-        return $string.implode('/', $s);
+        return ($widthEntrance == true ? '/'.config_item('index_page') : '').$string.implode('/', $s);
     }
     
 }
@@ -734,6 +745,84 @@ function pageArrayGenerator($currPage,$pageSize,$total, $url = '',$callJs = 'pag
 //排序
 function cmp_func($a, $b) {
 	return strcmp($a['datetime'], $b['datetime']);
+}
+
+
+
+function idcard_verify_number($idcard_base){
+    if (strlen($idcard_base) != 17){ return false;}
+    
+    $factor = array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
+
+    //校验码对应值
+    $verify_number_list = array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
+    $checksum = 0;
+    for ($i = 0; $i < strlen($idcard_base); $i++){
+        $checksum += substr($idcard_base, $i, 1) * $factor[$i];
+    }
+    $mod = $checksum % 11;
+    $verify_number = $verify_number_list[$mod];
+
+    return $verify_number;
+
+}
+
+//15位升级18位
+function idcard_15to18($idcard){
+    if (strlen($idcard) != 15){
+        return false;
+    }else{
+    //若身份证顺序码是996 997 998 999，说明是为百岁老人准备的特殊码
+    if (array_search(substr($idcard, 12, 3), array('996', '997', '998', '999')) !== false){
+        $idcard = substr($idcard, 0, 6) . '18'. substr($idcard, 6, 9);
+    }else{
+        $idcard = substr($idcard, 0, 6) . '19'. substr($idcard, 6, 9);
+    }
+    }
+    $idcard = $idcard . idcard_verify_number($idcard);
+    return $idcard;
+}
+
+
+/**
+ * 验证身份证号
+ * @param $vStr
+ * @return bool
+ */
+
+function isCreditNo($vStr)
+{
+    $vCity = array(
+        '11','12','13','14','15','21','22',
+        '23','31','32','33','34','35','36',
+        '37','41','42','43','44','45','46',
+        '50','51','52','53','54','61','62',
+        '63','64','65','71','81','82','91'
+    );
+    if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $vStr)) return false;
+    if (!in_array(substr($vStr, 0, 2), $vCity)) return false;
+    $vStr = preg_replace('/[xX]$/i', 'a', $vStr);
+    $vLength = strlen($vStr);
+    
+    if ($vLength == 18)
+    {
+        $vBirthday = substr($vStr, 6, 4) . '-' . substr($vStr, 10, 2) . '-' . substr($vStr, 12, 2);
+    } else {
+        $vBirthday = '19' . substr($vStr, 6, 2) . '-' . substr($vStr, 8, 2) . '-' . substr($vStr, 10, 2);
+    }
+
+    if (date('Y-m-d', strtotime($vBirthday)) != $vBirthday) return false;
+    if ($vLength == 18)
+    {
+        $vSum = 0;
+        for ($i = 17 ; $i >= 0 ; $i--)
+        {
+            $vSubStr = substr($vStr, 17 - $i, 1);
+            $vSum += (pow(2, $i) % 11) * (($vSubStr == 'a') ? 10 : intval($vSubStr , 11));
+        }
+        if($vSum % 11 != 1) return false;
+    }
+    return true;
 }
 
 

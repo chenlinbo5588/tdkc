@@ -10,14 +10,32 @@ class TZ_Controller extends CI_Controller {
     public $_smarty = null;
     public $tpldir = '';
     public $tplName = '';
+    public $isAjax = 0;
+    public $reqtime;
+    
     
     public function __construct(){
         parent::__construct();
         
-        $this->tpldir = strtolower(get_class($this));
+        $this->load->helper(array('form', 'url'));
+        $this->load->library('form_validation');
+        /*
+        echo $this->uri->uri_string();
+        //var_dump($this->uri);
+        $array = array('product' => 'shoes', 'size' => 'large', 'color' => 'red');
+        $str = $this->uri->assoc_to_uri($array);
+        //echo $str;
+         */
+        $this->tpldir = empty($_GET[''.config_item('controller_trigger')]) ? 'index' : strtolower($_GET[''.config_item('controller_trigger')]);
+        $this->tplName = empty($_GET[''.config_item('function_trigger')]) ? 'index' : strtolower($_GET[''.config_item('function_trigger')]);
+        $this->isAjax = !empty($_GET['isajax']) ? 1:0;
+        
+        $this->reqtime = $_SERVER['REQUEST_TIME'];
         
         $this->_init_smarty();
         $this->_init_config();
+        $this->_init_mobile();
+        
         $this->setDefaultSEO();
     }
     
@@ -42,6 +60,12 @@ class TZ_Controller extends CI_Controller {
     protected function _init_config(){
         $this->_smarty->assign('NO_COVER_IMG',config_item('no_cover_image'));
     }
+    
+    protected function _init_mobile(){
+        
+        
+    }
+    
     
     /**
      *
@@ -119,11 +143,18 @@ class TZ_Controller extends CI_Controller {
      *
      * @param type $pageTplName 
      */
-    public function display($pageTplName = 'index',$dir = ''){
-        if($dir){
-            $file = TZ_TPL_PATH.trim($dir,'/').'/'.$pageTplName.'.tpl';
+    public function display($pageTplName = '',$dir = ''){
+        
+        if(!$dir){
+            $file = TZ_TPL_PATH.trim($this->tpldir,'/').'/';
         }else{
-            $file = TZ_TPL_PATH.trim($this->tpldir,'/').'/'.$pageTplName.'.tpl';
+            $file = TZ_TPL_PATH.trim($dir,'/').'/';
+        }
+        
+        if(!$pageTplName){
+            $file .= $this->tplName .'.tpl';
+        }else{
+            $file .= $pageTplName.'.tpl';
         }
         
         if(file_exists($file)){
@@ -135,6 +166,17 @@ class TZ_Controller extends CI_Controller {
         
     }
     
+    public function isGetRequest(){
+        return 'get' == strtolower($_SERVER['REQUEST_METHOD']) ? 1 : 0;
+    }
+    public function isPostRequest(){
+        return 'post' == strtolower($_SERVER['REQUEST_METHOD']) ? 1 : 0;
+    }
+    
+    /**
+     * 废弃
+     * @param type $mainPageName 
+     */
     public function setMainPage($mainPageName = 'index'){
         $this->assign('MAIN_PAGE_NAME',$mainPageName.'.tpl');
     }

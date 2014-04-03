@@ -7,6 +7,3 @@ class System extends TZ_Admin_Controller {
 		$this->display();
 	}
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */

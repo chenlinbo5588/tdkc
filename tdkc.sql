@@ -4,14 +4,27 @@ Source Host: localhost
 Source Database: tdkc
 Target Host: localhost
 Target Database: tdkc
-Date: 2014/4/1 ���ڶ� 16:49:03
+Date: 2014/4/3 ������ 17:17:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
--- Table structure for attachment
+-- Table structure for ci_sessions
 -- ----------------------------
-CREATE TABLE `attachment` (
+CREATE TABLE `ci_sessions` (
+  `session_id` varchar(40) NOT NULL DEFAULT '0',
+  `ip_address` varchar(45) NOT NULL DEFAULT '0',
+  `user_agent` varchar(120) NOT NULL,
+  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_data` text NOT NULL,
+  PRIMARY KEY (`session_id`),
+  KEY `last_activity_idx` (`last_activity`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for tb_attachment
+-- ----------------------------
+CREATE TABLE `tb_attachment` (
   `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `file_name` varchar(200) NOT NULL DEFAULT '',
   `file_size` int(11) NOT NULL DEFAULT '0' COMMENT '字节数',
@@ -24,19 +37,6 @@ CREATE TABLE `attachment` (
   `createtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updatetime` datetime NOT NULL,
   PRIMARY KEY (`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for ci_sessions
--- ----------------------------
-CREATE TABLE `ci_sessions` (
-  `session_id` varchar(40) NOT NULL DEFAULT '0',
-  `ip_address` varchar(45) NOT NULL DEFAULT '0',
-  `user_agent` varchar(120) NOT NULL,
-  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_data` text NOT NULL,
-  PRIMARY KEY (`session_id`),
-  KEY `last_activity_idx` (`last_activity`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -492,12 +492,14 @@ CREATE TABLE `tb_shared_file` (
 -- ----------------------------
 CREATE TABLE `tb_user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) NOT NULL,
+  `account` varchar(15) NOT NULL,
+  `name` varchar(20) NOT NULL,
   `id_card` varchar(20) NOT NULL DEFAULT '',
   `email` varchar(40) NOT NULL DEFAULT '',
   `alias_name` varchar(20) NOT NULL DEFAULT '' COMMENT '别名',
+  `gh` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '工号',
   `psw` varchar(32) NOT NULL DEFAULT '' COMMENT '登陆密码',
-  `sex` char(2) NOT NULL DEFAULT '男',
+  `sex` char(1) NOT NULL DEFAULT 'm',
   `age` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `birthday` datetime NOT NULL,
   `mobile` varchar(15) NOT NULL DEFAULT '' COMMENT '手机号码',
@@ -512,12 +514,16 @@ CREATE TABLE `tb_user` (
   `current_job` varchar(20) NOT NULL DEFAULT '' COMMENT '当前职位',
   `enter_date` int(11) unsigned NOT NULL COMMENT '院入年月',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '锁定',
+  `status` varchar(10) NOT NULL DEFAULT '正常' COMMENT '录记状态',
   `creator` varchar(20) NOT NULL DEFAULT '',
   `updator` varchar(20) NOT NULL DEFAULT '',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `idx_account` (`account`),
+  UNIQUE KEY `idx_gh` (`gh`),
+  KEY `idx_status` (`status`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_user_event
@@ -574,3 +580,8 @@ CREATE TABLE `tb_user_menu` (
 -- Records 
 -- ----------------------------
 INSERT INTO `ci_sessions` VALUES ('170bda462e02fb80a9aa00674a8cb3a9', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396342038', '');
+INSERT INTO `ci_sessions` VALUES ('f86ee54f3f9968463d1a506d1a1acc88', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396516370', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:26:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:7:\"id_card\";s:1:\"0\";s:5:\"email\";s:1:\"0\";s:10:\"alias_name\";s:0:\"\";s:3:\"psw\";s:88:\"DG1un9xIkcGse4ufjDBGXNqOZuFHvqS70+F7S8ExXAREOlz8cb2fVfue1rI9OFq8KeuL3g2HtUltQAIzplkfvQ==\";s:3:\"sex\";s:1:\"m\";s:3:\"age\";s:1:\"0\";s:8:\"birthday\";s:19:\"0000-00-00 00:00:00\";s:6:\"mobile\";s:0:\"\";s:3:\"tel\";s:0:\"\";s:7:\"address\";s:0:\"\";s:2:\"sm\";s:1:\"0\";s:10:\"virtual_no\";s:0:\"\";s:11:\"school_name\";s:0:\"\";s:15:\"graduation_date\";s:1:\"0\";s:5:\"major\";s:0:\"\";s:9:\"job_title\";s:0:\"\";s:11:\"current_job\";s:0:\"\";s:10:\"enter_date\";s:1:\"0\";s:6:\"locked\";s:1:\"0\";s:7:\"creator\";s:5:\"admin\";s:7:\"updator\";s:5:\"admin\";s:10:\"createtime\";s:1:\"0\";s:10:\"updatetime\";s:1:\"0\";}}');
+INSERT INTO `tb_user` VALUES ('1', 'admin', '超级管理员', '0', '0', '', '0', 'ea021abea3e9ac7a0f172f65336c0250', 'm', '0', '0000-00-00 00:00:00', '', '', '', '0', '', '', '0', '', '', '', '0', '0', '正常', 'admin', 'admin', '0', '0');
+INSERT INTO `tb_user` VALUES ('2', 'admin1', '爱上dsadsa', '', '', '', '1', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '0', '', '', '', '0', '0', '正常', '超级管理员', '超级管理员', '1396515367', '1396515367');
+INSERT INTO `tb_user` VALUES ('3', 'hh12', '测试名字', '', '', '', '2', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '0', '', '', '', '0', '0', '正常', '超级管理员', '超级管理员', '1396515457', '1396515457');
+INSERT INTO `tb_user` VALUES ('4', 'h122', '测试名字1', '', '', '', '3', 'dd1f73c3a84bee119fd6cd206a5ace31', 'f', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '0', '', '', '', '0', '0', '正常', '超级管理员', '超级管理员', '1396515749', '1396515749');

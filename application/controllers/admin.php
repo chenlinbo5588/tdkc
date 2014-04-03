@@ -72,7 +72,7 @@ class Admin extends TZ_Admin_Controller {
                     $this->session->set_userdata($profile);
                     $message['feedback'] = '修改成功,3秒后自动退出,请重新登录';
                     $message['className'] = 'success';
-                    $message['location'] = url_path('login','index',array(),true);
+                    $message['location'] = url_path('login','index');
                     break;
                 }else{
                     $message['feedback'] = "原密码错误";

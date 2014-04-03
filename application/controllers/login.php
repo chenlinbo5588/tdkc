@@ -32,7 +32,7 @@ class Login extends TZ_Controller {
         if(empty($_POST['username']) || empty($_POST['password'])){
             $errorMsg['message'] = "请输入账号和密码";
         }else{
-            $user = $this->User_Model->getUserByAccount($_POST['username']);
+            $user = $this->User_Model->getUserByAccount($_POST['username'],'*');
             
             if($user && md5(config_item('encryption_key').$_POST['password']) == $user[0]['psw']){
                 
@@ -56,7 +56,7 @@ class Login extends TZ_Controller {
         $this->assign('errorMsg',$errorMsg);
         
         if($loginSuccess){
-            redirect(url_path('admin','index','',false));
+            redirect(url_path('admin'));
         }else{
             $this->setSEO('登录');
             $this->assign('cssFiles',array('bootstrap','login'));

@@ -19,10 +19,14 @@ class TZ_Model extends CI_Model {
     
     public function getList($condition = array()){
         
+        $data = array();
+        
         if($condition['select']){
             $this->db->select($condition['select']);
-        }else{
-            $this->db->select('*');
+        }
+        
+        if($condition['like']){
+            $this->db->like($condition['like']);
         }
         
         if($condition['where']){
@@ -41,7 +45,20 @@ class TZ_Model extends CI_Model {
             $query = $this->db->get($this->_tableName);
         }
         
-        return $query->result_array();
+        $data['data'] = $query->result_array();
+        /**
+         * 先获得数据 
+         */
+        if($condition['pager']){
+            if($condition['where']){
+                $this->db->where($condition['where']);
+            }
+
+            $config['total_rows'] = $this->db->count_all_results($this->_tableName);
+            $pager = pageArrayGenerator($_GET['page'],$condition['pager']['page_size'],$config['total_rows'],$condition['pager']['query_param']);
+            $data['pager'] = $pager;
+        }
+        return $data;
 
     }
 }

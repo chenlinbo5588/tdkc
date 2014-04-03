@@ -10,8 +10,7 @@ class Logout extends TZ_Controller {
     public function index()
     {
         $this->session->sess_destroy();
-        
-        $this->display('index','login');
+        redirect(url_path('login'));
     }
     
 }
