@@ -61,6 +61,10 @@ class TZ_Controller extends CI_Controller {
     
     protected function _init_config(){
         $this->_smarty->assign('NO_COVER_IMG',config_item('no_cover_image'));
+        
+        if(ENVIRONMENT == 'production'){
+            $this->_smarty->assign('js_compress','min.');
+        }
     }
     
     protected function _init_mobile(){

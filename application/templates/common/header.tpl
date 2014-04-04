@@ -19,13 +19,13 @@
 
 <!-- Fav and touch icons -->
 <link rel="shortcut icon" href="/img/favicon.png">
-<script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/jquery-1.9.1.{$js_compress}js"></script>
+{*<script type="text/javascript" src="js/bootstrap.{$js_compress}js"></script>*}
 <script src="/js/json2.js"></script>
 <script src="/js/public.js"></script>
     
 <!--[if lte IE 9]>
-<script src="/js/jquery.placeholder.1.3.js"></script>
+<script src="/js/jquery.placeholder.1.3.{$js_compress}js"></script>
 <script>
     $(function(){
         $.Placeholder.init();
