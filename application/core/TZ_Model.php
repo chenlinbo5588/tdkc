@@ -12,10 +12,27 @@ class TZ_Model extends CI_Model {
     }
     
     
-    public function getCount(){
+    public function getCount($condition = array()){
+        if($condition['where']){
+            $this->db->where($condition['where']);
+        }
+        
         return $this->db->count_all_results($this->_tableName);
     }
     
+    public function getById($condition){
+        if($condition['where']){
+            $this->db->where($condition['where']);
+            $query = $this->db->get($this->_tableName);
+            $data = $query->result_array();
+            
+            if($data[0]){
+                return $data[0];
+            }
+        }
+        
+        return false;
+    }
     
     public function getList($condition = array()){
         
@@ -53,7 +70,10 @@ class TZ_Model extends CI_Model {
             if($condition['where']){
                 $this->db->where($condition['where']);
             }
-
+            if($condition['like']){
+                $this->db->like($condition['like']);
+            }
+            
             $config['total_rows'] = $this->db->count_all_results($this->_tableName);
             $pager = pageArrayGenerator($_GET['page'],$condition['pager']['page_size'],$config['total_rows'],$condition['pager']['query_param']);
             $data['pager'] = $pager;

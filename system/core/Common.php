@@ -658,7 +658,7 @@ function url_path($control = 'index',$method = 'index',$param = '',$widthEntranc
             $s[] = $k.'='.urlencode($v);
         }
         
-        return ($widthEntrance == true ? '/'.config_item('index_page').'?': '').implode('&', $s).'&'.$param;
+        return ($widthEntrance == true ? '/'.config_item('index_page').'?': '').implode('&', $s).($param ? '&'.$param : '');
     }else{
         $string  = '/'.$control.'/'.$method.'/';
         $tparam = explode('&',$param);
@@ -675,7 +675,7 @@ function url_path($control = 'index',$method = 'index',$param = '',$widthEntranc
 
 function pagination_config($page_param_name = 'per_page'){
    
-    $config['full_tag_open'] = '<ul class="pagination pagination-lg">';
+    $config['full_tag_open'] = '<ul class="pagination">';
     $config['full_tag_close'] = '</ul>';
     $config['first_link'] = '第一页';
     $config['first_tag_open'] = '<li>';

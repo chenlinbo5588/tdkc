@@ -104,6 +104,5 @@ function pageJs(num) {
 	else {
 		url += '&page=' + num;
 	}
-
 	location.href = url;
 }

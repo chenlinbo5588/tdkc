@@ -61,9 +61,48 @@ class User_Model extends TZ_Model {
         
     }
     
+    public function fake_delete($user){
+        
+        $where = array(
+            'user_id' => $user['id']
+        );
+        
+        $data = array(
+            'status' => '已删除'
+        );
+        
+        return $this->db->update($this->_tableName, $data, $where);
+    }
+    
+    
     public function update($user){
+        $data = array(
+            'name' => $user['name'],
+            'id_card' => $user['id_card'],
+            'email' => $user['email'],
+            'sex' => $user['sex'],
+            'mobile' => $user['mobile'],
+            'tel' => $user['tel'],
+            'virtual_no' => $user['virtual_no'],
+            'school_name' => $user['school_name'],
+            'major' => $user['major'],
+            'graduation_date' => $user['graduation_date'],
+            'job_title' => $user['job_title'],
+            'current_job' => $user['current_job'],
+            'enter_date' => $user['enter_date'],
+            'updator' => $user['updator'],
+            'updatetime' => time()
+        );
         
+        if(!$user['psw']){
+            $data['psw'] = md5(config_item('encryption_key').$user['psw']);
+        }
         
+        $where = array(
+            'user_id' => $user['id']
+        );
+        
+        return $this->db->update($this->_tableName, $data, $where);
     }
     
     public function lock($user){

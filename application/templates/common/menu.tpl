@@ -65,3 +65,4 @@
 <!-- side menu end -->
 <div class="container-fluid" style="margin: 16px 0 0 0;">
     <div style="min-height: 590px;padding:20px;">
+        {include file="common/breadcrumb.tpl"}

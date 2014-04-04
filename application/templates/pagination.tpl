@@ -1,5 +1,5 @@
 {if ($page['pager']['pageLastNum'] > 1)}
-<ul class="pagination pagination-lg">
+<ul class="pagination">
 	{if ($page['pager']['pageNow'] != 1)}
         <li><a href="javascript:void(0)" onclick="{$page['pager']['callJs']}(1);return false;">第一页</a></li>
 		<li><a href="javascript:void(0)" onclick="{$page['pager']['callJs']}({$page['pager']['pageNow'] - 1});return false;">上一页</a></li>
