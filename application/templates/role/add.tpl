@@ -1,0 +1,32 @@
+{include file="common/header.tpl"}
+            <div class="row-fluid">
+                {if $action == 'edit'}
+                <form action="{url_path('role','edit')}" method="post" name="roleform">
+                    <input type="hidden" name="id" value="{$role['id']}"/>
+                {else}
+                <form action="{url_path('role','add')}" method="post" name="roleform">
+                {/if}
+                    <ul class="formarea">
+                        <li>
+                            <label class="required"><em>*</em><strong>角色名称</strong><input type="text" name="name" value="{$role['name']}" placeholder="请输入角色姓名"/></label><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
+                        </li>
+                        <li>{form_error('name')}</li>
+                     </ul>
+                </form>
+                <script>
+                    $(function(){
+                    {if $feedback == 'success' && $action != 'edit'}
+                        if(confirm('{$feedMessage}')){
+                            location.href = "{url_path('role','add')}";
+                        }else{
+                            location.href = "{url_path('role')}";
+                        }
+                    {/if}
+                    
+                    {if $action == 'edit' && $feedMessage}
+                        alert('{$feedMessage}');
+                    {/if}
+                    });
+                </script>
+            </div>
+{include file="common/footer.tpl"}

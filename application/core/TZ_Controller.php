@@ -19,6 +19,8 @@ class TZ_Controller extends CI_Controller {
         
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
+        
+        $this->form_validation->set_error_delimiters('<span class="'.config_item('validation_error').'">', '</span>');
         /*
         echo $this->uri->uri_string();
         //var_dump($this->uri);

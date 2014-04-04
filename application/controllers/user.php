@@ -92,13 +92,12 @@ class User extends TZ_Admin_Controller {
     
     private function _addRules(){
         
-        $this->form_validation->set_error_delimiters('<span class="'.config_item('validation_error').'">', '</span>');
-        $this->form_validation->set_rules('name', '姓名', 'required|min_length[1]|max_length[20]');
+        $this->form_validation->set_rules('name', '姓名', 'required|min_length[1]|max_length[6]');
         //$this->form_validation->set_rules('name', '姓名', 'required|min_length[1]|max_length[20]');
         
         if(!empty($_POST['psw'])){
-            $this->form_validation->set_rules('psw', '密码', 'required|min_length[6]|max_length[12]|matches[psw2]');
-            $this->form_validation->set_rules('psw2', '密码确认', 'required|min_length[6]|max_length[12]');
+            $this->form_validation->set_rules('psw', '密码', 'required|min_length[6]|max_length[10]|matches[psw2]');
+            $this->form_validation->set_rules('psw2', '密码确认', 'required|min_length[6]|max_length[10]');
         }
 
         if(!empty($_POST['id_card'])){
@@ -106,10 +105,10 @@ class User extends TZ_Admin_Controller {
         }
 
         if(!empty($_POST['email'])){
-            $this->form_validation->set_rules('email', '邮箱', 'required|valid_email');
+            $this->form_validation->set_rules('email', '邮箱', 'required|valid_email|max_length[40]');
         }
 
-        $this->form_validation->set_rules('mobile', '手机号码', 'required|exact_length[11]|numeric');
+        $this->form_validation->set_rules('mobile', '手机号码', 'required|numeric|exact_length[11]');
         $this->form_validation->set_rules('enter_date', '入院时间', 'required');
     }
 
@@ -181,11 +180,14 @@ class User extends TZ_Admin_Controller {
             if(!empty($_GET['name'])){
                 $condition['like'] = array('name' => $_GET['name']);
             }
+            $condition['where'] = array();
+            
+            if(!empty($_GET['gh'])){
+                $condition['where']['gh'] = $_GET['gh'];
+            }
             
             if($_GET['inc_del'] != '是'){
-                $condition['where'] = array(
-                    'status = ' => '正常'  
-                );
+                $condition['where']['status'] = '正常';
             }
             
             $data = $this->User_Model->getList($condition);

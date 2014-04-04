@@ -106,3 +106,34 @@ function pageJs(num) {
 	}
 	location.href = url;
 }
+
+
+/**
+ * 公共删除逻辑
+ */
+$(function(){
+    $.loadingbar({
+        'url' : [new RegExp("\&m=delete")]
+    });
+
+    $(".delete").bind("click",function(){
+        if(confirm("确定要删除吗")){
+            $.ajax({
+                type :"POST",
+                dataType:"json",
+                url: $(this).attr('data-href'),
+                data : {
+                    isajax:"1",
+                    id:$(this).attr('data-id')
+                },
+                success:function(data){
+                    alert(data.body.text);
+                    if(data.code == 'success'){
+                        $("#row_" + data.body.id).remove();
+                    }
+                }
+            });
+
+        }
+    });
+});

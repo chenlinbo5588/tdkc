@@ -53,10 +53,10 @@
         <li><a href="#">仪器设备</a></li>
         <li><a href="#">耗材库存</a></li>
     </ul>
-    <ul class="nav nav-list" {if !in_array($smarty.get.c,array('system','user')) }style="display:none;"{/if}>
+    <ul class="nav nav-list" {if !in_array($smarty.get.c,array('system','user','role')) }style="display:none;"{/if}>
         <li class="first {if $smarty.get.c == 'user'}active{/if}"><a href="{url_path('user')}">用户管理</a></li>
-        <li><a href="#">角色管理</a></li>
-        <li><a href="#">权限管理</a></li>
+        <li class="{if $smarty.get.c == 'role'}active{/if}"><a href="{url_path('role')}">角色管理</a></li>
+        <!--<li><a href="#">权限管理</a></li>-->
         <li><a href="#">组织机构</a></li>
         <li><a href="#">项目类型设置</a></li>
         {*<li><a href="#">短信控制</a></li>*}

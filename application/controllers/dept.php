@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Role extends TZ_Admin_Controller {
+class Dept extends TZ_Admin_Controller {
 
 	public function __construct(){
         parent::__construct();
-        $this->load->model('Role_Model');
+        $this->load->model('Dept_Model');
     }
     
 	public function index()
@@ -17,9 +17,9 @@ class Role extends TZ_Admin_Controller {
 	{
         if($this->isPostRequest() && !empty($_POST['id'])){
             /**
-             * @todo 角色正在使用 ,不能被删除 
+             * @todo 如果部门下面有员工 ,不能被删除 
              */
-            $this->Role_Model->fake_delete($_POST);
+            $this->Dept_Model->fake_delete($_POST);
             $this->sendFormatJson('success',array('id' => $_POST['id'] , 'text' => '删除成功'));
         }else{
             $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '删除失败'));
@@ -35,8 +35,8 @@ class Role extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
-                $this->Role_Model->update($_POST);
-                $role = $this->Role_Model->getById(array('where' => array('id' => $_POST['id'])));
+                $this->Dept_Model->update($_POST);
+                $role = $this->Dept_Model->getById(array('where' => array('id' => $_POST['id'])));
                 
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"修改成功");
@@ -46,7 +46,7 @@ class Role extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
-            $role = $this->Role_Model->getById(array('where' => array('id' => $_GET['id'])));
+            $role = $this->Dept_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         
         $this->assign('role',$role);
@@ -68,7 +68,7 @@ class Role extends TZ_Admin_Controller {
                 // add
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
                 
-                $insertid = $this->Role_Model->add($_POST);
+                $insertid = $this->Dept_Model->add($_POST);
                 
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"创建成功,您需要继续添加吗");
@@ -108,7 +108,7 @@ class Role extends TZ_Admin_Controller {
                 );
             }
             
-            $data = $this->Role_Model->getList($condition);
+            $data = $this->Dept_Model->getList($condition);
             $this->assign('page',$data['pager']);
             $this->assign('data',$data);
             

@@ -57,6 +57,10 @@ class User_Model extends TZ_Model {
         
     }
     
+    /**
+     * really delete
+     * @param type $user 
+     */
     public function delete($user){
         
     }
@@ -105,11 +109,5 @@ class User_Model extends TZ_Model {
         return $this->db->update($this->_tableName, $data, $where);
     }
     
-    public function lock($user){
-        
-    }
     
-    public function unlock($user){
-        
-    }
 }

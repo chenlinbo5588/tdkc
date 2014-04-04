@@ -10,6 +10,27 @@ body {
     font-size:13px;
 }
 
+input[type=text] , input[type=password] {
+    /*color:#9a9a9a;*/
+    color:#333333;
+    height:28px;
+    line-height:28px;
+    border:1px solid #c7c7c7; 
+    text-indent:3px;
+}
+
+input[type=checkbox],input[type=radio] { margin-right:3px; vertical-align: middle;}
+input[type=text].grayed, input[type=password].grayed {
+    color:#cccccc;
+    border:1px solid #dedede;
+    background:#f7f7f7;
+    box-shadow:none;
+    -moz-box-shadow:none;
+    -o-box-shadow:none;
+    -webkit-box-shadow:none;
+}
+
+
 ul,ol {
     list-style: none;
 }
