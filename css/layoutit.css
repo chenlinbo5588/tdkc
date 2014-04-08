@@ -202,3 +202,49 @@ ul,ol {
     background: #0099FF;
     color: #fff;
 }
+
+
+.col {
+    border:1px solid #0099FF;
+}
+
+.col2 {
+    width:45%;
+    min-height:500px;
+    border:1px solid #0099FF;
+    float:left;
+    margin: 0 10px 0 0;
+}
+
+.col2 h3 {
+    margin:0;
+    padding:5px;
+    color:#fff;
+    background:#0099FF;
+}
+
+.deep1 {
+    text-indent: 1em;
+}
+.deep2 {
+    text-indent: 2em;
+}
+
+.deep3 {
+    text-indent: 3em;
+}
+.deep4 {
+    text-indent: 4em;
+}
+.deep5 {
+    text-indent: 5em;
+}
+.deep6 {
+    text-indent: 6em;
+}
+.deep7 {
+    text-indent: 7em;
+}
+.deep8 {
+    text-indent: 8em;
+}

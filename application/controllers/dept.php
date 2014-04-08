@@ -9,7 +9,9 @@ class Dept extends TZ_Admin_Controller {
     
 	public function index()
 	{
-        $this->_getPageData();
+        $data = $this->Dept_Model->getDeptListByTree();
+        
+        $this->assign('data',$data);
 		$this->display();
 	}
     
@@ -29,44 +31,55 @@ class Dept extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         
+        $data = $this->Dept_Model->getDeptListByTree();
         if($this->isPostRequest() && !empty($_POST['id'])){
             
             $this->_addRules();
+            $this->form_validation->set_rules('pid', '上级部门', 'required|integer');
             if($this->form_validation->run()){
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
                 $this->Dept_Model->update($_POST);
-                $role = $this->Dept_Model->getById(array('where' => array('id' => $_POST['id'])));
-                
+                $dept = $this->Dept_Model->getById(array('where' => array('id' => $_POST['id'])));
+                //print_r($dept);
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"修改成功");
             }else{
-                $role = $_POST;
+                $dept = $_POST;
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
-            $role = $this->Dept_Model->getById(array('where' => array('id' => $_GET['id'])));
+            $dept = $this->Dept_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         
-        $this->assign('role',$role);
+        $this->assign('dept',$dept);
+        $this->assign('data',$data);
         $this->display('add');
     }
     
     private function _addRules(){
-        $this->form_validation->set_rules('name', '角色名称', 'required|min_length[2]|max_length[10]');
+        $this->form_validation->set_rules('name', '部门名称', 'required|min_length[2]|max_length[50]');
     }
 
     public function add()
 	{
+        
+        $data = $this->Dept_Model->getDeptListByTree();
+        
         if($this->isPostRequest()){
-            $this->assign('role',$_POST);
+            $this->assign('dept',$_POST);
             
             $this->_addRules();
+            
             
             if($this->form_validation->run()){
                 // add
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
+                
+                if(empty($_POST['pid'])){
+                    $_POST['pid'] = 0;
+                }
                 
                 $insertid = $this->Dept_Model->add($_POST);
                 
@@ -77,45 +90,9 @@ class Dept extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
         }
-        
+        $this->assign('data',$data);
         $this->display();
 		
 	}
-    
-    
-    public function _getPageData(){
-        try {
-            
-            if(empty($_GET['page'])){
-                $_GET['page'] = 1;
-            }
-            
-            //$condition['select'] = 'a,b';
-            
-            $condition['order'] = "updatetime desc";
-            $condition['pager'] = array(
-                'page_size' => 2,
-                'current_page' => $_GET['page'],
-                'query_param' => url_path('role','index',array('name' => $_GET['name']))
-            );
-            if(!empty($_GET['name'])){
-                $condition['like'] = array('name' => $_GET['name']);
-            }
-            
-            if($_GET['inc_del'] != '是'){
-                $condition['where'] = array(
-                    'status = ' => '正常'  
-                );
-            }
-            
-            $data = $this->Dept_Model->getList($condition);
-            $this->assign('page',$data['pager']);
-            $this->assign('data',$data);
-            
-        }catch(Exception $e){
-            //@todo error code here
-        }
-        
-    }
 }
 

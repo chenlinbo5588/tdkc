@@ -19,7 +19,7 @@
         <li {if $smarty.get.c == 'info'}class="active"{/if}>
             <a href="#">信息中心</a>
         </li>
-        <li {if in_array($smarty.get.c,array('system','user'))}class="active"{/if}>
+        <li {if in_array($smarty.get.c,array('system','user','role','dept'))}class="active"{/if}>
             <a href="{url_path('system')}">系统管理</a>
         </li>
     </ul>
@@ -53,11 +53,11 @@
         <li><a href="#">仪器设备</a></li>
         <li><a href="#">耗材库存</a></li>
     </ul>
-    <ul class="nav nav-list" {if !in_array($smarty.get.c,array('system','user','role')) }style="display:none;"{/if}>
+    <ul class="nav nav-list" {if !in_array($smarty.get.c,array('system','user','role','dept')) }style="display:none;"{/if}>
         <li class="first {if $smarty.get.c == 'user'}active{/if}"><a href="{url_path('user')}">用户管理</a></li>
         <li class="{if $smarty.get.c == 'role'}active{/if}"><a href="{url_path('role')}">角色管理</a></li>
         <!--<li><a href="#">权限管理</a></li>-->
-        <li><a href="#">组织机构</a></li>
+        <li class="{if $smarty.get.c == 'dept'}active{/if}"><a href="{url_path('dept')}">组织机构</a></li>
         <li><a href="#">项目类型设置</a></li>
         {*<li><a href="#">短信控制</a></li>*}
     </ul>

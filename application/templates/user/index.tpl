@@ -50,7 +50,7 @@
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                <a href="{url_path('user','edit','id=')}{$item['id']}">编辑</a>
-                               {if $item['user_id'] != 1}<a href="javascript:void(0);" data-href="{url_path('user','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/if}
+                               {if $item['user_id'] != 1 && $item['status'] != '已删除'}<a href="javascript:void(0);" data-href="{url_path('user','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/if}
                            </td>
                         </tr>
                         {foreachelse}
