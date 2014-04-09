@@ -48,7 +48,7 @@
                            <td>
                                <a href="{url_path('role','edit','id=')}{$item['id']}">编辑</a>
                                {if $item['status'] != '已删除'}
-                               <a href="javascript:void(0);" data-href="{url_path('role','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>
+                               <a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('role','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>
                                {/if}
                            </td>
                         </tr>

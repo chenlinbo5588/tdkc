@@ -9,6 +9,7 @@ class User extends TZ_Admin_Controller {
     
 	public function index()
 	{
+        
         $this->_getPageData();
 		$this->display();
 	}
@@ -56,6 +57,9 @@ class User extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         
+        $this->load->model('Dept_Model');
+        $data = $this->Dept_Model->getDeptListByTree();
+        $this->assign('deptList',$data);
         if($this->isPostRequest() && !empty($_POST['id'])){
             
             //$this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|callback_editunique['.$this->User_Model->_tableName.'.account]');
@@ -66,6 +70,7 @@ class User extends TZ_Admin_Controller {
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['enter_date'] = empty($_POST['enter_date']) ? time() : strtotime($_POST['enter_date']);
+                $_POST['graduation_date'] = empty($_POST['graduation_date']) ? time() : strtotime($_POST['graduation_date']);
                 
                 $this->User_Model->update($_POST);
                 
@@ -110,11 +115,16 @@ class User extends TZ_Admin_Controller {
 
         $this->form_validation->set_rules('mobile', '手机号码', 'required|numeric|exact_length[11]');
         $this->form_validation->set_rules('enter_date', '入院时间', 'required');
+        $this->form_validation->set_rules('dept_id', '归属部门', 'required|integer|greater_than[0]');
     }
 
 
     public function add()
 	{
+        $this->load->model('Dept_Model');
+        $data = $this->Dept_Model->getDeptListByTree();
+        $this->assign('deptList',$data);
+        
         if($this->isPostRequest()){
             $this->assign('user',$_POST);
             

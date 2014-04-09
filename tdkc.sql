@@ -7,6 +7,8 @@ Target Database: tdkc
 Date: 2014/4/4 ������ 16:29:54
 */
 
+
+
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for ci_sessions
@@ -45,13 +47,14 @@ CREATE TABLE `tb_attachment` (
 CREATE TABLE `tb_dept` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '门部名称',
-  `up_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级机构ID',
+  `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级机构ID',
+  `status` varchar(10) NOT NULL DEFAULT '正常',
   `creator` varchar(20) NOT NULL DEFAULT '',
   `updator` varchar(20) NOT NULL DEFAULT '',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -61,7 +64,7 @@ CREATE TABLE `tb_menu` (
   `auth_key` varchar(16) NOT NULL,
   `name` varchar(20) NOT NULL,
   `url` varchar(30) NOT NULL DEFAULT '' COMMENT 'url地址',
-  `up_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `pid` int(10) unsigned NOT NULL DEFAULT '0',
   `creator` varchar(20) NOT NULL DEFAULT '',
   `updator` varchar(20) NOT NULL DEFAULT '',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -465,7 +468,7 @@ CREATE TABLE `tb_role` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_name_status` (`name`,`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_role_menu
@@ -522,6 +525,7 @@ CREATE TABLE `tb_user` (
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '家庭地址',
   `sm` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '信短数量配额,暂时没有用',
   `virtual_no` varchar(10) NOT NULL DEFAULT '' COMMENT '拟虚号',
+  `dept_id` int(10) unsigned NOT NULL DEFAULT '1',
   `school_name` varchar(80) NOT NULL DEFAULT '' COMMENT '业毕院校',
   `graduation_date` int(11) unsigned NOT NULL COMMENT '业毕时间',
   `major` varchar(30) NOT NULL DEFAULT '' COMMENT '学所专业',
@@ -537,7 +541,8 @@ CREATE TABLE `tb_user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `idx_account` (`account`),
   UNIQUE KEY `idx_gh` (`gh`),
-  KEY `idx_status` (`status`)
+  KEY `idx_status` (`status`),
+  KEY `idx_dept` (`dept_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -598,7 +603,7 @@ INSERT INTO `ci_sessions` VALUES ('170bda462e02fb80a9aa00674a8cb3a9', '127.0.0.1
 INSERT INTO `ci_sessions` VALUES ('95d2c5c077437909c6340ac5e300e703', '172.27.35.2', 'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 5.1; Trident/5.0)', '1396576897', '');
 INSERT INTO `ci_sessions` VALUES ('d00705e1b75df2915d67fa909cb73682', '172.27.35.2', 'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 5.1; Trident/5.0)', '1396577520', '');
 INSERT INTO `ci_sessions` VALUES ('6301c578dd61626f05a759da5cefe77c', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1396581623', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:28:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:7:\"id_card\";s:1:\"0\";s:5:\"email\";s:1:\"0\";s:10:\"alias_name\";s:0:\"\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"PibPSe5i08ue9a0IXgpIJYzHRwvZV2ZFRNwcNROL3k92OgzrqxrAUGu4vxgreBygF93KYm/zU9lmS0mBbk9k4w==\";s:3:\"sex\";s:1:\"m\";s:3:\"age\";s:1:\"0\";s:8:\"birthday\";s:19:\"0000-00-00 00:00:00\";s:6:\"mobile\";s:0:\"\";s:3:\"tel\";s:0:\"\";s:7:\"address\";s:0:\"\";s:2:\"sm\";s:1:\"0\";s:10:\"virtual_no\";s:0:\"\";s:11:\"school_name\";s:0:\"\";s:15:\"graduation_date\";s:1:\"0\";s:5:\"major\";s:0:\"\";s:9:\"job_title\";s:0:\"\";s:11:\"current_job\";s:0:\"\";s:10:\"enter_date\";s:1:\"0\";s:6:\"locked\";s:1:\"0\";s:6:\"status\";s:6:\"正常\";s:7:\"creator\";s:5:\"admin\";s:7:\"updator\";s:5:\"admin\";s:10:\"createtime\";s:1:\"0\";s:10:\"updatetime\";s:1:\"0\";}}');
-INSERT INTO `ci_sessions` VALUES ('a61e7b141711eec56459ca7418a5e72a', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396600087', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"wZLzyV4gcXVaG3GC5VABtXuC5JbuffNRXgHK6S7n+HAlWQbQ3KC9WpjlKozcsDdbONL0rScr7LX9nW8oV7JOCg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('d4966e5ba2e6f69d2e358f1721c71ba8', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396914765', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"wZLzyV4gcXVaG3GC5VABtXuC5JbuffNRXgHK6S7n+HAlWQbQ3KC9WpjlKozcsDdbONL0rScr7LX9nW8oV7JOCg==\";}}');
 INSERT INTO `ci_sessions` VALUES ('939579e0f05bc1e8d2e8fb6e985ab9d7', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:27.0) Gecko/20100101 Firefox/27.0', '1396596193', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:2:\"10\";s:7:\"account\";s:3:\"zwt\";s:4:\"name\";s:9:\"张五天\";s:2:\"gh\";s:2:\"22\";s:3:\"psw\";s:88:\"Et22e3/wIIHWrLrEiBzQSlBGZNlDNZDevuovnWZ8E2aN056Aa/xQPNg97vv0Md2GyztsyXO7qY30XD2l1Saa8w==\";}}');
 INSERT INTO `ci_sessions` VALUES ('181b18d65aeed4a98f1da35141886a32', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1396595026', '');
 INSERT INTO `ci_sessions` VALUES ('114406f7c5f4c4708286ade6241b4215', '172.27.35.2', 'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 5.1; Trident/5.0)', '1396596959', '');
@@ -607,6 +612,27 @@ INSERT INTO `ci_sessions` VALUES ('db4f5472e484f6846f2c30e9fe5e8990', '127.0.0.1
 INSERT INTO `ci_sessions` VALUES ('24cc280846cd05cf93edbfab01f72c2f', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1396584998', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:28:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:7:\"id_card\";s:1:\"0\";s:5:\"email\";s:1:\"0\";s:10:\"alias_name\";s:0:\"\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"BqTDRUWn9IA4Pd6hzu5LK0JCvmkow9JEX/DhfwpkPe2o0EXMwr4no1HJfMAuU1GO/ZHpkuEQXk9b2HBDA56LEw==\";s:3:\"sex\";s:1:\"m\";s:3:\"age\";s:1:\"0\";s:8:\"birthday\";s:19:\"0000-00-00 00:00:00\";s:6:\"mobile\";s:0:\"\";s:3:\"tel\";s:0:\"\";s:7:\"address\";s:0:\"\";s:2:\"sm\";s:1:\"0\";s:10:\"virtual_no\";s:0:\"\";s:11:\"school_name\";s:0:\"\";s:15:\"graduation_date\";s:1:\"0\";s:5:\"major\";s:0:\"\";s:9:\"job_title\";s:0:\"\";s:11:\"current_job\";s:0:\"\";s:10:\"enter_date\";s:1:\"0\";s:6:\"locked\";s:1:\"0\";s:6:\"status\";s:6:\"正常\";s:7:\"creator\";s:5:\"admin\";s:7:\"updator\";s:5:\"admin\";s:10:\"createtime\";s:1:\"0\";s:10:\"updatetime\";s:1:\"0\";}}');
 INSERT INTO `ci_sessions` VALUES ('d79c57d5f807aad029790b5a69b696cd', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1396593585', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:28:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:7:\"id_card\";s:1:\"0\";s:5:\"email\";s:1:\"0\";s:10:\"alias_name\";s:0:\"\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"itK5sxCay3VtKBgwT8csKba7S2rxUM+bosfSQat4Ze+ZaOjlVrPuaBSpokdexlfrliHKPYD38LYI/gvpmLHG7Q==\";s:3:\"sex\";s:1:\"m\";s:3:\"age\";s:1:\"0\";s:8:\"birthday\";s:19:\"0000-00-00 00:00:00\";s:6:\"mobile\";s:0:\"\";s:3:\"tel\";s:0:\"\";s:7:\"address\";s:0:\"\";s:2:\"sm\";s:1:\"0\";s:10:\"virtual_no\";s:0:\"\";s:11:\"school_name\";s:0:\"\";s:15:\"graduation_date\";s:1:\"0\";s:5:\"major\";s:0:\"\";s:9:\"job_title\";s:0:\"\";s:11:\"current_job\";s:0:\"\";s:10:\"enter_date\";s:1:\"0\";s:6:\"locked\";s:1:\"0\";s:6:\"status\";s:6:\"正常\";s:7:\"creator\";s:5:\"admin\";s:7:\"updator\";s:5:\"admin\";s:10:\"createtime\";s:1:\"0\";s:10:\"updatetime\";s:1:\"0\";}}');
 INSERT INTO `ci_sessions` VALUES ('b81eaa87485e9089cfa38128a1f2a4b4', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396590502', '');
+INSERT INTO `ci_sessions` VALUES ('a0ced5f8285237f6bef1a1889cc4044e', '127.0.0.1', 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2', '1396914910', '');
+INSERT INTO `ci_sessions` VALUES ('ffc00cabed8c5539a5f86805f7817798', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396939872', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"SbtNzyw8FjFiOejSvZxxmFlLECmqMEPSbS5EtqY7Qgd2cqOAsZb/WF/L27MnwUlL+VvFcZUkPGrbej2VG3Vl3w==\";}}');
+INSERT INTO `ci_sessions` VALUES ('33fc7bbe95a2331743a0edeb65c17675', '127.0.0.1', 'Mozilla/5.0 (Linux; U; Android 2.2; en-gb; GT-P1000 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobil', '1396941062', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"hqw2+djpU0LzZcvsZ8wNnxDCPcIh9JNhGAEJXrqjkq78ztRZ9361TyaGqtMlwy1Q2hkAmR2FI8ZkhaU9ZHwpqg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('8518e1eeb29bde40a59c097c5d9f6e5c', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1396942269', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"apG566ba/RlQ4FV6mnDMz/9MJaRRQTshsRGpTICT/jfjx46LHdmkkwyFG3bt/xLImgqXANc5wxDwQscbqeWvMA==\";}}');
+INSERT INTO `ci_sessions` VALUES ('5c7aaa121c0bf4cc57ad6d6d09bb192c', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397026593', 'a:1:{s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:33:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"CpT5giNbpmzj+N7e+bYtHmLZ2DVyrjbNxXRlbECDc6DNSC4bOO5i5BRJ0HU4ow189bD/zHlXJD3h+33v48hF2g==\";}}');
+INSERT INTO `ci_sessions` VALUES ('83f323e217af2f247b7a94320d987c60', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1397004434', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"baLA/MyTJQnnPgrkK627kFfmOtd99KIi+9jMuHapi+j63Bfcr87191LidfDTUmcRjEJzId/cblQscllVIF8Pyg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('0b2f688af8cf133d191bde93cc5a0345', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1397004625', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"KSelTgq4Md3bUARYrBoI4ts94WUZ4UdrZiq4WAVOop+Eq5S2Zl4kd3mBPVXo5kQIBo8TvMpzxQ8VDen4EFd9Pg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('9fcd65867cb31cf278592701cfe76d8f', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1397016526', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"1FTRCprJ3kB1erR2NFAAjvQzJDMnDZuxj7+fKStAYc6PJIKj7ANxs/Sf7wipjYV0HZT8F1nuRFPTQ/ywYBcWyw==\";}}');
+INSERT INTO `ci_sessions` VALUES ('daf3da449e3875391d189a5e2d025d12', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1397022425', '');
+INSERT INTO `ci_sessions` VALUES ('3a21c503dab547199ca8c5cf16f5f13d', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1397025121', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"rx4puSvt3sPR3FIQLpXuRSK918rdAUar3gA4y+p0mht9j1GHsptgJ+H0ru2hhLFUPwGzgDX0z7yETIhehj/aFA==\";}}');
+INSERT INTO `ci_sessions` VALUES ('bc03e801c647a35ff55e562b6025f067', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397026877', 'a:1:{s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:33:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"T4zawA+rs9+Rq9OzxRcHwOh20lCOUc1OlCpTfR2ata5j9Gej9F/2RECiv6nvAkOaA1ujdrg5eOsq1qz7anM8jQ==\";}}');
+INSERT INTO `tb_dept` VALUES ('1', '慈溪市土地勘测规划设计员有限公司', '0', '正常', '超级管理员', '超级管理员', '1396940368', '1396940368');
+INSERT INTO `tb_dept` VALUES ('2', '测绘室', '1', '正常', '超级管理员', '超级管理员', '1396940709', '1397019054');
+INSERT INTO `tb_dept` VALUES ('3', '规划室', '1', '正常', '超级管理员', '超级管理员', '1396940729', '1396940729');
+INSERT INTO `tb_dept` VALUES ('4', '规划小组1', '3', '正常', '超级管理员', '超级管理员', '1396943952', '1396945961');
+INSERT INTO `tb_dept` VALUES ('5', '规划小组1-1', '3', '正常', '超级管理员', '超级管理员', '1396944491', '1396945590');
+INSERT INTO `tb_dept` VALUES ('6', '规划小组23', '2', '正常', '超级管理员', '超级管理员', '1396945623', '1397007158');
+INSERT INTO `tb_dept` VALUES ('7', '我的部门', '1', '正常', '超级管理员', '超级管理员', '1396945686', '1397005414');
+INSERT INTO `tb_dept` VALUES ('8', '我的部门1', '2', '正常', '超级管理员', '超级管理员', '1396945711', '1397016491');
+INSERT INTO `tb_dept` VALUES ('9', '我的,部门', '1', '正常', '超级管理员', '超级管理员', '1397003617', '1397003617');
+INSERT INTO `tb_dept` VALUES ('10', '规划室3', '3', '正常', '超级管理员', '超级管理员', '1397024764', '1397024764');
 INSERT INTO `tb_role` VALUES ('1', '测试角色', '正常', '超级管理员', '超级管理员', '1396596593', '1396596593');
 INSERT INTO `tb_role` VALUES ('2', '我的', '正常', '超级管理员', '超级管理员', '1396596746', '1396596746');
 INSERT INTO `tb_role` VALUES ('3', '角色3修改', '正常', '超级管理员', '超级管理员', '1396596772', '1396597289');
@@ -614,13 +640,14 @@ INSERT INTO `tb_role` VALUES ('4', '系统管理员', '正常', '超级管理员
 INSERT INTO `tb_role` VALUES ('5', '数据录入员', '正常', '超级管理员', '超级管理员', '1396597346', '1396597346');
 INSERT INTO `tb_role` VALUES ('6', '财务人员', '正常', '超级管理员', '超级管理员', '1396597353', '1396597353');
 INSERT INTO `tb_role` VALUES ('7', '测量组人员修改', '已删除', '超级管理员', '超级管理员', '1396597362', '1396597425');
-INSERT INTO `tb_user` VALUES ('1', 'admin', '超级管理员', '0', '0', '', '0', 'ea021abea3e9ac7a0f172f65336c0250', 'm', '0', '0000-00-00 00:00:00', '', '', '', '0', '', '', '0', '', '', '', '1398384000', '0', '正常', 'admin', 'admin', '0', '0');
-INSERT INTO `tb_user` VALUES ('2', 'admin1', '爱上dsadsa', '', '', '', '1', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '0', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515367', '1396515367');
-INSERT INTO `tb_user` VALUES ('3', 'hh12', '测试名字', '', '', '', '2', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515457', '1396515457');
-INSERT INTO `tb_user` VALUES ('4', 'h122', '测试名字1', '', '', '', '3', 'dd1f73c3a84bee119fd6cd206a5ace31', 'f', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '0', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515749', '1396515749');
-INSERT INTO `tb_user` VALUES ('5', '23123', '就爱上哈都是', '', '', '', '4', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396572758', '1396572758');
-INSERT INTO `tb_user` VALUES ('6', '323', '我的姓名', '', '', '', '5', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '1397347200', '', '', '', '1398384000', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396573128', '1396573128');
-INSERT INTO `tb_user` VALUES ('7', '554', '说得很好', '', '', '', '6', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '0', '', '', '', '1398384000', '0', '已删除', '就爱上哈都是', '就爱上哈都是', '1396578418', '1396578418');
-INSERT INTO `tb_user` VALUES ('8', 'ddff', 'hjasdr23', '', '', '', '7', 'd91976a8add1886a83b6bd7cc7a6632d', 'f', '0', '0000-00-00 00:00:00', '13795467942', '', '', '0', '', '', '1397347200', '', '', '', '1397347200', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396579538', '1396588631');
-INSERT INTO `tb_user` VALUES ('9', 'czb', '陈暂波', '', '', '', '12', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '13795467941', '', '', '0', '', '', '1397347200', '', '', '', '1398816000', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396588781', '1396589163');
-INSERT INTO `tb_user` VALUES ('10', 'zwt', '张五天', '', '', '', '22', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '', '1398384000', '', '', '', '1398384000', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396589286', '1396589286');
+INSERT INTO `tb_role` VALUES ('8', '再来一个', '已删除', '超级管理员', '超级管理员', '1396932672', '1396932672');
+INSERT INTO `tb_user` VALUES ('1', 'admin', '超级管理员', '0', '0', '', '0', 'ea021abea3e9ac7a0f172f65336c0250', 'm', '0', '0000-00-00 00:00:00', '', '', '', '0', '', '1', '', '0', '', '', '', '1398384000', '0', '正常', 'admin', 'admin', '0', '0');
+INSERT INTO `tb_user` VALUES ('2', 'admin1', '爱上dsadsa', '', '', '', '1', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '', '0', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515367', '1396515367');
+INSERT INTO `tb_user` VALUES ('3', 'hh12', '测试名字', '', '', '', '2', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515457', '1396515457');
+INSERT INTO `tb_user` VALUES ('4', 'h122', '测试名字1', '', '', '', '3', 'dd1f73c3a84bee119fd6cd206a5ace31', 'f', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '', '0', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515749', '1396515749');
+INSERT INTO `tb_user` VALUES ('5', '23123', '就爱上哈都是', '', '', '', '4', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396572758', '1396572758');
+INSERT INTO `tb_user` VALUES ('6', '323', '我的姓名', '', '', '', '5', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '', '1397347200', '', '', '', '1398384000', '0', '已删除', '就爱上哈都是', '就爱上哈都是', '1396573128', '1396573128');
+INSERT INTO `tb_user` VALUES ('7', '554', '说得很好', '', '', '', '6', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '', '0', '', '', '', '1398384000', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396578418', '1396578418');
+INSERT INTO `tb_user` VALUES ('8', 'ddff', 'hjasdr23', '', '', '', '7', 'd91976a8add1886a83b6bd7cc7a6632d', 'f', '0', '0000-00-00 00:00:00', '13795467942', '', '', '0', '', '1', '', '1397347200', '', '', '', '1397347200', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396579538', '1396588631');
+INSERT INTO `tb_user` VALUES ('9', 'czb', '陈暂波', '', '', '', '12', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '15195467940', '', '', '0', '', '6', '', '1271116800', '', '助理工程师', '', '1398816000', '0', '已删除', '就爱上哈都是', '超级管理员', '1396588781', '1397024664');
+INSERT INTO `tb_user` VALUES ('10', 'zwt', '张五天', '', '', '', '22', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '13795467840', '', '', '0', '', '1', '', '1397433600', '', '', '', '1398384000', '0', '已删除', '就爱上哈都是', '超级管理员', '1396589286', '1397007924');

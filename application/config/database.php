@@ -60,14 +60,14 @@ if(ENVIRONMENT == 'production'){
      * 测试和生产暂时一样 
      */
     $db['default']['database'] = 'tdkc';
-    $db['default']['hostname'] = 'localhost';
+    $db['default']['hostname'] = '192.168.1.118';
     $db['default']['username'] = 'tdkc';
     $db['default']['password'] = '123123';
     
     $db['default']['db_debug'] = false;
 }else{
     $db['default']['database'] = 'tdkc';
-    $db['default']['hostname'] = 'localhost';
+    $db['default']['hostname'] = '192.168.1.118';
     $db['default']['username'] = 'tdkc';
     $db['default']['password'] = '123123';
 
@@ -76,7 +76,8 @@ if(ENVIRONMENT == 'production'){
 
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = '';
-$db['default']['char_set'] = 'UTF-8';
+$db['default']['char_set'] = "utf8";
+$db['default']['dbcollat'] = "utf8_general_ci";
 
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;

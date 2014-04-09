@@ -18,11 +18,35 @@ class Dept extends TZ_Admin_Controller {
     public function delete()
 	{
         if($this->isPostRequest() && !empty($_POST['id'])){
-            /**
-             * @todo 如果部门下面有员工 ,不能被删除 
-             */
-            $this->Dept_Model->fake_delete($_POST);
-            $this->sendFormatJson('success',array('id' => $_POST['id'] , 'text' => '删除成功'));
+            
+            if($_POST['id'] == 1){
+                $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '该部门不能删除'));
+            }else{
+                $dept = $this->Dept_Model->getById(array('where' => array('id' => $_POST['id'],'status' => '正常')));
+            }
+            
+            if($dept){
+                
+                $childs = $this->Dept_Model->getDeptListByTree($dept['id']);
+                $ids = array($dept['id']);
+                foreach($childs as $key => $val){
+                    $ids[] = $val['id'];
+                }
+                $this->Dept_Model->fake_delete(array('id' => $ids));
+                /**
+                 * 首先 update user 表 
+                 */
+                
+                
+                /**
+                 * 再 update dept 表 
+                 */
+                
+                $this->sendFormatJson('success',array('id' => implode(',',$ids) , 'text' => '删除成功'));
+            }else{
+                $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '找不到记录,删除失败'));
+            }
+            
         }else{
             $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '删除失败'));
         }
@@ -31,12 +55,16 @@ class Dept extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         
-        $data = $this->Dept_Model->getDeptListByTree();
+        
         if($this->isPostRequest() && !empty($_POST['id'])){
             
             $this->_addRules();
             $this->form_validation->set_rules('pid', '上级部门', 'required|integer');
             if($this->form_validation->run()){
+                
+                if($_POST['id'] == $_POST['pid'] || $_POST['id'] == 1){
+                    unset($_POST['pid']);
+                }
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
                 $this->Dept_Model->update($_POST);
@@ -53,8 +81,28 @@ class Dept extends TZ_Admin_Controller {
             $dept = $this->Dept_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         
+        $data = $this->Dept_Model->getDeptListByTree();
+        
+        $this->Dept_Model->saveTree($data);
+        $this->Dept_Model->clearDeptTree();
+        //$self = $data[$dept['id']];
+        
+        $childs = $this->Dept_Model->getDeptListByTree($dept['id']);
+        
+        $ids = array($dept['id']);
+        foreach($childs as $key => $val){
+            $ids[] = $val['id'];
+        }
+        
+        $employs = $this->User_Model->getList(array(
+           'where_in' => array(
+               array('key' => 'dept_id ','value' => $ids )
+             )
+        ));
+        
         $this->assign('dept',$dept);
         $this->assign('data',$data);
+        $this->assign('employs',$employs);
         $this->display('add');
     }
     

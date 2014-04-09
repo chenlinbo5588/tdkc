@@ -73,9 +73,18 @@
                         <li>
                             <label class="required"><em>*</em><strong>入院年月</strong><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="enter_date" value="{$user['enter_date']}" placeholder="请输入当前入院年月"/></label><span class="tip">{form_error('enter_date')}</span>
                         </li>
+                        <li><label class="required"><em>*</em><strong>归属部门</strong>
+                            <select name="dept_id">
+                            {foreach from=$deptList item=item}
+                            <option value="{$item['id']}" {if $user['dept_id'] == $item['id']}selected{/if}>{$item['title']}</div>
+                            {foreachelse}
+                                <option value="">尚未添加任何部门</option>
+                            {/foreach}
+                            </select>
+                        </li>
                         <li>
                             <input type="submit" name="submit" class="btn btn-primary" value="保存"/>
-                            <input type="reset" name="reset" class="btn btn-default" value="重置"/>
+                            {if $action != 'edit'}<input type="reset" name="reset" class="btn btn-default" value="重置"/>{/if}
                         </li>
                      </ul>
                 </form>

@@ -29,6 +29,8 @@
                             <th>工号</th>
                             <th>姓名</th>
                             <th>登陆账号</th>
+                            <th>手机号码</th>
+                            <th>归属部门</th>
                             <th>状态</th>
                             <th>创建人</th>
                             <th>创建时间</th>
@@ -43,14 +45,16 @@
                            <td>{$item['gh']}</td>
                            <td>{$item['name']|escape}</td>
                            <td>{$item['account']}</td>
+                           <td>{$item['mobile']}</td>
+                           <td>{$item['dept_id']}</td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               <a href="{url_path('user','edit','id=')}{$item['id']}">编辑</a>
-                               {if $item['user_id'] != 1 && $item['status'] != '已删除'}<a href="javascript:void(0);" data-href="{url_path('user','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/if}
+                               <a href="{url_path('user','edit','id=')}{$item['user_id']}">编辑</a>
+                               {if $item['user_id'] != 1 && $item['status'] != '已删除'}<a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('user','delete','id=')}{$item['user_id']}" data-id="{$item['user_id']}" class="delete">删除</a>{/if}
                            </td>
                         </tr>
                         {foreachelse}

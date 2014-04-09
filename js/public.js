@@ -117,23 +117,66 @@ $(function(){
     });
 
     $(".delete").bind("click",function(){
-        if(confirm("确定要删除吗")){
-            $.ajax({
-                type :"POST",
-                dataType:"json",
-                url: $(this).attr('data-href'),
-                data : {
-                    isajax:"1",
-                    id:$(this).attr('data-id')
-                },
-                success:function(data){
-                    alert(data.body.text);
-                    if(data.code == 'success'){
-                        $("#row_" + data.body.id).remove();
-                    }
-                }
-            });
-
+        var s = $(this).attr('data-title');
+        var that = $(this);
+        if(!s){
+            s = '';
         }
+        var text = "确定要删除 " + s + " 吗";
+        
+        $("#replaceTxt").html(text);
+        
+		var dialog = $("#dialog-confirm" ).dialog({
+			resizable: false,
+			
+			modal: true,
+			buttons: {
+				"确定" : function() {
+                    $.ajax({
+                        type :"POST",
+                        dataType:"json",
+                        url: that.attr('data-href'),
+                        data : {
+                            isajax:"1",
+                            id:that.attr('data-id')
+                        },
+                        success:function(data){
+                            dialog.dialog( "close" );
+                            $( "#dialog p" ).html(data.body.text);
+                            $( "#dialog").dialog({
+                                modal: true
+                            });
+            
+                            if(data.code == 'success'){
+                                var ids = data.body.id.split(',');
+                                for(var i = 0, j = ids.length; i < j; i++ ){
+                                    $("#row_" + ids[i]).remove();
+                                }
+                            }
+                            
+                            if(data.redirectUrl){
+                                location.href = redirectUrl;
+                            }
+                        },
+                        error:function(xhr, textStatus, errorThrown){
+                            $( "#dialog p" ).html("请求错误");
+                            $( "#dialog").dialog({
+                                modal: true
+                            });
+                        }
+                    });
+				},
+				"取消": function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+    
+    
+        /*
+        if(confirm("确定要删除 " + s + " 吗")){
+            
+
+        }*/
     });
 });

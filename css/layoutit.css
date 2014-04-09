@@ -138,7 +138,7 @@ ul,ol {
 	bottom:0;
 	top:63px;
     z-index:10;
-    border-right:1px solid #0099FF;
+    border-right:1px solid #4297d7;
 	-webkit-transition: all 500ms ease;
 	-moz-transition: all 500ms ease;
 	-ms-transition: all 500ms ease;
@@ -152,8 +152,8 @@ ul,ol {
     padding:10px 15px;
 }
 .sidebar-nav li a:hover ,.sidebar-nav li.active a {
-    border-top:1px solid #0099FF;
-    border-bottom: 1px solid #0099FF;
+    border-top:1px solid #4297d7;
+    border-bottom: 1px solid #4297d7;
     border-right:1px solid transparent;
     background: #fff;
     width:101%;
@@ -167,7 +167,8 @@ ul,ol {
 #topbar {
     1background: url(../img/top_bg.jpg) no-repeat left top #fff;
     background:#fff;
-    border-color:#0099FF;
+    border-color:#4297d7;
+    z-index:10;
 }
 
 #topmenu,#profile {
@@ -194,33 +195,45 @@ ul,ol {
 
 #topbar .nav-tabs li a {
     display:block;
-    border:1px solid #0099FF;
+    border:1px solid #4297d7;
     border-width: 1px 1px 0px 1px;
 }
 
 #topbar .nav-tabs li.active a {
-    background: #0099FF;
+    background: #4297d7;
     color: #fff;
 }
 
 
 .col {
-    border:1px solid #0099FF;
+    border:1px solid #4297d7;
 }
 
 .col2 {
     width:45%;
-    min-height:500px;
-    border:1px solid #0099FF;
+    border:1px solid #4297d7;
     float:left;
-    margin: 0 10px 0 0;
+    margin: 20px 10px 0 0;
+    padding: 0 0 20px 0;
 }
 
 .col2 h3 {
     margin:0;
     padding:5px;
     color:#fff;
-    background:#0099FF;
+    background:#4297d7;
+    position:relative;
+}
+.col2 h3 .goback {
+    /*
+    position:absolute;
+    right:10px;
+    top:5px;
+    display: block;
+    */
+}
+.col2 .goback {
+    color:#fff;
 }
 
 .deep1 {
@@ -247,4 +260,34 @@ ul,ol {
 }
 .deep8 {
     text-indent: 8em;
+}
+
+.datalist {
+    padding:20px;
+}
+
+.col2 .alert {
+    margin:0px;
+}
+
+.dept a {
+    display: block;
+    width:90%;
+    float:left;
+    margin: 2px 0;
+}
+
+.dept a.delete {
+    width:10%;
+}
+
+ol.style_decimal , ul.style_decimal {
+    list-style-type: decimal;
+}
+
+#dept_employ_list li {
+    width:30%;
+    display: block;
+    float: left;
+    padding: 2px 0;
 }

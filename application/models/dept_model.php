@@ -5,12 +5,19 @@ class Dept_Model extends TZ_Model {
     
     public $_tableName = 'tb_dept';
     public $_deptTree = array() ;
+    public $_fullTree = array();
     
     public function __construct(){
         parent::__construct();
     }
     
+    public function saveTree($tree){
+        $this->_fullTree = $tree;
+    }
     
+    public function clearDeptTree(){
+        $this->_deptTree = array();
+    }
     
     /**
      * 获得部门
@@ -19,43 +26,60 @@ class Dept_Model extends TZ_Model {
      * @param type $separate
      * @return type 
      */
-    public function getDeptListByTree($parentId = 0,$selfId = 0,$separate = '',$level = 0) {
-        $childrenList = $this->geDeptList($parentId,$selfId);
-        if(is_array($childrenList)){
-            foreach ($childrenList as $item){
-                $item['title'] = $separate . $item['name'];
-                $item['level'] = $level;
-                
-                $this->_deptTree[] = $item;
-                
-                $this->getDeptListByTree($item['id'],$selfId,$separate . '&nbsp;&nbsp;',$level + 1);
-            }
-        }
-		
-		return $this->_deptTree;
-	}
-
-
-
-	public function geDeptList($parentId = 0,$selfId = 0) {
-		
-        $parentId = $parentId < 0 ? 0 : $parentId;
-        $selfId   = $selfId < 0 ? 0 : $selfId;
+    public function getDeptListByTree($parentId = 0,$separate = '',$level = 0) {
+        
+        $parentId = $parentId < 0 ? 0 : intval($parentId);
+        //$selfId   = $selfId < 0 ? 0 : intval($selfId);
         $condition = array(
           'where' => array(
               'status' => '正常',
               'pid' => $parentId,
-              'id !=' => $selfId
           ),
           'order' => 'pid ASC'
         );
         
         $result = $this->getList($condition);
+        $childrenList = $result['data'];
+        if(is_array($childrenList)){
+            foreach ($childrenList as $item){
+                $item['title'] = $separate . $item['name'];
+                $item['level'] = $level;
+                
+                $this->_deptTree[$item['id']] = $item;
+                
+                $this->getDeptListByTree($item['id'],$separate . '&nbsp;&nbsp;',$level + 1);
+            }
+        }
 		
-		return $result['data'];
+		return $this->_deptTree;
 	}
     
-    
+    /*
+    public function getChildsDeptList($parentId = 0,$separate,$level){
+        $condition = array(
+          'where' => array(
+              'status' => '正常',
+              'pid' => $parentId,
+          ),
+          'order' => 'pid ASC'
+        );
+        $result = $this->getList($condition);
+        $childrenList = $result['data'];
+        if(is_array($childrenList)){
+            foreach ($childrenList as $item){
+                $item['title'] = $separate . $item['name'];
+                $item['level'] = $level;
+                
+                $this->_deptTree[$item['id']] = $item;
+                
+                $this->getDeptListByTree($item['id'],$separate . '&nbsp;&nbsp;',$level + 1);
+            }
+        }
+        
+    }
+     * 
+     */
+
     public function add($param){
         $now = time();
         $data = array(
@@ -77,25 +101,41 @@ class Dept_Model extends TZ_Model {
     
     public function fake_delete($param){
         
-        $where = array(
-            'id' => $param['id']
-        );
+        if(is_array($param['id'])){
+             $data = array();
+           
+            foreach($param['id'] as $v){
+                $data[] = array(
+                    'id' => $v,
+                    'status' => '已删除'
+                );
+            }
+            
+            return $this->db->update_batch($this->_tableName, $data,'id'); 
+        }else{
+            $data = array(
+                'status' => '已删除'
+            );
+            
+            $where = array(
+                'id' => $param['id']
+            );
+            return $this->db->update($this->_tableName, $data,$where);
+        }
         
-        $data = array(
-            'status' => '已删除'
-        );
-        
-        return $this->db->update($this->_tableName, $data, $where);
     }
     
     
     public function update($param){
         $data = array(
             'name' => $param['name'],
-            'pid' => $param['pid'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
+        
+        if(!empty($param['pid'])){
+            $data['pid'] = $param['pid'];
+        }
         
         $where = array(
             'id' => $param['id']
