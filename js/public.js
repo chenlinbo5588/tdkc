@@ -132,6 +132,7 @@ $(function(){
 			modal: true,
 			buttons: {
 				"确定" : function() {
+                    dialog.dialog( "close" );
                     $.ajax({
                         type :"POST",
                         dataType:"json",

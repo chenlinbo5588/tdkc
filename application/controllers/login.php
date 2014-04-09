@@ -58,8 +58,7 @@ class Login extends TZ_Controller {
             redirect(url_path('admin'));
         }else{
             $this->setSEO('登录');
-            $this->assign('cssFiles',array('bootstrap','login'));
-            $this->display();
+            $this->display('index');
         }
     }
     
