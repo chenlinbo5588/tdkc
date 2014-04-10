@@ -32,7 +32,7 @@ class Login extends TZ_Controller {
         if(empty($_POST['username']) || empty($_POST['password'])){
             $errorMsg['message'] = "请输入账号和密码";
         }else{
-            $user = $this->User_Model->getUserByAccount($_POST['username'],'user_id,account,name,gh,psw');
+            $user = $this->User_Model->getUserByAccount($_POST['username'],'id,account,name,gh,psw');
             if($user && md5(config_item('encryption_key').$_POST['password']) == $user[0]['psw']){
                 
                 /*

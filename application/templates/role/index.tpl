@@ -46,6 +46,7 @@
                            <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
+                               <a href="{url_path('role','auth','id=')}{$item['id']}">设置权限</a>
                                <a href="{url_path('role','edit','id=')}{$item['id']}">编辑</a>
                                {if $item['status'] != '已删除'}
                                <a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('role','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>

@@ -156,7 +156,7 @@ ul,ol {
     border-bottom: 1px solid #4297d7;
     border-right:1px solid transparent;
     background: #fff;
-    width:101%;
+    width:201px;
     
 }
 
@@ -204,27 +204,20 @@ ul,ol {
     color: #fff;
 }
 
-
-.col {
+.zzjg {
     border:1px solid #4297d7;
-}
-
-.col2 {
-    width:45%;
-    border:1px solid #4297d7;
-    float:left;
     margin: 20px 10px 0 0;
     padding: 0 0 20px 0;
 }
 
-.col2 h3 {
+.zzjg h3 {
     margin:0;
     padding:5px;
     color:#fff;
     background:#4297d7;
     position:relative;
 }
-.col2 h3 .goback {
+.zzjg h3 .goback {
     /*
     position:absolute;
     right:10px;
@@ -232,9 +225,14 @@ ul,ol {
     display: block;
     */
 }
-.col2 .goback {
+.zzjg .goback {
     color:#fff;
 }
+
+.zzjg .alert {
+    margin:0px;
+}
+
 
 .deep1 {
     text-indent: 1em;
@@ -266,9 +264,7 @@ ul,ol {
     padding:20px;
 }
 
-.col2 .alert {
-    margin:0px;
-}
+
 
 .dept a {
     display: block;
@@ -290,4 +286,9 @@ ol.style_decimal , ul.style_decimal {
     display: block;
     float: left;
     padding: 2px 0;
+}
+
+.table tr:hover {
+    background: #d0e5f5;
+    color: #1d5987;
 }

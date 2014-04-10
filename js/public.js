@@ -124,8 +124,8 @@ $(function(){
         }
         var text = "确定要删除 " + s + " 吗";
         
-        $("#replaceTxt").html(text);
-        
+        /*
+         *$("#replaceTxt").html(text);
 		var dialog = $("#dialog-confirm" ).dialog({
 			resizable: false,
 			
@@ -172,12 +172,36 @@ $(function(){
 				}
 			}
 		});
+        */
     
     
-        /*
-        if(confirm("确定要删除 " + s + " 吗")){
-            
+        if(confirm(text)){
+            $.ajax({
+                type :"POST",
+                dataType:"json",
+                url: that.attr('data-href'),
+                data : {
+                    isajax:"1",
+                    id:that.attr('data-id')
+                },
+                success:function(data){
+                    alert(data.body.text);
+                    
+                    if(data.code == 'success'){
+                        var ids = data.body.id.split(',');
+                        for(var i = 0, j = ids.length; i < j; i++ ){
+                            $("#row_" + ids[i]).remove();
+                        }
+                    }
 
-        }*/
+                    if(data.redirectUrl){
+                        location.href = redirectUrl;
+                    }
+                },
+                error:function(xhr, textStatus, errorThrown){
+                    alert("请求发生错误," + textStatus);
+                }
+            });
+        }
     });
 });

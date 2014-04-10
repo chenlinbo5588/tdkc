@@ -15,7 +15,7 @@
                             <label class="required"><em>*</em><strong>上级部门</strong></label>
                             <select name="pid" style="width:350px;">
                             {foreach from=$data item=item}
-                            <option value="{$item['id']}" {if $dept['pid'] == $item['id']}selected{/if}>{$item['title']}</div>
+                            <option value="{$item['id']}" {if $dept['pid'] == $item['id']}selected{/if}>{$item['sep']}{$item['name']}</option>
                             {foreachelse}
                                 <option value="">尚未添加任何部门</option>
                             {/foreach}
@@ -24,12 +24,12 @@
                         <li><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></label>
                         {if $action == 'edit'}
                         <li>
-                            <div class="col2" >
+                            <div class="zzjg clearfix" >
                                 <h3><span>成员列表</span>&nbsp;<a class="goback" href="javascript:history.go(-1);">【返回】</a></h3>
                                 <div class="datalist">
                                     <ol id="dept_employ_list" class="style_decimal">
                                         {foreach from=$employs['data'] item=item}
-                                        <li><a href="{url_path('user','edit','id=')}{$item['user_id']}">{$item['name']}</a></li>
+                                        <li><a href="{url_path('user','edit','id=')}{$item['id']}">{$item['name']}</a></li>
                                         {foreachelse}
                                         <li>还没有员工</li>
                                         {/foreach}

@@ -13,6 +13,90 @@ class Role extends TZ_Admin_Controller {
 		$this->display();
 	}
     
+    public function auth(){
+        $this->load->model('Menu_Model');
+        $data = $this->Menu_Model->getListByTree();
+        
+        if(!empty($_GET['id'])){
+            $info = $this->User_Model->getById(array('where' => array('id' => intval($_GET['id']))));
+        }
+        
+        $this->load->model('Role_Menu_Model');
+        
+        $roleMenu = $this->Role_Menu_Model->getList(array(
+            'field' => 'auth_key',
+            'where' => array('role_id' => $_GET['id'],'status' => 0)
+        ));
+        
+        $existsAuth = array();
+        if($roleMenu['data']){
+            foreach($roleMenu['data'] as $value){
+                $existsAuth[] = $value['auth_key'];
+            }
+        }
+        
+        $this->assign('existsAuth',$existsAuth);
+        $this->assign('actionUrl',url_path('role','auth'));
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            
+            $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
+            
+            if($this->form_validation->run()){
+                
+                $updateCount = $this->Role_Menu_Model->updateByWhere(
+                        array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
+                        array('role_id' => $_POST['id'])
+                        );
+                
+                if(!empty($_POST['auth_key'])){
+                    $this->load->model('Menu_Model');
+                    /**
+                     * 必须是系统内部的已经存在的
+                     */
+                    $menuList = $this->Menu_Model->getList(array(
+                        'where_in' => array(
+                            array(
+                                'key'=> 'auth_key' ,
+                                'value' => array_values($_POST['auth_key'])
+                            )
+                        )
+                    ));
+                    
+                    $newmenu = array();
+                    $now = time();
+                    foreach($menuList['data'] as $value){
+                        $newmenu[] = array(
+                            'role_id' => $_POST['id'],
+                            'auth_key' => $value['auth_key'],
+                            'creator' => $this->_userProfile['name'],
+                            'updator' => $this->_userProfile['name'],
+                            'createtime' => $now,
+                            'updatetime' => $now,
+                        );
+                    }
+                    
+                    if($newmenu){
+                        $this->Role_Menu_Model->batchInsert($newmenu);
+                    }
+                }
+                
+                $this->assign("feedback", "success");
+                $this->assign('feedMessage',"修改成功");
+            }else{
+                $this->assign("feedback", "failed");
+                $this->assign('feedMessage',"修改失败");
+            }
+            
+            $this->assign('redirectUrl',url_path('role','auth','id='.$_POST['id']));
+        }
+        
+        $this->assign('info',$info);
+        $this->assign('data',$data);
+        $this->display('auth','menu');
+    }
+    
+    
     public function delete()
 	{
         if($this->isPostRequest() && !empty($_POST['id'])){

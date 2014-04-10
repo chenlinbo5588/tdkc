@@ -30,7 +30,7 @@ class User_Model extends TZ_Model {
         }
         
         $data = array(
-            'user_id' => NULL,
+            'id' => NULL,
             'name' => $user['name'],
             'account' => $user['account'],
             'id_card' => $user['id_card'],
@@ -42,6 +42,7 @@ class User_Model extends TZ_Model {
             'tel' => $user['tel'],
             'virtual_no' => $user['virtual_no'],
             'dept_id' => $user['dept_id'],
+            'role_id' => $user['role_id'],
             'school_name' => $user['school_name'],
             'major' => $user['major'],
             'graduation_date' => $user['graduation_date'],
@@ -69,7 +70,7 @@ class User_Model extends TZ_Model {
     public function fake_delete($user){
         
         $where = array(
-            'user_id' => $user['id']
+            'id' => $user['id']
         );
         
         $data = array(
@@ -83,13 +84,16 @@ class User_Model extends TZ_Model {
     public function update($user){
         $data = array(
             'name' => $user['name'],
+            'account' => $user['account'],
             'id_card' => $user['id_card'],
             'email' => $user['email'],
+            'gh' => $user['gh'],
             'sex' => $user['sex'],
             'mobile' => $user['mobile'],
             'tel' => $user['tel'],
             'virtual_no' => $user['virtual_no'],
             'dept_id' => $user['dept_id'],
+            'role_id' => $user['role_id'],
             'school_name' => $user['school_name'],
             'major' => $user['major'],
             'graduation_date' => $user['graduation_date'],
@@ -100,12 +104,12 @@ class User_Model extends TZ_Model {
             'updatetime' => time()
         );
         
-        if(!$user['psw']){
+        if(!empty($user['psw'])){
             $data['psw'] = md5(config_item('encryption_key').$user['psw']);
         }
         
         $where = array(
-            'user_id' => $user['id']
+            'id' => $user['id']
         );
         
         return $this->db->update($this->_tableName, $data, $where);

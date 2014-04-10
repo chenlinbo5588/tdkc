@@ -26,7 +26,7 @@ class Dept_Model extends TZ_Model {
      * @param type $separate
      * @return type 
      */
-    public function getDeptListByTree($parentId = 0,$separate = '',$level = 0) {
+    public function getDeptListByTree($parentId = 0,$separate = '----',$level = 0) {
         
         $parentId = $parentId < 0 ? 0 : intval($parentId);
         //$selfId   = $selfId < 0 ? 0 : intval($selfId);
@@ -42,12 +42,18 @@ class Dept_Model extends TZ_Model {
         $childrenList = $result['data'];
         if(is_array($childrenList)){
             foreach ($childrenList as $item){
-                $item['title'] = $separate . $item['name'];
+                
+                $sepA = array();
+                for($i = 0; $i < $level; $i++){
+                    $sepA[] = $separate;
+                }
+                $item['sep'] = implode('',$sepA);
+                
                 $item['level'] = $level;
                 
                 $this->_deptTree[$item['id']] = $item;
                 
-                $this->getDeptListByTree($item['id'],$separate . '&nbsp;&nbsp;',$level + 1);
+                $this->getDeptListByTree($item['id'],$separate,$level + 1);
             }
         }
 		

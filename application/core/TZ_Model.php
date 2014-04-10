@@ -34,6 +34,18 @@ class TZ_Model extends CI_Model {
         return false;
     }
     
+    public function updateByWhere($data,$where){
+        return $this->db->update($this->_tableName,$data,$where);
+    }
+    
+    public function batchInsert($data){
+        return $this->db->insert_batch($this->_tableName, $data); 
+    }
+    
+    public function batchUpdate($data,$key = 'id'){
+        return $this->db->update_batch($this->_tableName, $data,$key); 
+    }
+    
     public function getList($condition = array()){
         
         $data = array();
