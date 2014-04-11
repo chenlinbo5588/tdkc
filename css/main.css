@@ -1,0 +1,152 @@
+
+.breadcrumb {
+    margin: 0 0 10px 0;
+}
+
+.required em {
+    color:#f00;
+    font-weight: bold;
+    padding:0 2px;
+}
+
+.validate_error {
+    color:#f00;
+}
+
+.pagination {
+    margin:10px 0 0 ;
+}
+
+.pagination a {
+    padding:1px 5px;
+    border:1px solid #CBD8AC;
+}
+
+.pagination a.active {
+    color:#f00;
+    border:1px solid transparent;
+}
+
+.searchform {
+    background:#EEF4EA;
+    padding:10px 10px;
+    border:1px solid #CBD8AC;
+    margin:0 0 10px 0;
+    position:relative;
+}
+
+.searchform .addlink {
+   
+}
+
+.btn {
+    cursor:pointer;
+}
+
+
+.container {
+    padding:20px;
+}
+
+.table {
+    border-collapse: collapse;
+    width:100%;
+}
+
+.table thead tr {
+    background:#FAFAF1;
+}
+.table td ,.table th {
+    text-align: left;
+    border:1px solid #D1D36B;
+}
+
+.table tbody tr:hover {
+    background:#FAFAF1;
+}
+
+.table tr td ,.table tr th {
+    padding:3px;
+}
+
+.table tbody td,.table tbody th {
+    
+}
+
+
+.zzjg {
+    border:1px solid  #D1D36B;
+    margin: 20px 10px 0 0;
+    padding: 0 0 20px 0;
+}
+
+.zzjg h3 {
+    margin:0;
+    padding:5px;
+    background:#FAFAF1;
+    position:relative;
+    border-bottom:1px solid  #D1D36B;
+}
+.zzjg h3 .goback {
+    /*
+    position:absolute;
+    right:10px;
+    top:5px;
+    display: block;
+    */
+}
+.zzjg .goback {
+}
+
+.zzjg .alert {
+    margin:0px;
+}
+
+
+.deep1 {
+    text-indent: 1em;
+}
+.deep2 {
+    text-indent: 2em;
+}
+
+.deep3 {
+    text-indent: 3em;
+}
+.deep4 {
+    text-indent: 4em;
+}
+.deep5 {
+    text-indent: 5em;
+}
+.deep6 {
+    text-indent: 6em;
+}
+.deep7 {
+    text-indent: 7em;
+}
+.deep8 {
+    text-indent: 8em;
+}
+
+.datalist {
+    padding:20px;
+}
+
+
+
+
+.dept a.delete {
+    width:10%;
+}
+
+ol.style_decimal , ul.style_decimal {
+    list-style-type: decimal;
+}
+
+#dept_employ_list li {
+    display: block;
+    padding: 2px 0;
+}
+
+

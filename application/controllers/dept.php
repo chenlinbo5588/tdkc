@@ -37,16 +37,16 @@ class Dept extends TZ_Admin_Controller {
                 $this->Dept_Model->fake_delete(array('id' => $ids));
                 $this->load->model('User_Model');
                 
-                $users = $this->User_Model->getList(array('select' => 'user_id', 'where_in' => array('dept_id' => $ids)));
+                $users = $this->User_Model->getList(array('select' => 'id', 'where_in' => array('dept_id' => $ids)));
                 
                 if($users){
                     foreach($users['data'] as $user ){
                         $data[] = array(
-                            'user_id' => $user['user_id'],
+                            'id' => $user['id'],
                             'dept_id' => $dept['pid']
                         );
                     }
-                    $this->User_Model->batchUpdate($data,'user_id');
+                    $this->User_Model->batchUpdate($data,'id');
                 }
                 
                 $this->sendFormatJson('success',array('id' => implode(',',$ids) , 'text' => '删除成功'));

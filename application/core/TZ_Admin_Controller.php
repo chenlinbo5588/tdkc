@@ -36,10 +36,16 @@ class TZ_Admin_Controller extends TZ_Controller {
         }
         
         $this->load->model('User_Menu_Model');
+        $this->load->model('Role_Menu_Model');
         
         $userMenu = $this->User_Menu_Model->getList(array(
             'field' => 'id,url,auth_key',
             'where' => array('user_id' => $user[0]['id'],'status' => 0)
+        ));
+        
+        $roleMenu = $this->Role_Menu_Model->getList(array(
+            'field' => 'id,url,auth_key',
+            'where' => array('role_id' => $user[0]['id'],'status' => 0)
         ));
 
         if($userMenu['data']){

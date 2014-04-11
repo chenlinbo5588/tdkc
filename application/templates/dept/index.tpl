@@ -1,26 +1,31 @@
-{include file="common/header.tpl"}
-            <div class="row-fluid">
+{include file="common/main_header.tpl"}
+            <div class="searchform row-fluid">
                 <a href="{url_path('dept','add')}">添加部门</a>
             </div>
             
             <div class="span12 clearfix">
-                <div class="zzjg">
-                    <h3>组织架构</h3>
-                    <div class="alert alert-warning" style="color:#f00;">备注：删除部门时，其下级部门将同样被删除,被删除部门下的员工将自动归入其上级部门</div>
-                    <div class="datalist">
+                <table class="table">
+                    
+                    <thead>
+                        <tr>
+                            <th>组织架构 <b style="color:#f00;">备注：删除部门时，其下级部门将同时被删除,被删除部门下的员工将自动归入其上级部门</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {foreach from=$data item=item}
-                        <div class="dept clearfix" id="row_{$item['id']}">
+                        <tr id="row_{$item['id']}">
                         {if $item['id'] != 1}
-                            <a class="delete" href="javascript:void(0);" data-title="{$item['name']}" data-id="{$item['id']}" data-href="{url_path('dept','delete','id=')}{$item['id']}">【删除】</a>
-                            <a class="" href="{url_path('dept','edit','id=')}{$item['id']}&ajax=1&inlayer=yes">{$item['sep']}{$item['name']}</a>
+                            <td><a class="delete" href="javascript:void(0);" data-title="{$item['name']}" data-id="{$item['id']}" data-href="{url_path('dept','delete','id=')}{$item['id']}">【删除】</a>
+                            <a class="" href="{url_path('dept','edit','id=')}{$item['id']}&ajax=1&inlayer=yes">{$item['sep']}{$item['name']}</a></td>
                         {else}
-                            <a style="width:10%" href="javascript:void(0);"></a><a href="{url_path('dept','edit','id=')}{$item['id']}&ajax=1&inlayer=yes">{$item['name']}</a>
+                            <td><a href="{url_path('dept','edit','id=')}{$item['id']}&ajax=1&inlayer=yes">{$item['name']}</a></td>
                          {/if}
                         </div>
                         {foreachelse}
-                            找不到数据
+                            <td></td>
                         {/foreach}
-                    </div>
-                </div>
+                        </tr>
+                    </tbody>
+                </table>
              </div>
-{include file="common/footer.tpl"}
+{include file="common/main_footer.tpl"}

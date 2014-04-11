@@ -1,5 +1,5 @@
-{include file="common/header.tpl"}
-            <div class="row-fluid">
+{include file="common/main_header.tpl"}
+            <div class="searchform row-fluid">
                 <form action="{url_path('role')}" method="get" name="roleform">
                     <input type="hidden" value="role" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
@@ -13,13 +13,11 @@
                                 </select>
                             </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                            <a  class="addlink" href="{url_path('role','add')}">添加角色</a>
                         </li>
                      </ul>
                 </form>
-                
-               <a href="{url_path('role','add')}">添加角色</a>
             </div>
-            
             
             <div class="span12">
                 <table class="table">
@@ -62,4 +60,4 @@
                 </table>
                 {include file="pagination.tpl"}
              </div>
-{include file="common/footer.tpl"}
+{include file="common/main_footer.tpl"}

@@ -1,4 +1,4 @@
-{include file="common/header.tpl"}
+{include file="common/main_header.tpl"}
             <div class="row-fluid">
                 {if $action == 'edit'}
                 <form action="{url_path('user','edit')}" method="post" name="userform">
@@ -7,7 +7,6 @@
                 <form action="{url_path('user','add')}" method="post" name="userform">
                 {/if}
                     <table>
-                        
                         <tr>
                             <th><label class="required"><em>*</em><strong></th><td>姓名</strong></td><td><input type="text" name="name" value="{$user['name']}" placeholder="请输入员工姓名"/></label><span class="tip">{form_error('name')}</span></td>
                         </tr>
@@ -114,4 +113,4 @@
                 </script>
             </div>
         <script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
-{include file="common/footer.tpl"}
+{include file="common/main_footer.tpl"}

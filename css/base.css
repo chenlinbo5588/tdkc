@@ -1,0 +1,92 @@
+* {
+	font-size: 12px;
+    margin:0;
+    padding:0;
+}
+
+body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
+	outline-style:none;
+	font-family:"Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+
+html {
+    font-size:100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+
+body {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+td,th,div {
+	word-break:break-all;
+	word-wrap:break-word;
+}
+
+b,strong {
+	color:#666600;
+}
+
+li,dd {
+  list-style-type:none; margin:0px; padding:0px; 
+}
+
+
+ul,ol {
+    list-style: none;
+}
+
+
+input[type=button]{
+ background-color: #F1F8B4;
+}
+
+h1 { color:#171B16; font-size:130%; font-weight:bold; }
+h2 { color:#171B16; font-size:115%; font-weight:bold; }
+h3 { color:#171B16; font-size:100%; font-weight:bold;}
+
+a:link { font-size: 9pt; color: #000000; text-decoration: none;  }
+a:visited{ font-size: 9pt; text-decoration: none;  }
+a:hover {color: red; }
+a img { border-style:none; }
+
+b a {
+	color:#666600;
+}
+strong a {
+	color:#666600;
+}
+
+a b{
+	color:#666600;
+}
+a strong{
+	color:#666600;
+}
+
+input { border: 1px solid #ababab; }
+input[type=text] , input[type=password] {
+    height:20px;
+    border:1px solid #c7c7c7; 
+    text-indent:3px;
+}
+
+input[type=checkbox],input[type=radio] { 
+    margin-right:3px; 
+    vertical-align: middle;
+}
+input[type=text].grayed, input[type=password].grayed {
+    color:#cccccc;
+    border:1px solid #dedede;
+    background:#f7f7f7;
+    box-shadow:none;
+    -moz-box-shadow:none;
+    -o-box-shadow:none;
+    -webkit-box-shadow:none;
+}
+
+

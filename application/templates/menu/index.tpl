@@ -1,5 +1,5 @@
-{include file="common/header.tpl"}
-            <div class="row-fluid">
+{include file="common/main_header.tpl"}
+            <div class="searchform row-fluid">
                 <a href="{url_path('menu','add')}">添加菜单</a>
             </div>
             
@@ -44,4 +44,4 @@
             <script>
 
             </script>
-{include file="common/footer.tpl"}
+{include file="common/main_footer.tpl"}

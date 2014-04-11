@@ -1,3 +1,5 @@
+/*
+
 body {
 	padding-top:50px;
 	padding-bottom: 40px;
@@ -11,7 +13,6 @@ body {
 }
 
 input[type=text] , input[type=password] {
-    /*color:#9a9a9a;*/
     color:#333333;
     height:28px;
     line-height:28px;
@@ -163,6 +164,9 @@ ul,ol {
 .sidebar-nav li.first a:hover,.sidebar-nav li.first a {
     border-top:0px;
 }
+
+*/
+
 
 #topbar {
     1background: url(../img/top_bg.jpg) no-repeat left top #fff;

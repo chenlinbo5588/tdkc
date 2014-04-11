@@ -12,6 +12,24 @@ class Admin extends TZ_Admin_Controller {
         $this->display();
     }
     
+    /**
+     * 这三个函数需要权限检查 
+     */
+    public function top(){
+        
+        $this->display();
+    }
+    public function main(){
+        $this->display();
+    }
+    
+    public function menu(){
+        $this->display();
+    }
+    
+    
+    
+    
     public function change_password()
     {
         

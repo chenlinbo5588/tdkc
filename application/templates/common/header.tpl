@@ -9,8 +9,10 @@
 <meta name="author" content="linbo.chen">
 <link rel="shortcut icon" href="/favicon.ico">
 <title>{$TITLE}</title>
+<!--
 <link href="/css/bootstrap.css" rel="stylesheet">
 <link href="/css/layoutit.css" rel="stylesheet">
+-->
 <link href="/css/redmond/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -33,8 +35,17 @@
     });
 </script>
 <![endif]-->
+<style>
+body
+{
+  scrollbar-base-color:#C0D586;
+  scrollbar-arrow-color:#FFFFFF;
+  scrollbar-shadow-color:DEEFC6;
+}
+</style>
 </head>
 <body>
+{*
 <div id="dialog" title="操作提示" style="display:none;">
 	<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 </div>
@@ -42,5 +53,7 @@
 <div id="dialog-confirm" title="确认提示?" style="display:none;">
 	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="replaceTxt"></span></p>
 </div>
-    
-{include file="common/menu.tpl"}
+*}
+
+</style>
+</head>

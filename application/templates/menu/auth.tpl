@@ -1,4 +1,4 @@
-{include file="common/header.tpl"}
+{include file="common/main_header.tpl"}
             <div class="span12">
                 {form_error('auth_key[]')}
                 <form name="authForm" action="{$actionUrl}" method="post">
@@ -61,4 +61,4 @@
                     
                 });
             </script>
-{include file="common/footer.tpl"}
+{include file="common/main_footer.tpl"}
