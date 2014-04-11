@@ -1,52 +1,31 @@
-          <h1 class="page-header">修改密码</h1>
-          <div class="row placeholders">
-            
-          </div>
-          
-          <div class="table-responsive">
-            {if $message['feedback'] }
-            <div id="feedback" class="alert alert-{$message['className']}">{$message['feedback']}</div>
-            <script>
-                $(function(){
-                    setTimeout(function(){
-                        $("#feedback").fadeOut(function(){
-                            $(this).remove();
-                        });
-                        
-                        {if $message['location']}
-                        location.href = '{$message['location']}';
-                        {/if}
-                    },3000);
-                });
-            </script>
-            {/if}
-            <form role="form" name="editForm" action="{url_path('admin','save_password','',true)}" method="post">
-                <div class="form-group">
-                    <label for="old_psw">原密码</label>
-                    <input type="password" class="form-control" name="old_psw" value="" data-required id="old_psw" style="width:600px;" placeholder="请输入原密码"/>
-                </div>
-                <div class="form-group">
-                    <label for="new_psw">新密码</label>
-                    <input type="password" class="form-control" name="new_psw" value="" data-required id="new_psw" style="width:600px;" placeholder="请输入新密码"/>
-                </div>
-                <div class="form-group">
-                    <label for="new_psw2">新密码</label>
-                    <input type="password" class="form-control" name="new_psw2" value="" data-required id="new_psw2" style="width:600px;" placeholder="请再次输入新密码"/>
-                </div>
-                <button type="submit" class="btn btn-primary">保存</button>
+{include file="common/main_header.tpl"} 
+             <div class="feedback {$feedback}">{$feedMessage}</div>
+             <form role="form" name="editForm" action="{url_path('admin','change_password')}" method="post">
+                <table>
+                    <tr>
+                        <td><label for="old_psw">原密码</label></td>
+                        <td><input type="password"  name="old_psw" value="" data-required id="old_psw" style="width:600px;" placeholder="请输入原密码"/>{form_error('old_psw')}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="new_psw">新密码</label></td>
+                        <td><input type="password" name="new_psw" value="" data-required id="new_psw" style="width:600px;" placeholder="请输入新密码"/>{form_error('new_psw')}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="new_psw2">新密码</label></td>
+                        <td><input type="password"  name="new_psw2" value="" data-required id="new_psw2" style="width:600px;" placeholder="请再次输入新密码"/>{form_error('new_psw2')}</td>
+                     </tr>
+                     <tr>
+                         <td></td><td><button type="submit" class="btn btn-primary">保存</button></td>
+                     </tr>
+                </table>
              </form>
-         </div>
-         <script src="/js/jquery-validate.js"></script>
-        <script>
-            var editor1;
-            $('form[name=editForm]').validate({
-                onKeyup : true,
-                eachValidField : function() {
-                    $(this).closest('div').removeClass('has-error').addClass('has-success');
-                },
-                eachInvalidField : function() {
-                    $(this).closest('div').removeClass('has-success').addClass('has-error');
-                }
-            });
-            
-        </script>
+             <script>
+                $(function(){
+                {if $feedback == 'success'}
+                    setTimeout(function(){
+                        window.top.location.href = "{url_path('admin')}";
+                     },4000);
+                {/if}
+              });
+              </script>
+{include file="common/main_footer.tpl"}  

@@ -360,5 +360,8 @@ $config['proxy_ips'] = '';
 
 $config['validation_error'] = 'validate_error';
 
+//@todo modify
+$config['page_size'] = 2;
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */

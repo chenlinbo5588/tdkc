@@ -1,3 +1,15 @@
+.upload-button {
+    display: inline-block;
+    height: 26px;
+    width: 55px;
+    background: url(../img/swfup/upload_button.png) no-repeat;
+}
+
+.upload-button:hover {
+    background-position: 0 -26px;
+}
+
+
 
 .breadcrumb {
     margin: 0 0 10px 0;
@@ -7,6 +19,14 @@
     color:#f00;
     font-weight: bold;
     padding:0 2px;
+}
+
+.failed {
+    color:#f00;
+}
+
+.success {
+    color:blue;
 }
 
 .validate_error {

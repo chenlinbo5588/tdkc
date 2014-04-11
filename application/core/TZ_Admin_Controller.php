@@ -43,11 +43,12 @@ class TZ_Admin_Controller extends TZ_Controller {
             'where' => array('user_id' => $user[0]['id'],'status' => 0)
         ));
         
+        
         $roleMenu = $this->Role_Menu_Model->getList(array(
             'field' => 'id,url,auth_key',
-            'where' => array('role_id' => $user[0]['id'],'status' => 0)
+            'where' => array('role_id' => $user[0]['role_id'],'status' => 0)
         ));
-
+        
         if($userMenu['data']){
             foreach($userMenu['data'] as $value){
                 $this->_usermMenu[$value['id']] = $value;

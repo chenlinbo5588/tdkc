@@ -149,7 +149,7 @@ a:link,a:visited {
 		<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(0);"><img vspace="3" src="/img/frame/arrfc.gif" border="0" width="12" height="12" alt="显示/隐藏左框架" title="显示/隐藏左框架" /></a></dd>
 		{*<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(1);"><img vspace="5" src="/img/frame/arrr.gif" border="0" width="5" height="8" alt="增大左框架" title="增大左框架" /></a></dd>*}
 		<dd><div class="item" id="item1"><a href="{url_path('admin')}" onclick="changeSel(1)" target="_top">首页</a></div></dd>
-		<dd><div class="item" id="item2"><a href="javascript:void(0);" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>
+		<dd><div class="item" id="item2"><a href="{url_path('personal')}" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>
 		<dd><div class="item" id="item3"><a href="javascript:void(0);" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
 		<dd><div class="item" id="item4"><a href="javascript:void(0);" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
 		<dd><div class="item" id="item5"><a href="javascript:void(0);" onclick="changeSel(5)" target="menu">办公室</a></div></dd>

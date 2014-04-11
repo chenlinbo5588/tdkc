@@ -178,7 +178,7 @@ class Role extends TZ_Admin_Controller {
             
             $condition['order'] = "updatetime desc";
             $condition['pager'] = array(
-                'page_size' => 2,
+                'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
                 'query_param' => url_path('role','index',array('name' => $_GET['name']))
             );
