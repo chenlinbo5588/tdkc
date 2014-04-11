@@ -21,7 +21,6 @@
             <li class="{if $smarty.get.c == 'msg'}active{/if}"><a href="{url_path('msg')}">点对点消息</a></li>
             <li class="{if $smarty.get.c == 'my_schedule'}active{/if}"><a href="{url_path('my_schedule')}">日程安排</a></li>
             <li class="{if $smarty.get.c == 'my_file'}active{/if}"><a href="{url_path('my_file')}">我的文件</a></li>
-            <li class="{if $smarty.get.c == 'my_helper'}active{/if}"><a href="{url_path('my_helper')}">个人助理</a></li>
             <li class="{if $smarty.get.c == 'contacts'}active{/if}"><a href="{url_path('contacts')}">通讯录</a></li>
           </ul>
         </dd>

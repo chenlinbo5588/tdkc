@@ -537,6 +537,10 @@ if ( ! function_exists('redirect'))
 
 		switch($method)
 		{
+            case 'javascript':
+                header("Content-Type: text/html;charset=".config_item('charset'));
+                echo "<script>;window.top.location.href=\"".$uri."\";</script>";
+                break;
 			case 'refresh'	: header("Refresh:0;url=".$uri);
 				break;
 			default			: header("Location: ".$uri, TRUE, $http_response_code);

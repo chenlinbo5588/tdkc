@@ -20,19 +20,17 @@ class TZ_Admin_Controller extends TZ_Controller {
         //检查用户和密码
         $session = $this->session->userdata['profile'];
         if(!$session){
-            redirect(url_path('login'));
+            redirect(url_path('login'),'javascript');
         }
         
         $this->load->model('User_Model');
-        
-        
         
         $this->load->library('encrypt');
         
         $user = $this->User_Model->getUserByAccount($session['account']);
         
         if($user[0]['psw'] != $this->encrypt->decode($session['psw'])){
-            redirect(url_path('login'));
+            redirect(url_path('login'),'javascript');
         }
         
         $this->load->model('User_Menu_Model');
