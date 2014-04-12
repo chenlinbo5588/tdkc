@@ -25,7 +25,7 @@ class My_event extends TZ_Admin_Controller {
             
             //$condition['select'] = 'a,b';
             
-            $condition['order'] = "createtime desc";
+            $condition['order'] = "isnew DESC,createtime DESC";
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
@@ -34,7 +34,9 @@ class My_event extends TZ_Admin_Controller {
             if(!empty($_GET['title'])){
                 $condition['like'] = array('title' => $_GET['title']);
             }
-            $condition['where'] = array();
+            $condition['where'] = array(
+                'user_id' => $this->_userProfile['id'],
+            );
             
             if(!empty($_GET['sdate'])){
                 $condition['where']['createtime >='] = strtotime($_GET['sdate']);
