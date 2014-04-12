@@ -1,1 +1,1 @@
-<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>

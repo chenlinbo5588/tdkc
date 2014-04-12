@@ -26,7 +26,7 @@ class User_Model extends TZ_Model {
         $now = time();
         
         if(!$user['psw']){
-            $user['psw'] = md5(config_item('encryption_key').'#123456!');
+            $user['psw'] = md5(config_item('encryption_key').config_item('default_password'));
         }
         
         $data = array(

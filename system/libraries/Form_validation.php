@@ -956,31 +956,6 @@ class CI_Form_validation {
 		return $query->num_rows() === 0;
     }
     
-    public function is_unique_not_self($str,$field){
-        
-        list($table, $field,$key,$value)=explode('.', $field);
-        
-        $query = $this->CI->db->get_where($table, array($field => $str));
-        $result = $query->result_array();
-        
-        /*
-        print_r($field);
-        var_dump($query);
-        print_r($result);
-        */
-        
-        if($query->num_rows() === 0){
-            return true;
-        }
-        
-        if($query->num_rows() == 1 && $value == $result[0][$key]){
-            return true;
-        }else{
-            return false;
-        }
-        
-    }
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -1111,7 +1086,7 @@ class CI_Form_validation {
 	{
 		return $this->CI->input->valid_ip($ip, $which);
 	}
-
+    
 	// --------------------------------------------------------------------
 
 	/**

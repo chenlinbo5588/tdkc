@@ -8,7 +8,7 @@
         <dt onClick='showHide("items1_1")'><b>常用操作</b></dt>
         <dd style='display:block' class='sitem' id='items1_1'>
           <ul class='sitemu'>
-            <li><a href='archives.html' target='main'>所有档案列表</a> </li>
+            <li><a href="javascript:void(0);" target="main">常用操作</a> </li>
           </ul>
         </dd>
       </dl>

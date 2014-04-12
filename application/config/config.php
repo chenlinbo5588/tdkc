@@ -359,6 +359,7 @@ $config['proxy_ips'] = '';
 
 
 $config['validation_error'] = 'validate_error';
+$config['default_password'] = '123456';
 
 //@todo modify
 $config['page_size'] = 2;

@@ -6,7 +6,8 @@
                 {else}
                 <form action="{url_path('dept','add')}" method="post" name="deptform">
                 {/if}
-                    <table>
+                    <table class="maintain">
+                        <tbody>
                         <tr>
                             <td><label class="required"><em>*</em><strong>部门名称</strong></label></td>
                             <td><input type="text" style="width:350px;" name="name" value="{$dept['name']}" placeholder="请输入部门姓名"/>{form_error('name')}</td>
@@ -43,6 +44,7 @@
                             </td>
                         </tr>
                         {/if}
+                        </tbody>
                      </table>
                 </form>
                 <script>

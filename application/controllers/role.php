@@ -18,7 +18,7 @@ class Role extends TZ_Admin_Controller {
         $data = $this->Menu_Model->getListByTree();
         
         if(!empty($_GET['id'])){
-            $info = $this->User_Model->getById(array('where' => array('id' => intval($_GET['id']))));
+            $info = $this->Role_Model->getById(array('where' => array('id' => intval($_GET['id']))));
         }
         
         $this->load->model('Role_Menu_Model');
@@ -37,55 +37,60 @@ class Role extends TZ_Admin_Controller {
         
         $this->assign('existsAuth',$existsAuth);
         $this->assign('actionUrl',url_path('role','auth'));
-        
         if($this->isPostRequest() && !empty($_POST['id'])){
+            $info = $this->Role_Model->getById(array('where' => array('id' => intval($_POST['id']))));
             
-            $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
-            
-            if($this->form_validation->run()){
-                
-                $updateCount = $this->Role_Menu_Model->updateByWhere(
-                        array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
-                        array('role_id' => $_POST['id'])
-                        );
-                
-                if(!empty($_POST['auth_key'])){
-                    $this->load->model('Menu_Model');
-                    /**
-                     * 必须是系统内部的已经存在的
-                     */
-                    $menuList = $this->Menu_Model->getList(array(
-                        'where_in' => array(
-                            array(
-                                'key'=> 'auth_key' ,
-                                'value' => array_values($_POST['auth_key'])
-                            )
-                        )
-                    ));
-                    
-                    $newmenu = array();
-                    $now = time();
-                    foreach($menuList['data'] as $value){
-                        $newmenu[] = array(
-                            'role_id' => $_POST['id'],
-                            'auth_key' => $value['auth_key'],
-                            'creator' => $this->_userProfile['name'],
-                            'updator' => $this->_userProfile['name'],
-                            'createtime' => $now,
-                            'updatetime' => $now,
-                        );
-                    }
-                    
-                    if($newmenu){
-                        $this->Role_Menu_Model->batchInsert($newmenu);
-                    }
-                }
-                
-                $this->assign("feedback", "success");
-                $this->assign('feedMessage',"修改成功");
-            }else{
+            if($info['type'] == 1 && $this->_userProfile['id'] != 1){
                 $this->assign("feedback", "failed");
-                $this->assign('feedMessage',"修改失败");
+                $this->assign('feedMessage',"修改失败,系统角色权限只能由超级管理员修改");
+            }else{
+                $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
+
+                if($this->form_validation->run()){
+
+                    $updateCount = $this->Role_Menu_Model->updateByWhere(
+                            array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
+                            array('role_id' => $_POST['id'])
+                            );
+
+                    if(!empty($_POST['auth_key'])){
+                        $this->load->model('Menu_Model');
+                        /**
+                        * 必须是系统内部的已经存在的
+                        */
+                        $menuList = $this->Menu_Model->getList(array(
+                            'where_in' => array(
+                                array(
+                                    'key'=> 'auth_key' ,
+                                    'value' => array_values($_POST['auth_key'])
+                                )
+                            )
+                        ));
+
+                        $newmenu = array();
+                        $now = time();
+                        foreach($menuList['data'] as $value){
+                            $newmenu[] = array(
+                                'role_id' => $_POST['id'],
+                                'auth_key' => $value['auth_key'],
+                                'creator' => $this->_userProfile['name'],
+                                'updator' => $this->_userProfile['name'],
+                                'createtime' => $now,
+                                'updatetime' => $now,
+                            );
+                        }
+
+                        if($newmenu){
+                            $this->Role_Menu_Model->batchInsert($newmenu);
+                        }
+                    }
+
+                    $this->assign("feedback", "success");
+                    $this->assign('feedMessage',"修改成功");
+                }else{
+                    $this->assign("feedback", "failed");
+                    $this->assign('feedMessage',"修改失败");
+                }
             }
             
             $this->assign('redirectUrl',url_path('role','auth','id='.$_POST['id']));
@@ -100,9 +105,21 @@ class Role extends TZ_Admin_Controller {
     public function delete()
 	{
         if($this->isPostRequest() && !empty($_POST['id'])){
-            /**
-             * @todo 角色正在使用 ,不能被删除 
-             */
+            
+            
+            $role = $this->Role_Model->getById(array('where' => array('id' => $_POST['id'])));
+            
+            if($role['type'] == 1){
+                $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '系统角色不能删除'));
+            }
+            
+            $this->load->model('User_Model');
+            $usedCount = $this->User_Model->getCount(array('where' => array('role_id' => $_POST['id'],'status' => '正常')));
+            
+            if($usedCount){
+                $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '角色正在使用，不能删除'));
+            }
+            
             $this->Role_Model->fake_delete($_POST);
             $this->sendFormatJson('success',array('id' => $_POST['id'] , 'text' => '删除成功'));
         }else{

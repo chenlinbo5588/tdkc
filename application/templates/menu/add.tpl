@@ -6,13 +6,14 @@
                 {else}
                 <form action="{url_path('menu','add')}" method="post" name="menuform">
                 {/if}
-                    <table>
+                    <table class="maintain">
+                        <tbody>
                         <tr>
                             <td><label class="required"><em>*</em><strong>菜单名称</strong></label></td><td><input type="text" style="width:250px;" name="name" value="{$menu['name']}" placeholder="请输入菜单姓名"/>{form_error('name')}</td>
-                        </li>
+                        </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>权限名称</strong></label></td><td><input type="text" style="width:250px;" name="url" value="{$menu['url']}" placeholder="请输入权限名称"/><span class="tip">请按照 c=user&m=edit 这样的格式输入 {form_error('url')}</span></td>
-                        </li>
+                        </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>上级菜单</strong></label></td>
                             <td>
@@ -23,8 +24,9 @@
                                 {/foreach}
                                 </select>
                             </td>
-                        </li>
+                        </tr>
                         <tr><td></td><td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></td></tr>
+                        </tbody>
                      </table>
                 </form>
                 <script>

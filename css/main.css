@@ -1,3 +1,83 @@
+.lightbox table {
+    height: 100%;
+    width: 100%; 
+}
+
+.lightbox td, .lightbox th {
+    vertical-align: middle; 
+}
+
+.lightbox-content {
+    background-color: #fff;
+    width: 400px;
+    margin: 0 auto;
+    padding: 1px;
+    position: relative; 
+}
+
+.lightbox-body {
+    border: 1px solid #cecece;
+    border-top: 0;
+    padding: 10px 30px 30px 30px; 
+}
+
+.lightbox-head {
+    border: 1px solid #cecece;
+    border-bottom: 0;
+    background-color: #eeeeee; 
+}
+  .lightbox-head h3 {
+    line-height: 30px;
+    padding-left: 20px;
+    margin: 0; 
+  }
+
+.lightbox {
+    display: none;
+    line-height: 20px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 99999999999;
+    background-color: rgba(0, 0, 0, 0.3);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#7F000000', endColorstr='#7F000000');
+    zoom: 1; 
+}
+.loading_icon {
+    margin-right: 20px;
+    vertical-align: middle;
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    background: url(../img/loading.gif) no-repeat 50% 50%;
+}
+
+.loading_box div {
+    height: 60px;
+    width: 340px;
+    border: 3px solid #666;
+    text-align: center; 
+}
+
+.loading_text {
+    line-height: 60px;
+    color: #666;
+    font-size: 14px; 
+}
+
+.loading_close {
+    cursor: pointer;
+    color: #ccc;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    right: 5px;
+    top: 5px; 
+}
+
 .upload-button {
     display: inline-block;
     height: 26px;
@@ -8,7 +88,6 @@
 .upload-button:hover {
     background-position: 0 -26px;
 }
-
 
 
 .breadcrumb {
@@ -56,7 +135,7 @@
 }
 
 .searchform .addlink {
-   
+   color:#f00;
 }
 
 .btn {
@@ -67,6 +146,15 @@
 .container {
     padding:20px;
 }
+
+.maintain {
+    
+}
+
+.maintain td ,.maintain tr th {
+    padding:3px;
+}
+
 
 .table {
     border-collapse: collapse;
@@ -153,15 +241,13 @@
     padding:20px;
 }
 
-
-
-
-.dept a.delete {
-    width:10%;
-}
-
 ol.style_decimal , ul.style_decimal {
     list-style-type: decimal;
+}
+
+.tree_item {
+    border:1px solid #000;
+    border-width: 0 0 0 1px;
 }
 
 #dept_employ_list li {
@@ -170,3 +256,27 @@ ol.style_decimal , ul.style_decimal {
 }
 
 
+#cal table {
+    
+}
+
+#cal table td,#cal table th {
+    border:1px solid #D1D36B;
+    padding:3px;
+}
+
+.schedule_item h3 {
+    margin:3px 0;
+}
+
+.schedule_item p {
+    text-indent: 2em;
+}
+
+.ci_calendar .weekhead {
+    background:#FAFAF1;
+}
+
+.ci_calendar .weekhead td {
+    font-weight: bold;
+}

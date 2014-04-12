@@ -6,7 +6,8 @@
                 {else}
                 <form action="{url_path('role','add')}" method="post" name="roleform">
                 {/if}
-                    <table>
+                    <table class="maintain">
+                        <tbody>
                         <tr>
                             <td><label class="required"><em>*</em><strong>角色名称</strong></td><td><input type="text" style="width:200px" name="name" value="{$role['name']}" placeholder="请输入角色姓名"/></label>{form_error('name')}</td>
                         </tr>
@@ -14,6 +15,7 @@
                             <td></td>
                             <td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></td>
                         </tr>
+                        </tbody>
                      </table>
                 </form>
                 <script>

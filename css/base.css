@@ -9,9 +9,7 @@ body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input
 	font-family:"Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-
 html {
-    font-size:100%;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 }
@@ -48,10 +46,18 @@ input[type=button]{
 h1 { color:#171B16; font-size:130%; font-weight:bold; }
 h2 { color:#171B16; font-size:115%; font-weight:bold; }
 h3 { color:#171B16; font-size:100%; font-weight:bold;}
-
+/*
 a:link { font-size: 9pt; color: #000000; text-decoration: none;  }
 a:visited{ font-size: 9pt; text-decoration: none;  }
 a:hover {color: red; }
+*/
+a {
+   text-decoration: none;
+}
+a:hover {
+    color: red;
+    text-decoration:underline;
+}
 a img { border-style:none; }
 
 b a {
@@ -87,6 +93,14 @@ input[type=text].grayed, input[type=password].grayed {
     -moz-box-shadow:none;
     -o-box-shadow:none;
     -webkit-box-shadow:none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td,table th {
+    vertical-align: top;
 }
 
 

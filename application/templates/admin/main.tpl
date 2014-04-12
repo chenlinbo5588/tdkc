@@ -70,6 +70,7 @@
     <td>Cms_2009_UTF8</td>
   </tr>
 </table>
+{*
 <table width="98%" align="center" border="0" cellpadding="4" cellspacing="1" bgcolor="#CBD8AC">
   <tr bgcolor="#EEF4EA">
     <td colspan="2" background="/img/frame/wbg.gif" class='title'><span>使用帮助</span></td>
@@ -82,5 +83,5 @@
     <td width="25%" height="32">更多后台模板：</td>
     <td width="75%"><a href="http://www.865171.cn/admin-templates" target="_blank"><u>http://www.865171.cn/admin-templates</u></a></td>
   </tr>
-</table>
+</table>*}
 {include file="common/main_footer.tpl"}

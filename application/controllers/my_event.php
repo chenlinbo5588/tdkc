@@ -2,7 +2,12 @@
 
 class My_event extends TZ_Admin_Controller {
 
-	
+	public function __construct(){
+        parent::__construct();
+        $this->load->model('User_Event_Model');
+    }
+    
+    
 	public function index()
 	{
         
@@ -18,8 +23,6 @@ class My_event extends TZ_Admin_Controller {
                 $_GET['page'] = 1;
             }
             
-            $this->load->model('User_Event_Model');
-            
             //$condition['select'] = 'a,b';
             
             $condition['order'] = "createtime desc";
@@ -28,8 +31,8 @@ class My_event extends TZ_Admin_Controller {
                 'current_page' => $_GET['page'],
                 'query_param' => url_path('my_event','index')
             );
-            if(!empty($_GET['name'])){
-                $condition['like'] = array('name' => $_GET['name']);
+            if(!empty($_GET['title'])){
+                $condition['like'] = array('title' => $_GET['title']);
             }
             $condition['where'] = array();
             

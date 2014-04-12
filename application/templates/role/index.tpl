@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
             <div class="searchform row-fluid">
-                <form action="{url_path('role')}" method="get" name="roleform">
+                <form action="{url_path('role')}" method="get" name="searchform">
                     <input type="hidden" value="role" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
                     <ul>
@@ -25,6 +25,7 @@
                         <tr>
                             <th>编号</th>
                             <th>角色名称</th>
+                            <th>角色类型</th>
                             <th>状态</th>
                             <th>创建人</th>
                             <th>创建时间</th>
@@ -38,6 +39,7 @@
                         <tr id="row_{$item['id']}">
                            <td>{$item['id']}</td>
                            <td>{$item['name']|escape}</td>
+                           <td>{if $item['type'] == 1}系统角色{else}用户角色{/if}</td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>

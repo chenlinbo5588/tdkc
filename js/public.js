@@ -193,9 +193,13 @@ $(function(){
                             $("#row_" + ids[i]).remove();
                         }
                     }
-
+                    
                     if(data.redirectUrl){
-                        location.href = redirectUrl;
+                        location.href = data.redirectUrl;
+                    }
+                    
+                    if(data.reload){
+                        location.reload();
                     }
                 },
                 error:function(xhr, textStatus, errorThrown){

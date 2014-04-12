@@ -41,52 +41,56 @@ class User extends TZ_Admin_Controller {
         $this->assign('actionUrl',url_path('user','auth'));
         
         if($this->isPostRequest() && !empty($_POST['id'])){
-            
-            $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
-            if($this->form_validation->run()){
-                
-                $updateCount = $this->User_Menu_Model->updateByWhere(
-                        array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
-                        array('user_id' => $_POST['id'],'status' => 0)
-                        );
-                
-                if(!empty($_POST['auth_key'])){
-                    $this->load->model('Menu_Model');
-                    /**
-                     * 必须是系统内部的已经存在的
-                     */
-                    $menuList = $this->Menu_Model->getList(array(
-                        'where_in' => array(
-                            array(
-                                'key'=> 'auth_key' ,
-                                'value' => array_values($_POST['auth_key'])
+            if($_POST['id'] != 1){
+                $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
+                if($this->form_validation->run()){
+
+                    $updateCount = $this->User_Menu_Model->updateByWhere(
+                            array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
+                            array('user_id' => $_POST['id'],'status' => 0)
+                            );
+
+                    if(!empty($_POST['auth_key'])){
+                        $this->load->model('Menu_Model');
+                        /**
+                        * 必须是系统内部的已经存在的
+                        */
+                        $menuList = $this->Menu_Model->getList(array(
+                            'where_in' => array(
+                                array(
+                                    'key'=> 'auth_key' ,
+                                    'value' => array_values($_POST['auth_key'])
+                                )
                             )
-                        )
-                    ));
-                    
-                    $newmenu = array();
-                    $now = time();
-                    foreach($menuList['data'] as $value){
-                        $newmenu[] = array(
-                            'user_id' => $_POST['id'],
-                            'auth_key' => $value['auth_key'],
-                            'creator' => $this->_userProfile['name'],
-                            'updator' => $this->_userProfile['name'],
-                            'createtime' => $now,
-                            'updatetime' => $now,
-                        );
+                        ));
+
+                        $newmenu = array();
+                        $now = time();
+                        foreach($menuList['data'] as $value){
+                            $newmenu[] = array(
+                                'user_id' => $_POST['id'],
+                                'auth_key' => $value['auth_key'],
+                                'creator' => $this->_userProfile['name'],
+                                'updator' => $this->_userProfile['name'],
+                                'createtime' => $now,
+                                'updatetime' => $now,
+                            );
+                        }
+
+                        if($newmenu){
+                            $this->User_Menu_Model->batchInsert($newmenu);
+                        }
                     }
-                    
-                    if($newmenu){
-                        $this->User_Menu_Model->batchInsert($newmenu);
-                    }
+
+                    $this->assign("feedback", "success");
+                    $this->assign('feedMessage',"修改成功");
+                }else{
+                    $this->assign("feedback", "failed");
+                    $this->assign('feedMessage',"修改失败");
                 }
-                
-                $this->assign("feedback", "success");
-                $this->assign('feedMessage',"修改成功");
             }else{
                 $this->assign("feedback", "failed");
-                $this->assign('feedMessage',"修改失败");
+                $this->assign('feedMessage',"不能对超级管理员设置权限");
             }
             
             $this->assign('redirectUrl',url_path('user','auth','id='.$_POST['id']));
@@ -188,7 +192,7 @@ class User extends TZ_Admin_Controller {
     
     private function _addRules(){
         
-        $this->form_validation->set_rules('name', '姓名', 'required|min_length[1]|max_length[20]');
+        $this->form_validation->set_rules('name', '姓名', 'required|min_length[1]|max_length[20]|htmlspecialchars');
         
         if(!empty($_POST['psw'])){
             $this->form_validation->set_rules('psw', '密码', 'required|min_length[6]|max_length[10]|matches[psw2]');
@@ -202,9 +206,13 @@ class User extends TZ_Admin_Controller {
         if(!empty($_POST['email'])){
             $this->form_validation->set_rules('email', '邮箱', 'required|valid_email|max_length[40]');
         }
+        
+        if(!empty($_POST['graduation_date'])){
+            $this->form_validation->set_rules('graduation_date', '毕业时间', 'required|valid_date[yyyy-mm-dd]');
+        }
 
         $this->form_validation->set_rules('mobile', '手机号码', 'required|numeric|exact_length[11]');
-        $this->form_validation->set_rules('enter_date', '入院时间', 'required');
+        $this->form_validation->set_rules('enter_date', '入院时间', 'required|valid_date[yyyy-mm-dd]');
         $this->form_validation->set_rules('dept_id', '归属部门', 'required|integer|greater_than[0]');
     }
 
@@ -276,7 +284,7 @@ class User extends TZ_Admin_Controller {
             
             //$condition['select'] = 'a,b';
             
-            $condition['order'] = "updatetime desc";
+            $condition['order'] = "createtime desc";
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
