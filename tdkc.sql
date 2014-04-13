@@ -1,13 +1,11 @@
 /*
 MySQL Data Transfer
-Source Host: localhost
+Source Host: 192.168.171.128
 Source Database: tdkc
-Target Host: localhost
+Target Host: 192.168.171.128
 Target Database: tdkc
-Date: 2014/4/4 ������ 16:29:54
+Date: 2014/4/13 20:54:16
 */
-
-
 
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
@@ -22,6 +20,21 @@ CREATE TABLE `ci_sessions` (
   PRIMARY KEY (`session_id`),
   KEY `last_activity_idx` (`last_activity`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for tb_announces
+-- ----------------------------
+CREATE TABLE `tb_announces` (
+  `annid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `subject` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `show_order` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_expand` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `in_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`annid`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_attachment
@@ -77,6 +90,72 @@ CREATE TABLE `tb_dept` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for tb_files
+-- ----------------------------
+CREATE TABLE `tb_files` (
+  `file_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `yun_fid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `file_name` varchar(100) NOT NULL,
+  `file_key` char(8) NOT NULL,
+  `file_short_url` char(6) NOT NULL,
+  `file_extension` varchar(10) NOT NULL,
+  `is_image` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `file_mime` varchar(50) NOT NULL,
+  `file_description` text NOT NULL,
+  `file_store_path` varchar(50) NOT NULL,
+  `file_real_name` varchar(255) NOT NULL,
+  `file_md5` char(32) NOT NULL,
+  `server_oid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `store_old` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `file_size` int(10) unsigned NOT NULL DEFAULT '0',
+  `thumb_size` int(10) unsigned NOT NULL DEFAULT '0',
+  `file_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `file_views` int(10) unsigned DEFAULT '0',
+  `file_downs` int(10) unsigned NOT NULL DEFAULT '0',
+  `file_last_view` int(10) unsigned DEFAULT '0',
+  `file_credit` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `report_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `in_share` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `space_pos` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `good_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `bad_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `is_locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_checked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_public` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `folder_id` bigint(20) NOT NULL DEFAULT '0',
+  `cate_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `subcate_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `in_recycle` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `ip` varchar(15) NOT NULL,
+  PRIMARY KEY (`file_id`),
+  KEY `userid` (`userid`),
+  KEY `folder_id` (`folder_id`),
+  KEY `server_id` (`server_oid`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for tb_folders
+-- ----------------------------
+CREATE TABLE `tb_folders` (
+  `folder_id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(20) NOT NULL DEFAULT '0',
+  `folder_node` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `folder_name` varchar(50) NOT NULL,
+  `folder_description` varchar(255) NOT NULL,
+  `in_recycle` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `in_share` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `folder_order` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `folder_size` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `in_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`folder_id`),
+  KEY `userid` (`user_id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `folder_node` (`folder_node`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -582,8 +661,8 @@ CREATE TABLE `tb_user` (
 CREATE TABLE `tb_user_event` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(16) NOT NULL,
-  `title` varchar(30) NOT NULL DEFAULT '' COMMENT 'url地址',
-  `content` varchar(100) NOT NULL DEFAULT '',
+  `title` varchar(200) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL,
   `isnew` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '是否未新消息 1=是 0=否',
   `status` varchar(10) NOT NULL DEFAULT '' COMMENT '未处理,已处理',
   `creator` varchar(20) NOT NULL DEFAULT '',
@@ -640,8 +719,8 @@ CREATE TABLE `tb_user_schedule` (
   `user_id` int(16) NOT NULL,
   `sdate` int(10) unsigned NOT NULL,
   `edate` int(10) unsigned NOT NULL,
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'url地址',
-  `content` varchar(100) NOT NULL DEFAULT '',
+  `title` varchar(200) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT '正常',
   `auto_notify` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否自动提醒 1=是 0=否',
   `creator` varchar(20) NOT NULL DEFAULT '',
@@ -650,7 +729,8 @@ CREATE TABLE `tb_user_schedule` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_create` (`createtime`),
-  KEY `idx_user_id` (`user_id`)
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_title` (`title`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -659,8 +739,8 @@ CREATE TABLE `tb_user_schedule` (
 CREATE TABLE `tb_work_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(16) NOT NULL,
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'url地址',
-  `content` varchar(200) NOT NULL DEFAULT '',
+  `title` varchar(200) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT '正常',
   `creator` varchar(20) NOT NULL DEFAULT '',
   `updator` varchar(20) NOT NULL DEFAULT '',
@@ -668,8 +748,9 @@ CREATE TABLE `tb_work_log` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_create` (`createtime`),
-  KEY `idx_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_title` (`title`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records 
@@ -713,6 +794,12 @@ INSERT INTO `ci_sessions` VALUES ('44c6cc967da3c61c1ce61f2fe30008dd', '127.0.0.1
 INSERT INTO `ci_sessions` VALUES ('ffdb6630abeab9caf1e31740ec3efec9', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36', '1397279546', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"ywNbTQT/baKlWXx8P770fK7S+Q0lQsU6Iq5S5mrNkQL236zjGPMfMoi2PFJsB5TOtFID129C8nZLmC41QPm94w==\";}}');
 INSERT INTO `ci_sessions` VALUES ('af1e383c75cfc3dba5d153c8fe969c17', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1397293623', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"fI14L+vObQwVyeG3aogiM6cQMUncbyhma6Pjy/XEMsv7VcY9G/RK2mWhrajZZR088CH1Eekib2wW1oCSGPPrjw==\";}}');
 INSERT INTO `ci_sessions` VALUES ('04666c2717192135538ad97c53528839', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36', '1397293714', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:2:\"11\";s:7:\"account\";s:3:\"t51\";s:4:\"name\";s:9:\"测试是\";s:2:\"gh\";s:2:\"55\";s:3:\"psw\";s:88:\"dS+ICJQPGQU+gyuZxvTsKMfKPdwzbxiASkM6t5G+UDJirAzPWHeIig4l6Qto/kOL8ldaGPbfybg8wzH+E64+bg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('67a9aa2f10b58cffd92b32026903f9c4', '192.168.171.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397393509', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"VWAEPFRgBjpcPAdtBjYMYVdlAjBXMF42VWBQYlNnBGcLZ1RnVjAPPFEzBTpTYVNoXD4AOFA0WjFUNwY1BzBUNQ==\";}}');
+INSERT INTO `tb_announces` VALUES ('2', '1', 'PHPDISK v5.1 新增功能与修正列表', '[新增]分布式服务器管理员可自行添加ID作为FTP与文件的对应标识。<br>[新增]公共文件,缩短地址，网盘文件的直接显示外链地址。<br>[新增]如果是共享文件/公共文件，点击后有下载页面，私人文件直接下载。<br>[新增]文件管理添加目录显示。<br>[新增]充值选项，自动转化为积分。<br>[新增]MYSQL数据库类提交错误时，输入email，处理完发邮件通知用户。<br>[修正]整合，在linux下无法整合UC，通信不成功问题。<br>[修正]GBK上传添加描述、标签出现乱码问题。<br>[修正]Mysql类出错时在linux主机下的目录问题。<br>[修正]只能设置为共享的文件才能使用提取码功能。<br>[修正]使用代码广告会令页面不断跳转。', '0', '0', '1', '1286171569');
+INSERT INTO `tb_announces` VALUES ('3', '1', 'PHPDISK v5.3.0新增功能与改进', '[新增]支持PHPWIND论坛整合。<br>[新增]新增几种广告管理，让管理员更好的投放广告。<br>[新增]支持常用的文件在线浏览，如mp3播放，flash播放等支持。<br>[新增]PHPDISK可实现在线检测自动升级，比起传统手动升级更加便捷。<br>[新增]标题排序，用户可以直接点击表头，对网盘中的文件进行排序，如，按大小、按日期等。<br>[新增]引入用户经验等级模式，用户使用网盘，帐号会自动升级。<br>[新增]增加首页幻灯片展示效果，可以让网盘更具个性效果。<br>[新增]用户充值方式支持使用网银接口与易宝支付接口。<br>[修正]公告模式的改进，阅读、显示更加人性化。<br>[修正]改进结构系统布局UI，引入更华丽的ajax效果，大大提升用户交互体验。<br>[修正]在生成外链的[img]代码直接变成&lt;IMG src=\"\"&gt;  代码，多一种模式的显示。<br>[修正]修正UCenter整合时出现用户重复记录问题。<br>[修正]修正搜索引擎直接收录文件问题，而不能通过文件展示页下载的问题。<br>[修正]分布服务器插件，可支持子程序配置，同时可支持FTP中转上传与子程序直接上传的形式。大大减少主服务器资源消耗。<br>[修正]外链，提取码等可由管理员设定，后台使用了大部分的开关形式。<br>[修正]SEO插件nginx修正。<br>[修正]移动文件到二级公共文件时文件无法显示问题。<br>[修正]管理员后台更加精细的分类。<br>[修正]修正公共文件显示文件空间不正确问题。', '0', '0', '0', '1288057490');
+INSERT INTO `tb_announces` VALUES ('4', '1', 'PHPDisk v5.5.0 新增功能与改进说明', '[增加]添加一键设置所有文件共享。<br>[增加]后台搜索缓存管理。<br>[增加]语言包在线切换功能。<br>[增加]文件替换功能，替换后原文件地址不变，适合做永久链接。<br>[增加]模板SQL 标签{sql[xxx][$v]}{/sql}调用，用户可以通过修改模板，实现对数据库进行个性化的调用。<br>[增加]JS数据调用。<br>[增加]数组调用。<br>[增加]分享工具功能，用户可以通过工具将网盘上的文件资源分享到其他的网站中。<br>[增加]添加后台sitemap功能，管理员可以更快捷定位到管理功能。<br>[增加]添加后台快捷操作面板，整合了后台配置面板，管理员可定义自己常用快捷功能。<br>[优化]优化精简程序核心架构代码，系统运行更快更稳定。<br>[优化]优化下载出现“外链未开启提示”。<br>[优化]将大部分常用的插件集成到系统后台，免去反复安装的麻烦。<br>[修正]分布式服务器出现显示乱码问题。<br>[修正]部分接口无法进行充值转换问题。<br>[修正]充值接口空白问题。<br>[修正]文件浏览页标题，附加上网站标题，方便SEO。<br>[改进]下载提示，更加友好显示文件下载。', '0', '0', '0', '1301419754');
+INSERT INTO `tb_announces` VALUES ('5', '1', 'PHPDisk 6.5.0 V-Core系列', '1、引入国际化语言包功能(po , mo)，让系统维护语言包更简洁，进一步向国际化的方向跨进。<br>2、为了兼容所有的浏览器，系统全面放弃iframe 框架结构。<br>3、系统上多处页面上的细节改动，更加合理地布局。<br>4、进一步改进缓存及程序架构底层，速度运营更稳定更快速。<br>5、同一套内核将会针对不同的方向及领域，专业化的方向发展。<br>6、v-core首先将推出FMS(File Manage System) 文件管理系统方向，站长可以将此做成WEB2.0模式的下载站，而内容可以由网站的用户上传。<br>7、公共文件部分的改进，激发此部分的效能。<br>\n8、可自定配置网站后台的管理员入口，增加网站管理员安全。', '0', '0', '0', '1338516732');
+INSERT INTO `tb_announces` VALUES ('6', '1', 'PHPDisk 6.8.0 V-Core系列', '新增客户端支持<br>改进分布服务配置<br>修正现有版本存在的BUG<br>优化程序架构<br>改进缓存体系，修正共享文件无法操作', '0', '0', '0', '1357737649');
 INSERT INTO `tb_contacts` VALUES ('1', '我的日程1', '0', '今天去办社保', '', '', '', '正常', '超级管理员', '超级管理员', '1397265793', '1397265793');
 INSERT INTO `tb_contacts` VALUES ('2', '我的日程2', '0', '今天下班去接小孩', '', '', '', '正常', '超级管理员', '超级管理员', '1397267173', '1397267173');
 INSERT INTO `tb_contacts` VALUES ('3', '我日日程3', '0', '几天能哈哈sas 环境阿莎哈啥', '', '', '', '正常', '超级管理员', '超级管理员', '1397267537', '1397267537');
@@ -732,6 +819,8 @@ INSERT INTO `tb_dept` VALUES ('11', '测量组', '1', '正常', '超级管理员
 INSERT INTO `tb_dept` VALUES ('12', '测量1组', '11', '正常', '超级管理员', '超级管理员', '1397102772', '1397102772');
 INSERT INTO `tb_dept` VALUES ('13', '测量2组', '11', '已删除', '超级管理员', '超级管理员', '1397102781', '1397102781');
 INSERT INTO `tb_dept` VALUES ('14', '测量3组', '11', '已删除', '超级管理员', '超级管理员', '1397195082', '1397197246');
+INSERT INTO `tb_files` VALUES ('1', '0', '新建文本文档 (3)', 'LGyVO3AH', '', 'txt', '0', 'application/octet-stream', '', '2014/04/13/', '8e9fe03ce8b4a8d598236404d9b8bb0c', '', '0', '0', '161', '0', '1397382227', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '0', '0', '0', '0', '192.168.171.1');
+INSERT INTO `tb_folders` VALUES ('1', '-1', '1', '我的文件', '', '0', '0', '0', '0', '1', '1397382263');
 INSERT INTO `tb_menu` VALUES ('7', '134f34825e4f179f4355bb8bc369ead0', '系统管理', 'c=system&m=index', '0', '0', '正常', '超级管理员', '超级管理员', '1397093146', '1397099842');
 INSERT INTO `tb_menu` VALUES ('8', '970ee07bcf77cf54e167c83a5e6d3c27', '用户管理', 'c=user&m=index', '7', '0', '正常', '超级管理员', '超级管理员', '1397093444', '1397099915');
 INSERT INTO `tb_menu` VALUES ('9', 'e8543ad4a081e16686be51317b888f00', '添加用户', 'c=user&m=add', '8', '0', '正常', '超级管理员', '超级管理员', '1397093473', '1397097714');
@@ -837,4 +926,4 @@ INSERT INTO `tb_work_log` VALUES ('2', '1', '我的日程2', '今天下班去接
 INSERT INTO `tb_work_log` VALUES ('3', '1', '我日日程3', '几天能哈哈sas 环境阿莎哈啥', '正常', '超级管理员', '超级管理员', '1397267537', '1397267537');
 INSERT INTO `tb_work_log` VALUES ('4', '1', '今天去桥头测量', '问题1：\r\n哈哈是爱上\r\n问题2\r\nhashash\r\n问题3\r\n与哈市', '已删除', '超级管理员', '超级管理员', '1397288917', '1397289147');
 INSERT INTO `tb_work_log` VALUES ('5', '1', '测试测试', '爱喝啥啥爱上哈啥是撒', '正常', '超级管理员', '超级管理员', '1397293478', '1397293478');
-
+INSERT INTO `tb_work_log` VALUES ('6', '1', '我介绍的或多或少的是速度', '哈哈撒花花洒撒是', '正常', '超级管理员', '超级管理员', '1397383274', '1397383274');

@@ -63,8 +63,8 @@ class Work_Log extends TZ_Admin_Controller {
     
     
     private function _addRules(){
-        $this->form_validation->set_rules('title', '标题', 'required|min_length[3]|max_length[50]|htmlspecialchars');
-        $this->form_validation->set_rules('content', '内容', 'required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('title', '标题', 'required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('content', '内容', 'required|min_length[3]|htmlspecialchars');
     }
     
     public function add()

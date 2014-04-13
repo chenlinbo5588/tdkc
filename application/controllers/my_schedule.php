@@ -77,8 +77,8 @@ class My_schedule extends TZ_Admin_Controller {
     
     
     private function _addRules(){
-        $this->form_validation->set_rules('title', '标题', 'required|min_length[3]|max_length[50]|htmlspecialchars');
-        $this->form_validation->set_rules('content', '内容', 'required|min_length[3]|max_length[100]|htmlspecialchars');
+        $this->form_validation->set_rules('title', '标题', 'required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('content', '内容', 'required|min_length[3]|htmlspecialchars');
         $this->form_validation->set_rules('sdate', '开始日期', 'required|valid_date[yyyy-mm-dd]');
         $this->form_validation->set_rules('edate', '结束日期', 'required|valid_date[yyyy-mm-dd]');
     }
