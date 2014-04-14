@@ -1,83 +1,3 @@
-.lightbox table {
-    height: 100%;
-    width: 100%; 
-}
-
-.lightbox td, .lightbox th {
-    vertical-align: middle; 
-}
-
-.lightbox-content {
-    background-color: #fff;
-    width: 400px;
-    margin: 0 auto;
-    padding: 1px;
-    position: relative; 
-}
-
-.lightbox-body {
-    border: 1px solid #cecece;
-    border-top: 0;
-    padding: 10px 30px 30px 30px; 
-}
-
-.lightbox-head {
-    border: 1px solid #cecece;
-    border-bottom: 0;
-    background-color: #eeeeee; 
-}
-  .lightbox-head h3 {
-    line-height: 30px;
-    padding-left: 20px;
-    margin: 0; 
-  }
-
-.lightbox {
-    display: none;
-    line-height: 20px;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 99999999999;
-    background-color: rgba(0, 0, 0, 0.3);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#7F000000', endColorstr='#7F000000');
-    zoom: 1; 
-}
-.loading_icon {
-    margin-right: 20px;
-    vertical-align: middle;
-    display: inline-block;
-    height: 40px;
-    width: 40px;
-    background: url(../img/loading.gif) no-repeat 50% 50%;
-}
-
-.loading_box div {
-    height: 60px;
-    width: 340px;
-    border: 3px solid #666;
-    text-align: center; 
-}
-
-.loading_text {
-    line-height: 60px;
-    color: #666;
-    font-size: 14px; 
-}
-
-.loading_close {
-    cursor: pointer;
-    color: #ccc;
-    font-size: 20px;
-    font-weight: bold;
-    position: absolute;
-    right: 5px;
-    top: 5px; 
-}
-
 .upload-button {
     display: inline-block;
     height: 26px;
@@ -98,6 +18,10 @@
     color:#f00;
     font-weight: bold;
     padding:0 2px;
+}
+
+.notice {
+    color:#f00;
 }
 
 .failed {
@@ -124,6 +48,14 @@
 .pagination a.active {
     color:#f00;
     border:1px solid transparent;
+}
+
+.filebar {
+    background:#EEF4EA;
+    padding:10px 10px;
+    border:1px solid #CBD8AC;
+    margin:0 0 10px 0;
+    position:relative;
 }
 
 .searchform {
@@ -180,6 +112,15 @@
 .table tbody td,.table tbody th {
     
 }
+
+.filebar a {
+    margin:3px;
+}
+
+.files td, .files th {
+    1border-width:0 1px 0 1px;
+}
+
 
 
 .zzjg {

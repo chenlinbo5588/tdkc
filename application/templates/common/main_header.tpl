@@ -18,7 +18,6 @@
 <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.10.4.custom.js"></script>
 <script src="/js/json2.js"></script>
-<script src="/js/public.js"></script>
 {*
 <!--[if lte IE 9]>
 <script src="/js/jquery.placeholder.1.3.{$js_compress}js"></script>
@@ -29,6 +28,11 @@
 </script>
 <![endif]-->
 *}
+<script type="text/javascript" src="/js/jquery-migrate-1.2.1.js"></script>
+<script type="text/javascript" src="/js/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="/js/i18n/jquery.jBox-zh-CN.js"></script>
+<link type="text/css" rel="stylesheet" href="/js/skins/blue/jbox.css"/>
+<script src="/js/public.js"></script>
 </head>
 <body>
     <div class="container">

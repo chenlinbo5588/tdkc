@@ -825,6 +825,157 @@ function isCreditNo($vStr)
     return true;
 }
 
+function random($length){
+	$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	$str = "";
+	while(strlen($str) < $length){
+		$str .= substr($seed,(mt_rand() % strlen($seed)),1);
+	}
+	return $str;
+}
+
+function get_ip(){
+	if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
+		$onlineip = getenv('HTTP_CLIENT_IP');
+	} elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
+		$onlineip = getenv('HTTP_X_FORWARDED_FOR');
+	} elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
+		$onlineip = getenv('REMOTE_ADDR');
+	} elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
+		$onlineip = $_SERVER['REMOTE_ADDR'];
+	}
+	$onlineip = addslashes($onlineip);
+	@preg_match("/[\d\.]{7,15}/", $onlineip, $onlineipmatches);
+	$onlineip = $onlineipmatches[0] ? $onlineipmatches[0] : 'unknown';
+	unset($onlineipmatches);
+	return $onlineip;
+}
+
+
+
+/**
+ * 生产缩略图
+ * @param type $srcFile
+ * @param type $toFile
+ * @param type $toW
+ * @param type $toH 
+ */
+function make_thumb($srcFile,$toFile="",$toW,$toH){
+   if($toFile==""){ $toFile = $srcFile; }
+   $info = "";
+   $arr = getimagesize($srcFile,$info);
+   switch ($arr[2]){
+	   case 1:
+		  if(!function_exists("imagecreatefromgif")){
+		  	exit("function [imagecreatefromgif] not exists!");
+		  }
+		  $src_file = imagecreatefromgif($srcFile);
+	   break;
+	   case 2:
+		  if(!function_exists("imagecreatefromjpeg")){
+		  	exit("function [imagecreatefromjpeg] not exists!");
+		  }
+		  $src_file = imagecreatefromjpeg($srcFile);    
+	   break;
+	   case 3:
+		  if(!function_exists("imagecreatefrompng")){
+		  	exit("function [imagecreatefrompng] not exists!");
+		  }
+		  $src_file = imagecreatefrompng($srcFile);    
+	   break;
+	   case 6:
+		  if(!function_exists("imagecreatefromwbmp")){
+		  	exit("function [imagecreatefromwbmp] not exists!");
+		  }
+		  $src_file = imagecreatefromwbmp($srcFile);    
+	   break;
+	   default:
+
+   }
+  $srcW = imagesx($src_file);
+  $srcH = imagesy($src_file);
+  $toWH = $toW/$toH;
+  $srcWH = $srcW/$srcH;
+  if($toWH <= $srcWH){
+       $ftoW = $toW;
+       $ftoH = $ftoW*($srcH/$srcW);
+  }else{
+      $ftoH = $toH;
+      $ftoW = $ftoH*($srcW/$srcH);
+  }    
+  if($srcW>$toW || $srcH>$toH){
+     if(function_exists("imagecreatetruecolor")){
+        @$dest_file = imagecreatetruecolor($ftoW,$ftoH);
+        if($dest_file){
+			imagecopyresampled($dest_file,$src_file,0,0,0,0,$ftoW,$ftoH,$srcW,$srcH);
+        }else{
+          	$dest_file = imagecreate($ftoW,$ftoH);
+          	imagecopyresized($dest_file,$src_file,0,0,0,0,$ftoW,$ftoH,$srcW,$srcH);
+        }
+     }else{
+        $dest_file = imagecreate($ftoW,$ftoH);
+        imagecopyresized($dest_file,$src_file,0,0,0,0,$ftoW,$ftoH,$srcW,$srcH);
+     }
+	 switch ($arr[2]){
+	 	case 1:
+			if(!function_exists('imagegif')){
+				exit("function [imagegif] not exists!");
+			}
+			imagegif($dest_file,$toFile);
+		break;
+		case 2:
+			if(!function_exists('imagejpeg')){
+				exit("function [imagejpeg] not exists!");
+			}
+			imagejpeg($dest_file,$toFile);
+		break;
+		case 3:
+			if(!function_exists('imagepng')){
+				exit("function [imagepng] not exists!");
+			}
+			imagepng($dest_file,$toFile);
+		break;
+		case 6:
+			if(!function_exists('imagewbmp')){
+				exit("function [imagewbmp] not exists!");
+			}
+			imagewbmp($dest_file,$toFile);
+		break;
+		default:
+	 }
+     @imagedestroy($dest_file);
+  }
+  @imagedestroy($src_file);
+}
+
+
+
+/**
+ *
+ * @param type $file_extension
+ * @return string 
+ */
+function filetype_url($file_extension = '',$size = ''){
+    
+    if(!$file_extension){
+        return config_item('fileicon_path').$size.'/unknow.gif';
+    }else{
+        
+        if(strpos($file_extension,'.') !== false){
+            $file_extension = substr($file_extension,1);
+        }
+        $file =  realpath(dirname(APPPATH)).config_item('fileicon_path').$size.'/'.$file_extension.".gif";
+        
+        if(file_exists($file)){
+            return config_item('fileicon_path').$size.'/'.$file_extension.'.gif';
+        }else{
+            return config_item('fileicon_path').$size.'/unknow.gif';
+        }
+        
+    }
+
+}
+
 
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */

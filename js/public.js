@@ -1,6 +1,8 @@
 // 加载谈层
 $.loadingbar = function(settings) {
     var defaults = {
+        id : "loading",
+        urls : [],
         autoHide:true,
         replaceText:"正在刷新,请稍后...",
         container: 'body',
@@ -13,6 +15,7 @@ $.loadingbar = function(settings) {
     var postext;
 
 
+    /*
     if(cfg.container==='body'){
         postext = 'fixed';
     }else{
@@ -41,6 +44,9 @@ $.loadingbar = function(settings) {
     }else{
         spin_wrap = $("> .lightbox",$(cfg.container));
     }
+    
+    */
+
 
     $(document).ajaxSend(function(event, jqxhr, settings) {
         var surl = settings.url;
@@ -62,32 +68,19 @@ $.loadingbar = function(settings) {
                 }
             });
         } else {
-            spin_wrap.show();
+            //spin_wrap.show();
         }
 
         if(state){
-            spin_wrap.show();
-        }
-
-        if(cfg.showClose){
-            $('.loading_close').on('click',function(e){
-                jqxhr.abort();
-                $.active = 0;
-                spin_wrap.hide();
-                $(this).off('click');
-            });
+            //$.jBox.tip(defaults.text, 'loading');
         }
     });
 
     $(document).ajaxStop(function(e) {
-        if(cfg.autoHide){
-            spin_wrap.hide();
-        }else{
-            spin_wrap.find(".loading_text").html(cfg.replaceText);
-        }
+        //setTimeout(function () { $.jBox.tip('操作完成。', 'success'); }, 0);
     });
 
-    return spin_wrap;
+    ///return spin_wrap;
 };
 
 function pageJs(num) {
@@ -185,8 +178,8 @@ $(function(){
                     id:that.attr('data-id')
                 },
                 success:function(data){
-                    alert(data.body.text);
-                    
+                    $.jBox.tip(data.body.text);
+                    //alert(data.body.text);
                     if(data.code == 'success'){
                         var ids = data.body.id.split(',');
                         for(var i = 0, j = ids.length; i < j; i++ ){
@@ -203,9 +196,15 @@ $(function(){
                     }
                 },
                 error:function(xhr, textStatus, errorThrown){
-                    alert("请求发生错误," + textStatus);
+                    $.jBox.tip("请求发生错误," + textStatus);
+                    //alert("请求发生错误," + textStatus);
                 }
             });
         }
     });
 });
+
+
+function abox(url,title,width,height){
+	$.jBox.open("iframe:"+url, title, width, height, {top:'10%', buttons: {}});
+}

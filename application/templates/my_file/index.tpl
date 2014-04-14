@@ -1,60 +1,50 @@
 {include file="common/main_header.tpl"}
 
-        <div class="searchform row-fluid">
-                <form action="{url_path('user')}" method="get" name="searchform">
-                    <input type="hidden" value="my_event" name="{config_item('controller_trigger')}"/>
-                    <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
-                    <ul>
-                        <li>
-                            <label><strong>开始日期</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
-                            <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
-                            <label><strong>标题</strong><input type="text" name="title" value="{$smarty.get.title}"/></label>
-                            <label><strong>待办类型</strong>
-                                <select name="status">
-                                   <option value="">全部</option>
-                                   <option value="未处理">未处理</option>
-                                   <option value="已处理">已处理</option>
-                                </select>
-                            </label>
-                            <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                        </li>
-                     </ul>
-                </form>
+            <div class="filebar" >
+                <a href="javascript:void(0);" onclick="abox('{url_path('file')}&folder_id={$pid}&uid={$userProfile['id']}','上传文件',650,450);" clas="btn"><img src="/img/wp/upload_file_icon.gif" align="absmiddle"/>上传文件</a>
+                <a href="javascript:void(0);" class="btn"><img src="/img/wp/delete_icon.gif" align="absmiddle"/>删除</a>
+                <a href="javascript:void(0);" id="add_folder" clas="btn"><img src="/img/wp/new_folder.gif" align="absmiddle"/>新建文件夹</a>
+                <a href="javascript:void(0);" id="move" clas="btn"><img src="/img/wp/folder.gif" align="absmiddle"/>移动</a>
             </div>
-            
             <div class="span12">
-                <table class="table">
+                <table class="table files">
+                    <colgroup>
+                        <col style="width:25px;"/>
+                        <col style="width:600px;"/>
+                        <col style="width:100px;"/>
+                        <col style="width:200px;"/>
+                    </colgroup>
                     <thead>
                         <tr>
-                            <th>序号</th>
-                            <th>标题</th>
-                            <th>内容</th>
-                            <th>状态</th>
-                            <th>创建人</th>
-                            <th>创建时间</th>
-                            <th>最后修改人</th>
-                            <th>最后修改时间</th>
+                            <th colspan="6">
+                                <a href="{url_path('my_file')}">根目录</a>&gt;
+                                {if $smarty.get.pid }
+                                <a href="javascript:void(0);">我的文件</a>
+                                {/if}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th><input type="checkbox" name="checkall"/></th>
+                            <th>文件名称</th>
+                            <th>大小</th>
+                            <th>时间</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           <td>{$item['title']}</td>
-                           <td>{$item['content']|escape}</td>
-                           <td>{$item['status']}</td>
-                           <td>{$item['creator']}</td>
+                           <th><input type="checkbox" name="file_id[]"/></th>
+                           <td><img src="{filetype_url($item['file_extension'])}"/> {$item['file_name']|escape}</td>
+                           <td>{byte_format($item['file_size'])}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
-                           <td>{$item['updator']}</td>
-                           <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               {if $item['status'] == '未处理'}
-                               <a href="{url_path('my_event','edit','id=')}{$item['id']}">处理</a>
-                               {/if}
+                               <a href="{url_path('my_file','download','id=')}{$item['id']}">下载</a>
+                               <a href="{url_path('my_file','delete','id=')}{$item['id']}">删除</a>
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">没有待办事宜</td></tr>
+                            <tr><td colspan="5">没有文件</td></tr>
                         {/foreach}
                     </tbody>
                 </table>
@@ -62,8 +52,33 @@
              </div>
 
              
-             <script>
+             <div id="newfolder_dlg" style="display: none;">
+                 <form name="folder_form" action="{url_path('my_file','addfolder')}" method="post">
+                     <label><span>文件夹名称</span><input type="text" style="width:200px;" name="folder_name" placeholder="请输入文件夹名称"/></label><input type="submit" name="submit" value="确定"/>
                  
+                 </form>
+             </div>
+             <script>
+                 $(function(){
+                    $("#add_folder").bind("click",function(e){
+                        $.jBox('id:newfolder_dlg', { 
+                            title:"添加文件夹",
+                            buttons: { '关闭': true },
+                            submit:function(v, h, f){
+                                if($.trim(f.folder_name) == ''){
+                                    $.jBox.tip('请输入文件夹名称。');
+                                    return false;
+                                }
+                                
+                                
+                                return true;
+                                /*
+                                $.ajax({
+                                
+                                });*/
+                            }
+                        });
+                    });
+                 });
             </script>
-            {include file="common/calendar.tpl"}
 {include file="common/main_footer.tpl"}

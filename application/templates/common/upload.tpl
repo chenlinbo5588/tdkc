@@ -7,7 +7,7 @@
         <script>
         var upload_url = '{url_path('file','upload')}';
         
-        function createSwfUpload(index,allowSize, allowFile,successHandler){
+        function createSwfUpload(index,allowSize, allowFile, handlers){
             var upload = new SWFUpload({
                 // Backend Settings
                 upload_url: upload_url,
@@ -26,7 +26,7 @@
                 upload_start_handler : uploadStart,
                 upload_progress_handler : uploadProgress,
                 upload_error_handler : uploadError,
-                upload_success_handler : successHandler ? successHandler : uploadSuccess,
+                upload_success_handler : handlers.success ? handlers.success : uploadSuccess,
                 upload_complete_handler : uploadComplete,
                 button_placeholder_id : "UploaderPlaceholder_" + index,
                 // Button Settingsimg/fee
