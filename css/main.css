@@ -1,3 +1,20 @@
+.file_icon {
+    background: url(../img/fileico_v4.png);
+    background-position: 0 0;
+}
+
+.dir_icon16 {
+    background-position: -896px -31px;
+    width:16px;
+    height:16px;
+    float: left;
+}
+
+.filename {
+    padding:0 0 0 5px;
+}
+
+
 .upload-button {
     display: inline-block;
     height: 26px;

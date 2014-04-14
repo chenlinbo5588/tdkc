@@ -26,37 +26,15 @@ class Menu extends TZ_Admin_Controller {
 	{
         if($this->isPostRequest() && !empty($_POST['id'])){
             
-            $dept = $this->Menu_Model->getById(array('where' => array('id' => $_POST['id'],'status' => '正常')));
+            $menu = $this->Menu_Model->getById(array('where' => array('id' => $_POST['id'],'status' => '正常')));
             
-            if($dept){
+            if($menu){
                 
-                /**
-                 * 判断权限 
-                 */
-                $childs = $this->Menu_Model->getListByTree($dept['id']);
+                $this->Menu_Model->fake_delete(array(
+                    'id' =>  $_POST['id']
+                ));
                 
-                $ids = array($dept['id']);
-                $data = array();
-                
-                foreach($childs as $key => $val){
-                    $ids[] = $val['id'];
-                }
-                $this->Dept_Model->fake_delete(array('id' => $ids));
-                $this->load->model('User_Model');
-                
-                $users = $this->User_Model->getList(array('select' => 'id', 'where_in' => array('dept_id' => $ids)));
-                
-                if($users){
-                    foreach($users['data'] as $user ){
-                        $data[] = array(
-                            'id' => $user['id'],
-                            'dept_id' => $dept['pid']
-                        );
-                    }
-                    $this->User_Model->batchUpdate($data,'id');
-                }
-                
-                $this->sendFormatJson('success',array('id' => implode(',',$ids) , 'text' => '删除成功'));
+                $this->sendFormatJson('success',array('operation' => 'delete', 'id' => $_POST['id'] , 'text' => '删除成功'));
             }else{
                 $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '找不到记录,删除失败'));
             }

@@ -177,32 +177,40 @@ $(function(){
                     isajax:"1",
                     id:that.attr('data-id')
                 },
-                success:function(data){
-                    $.jBox.tip(data.body.text);
-                    //alert(data.body.text);
-                    if(data.code == 'success'){
-                        var ids = data.body.id.split(',');
-                        for(var i = 0, j = ids.length; i < j; i++ ){
-                            $("#row_" + ids[i]).remove();
-                        }
-                    }
-                    
-                    if(data.redirectUrl){
-                        location.href = data.redirectUrl;
-                    }
-                    
-                    if(data.reload){
-                        location.reload();
-                    }
-                },
-                error:function(xhr, textStatus, errorThrown){
-                    $.jBox.tip("请求发生错误," + textStatus);
-                    //alert("请求发生错误," + textStatus);
-                }
+                success:ajax_success,
+                error:ajax_error
             });
         }
     });
 });
+
+
+function ajax_success(data){
+    $.jBox.tip(data.body.text);
+    //alert(data.body.text);
+    if(data.code == 'success' && data.body.operation == 'delete'){
+        var ids = data.body.id.split(',');
+        for(var i = 0, j = ids.length; i < j; i++ ){
+            $("#row_" + ids[i]).remove();
+        }
+    }
+
+    if(data.redirectUrl){
+        location.href = data.redirectUrl;
+    }
+
+    if(data.redirectInfo){
+        if(data.redirectInfo.jsReload){
+            location.reload();
+        }else{
+            location.href = data.redirectInfo.url;
+        }
+    }
+}
+
+function ajax_error(xhr, textStatus, errorThrown){
+    $.jBox.tip("请求发生错误," + textStatus + "," + errorThrown);
+}
 
 
 function abox(url,title,width,height){

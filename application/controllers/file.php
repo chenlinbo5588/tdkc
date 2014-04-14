@@ -10,6 +10,12 @@ class File extends TZ_Controller {
     
     public function index()
     {
+        $folder_id = (int)gpc('folder_id','G',0);
+        $uid = (int)gpc('uid','G',0);
+        
+        $this->assign('folder_id',$folder_id);
+        $this->assign('uid',$uid);
+        
         $this->display();
     }
     
@@ -68,7 +74,12 @@ class File extends TZ_Controller {
         $now = time();
         $file_key = random(8);
         $file_description = '';
+        
+        $folder_id = (int)gpc('folder_id','G',0);
+        $uid = (int)gpc('uid','G',0);
+        
         $data = array(
+            'pid' => $folder_id,
             'file_name' => $attachment['filename'],
             'file_key' => $file_key,
             'file_extension' => $suffix,
@@ -80,20 +91,19 @@ class File extends TZ_Controller {
             'file_md5' => $file_md5 ? $file_md5 : '',
             'file_size' => $attachment['filesize'],
             'thumb_size' => 0,
+            'user_id' => $uid,
             'createtime' => $now,
             'updatetime' => $now,
             'ip' => get_ip()
         );
-        
-        
       
         try {
             $this->load->model('File_Model');
             $fileId = $this->File_Model->add($data);
             
-            /*
-            $db->query_unbuffered("update {$tpf}folders set folder_size=folder_size+{$file['size']} where userid='$pd_uid' and folder_id='$folder_id'");
-            */
+            $this->db->set('file_size', 'file_size+'. $attachment['filesize'], FALSE);
+            $this->db->where(array('id' => $folder_id ,'user_id' => $uid));
+            $this->db->update($this->File_Model->_tableName); 
             
             $retAry = array('error' => 1,"message" => '','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath);
                 

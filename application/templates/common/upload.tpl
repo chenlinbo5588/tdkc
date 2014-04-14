@@ -3,15 +3,20 @@
         <script type="text/javascript" src="/js/swfup/swfupload.queue.js"></script>
         <script type="text/javascript" src="js/swfup/fileprogress.js"></script>
         <script type="text/javascript" src="/js/swfup/handlers.js"></script>
-
         <script>
-        var upload_url = '{url_path('file','upload')}';
-        
-        function createSwfUpload(index,allowSize, allowFile, handlers){
+        function createSwfUpload(index,upload_url,postdata,allowSize, allowFile, handlers){
+            if(!upload_url){
+                var upload_url = '{url_path('file','upload')}';
+            }
+            
+            if(!postdata){
+                postdata = {};
+            }
+            
             var upload = new SWFUpload({
                 // Backend Settings
                 upload_url: upload_url,
-                post_params: {},
+                post_params: postdata,
                 // File Upload Settings
                 file_size_limit : allowSize,
                 file_types : allowFile ,

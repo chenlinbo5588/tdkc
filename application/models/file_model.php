@@ -32,6 +32,21 @@ class File_Model extends TZ_Model {
         
     }
     
+    
+    public function fake_delete_file($param){
+        $where = array(
+            'id' => $param['id']
+        );
+        
+        $data = array(
+            'status' => '已删除'
+        );
+        
+        return $this->db->update($this->_tableName, $data, $where);
+        
+    }
+    
+    
     public function fake_delete($param){
         
         $where = array(
@@ -41,6 +56,8 @@ class File_Model extends TZ_Model {
         $data = array(
             'status' => '已删除'
         );
+        
+        
         
         return $this->db->update($this->_tableName, $data, $where);
     }

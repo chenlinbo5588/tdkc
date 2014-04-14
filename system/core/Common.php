@@ -949,6 +949,20 @@ function make_thumb($srcFile,$toFile="",$toW,$toH){
 }
 
 
+function defend_xss($val){
+	return is_array($val) ? $val : htmlspecialchars($val);
+}
+
+function gpc($name,$w = 'GPC',$default = '',$d_xss=0){
+	$i = 0;
+	for($i = 0; $i < strlen($w); $i++) {
+		if($w[$i] == 'G' && isset($_GET[$name])) return $d_xss ? defend_xss($_GET[$name]) : $_GET[$name];
+		if($w[$i] == 'P' && isset($_POST[$name])) return $d_xss ? defend_xss($_POST[$name]) : $_POST[$name];
+		if($w[$i] == 'C' && isset($_COOKIE[$name])) return $d_xss ? defend_xss($_COOKIE[$name]) : $_COOKIE[$name];
+	}
+	return $default;
+}
+
 
 /**
  *

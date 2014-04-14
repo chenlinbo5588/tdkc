@@ -162,7 +162,7 @@ class My_schedule extends TZ_Admin_Controller {
             $_POST['user_id'] = $this->_userProfile['id'];
             
             $this->User_Schedule_Model->fake_delete($_POST);
-            $this->sendFormatJson('success',array('id' => $_POST['id'] , 'text' => '删除成功'),$_SERVER['HTTP_REFERER']);
+            $this->sendFormatJson('success',array('operation' => 'delete','id' => $_POST['id'] , 'text' => '删除成功'),$_SERVER['HTTP_REFERER']);
         }else{
             $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '删除失败'));
         }

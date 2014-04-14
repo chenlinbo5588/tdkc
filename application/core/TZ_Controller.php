@@ -217,7 +217,17 @@ class TZ_Controller extends CI_Controller {
 
         //重定向URL
         if('' != $redirectUrl){
-            $data['redirectUrl'] = $redirectUrl;
+            if(is_array($redirectUrl)){
+                /**
+                 * array(
+                 *     'jsReload' => true, //js reload 可以不需要传入url, 当前页面自身刷新
+                 *     'url' => ''
+                 * ) 
+                 */
+                $data['redirectInfo'] = $redirectUrl;
+            }else{
+                $data['redirectUrl'] = $redirectUrl;
+            }
         }
 
         exit(json_encode($data));

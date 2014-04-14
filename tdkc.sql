@@ -37,24 +37,6 @@ CREATE TABLE `tb_announces` (
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tb_attachment
--- ----------------------------
-CREATE TABLE `tb_attachment` (
-  `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `file_name` varchar(200) NOT NULL DEFAULT '',
-  `file_size` int(11) NOT NULL DEFAULT '0' COMMENT '字节数',
-  `file_suffix` varchar(10) NOT NULL,
-  `path_name` varchar(100) NOT NULL,
-  `width` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '度宽, 图片、视频',
-  `height` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '高度',
-  `play_sec` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '播放时间, 视频',
-  `refcount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '应用计数',
-  `createtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updatetime` datetime NOT NULL,
-  PRIMARY KEY (`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
 -- Table structure for tb_contacts
 -- ----------------------------
 CREATE TABLE `tb_contacts` (
@@ -95,67 +77,41 @@ CREATE TABLE `tb_dept` (
 -- Table structure for tb_files
 -- ----------------------------
 CREATE TABLE `tb_files` (
-  `file_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `yun_fid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `file_name` varchar(100) NOT NULL,
-  `file_key` char(8) NOT NULL,
-  `file_short_url` char(6) NOT NULL,
-  `file_extension` varchar(10) NOT NULL,
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) unsigned NOT NULL DEFAULT '0',
+  `file_name` varchar(510) NOT NULL,
+  `file_key` char(8) NOT NULL DEFAULT '',
+  `file_short_url` char(6) NOT NULL DEFAULT '',
+  `file_extension` varchar(10) NOT NULL DEFAULT '',
   `is_image` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `file_mime` varchar(50) NOT NULL,
+  `is_dir` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `file_mime` varchar(50) NOT NULL DEFAULT '',
   `file_description` text NOT NULL,
-  `file_store_path` varchar(50) NOT NULL,
-  `file_real_name` varchar(255) NOT NULL,
-  `file_md5` char(32) NOT NULL,
-  `server_oid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `store_old` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `file_size` int(10) unsigned NOT NULL DEFAULT '0',
+  `file_store_path` varchar(50) NOT NULL DEFAULT '',
+  `file_real_name` varchar(255) NOT NULL DEFAULT '',
+  `file_md5` char(32) NOT NULL DEFAULT '',
+  `file_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '如果是目录，则表示该目录下包含的文件大小的合计',
   `thumb_size` int(10) unsigned NOT NULL DEFAULT '0',
-  `file_time` int(10) unsigned NOT NULL DEFAULT '0',
-  `file_views` int(10) unsigned DEFAULT '0',
+  `file_views` int(10) unsigned NOT NULL DEFAULT '0',
   `file_downs` int(10) unsigned NOT NULL DEFAULT '0',
-  `file_last_view` int(10) unsigned DEFAULT '0',
-  `file_credit` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `report_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `in_share` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `space_pos` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `good_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `bad_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `is_locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_checked` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_public` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `folder_id` bigint(20) NOT NULL DEFAULT '0',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `status` varchar(10) NOT NULL DEFAULT '正常',
+  `expire_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '0 表示不过期 大于0 到期时间戳',
   `cate_id` int(10) unsigned NOT NULL DEFAULT '0',
   `subcate_id` int(10) unsigned NOT NULL DEFAULT '0',
   `in_recycle` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `creator` varchar(20) NOT NULL DEFAULT '',
+  `updator` varchar(20) NOT NULL DEFAULT '',
+  `createtime` int(10) unsigned NOT NULL,
+  `updatetime` int(10) unsigned NOT NULL,
   `ip` varchar(15) NOT NULL,
-  PRIMARY KEY (`file_id`),
-  KEY `userid` (`userid`),
-  KEY `folder_id` (`folder_id`),
-  KEY `server_id` (`server_oid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for tb_folders
--- ----------------------------
-CREATE TABLE `tb_folders` (
-  `folder_id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(20) NOT NULL DEFAULT '0',
-  `folder_node` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `folder_name` varchar(50) NOT NULL,
-  `folder_description` varchar(255) NOT NULL,
-  `in_recycle` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `in_share` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `folder_order` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `folder_size` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `in_time` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`folder_id`),
-  KEY `userid` (`user_id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `folder_node` (`folder_node`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -175,7 +131,7 @@ CREATE TABLE `tb_menu` (
   PRIMARY KEY (`id`),
   KEY `idx_auth_key` (`auth_key`),
   KEY `idx_url` (`url`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_pm_0
@@ -788,53 +744,105 @@ INSERT INTO `ci_sessions` VALUES ('3c0db6edbf50c0cb02d417064d9d7386', '127.0.0.1
 INSERT INTO `ci_sessions` VALUES ('8c9df0cb5b4c3da2c046622b5aa59250', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1397189718', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"EvEN5QUBtRu5J/LNPpKyHu9ilfiBx1fl8N5zSoPiWJf8RCWiSfD8gtuLf2WKPee5Z4khNkrP2pbqKTmtiAEVfg==\";}}');
 INSERT INTO `ci_sessions` VALUES ('9610a1ce9aa02f59d0fe8a7cae80c847', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1397189779', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"cmAcCnewkeOgjF6Lvt4w5+6MbKChgYr/l53FKtLaTlPaK8Xmr72LDS55SAp355gPz1PRzir7BNwhl4OFoaUONw==\";}}');
 INSERT INTO `ci_sessions` VALUES ('b43e6731ba31216e9411a6b988803b17', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1397196237', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"JPpCSUkRYFsWx7svHMjAbTe5kXqaRGliwwxCCnjHC2NelT7wYRWmCwFSSM+U7Mq+WezSXX7brkkq+ihqE1ymyQ==\";}}');
-INSERT INTO `ci_sessions` VALUES ('ed258c7a4003fc97b143cad79292bfb1', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397198391', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"nEIVweE+hA6JPdovg8jkqwxkJMq3njV1YvVycjMCKZJuOhIPxL68HokxVrEevhuRaFfzJXMCohJj2wP4GfYDhg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('4ef0d5863c0d319cc28246c26d349700', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397452526', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"kCANfuBVJ4eszTRYRfRdVUYuh6ak6KsVnIGFSbJyxPLKb608IwN0umAAIAwZ7Ux5AZd5PbxkCTn26vBdeBiLnQ==\";}}');
 INSERT INTO `ci_sessions` VALUES ('ffb2ce1506316b85a63e2e20a4a78fd9', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397205411', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"kRJw2JR6inWlvlhj9KzkZ/8G9AmXmmB13CfErjGHr8ZcYMkdIch9a8THRCl8CoK95+hR+60zb2Cv43Fj4igURg==\";}}');
 INSERT INTO `ci_sessions` VALUES ('44c6cc967da3c61c1ce61f2fe30008dd', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1397197774', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"TylL5/Y8iIIeJxlX1hXsjH0ppArCk/pbpW5q5Gz2YxTByS3S3s6wQp9kDmEWTnP3UAwVr/G1/93RekPzgKOVBQ==\";}}');
 INSERT INTO `ci_sessions` VALUES ('ffdb6630abeab9caf1e31740ec3efec9', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36', '1397279546', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"ywNbTQT/baKlWXx8P770fK7S+Q0lQsU6Iq5S5mrNkQL236zjGPMfMoi2PFJsB5TOtFID129C8nZLmC41QPm94w==\";}}');
 INSERT INTO `ci_sessions` VALUES ('af1e383c75cfc3dba5d153c8fe969c17', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1397293623', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"fI14L+vObQwVyeG3aogiM6cQMUncbyhma6Pjy/XEMsv7VcY9G/RK2mWhrajZZR088CH1Eekib2wW1oCSGPPrjw==\";}}');
 INSERT INTO `ci_sessions` VALUES ('04666c2717192135538ad97c53528839', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36', '1397293714', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:2:\"11\";s:7:\"account\";s:3:\"t51\";s:4:\"name\";s:9:\"测试是\";s:2:\"gh\";s:2:\"55\";s:3:\"psw\";s:88:\"dS+ICJQPGQU+gyuZxvTsKMfKPdwzbxiASkM6t5G+UDJirAzPWHeIig4l6Qto/kOL8ldaGPbfybg8wzH+E64+bg==\";}}');
 INSERT INTO `ci_sessions` VALUES ('67a9aa2f10b58cffd92b32026903f9c4', '192.168.171.1', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397393509', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"VWAEPFRgBjpcPAdtBjYMYVdlAjBXMF42VWBQYlNnBGcLZ1RnVjAPPFEzBTpTYVNoXD4AOFA0WjFUNwY1BzBUNQ==\";}}');
+INSERT INTO `ci_sessions` VALUES ('c35791a225c2b53749bbbdc1e1437ddf', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36', '1397466872', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"FsYNbdOveR00or4dCo2JUnNSPGHd31KaCxMFHf/ohh1uSymub+hMV8smbCBWe5sd/VMPRjI4CYfbbbm9QqZDZg==\";}}');
+INSERT INTO `ci_sessions` VALUES ('3c1799e30654de5d7edd1ed92050006b', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397453315', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"1m8Fd+b3JAwzTadk8DqZQZiGviv9++9RP1rIs8J62GTGoKTh2yCw6ZewQd+bo5DXDQv+mbRNKRQlBhU42SRgUQ==\";}}');
+INSERT INTO `ci_sessions` VALUES ('f4e3188715d1ce07b4585508795e467e', '192.168.1.121', 'Shockwave Flash', '1397453365', '');
+INSERT INTO `ci_sessions` VALUES ('10a362fc36a14e09da357ac7c5eaf3a5', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397453394', '');
+INSERT INTO `ci_sessions` VALUES ('530ce66251b6a755905b55b752bf1334', '192.168.1.121', 'Shockwave Flash', '1397453415', '');
+INSERT INTO `ci_sessions` VALUES ('83f0357b9d1eec52abcc2f9683a81ff7', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397457213', 'a:1:{s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"IRHpDDB6YaBHY3bX93aUVhxY34bptpFw3S6k+rt8CBTLuqhsIUN50cZWSQWyU3sHuz5FUJbAE/zhgQix0fyu5A==\";}}');
+INSERT INTO `ci_sessions` VALUES ('8b005a6ad7f19d18fb90d77fe0363b3f', '192.168.1.121', 'Shockwave Flash', '1397457222', '');
+INSERT INTO `ci_sessions` VALUES ('ffc871692d4c6c4ed257408a1529a776', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397457267', '');
+INSERT INTO `ci_sessions` VALUES ('1bbe25f41c2004158d82405c8a4aaba5', '192.168.1.121', 'Shockwave Flash', '1397457272', '');
+INSERT INTO `ci_sessions` VALUES ('161a8391dc19bbd8f790b1f166434b30', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397457287', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"fp6CjNZfPRobldkfnamEAff/HuceBqSdTxzOxg66TxIjoVXLd2ZPl8wSWhV76od8etVp11sSdxtup17ThM9jIA==\";}}');
+INSERT INTO `ci_sessions` VALUES ('a0ffd077fed616e31a9445daafdb7e03', '192.168.1.121', 'Shockwave Flash', '1397457303', '');
+INSERT INTO `ci_sessions` VALUES ('c52c961d0a50c3402bf017dea3ca477b', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397459201', '');
+INSERT INTO `ci_sessions` VALUES ('e991873bb97a78580c1e93de980eb689', '192.168.1.121', 'Shockwave Flash', '1397459204', '');
 INSERT INTO `tb_announces` VALUES ('2', '1', 'PHPDISK v5.1 新增功能与修正列表', '[新增]分布式服务器管理员可自行添加ID作为FTP与文件的对应标识。<br>[新增]公共文件,缩短地址，网盘文件的直接显示外链地址。<br>[新增]如果是共享文件/公共文件，点击后有下载页面，私人文件直接下载。<br>[新增]文件管理添加目录显示。<br>[新增]充值选项，自动转化为积分。<br>[新增]MYSQL数据库类提交错误时，输入email，处理完发邮件通知用户。<br>[修正]整合，在linux下无法整合UC，通信不成功问题。<br>[修正]GBK上传添加描述、标签出现乱码问题。<br>[修正]Mysql类出错时在linux主机下的目录问题。<br>[修正]只能设置为共享的文件才能使用提取码功能。<br>[修正]使用代码广告会令页面不断跳转。', '0', '0', '1', '1286171569');
 INSERT INTO `tb_announces` VALUES ('3', '1', 'PHPDISK v5.3.0新增功能与改进', '[新增]支持PHPWIND论坛整合。<br>[新增]新增几种广告管理，让管理员更好的投放广告。<br>[新增]支持常用的文件在线浏览，如mp3播放，flash播放等支持。<br>[新增]PHPDISK可实现在线检测自动升级，比起传统手动升级更加便捷。<br>[新增]标题排序，用户可以直接点击表头，对网盘中的文件进行排序，如，按大小、按日期等。<br>[新增]引入用户经验等级模式，用户使用网盘，帐号会自动升级。<br>[新增]增加首页幻灯片展示效果，可以让网盘更具个性效果。<br>[新增]用户充值方式支持使用网银接口与易宝支付接口。<br>[修正]公告模式的改进，阅读、显示更加人性化。<br>[修正]改进结构系统布局UI，引入更华丽的ajax效果，大大提升用户交互体验。<br>[修正]在生成外链的[img]代码直接变成&lt;IMG src=\"\"&gt;  代码，多一种模式的显示。<br>[修正]修正UCenter整合时出现用户重复记录问题。<br>[修正]修正搜索引擎直接收录文件问题，而不能通过文件展示页下载的问题。<br>[修正]分布服务器插件，可支持子程序配置，同时可支持FTP中转上传与子程序直接上传的形式。大大减少主服务器资源消耗。<br>[修正]外链，提取码等可由管理员设定，后台使用了大部分的开关形式。<br>[修正]SEO插件nginx修正。<br>[修正]移动文件到二级公共文件时文件无法显示问题。<br>[修正]管理员后台更加精细的分类。<br>[修正]修正公共文件显示文件空间不正确问题。', '0', '0', '0', '1288057490');
 INSERT INTO `tb_announces` VALUES ('4', '1', 'PHPDisk v5.5.0 新增功能与改进说明', '[增加]添加一键设置所有文件共享。<br>[增加]后台搜索缓存管理。<br>[增加]语言包在线切换功能。<br>[增加]文件替换功能，替换后原文件地址不变，适合做永久链接。<br>[增加]模板SQL 标签{sql[xxx][$v]}{/sql}调用，用户可以通过修改模板，实现对数据库进行个性化的调用。<br>[增加]JS数据调用。<br>[增加]数组调用。<br>[增加]分享工具功能，用户可以通过工具将网盘上的文件资源分享到其他的网站中。<br>[增加]添加后台sitemap功能，管理员可以更快捷定位到管理功能。<br>[增加]添加后台快捷操作面板，整合了后台配置面板，管理员可定义自己常用快捷功能。<br>[优化]优化精简程序核心架构代码，系统运行更快更稳定。<br>[优化]优化下载出现“外链未开启提示”。<br>[优化]将大部分常用的插件集成到系统后台，免去反复安装的麻烦。<br>[修正]分布式服务器出现显示乱码问题。<br>[修正]部分接口无法进行充值转换问题。<br>[修正]充值接口空白问题。<br>[修正]文件浏览页标题，附加上网站标题，方便SEO。<br>[改进]下载提示，更加友好显示文件下载。', '0', '0', '0', '1301419754');
 INSERT INTO `tb_announces` VALUES ('5', '1', 'PHPDisk 6.5.0 V-Core系列', '1、引入国际化语言包功能(po , mo)，让系统维护语言包更简洁，进一步向国际化的方向跨进。<br>2、为了兼容所有的浏览器，系统全面放弃iframe 框架结构。<br>3、系统上多处页面上的细节改动，更加合理地布局。<br>4、进一步改进缓存及程序架构底层，速度运营更稳定更快速。<br>5、同一套内核将会针对不同的方向及领域，专业化的方向发展。<br>6、v-core首先将推出FMS(File Manage System) 文件管理系统方向，站长可以将此做成WEB2.0模式的下载站，而内容可以由网站的用户上传。<br>7、公共文件部分的改进，激发此部分的效能。<br>\n8、可自定配置网站后台的管理员入口，增加网站管理员安全。', '0', '0', '0', '1338516732');
 INSERT INTO `tb_announces` VALUES ('6', '1', 'PHPDisk 6.8.0 V-Core系列', '新增客户端支持<br>改进分布服务配置<br>修正现有版本存在的BUG<br>优化程序架构<br>改进缓存体系，修正共享文件无法操作', '0', '0', '0', '1357737649');
-INSERT INTO `tb_contacts` VALUES ('1', '我的日程1', '0', '今天去办社保', '', '', '', '正常', '超级管理员', '超级管理员', '1397265793', '1397265793');
+INSERT INTO `tb_contacts` VALUES ('1', '我的日程1', '0', '今天去办社保', '', '', '', '已删除', '超级管理员', '超级管理员', '1397265793', '1397265793');
 INSERT INTO `tb_contacts` VALUES ('2', '我的日程2', '0', '今天下班去接小孩', '', '', '', '正常', '超级管理员', '超级管理员', '1397267173', '1397267173');
-INSERT INTO `tb_contacts` VALUES ('3', '我日日程3', '0', '几天能哈哈sas 环境阿莎哈啥', '', '', '', '正常', '超级管理员', '超级管理员', '1397267537', '1397267537');
+INSERT INTO `tb_contacts` VALUES ('3', '我日日程3', '0', '几天能哈哈sas 环境阿莎哈啥', '', '', '', '已删除', '超级管理员', '超级管理员', '1397267537', '1397267537');
 INSERT INTO `tb_contacts` VALUES ('4', '今天去桥头测量', '0', '问题1：\r\n哈哈是爱上\r\n11', '', '', '', '已删除', '超级管理员', '超级管理员', '1397288917', '1397289147');
 INSERT INTO `tb_contacts` VALUES ('5', '陈林波', '0', '12345454541', '232323', '34324-12123', '成寿寺哈哈撒花爱喝啥啥', '已删除', '超级管理员', '超级管理员', '1397293071', '1397293102');
 INSERT INTO `tb_dept` VALUES ('1', '慈溪市土地勘测规划设计院有限公司', '0', '正常', '超级管理员', '超级管理员', '1396940368', '1397102570');
-INSERT INTO `tb_dept` VALUES ('2', '测绘室', '1', '已删除', '超级管理员', '超级管理员', '1396940709', '1397019054');
+INSERT INTO `tb_dept` VALUES ('2', '测绘室', '1', '正常', '超级管理员', '超级管理员', '1396940709', '1397019054');
 INSERT INTO `tb_dept` VALUES ('3', '规划室', '1', '正常', '超级管理员', '超级管理员', '1396940729', '1396940729');
 INSERT INTO `tb_dept` VALUES ('4', '规划小组1', '3', '正常', '超级管理员', '超级管理员', '1396943952', '1396945961');
 INSERT INTO `tb_dept` VALUES ('5', '规划小组1-1', '3', '正常', '超级管理员', '超级管理员', '1396944491', '1396945590');
-INSERT INTO `tb_dept` VALUES ('6', '规划小组23', '2', '已删除', '超级管理员', '超级管理员', '1396945623', '1397007158');
+INSERT INTO `tb_dept` VALUES ('6', '规划小组23', '2', '正常', '超级管理员', '超级管理员', '1396945623', '1397007158');
 INSERT INTO `tb_dept` VALUES ('7', '我的部门', '1', '正常', '超级管理员', '超级管理员', '1396945686', '1397005414');
-INSERT INTO `tb_dept` VALUES ('8', '我的部门1', '2', '已删除', '超级管理员', '超级管理员', '1396945711', '1397016491');
-INSERT INTO `tb_dept` VALUES ('9', '我的,部门', '1', '已删除', '超级管理员', '超级管理员', '1397003617', '1397003617');
+INSERT INTO `tb_dept` VALUES ('8', '我的部门1', '2', '正常', '超级管理员', '超级管理员', '1396945711', '1397016491');
+INSERT INTO `tb_dept` VALUES ('9', '我的,部门', '1', '正常', '超级管理员', '超级管理员', '1397003617', '1397003617');
 INSERT INTO `tb_dept` VALUES ('10', '规划室3', '3', '正常', '超级管理员', '超级管理员', '1397024764', '1397024764');
 INSERT INTO `tb_dept` VALUES ('11', '测量组', '1', '正常', '超级管理员', '超级管理员', '1397102762', '1397102762');
 INSERT INTO `tb_dept` VALUES ('12', '测量1组', '11', '正常', '超级管理员', '超级管理员', '1397102772', '1397102772');
-INSERT INTO `tb_dept` VALUES ('13', '测量2组', '11', '已删除', '超级管理员', '超级管理员', '1397102781', '1397102781');
-INSERT INTO `tb_dept` VALUES ('14', '测量3组', '11', '已删除', '超级管理员', '超级管理员', '1397195082', '1397197246');
-INSERT INTO `tb_files` VALUES ('1', '0', '新建文本文档 (3)', 'LGyVO3AH', '', 'txt', '0', 'application/octet-stream', '', '2014/04/13/', '8e9fe03ce8b4a8d598236404d9b8bb0c', '', '0', '0', '161', '0', '1397382227', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '0', '0', '0', '0', '192.168.171.1');
-INSERT INTO `tb_folders` VALUES ('1', '-1', '1', '我的文件', '', '0', '0', '0', '0', '1', '1397382263');
+INSERT INTO `tb_dept` VALUES ('13', '测量2组', '11', '正常', '超级管理员', '超级管理员', '1397102781', '1397102781');
+INSERT INTO `tb_dept` VALUES ('14', '测量3组', '11', '正常', '超级管理员', '超级管理员', '1397195082', '1397197246');
+INSERT INTO `tb_files` VALUES ('1', '0', '新建文本文档 (3)', 'LGyVO3AH', '', 'txt', '0', '0', 'application/octet-stream', '', '2014/04/13/', '8e9fe03ce8b4a8d598236404d9b8bb0c', '', '161', '0', '0', '0', '0', '0', '1', '0', '1', '正常', '0', '0', '0', '0', '', '', '0', '0', '192.168.171.1');
+INSERT INTO `tb_files` VALUES ('2', '0', '办公暂存.txt', 'Oe7TKFbo', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'e340395175141a5c32cec8a63a582f8a', 'e340395175141a5c32cec8a63a582f8a', '5094', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397445426', '1397445426', '');
+INSERT INTO `tb_files` VALUES ('3', '0', '新建 WPS文字 文档.doc', 'V4lFbfjs', '', '.doc', '0', '0', 'application/octet-stream', '', '2014/04/14/', '436124ca56abdd0054a7d8fbff28754a', '436124ca56abdd0054a7d8fbff28754a', '29184', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397445583', '1397445583', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('4', '0', 'jquery.min.js', 'zsAyVyoC', '', '.js', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'b612e5635e5f880b04c8a25d5b7a91a8', 'b612e5635e5f880b04c8a25d5b7a91a8', '94840', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397445714', '1397445714', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('5', '0', 'Noname2.txt', 'NF9O0LpB', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'b48a1385f917adf5f625290f98e0aef5', 'b48a1385f917adf5f625290f98e0aef5', '135', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397445965', '1397445965', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('6', '0', '首页1.jpg', 'jrUZYoNG', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '6679ae4a132b42e6854b97eacb0a7732', '6679ae4a132b42e6854b97eacb0a7732', '45344', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397446337', '1397446337', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('7', '0', '开发摘要.txt', '7rnzqdXd', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'ff035980f0980e627bff22684ecf2b6c', 'ff035980f0980e627bff22684ecf2b6c', '97', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397449363', '1397449363', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('8', '0', '临时.txt', '18oNXPZw', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'cef170a4afd89d955d2bbc00e037a41e', 'cef170a4afd89d955d2bbc00e037a41e', '10899', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397449363', '1397449363', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('9', '0', 'tdkc.sql', 'aULYNMRc', '', '.sql', '0', '0', 'application/octet-stream', '', '2014/04/14/', '60d54cde55619d86aa23a1b459c5bb96', '60d54cde55619d86aa23a1b459c5bb96', '70772', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397450219', '1397450219', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('10', '0', '办公暂存.txt', 'X8HeCxbm', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'ef1a24eda7532e2f947aea0c081e0853', 'ef1a24eda7532e2f947aea0c081e0853', '5094', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397450267', '1397450267', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('11', '0', 'forums.txt', 'f54SpSan', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', '94666df8bfc5165b7f08d38c19ccdc23', '94666df8bfc5165b7f08d38c19ccdc23', '24861', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397450500', '1397450500', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('12', '0', 'Noname1.txt', '8fjlZtRj', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', '96fca9b22a98a24d4cda73330d0a820d', '96fca9b22a98a24d4cda73330d0a820d', '1331', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397450566', '1397450566', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('13', '0', 'Noname11.txt', 'dxkJ9xNw', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', '52b3724460660949435cf66b2cb3d730', '52b3724460660949435cf66b2cb3d730', '155', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397450566', '1397450566', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('14', '0', 'Water lilies.jpg', 'WyCzMQHf', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'd7be908d509d97b3fc2b651668706495', 'd7be908d509d97b3fc2b651668706495', '83794', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397453365', '1397453365', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('15', '0', 'Winter.jpg', 'tU9I7YnD', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '3145136fa0065fd91df551fec584d6cd', '3145136fa0065fd91df551fec584d6cd', '105542', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397453365', '1397453365', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('16', '0', 'Blue hills.jpg', 'YS6okMbh', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'fd4cc9ad7d77b319077823fc31005c8f', 'fd4cc9ad7d77b319077823fc31005c8f', '28521', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397453415', '1397453415', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('17', '0', 'Sunset.jpg', 'c8a4oBhq', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'fa86ce74dbef8a19599e1d35c8d99d1d', 'fa86ce74dbef8a19599e1d35c8d99d1d', '71189', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397453415', '1397453415', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('18', '0', 'Water lilies.jpg', 'NYgWWDcv', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'eae30044fd3d6bc3d9c74164af5f2978', 'eae30044fd3d6bc3d9c74164af5f2978', '83794', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397453415', '1397453415', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('19', '0', 'Winter.jpg', 'FPV4VGvY', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'b1487e1ff5bacfd04c7533fe200ff50d', 'b1487e1ff5bacfd04c7533fe200ff50d', '105542', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397453415', '1397453415', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('20', '0', 'Sunset.jpg', 'qeIeW172', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '28792b672f561632acb73bb521365326', '28792b672f561632acb73bb521365326', '71189', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457222', '1397457222', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('21', '0', 'Water lilies.jpg', 'A7Sq2pMy', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '3837e469a3bda810247f30aadc2e2524', '3837e469a3bda810247f30aadc2e2524', '83794', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457222', '1397457222', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('22', '0', 'Winter.jpg', 'VN0GhOuF', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '08d7d7f765d9d0f2f2c21614f6c3a07c', '08d7d7f765d9d0f2f2c21614f6c3a07c', '105542', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457222', '1397457222', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('23', '0', 'Water lilies.jpg', 'DUTBEfaU', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '12bb1152d0cdef5356ae57b90893e028', '12bb1152d0cdef5356ae57b90893e028', '83794', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457272', '1397457272', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('24', '0', 'Winter.jpg', 'eFWL94D9', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'be93c8bb40d10e3af881490f53ceed56', 'be93c8bb40d10e3af881490f53ceed56', '105542', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457303', '1397457303', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('25', '0', 'Sunset.jpg', 'qSr2aOkT', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '91f1db55c02d309268d6f18d581e5fc5', '91f1db55c02d309268d6f18d581e5fc5', '71189', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457327', '1397457327', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('26', '0', 'Water lilies.jpg', 'X7Sxl0n7', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'f8e2a93f665d3a36dfbb5fe870bce405', 'f8e2a93f665d3a36dfbb5fe870bce405', '83794', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457327', '1397457327', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('27', '0', 'Winter.jpg', 'lfMvxwZl', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '90976f88e0f7b31c48b941d854ed71c5', '90976f88e0f7b31c48b941d854ed71c5', '105542', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397457327', '1397457327', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('28', '0', 'Winter.jpg', 'eYugGtTl', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'b398f8fae2e3a6be3829766af9a5189a', 'b398f8fae2e3a6be3829766af9a5189a', '105542', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397459204', '1397459204', '192.168.1.121');
+INSERT INTO `tb_files` VALUES ('29', '0', '新建 WPS文字 文档.doc', 'fQU4iX2Q', '', '.doc', '0', '0', 'application/octet-stream', '', '2014/04/14/', '47e1551b828b7ab20bafdf624eab3a2f', '47e1551b828b7ab20bafdf624eab3a2f', '29184', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397459378', '1397459378', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('30', '0', 'html5shiv.js', 'SkXR6AQ5', '', '.js', '0', '0', 'application/octet-stream', '', '2014/04/14/', '29afce6305f0d932ee3c60e968c77dd4', '29afce6305f0d932ee3c60e968c77dd4', '2380', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397459411', '1397459411', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('31', '0', '办公暂存.txt', '2U7QUef2', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', '4a3a005577c5b78000311eef8b31b9bd', '4a3a005577c5b78000311eef8b31b9bd', '5094', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397459434', '1397459434', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('32', '0', '我的图片', '', '', '', '0', '1', '', '', '', '', '', '106987', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '超级管理员', '超级管理员', '1397463501', '1397463501', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('33', '0', '96181024.jpg', 'CGInwO24', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'd66246874aa6d4d61931fdb5b5170af1', 'd66246874aa6d4d61931fdb5b5170af1', '102484', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397465319', '1397465319', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('34', '32', '首页1.jpg', 'PxNYDaXC', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '64cca7e5b9c74b58aece647720504524', '64cca7e5b9c74b58aece647720504524', '45344', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397466146', '1397466146', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('35', '32', '首页2.jpg', 'ZQhuc9td', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', 'aee47fe5d6caf121bb5d2771f0ec2b84', 'aee47fe5d6caf121bb5d2771f0ec2b84', '49991', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397466146', '1397466146', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('36', '32', 'discuz备份.txt', 'qz105N1R', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'e270652b5dbdad6f9f17c8f2b6a6d66a', 'e270652b5dbdad6f9f17c8f2b6a6d66a', '15031', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397466884', '1397466884', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('37', '32', '临时2.txt', 'CV5jrpMg', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/14/', '518f653436900b8971872813eb85ae74', '518f653436900b8971872813eb85ae74', '3473', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397466899', '1397466899', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('38', '32', '96181024.jpg', 'TijpHbEO', '', '.jpg', '1', '0', 'application/octet-stream', '', '2014/04/14/', '2b5986ab95b985bc333373e8cfac1228', '2b5986ab95b985bc333373e8cfac1228', '102484', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397466995', '1397466995', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('39', '32', 'config_global.php', 'eTFdVXbR', '', '.php', '0', '0', 'application/octet-stream', '', '2014/04/14/', 'f3b0094de5a77abb9f246972bf443817', 'f3b0094de5a77abb9f246972bf443817', '4503', '0', '0', '0', '0', '0', '0', '0', '1', '正常', '0', '0', '0', '0', '', '', '1397466995', '1397466995', '127.0.0.1');
 INSERT INTO `tb_menu` VALUES ('7', '134f34825e4f179f4355bb8bc369ead0', '系统管理', 'c=system&m=index', '0', '0', '正常', '超级管理员', '超级管理员', '1397093146', '1397099842');
 INSERT INTO `tb_menu` VALUES ('8', '970ee07bcf77cf54e167c83a5e6d3c27', '用户管理', 'c=user&m=index', '7', '0', '正常', '超级管理员', '超级管理员', '1397093444', '1397099915');
 INSERT INTO `tb_menu` VALUES ('9', 'e8543ad4a081e16686be51317b888f00', '添加用户', 'c=user&m=add', '8', '0', '正常', '超级管理员', '超级管理员', '1397093473', '1397097714');
 INSERT INTO `tb_menu` VALUES ('10', '28486ff59f3c7e2001da304c6bfda91c', '删除用户', 'c=user&m=delete', '8', '0', '正常', '超级管理员', '超级管理员', '1397097650', '1397097650');
 INSERT INTO `tb_menu` VALUES ('11', '313dc71ee986826273e9a75df4eefd8d', '修改用户', 'c=user&m=edit', '8', '0', '正常', '超级管理员', '超级管理员', '1397097669', '1397097669');
-INSERT INTO `tb_menu` VALUES ('12', 'f607c898371146232b4fd31ce8b8c0b9', '设置用户权限', 'c=user&m=auth', '8', '0', '正常', '超级管理员', '超级管理员', '1397097750', '1397097750');
+INSERT INTO `tb_menu` VALUES ('12', 'f607c898371146232b4fd31ce8b8c0b9', '设置用户权限', 'c=user&m=auth', '8', '0', '正常', '超级管理员', '超级管理员', '1397097750', '1397462577');
+INSERT INTO `tb_menu` VALUES ('13', '1abecad3711029b404d0aeae6ad221d5', '角色管理', 'c=role&m=index', '7', '0', '正常', '超级管理员', '超级管理员', '1397463403', '1397463472');
+INSERT INTO `tb_menu` VALUES ('14', '09ec56ee1ce3b4350edaf65e386cc483', '添加角色', 'c=role&m=add', '13', '0', '正常', '超级管理员', '超级管理员', '1397463444', '1397463444');
 INSERT INTO `tb_role` VALUES ('1', '公共权限角色', '1', '正常', '超级管理员', '超级管理员', '1396596593', '1396596593');
 INSERT INTO `tb_role` VALUES ('2', '系统管理员', '1', '正常', '超级管理员', '超级管理员', '1396596746', '1396596746');
 INSERT INTO `tb_role` VALUES ('3', '角色3修改', '0', '正常', '超级管理员', '超级管理员', '1396596772', '1396597289');
 INSERT INTO `tb_role` VALUES ('4', '人事角色', '0', '正常', '超级管理员', '超级管理员', '1396597337', '1396597337');
 INSERT INTO `tb_role` VALUES ('5', '数据录入员', '0', '正常', '超级管理员', '超级管理员', '1396597346', '1396597346');
-INSERT INTO `tb_role` VALUES ('6', '财务人员', '0', '已删除', '超级管理员', '超级管理员', '1396597353', '1396597353');
-INSERT INTO `tb_role` VALUES ('7', '测量组人员修改', '0', '已删除', '超级管理员', '超级管理员', '1396597362', '1396597425');
-INSERT INTO `tb_role` VALUES ('8', '再来一个', '0', '已删除', '超级管理员', '超级管理员', '1396932672', '1396932672');
+INSERT INTO `tb_role` VALUES ('6', '财务人员', '0', '正常', '超级管理员', '超级管理员', '1396597353', '1396597353');
+INSERT INTO `tb_role` VALUES ('7', '测量组人员修改', '0', '正常', '超级管理员', '超级管理员', '1396597362', '1396597425');
+INSERT INTO `tb_role` VALUES ('8', '再来一个', '0', '正常', '超级管理员', '超级管理员', '1396932672', '1396932672');
 INSERT INTO `tb_role_menu` VALUES ('1', '5', '970ee07bcf77cf54e167c83a5e6d3c27', '1', '测试是', '测试是', '1397118589', '1397287917');
 INSERT INTO `tb_role_menu` VALUES ('2', '5', '134f34825e4f179f4355bb8bc369ead0', '1', '测试是', '测试是', '1397118589', '1397287917');
 INSERT INTO `tb_role_menu` VALUES ('3', '5', '970ee07bcf77cf54e167c83a5e6d3c27', '1', '测试是', '测试是', '1397118617', '1397287917');
@@ -870,13 +878,13 @@ INSERT INTO `tb_user` VALUES ('2', 'admin1', '爱上dsadsa', '', '', '', '1', 'd
 INSERT INTO `tb_user` VALUES ('3', 'hh12', '测试名字', '', '', '', '2', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515457', '1396515457');
 INSERT INTO `tb_user` VALUES ('4', 'h122', '测试名字1', '', '', '', '3', 'dd1f73c3a84bee119fd6cd206a5ace31', 'f', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396515749', '1396515749');
 INSERT INTO `tb_user` VALUES ('5', '23123', '就爱上哈都是', '', '', '', '4', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '正常', '超级管理员', '超级管理员', '1396572758', '1396572758');
-INSERT INTO `tb_user` VALUES ('6', '323', '我的姓名', '', '', '', '5', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '已删除', '就爱上哈都是', '就爱上哈都是', '1396573128', '1396573128');
-INSERT INTO `tb_user` VALUES ('7', '554', '说得很好', '', '', '', '6', 'd91976a8add1886a83b6bd7cc7a6632d', 'f', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '已删除', '就爱上哈都是', '超级管理员', '1396578418', '1397108268');
+INSERT INTO `tb_user` VALUES ('6', '323', '我的姓名', '', '', '', '5', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '正常', '就爱上哈都是', '就爱上哈都是', '1396573128', '1396573128');
+INSERT INTO `tb_user` VALUES ('7', '554', '说得很好', '', '', '', '6', 'd91976a8add1886a83b6bd7cc7a6632d', 'f', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1398384000', '0', '正常', '就爱上哈都是', '超级管理员', '1396578418', '1397108268');
 INSERT INTO `tb_user` VALUES ('8', 'ddff', 'hjasdr23', '', '', '', '7', 'd91976a8add1886a83b6bd7cc7a6632d', 'f', '0', '0000-00-00 00:00:00', '13795467942', '', '', '0', '', '11', '1', '0', '', '1397347200', '', '', '', '1397347200', '0', '正常', '就爱上哈都是', '超级管理员', '1396579538', '1397097107');
-INSERT INTO `tb_user` VALUES ('9', 'czb', '陈暂波', '', '', '', '12', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '15195467940', '', '', '0', '', '11', '1', '0', '', '1271116800', '', '助理工程师', '', '1398816000', '0', '已删除', '就爱上哈都是', '超级管理员', '1396588781', '1397024664');
-INSERT INTO `tb_user` VALUES ('10', 'zwt', '张五天', '', '', '', '22', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '13795467840', '', '', '0', '', '11', '1', '0', '', '1397433600', '', '', '', '1398384000', '0', '已删除', '就爱上哈都是', '超级管理员', '1396589286', '1397007924');
+INSERT INTO `tb_user` VALUES ('9', 'czb', '陈暂波', '', '', '', '12', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '15195467940', '', '', '0', '', '11', '1', '0', '', '1271116800', '', '助理工程师', '', '1398816000', '0', '正常', '就爱上哈都是', '超级管理员', '1396588781', '1397024664');
+INSERT INTO `tb_user` VALUES ('10', 'zwt', '张五天', '', '', '', '22', 'd91976a8add1886a83b6bd7cc7a6632d', 'm', '0', '0000-00-00 00:00:00', '13795467840', '', '', '0', '', '11', '1', '0', '', '1397433600', '', '', '', '1398384000', '0', '正常', '就爱上哈都是', '超级管理员', '1396589286', '1397007924');
 INSERT INTO `tb_user` VALUES ('11', 't51', '测试是', '', '', '', '55', '641003ad022f3b62ba2ef7273d1a17a6', 'm', '0', '0000-00-00 00:00:00', '13795467941', '', '', '0', '', '11', '1', '5', '', '1397001600', '', '', '', '1398470400', '0', '正常', '超级管理员', '测试是', '1397109730', '1397118975');
-INSERT INTO `tb_user` VALUES ('12', 'my1', '我的名字', '', '', '', '234', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '1', '1', '0', '', '1240963200', '', '', '', '1396310400', '0', '正常', '超级管理员', '超级管理员', '1397198001', '1397292999');
+INSERT INTO `tb_user` VALUES ('12', 'my1', '我的名字', '', '', '', '234', 'dd1f73c3a84bee119fd6cd206a5ace31', 'm', '0', '0000-00-00 00:00:00', '13795467940', '', '', '0', '', '11', '1', '0', '', '1240963200', '', '', '', '1396310400', '0', '正常', '超级管理员', '超级管理员', '1397198001', '1397292999');
 INSERT INTO `tb_user_menu` VALUES ('1', '11', '970ee07bcf77cf54e167c83a5e6d3c27', '1', '超级管理员', '测试是', '1397114183', '1397117741');
 INSERT INTO `tb_user_menu` VALUES ('2', '11', '134f34825e4f179f4355bb8bc369ead0', '1', '超级管理员', '测试是', '1397114183', '1397117741');
 INSERT INTO `tb_user_menu` VALUES ('3', '11', 'f607c898371146232b4fd31ce8b8c0b9', '1', '超级管理员', '测试是', '1397114183', '1397117741');
@@ -918,12 +926,13 @@ INSERT INTO `tb_user_menu` VALUES ('38', '2', 'e8543ad4a081e16686be51317b888f00'
 INSERT INTO `tb_user_menu` VALUES ('39', '2', '313dc71ee986826273e9a75df4eefd8d', '0', '超级管理员', '超级管理员', '1397287094', '1397287094');
 INSERT INTO `tb_user_menu` VALUES ('40', '2', '28486ff59f3c7e2001da304c6bfda91c', '0', '超级管理员', '超级管理员', '1397287094', '1397287094');
 INSERT INTO `tb_user_schedule` VALUES ('1', '1', '1397260800', '1397692800', '我的日程1', '今天去办社保 版里了', '正常', '1', '超级管理员', '超级管理员', '1397265793', '1397288857');
-INSERT INTO `tb_user_schedule` VALUES ('2', '1', '1397520000', '1397779200', '我的日程2', '今天下班去接小孩,去接好了', '已删除', '1', '超级管理员', '超级管理员', '1397267173', '1397280758');
-INSERT INTO `tb_user_schedule` VALUES ('3', '1', '1397520000', '1397606400', '我日日程32323', '几天能哈哈sas ，再次修噶', '已删除', '1', '超级管理员', '超级管理员', '1397267537', '1397280317');
+INSERT INTO `tb_user_schedule` VALUES ('2', '1', '1397520000', '1397779200', '我的日程2', '今天下班去接小孩,去接好了', '正常', '1', '超级管理员', '超级管理员', '1397267173', '1397280758');
+INSERT INTO `tb_user_schedule` VALUES ('3', '1', '1397520000', '1397606400', '我日日程32323', '几天能哈哈sas ，再次修噶', '正常', '1', '超级管理员', '超级管理员', '1397267537', '1397280317');
 INSERT INTO `tb_user_schedule` VALUES ('4', '1', '1397260800', '1398297600', '12号到24好', '12号到24好12号到24好12号到24好12号到24好', '正常', '1', '超级管理员', '超级管理员', '1397283072', '1397283072');
 INSERT INTO `tb_work_log` VALUES ('1', '1', '我的日程1', '今天去办社保', '正常', '超级管理员', '超级管理员', '1397265793', '1397265793');
 INSERT INTO `tb_work_log` VALUES ('2', '1', '我的日程2', '今天下班去接小孩', '正常', '超级管理员', '超级管理员', '1397267173', '1397267173');
 INSERT INTO `tb_work_log` VALUES ('3', '1', '我日日程3', '几天能哈哈sas 环境阿莎哈啥', '正常', '超级管理员', '超级管理员', '1397267537', '1397267537');
-INSERT INTO `tb_work_log` VALUES ('4', '1', '今天去桥头测量', '问题1：\r\n哈哈是爱上\r\n问题2\r\nhashash\r\n问题3\r\n与哈市', '已删除', '超级管理员', '超级管理员', '1397288917', '1397289147');
+INSERT INTO `tb_work_log` VALUES ('4', '1', '今天去桥头测量', '问题1：\r\n哈哈是爱上\r\n问题2\r\nhashash\r\n问题3\r\n与哈市', '正常', '超级管理员', '超级管理员', '1397288917', '1397289147');
 INSERT INTO `tb_work_log` VALUES ('5', '1', '测试测试', '爱喝啥啥爱上哈啥是撒', '正常', '超级管理员', '超级管理员', '1397293478', '1397293478');
 INSERT INTO `tb_work_log` VALUES ('6', '1', '我介绍的或多或少的是速度', '哈哈撒花花洒撒是', '正常', '超级管理员', '超级管理员', '1397383274', '1397383274');
+

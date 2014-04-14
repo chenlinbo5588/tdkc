@@ -121,7 +121,7 @@ class Role extends TZ_Admin_Controller {
             }
             
             $this->Role_Model->fake_delete($_POST);
-            $this->sendFormatJson('success',array('id' => $_POST['id'] , 'text' => '删除成功'));
+            $this->sendFormatJson('success',array('operation' => 'delete','id' => $_POST['id'] , 'text' => '删除成功'));
         }else{
             $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '删除失败'));
         }
