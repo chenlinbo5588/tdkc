@@ -7,11 +7,12 @@
     background-position: -896px -31px;
     width:16px;
     height:16px;
-    float: left;
 }
 
-.filename {
-    padding:0 0 0 5px;
+
+
+.pd20 {
+    padding: 20px;
 }
 
 
@@ -135,7 +136,7 @@
 }
 
 .files td, .files th {
-    1border-width:0 1px 0 1px;
+    border-width: 1px 0 1px 0;
 }
 
 
@@ -238,3 +239,29 @@ ol.style_decimal , ul.style_decimal {
 .ci_calendar .weekhead td {
     font-weight: bold;
 }
+
+/** 文件相关 */
+.dir_list li {
+    padding:3px 0;
+    cursor: pointer;
+}
+
+.dir_list li.selected {
+    background-color:#ddd;
+}
+
+.filerow {
+    position:relative;
+}
+
+.filerow .dir_icon16 {
+    position: absolute;
+    display: block;
+    top:0;
+    left:0;
+}
+
+.isdir .filename {
+    margin: 0 0 0 18px;
+}
+

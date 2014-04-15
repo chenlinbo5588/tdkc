@@ -4,8 +4,7 @@
 class File extends TZ_Controller {
     public function __construct(){
         parent::__construct();
-        
-        
+        $this->load->model('File_Model');
     }
     
     public function index()
@@ -28,6 +27,10 @@ class File extends TZ_Controller {
         $this->load->helper('directory');
         $this->load->helper('file');
         
+        $folder_id = (int)gpc('folder_id','G',0);
+        $uid = (int)gpc('uid','G',0);
+        
+        
         $keyname = 'Filedata';
         if(0 === $_FILES['imgFile']['error']){
             $keyname = 'imgFile';
@@ -38,6 +41,20 @@ class File extends TZ_Controller {
             'filesize'  => $_FILES[$keyname]['size'],
             'type'		=> $_FILES[$keyname]["type"],
         );
+        
+        $count = $this->File_Model->getCount(array(
+            'where' => array(
+                'user_id' => $uid,
+                'status' => 0,
+                'pid' => $folder_id,
+                'file_name' => $attachment['filename']
+            )
+        ));
+        
+        if($count){
+            $this->sendJson(array('error' => 1,"message" => '文件已经存在'));
+        }
+        
         
         $suffix = substr($attachment['filename'],strrpos($attachment['filename'],'.'));
         $suffix = strtolower($suffix);
@@ -75,8 +92,7 @@ class File extends TZ_Controller {
         $file_key = random(8);
         $file_description = '';
         
-        $folder_id = (int)gpc('folder_id','G',0);
-        $uid = (int)gpc('uid','G',0);
+        
         
         $data = array(
             'pid' => $folder_id,
@@ -87,7 +103,7 @@ class File extends TZ_Controller {
             'file_mime' => $attachment['type'],
             'file_description' => $file_description ? $file_description : '',
             'file_store_path' => $fileDir.'/',
-            'file_real_name' => $file_md5,
+            'file_real_name' => $attachment['filename'],
             'file_md5' => $file_md5 ? $file_md5 : '',
             'file_size' => $attachment['filesize'],
             'thumb_size' => 0,
@@ -98,17 +114,30 @@ class File extends TZ_Controller {
         );
       
         try {
-            $this->load->model('File_Model');
+            
             $fileId = $this->File_Model->add($data);
             
-            $this->db->set('file_size', 'file_size+'. $attachment['filesize'], FALSE);
-            $this->db->where(array('id' => $folder_id ,'user_id' => $uid));
-            $this->db->update($this->File_Model->_tableName); 
+            /**
+             * 目录数上 每个节点都要增加 
+             */
+            $parents = $this->File_Model->getParents($folder_id);
+            $increseIds = array();
+            foreach($parents as $v){
+                $increseIds[] = $v['id'];
+            }
             
-            $retAry = array('error' => 1,"message" => '','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath);
+            
+            if($increseIds){
+                //file_put_contents("incres_parent.txt",print_r($increseIds,true));
+                $this->db->set('file_size', 'file_size+'. $attachment['filesize'], FALSE);
+                $this->db->where_in('id' ,$increseIds);
+                $this->db->update($this->File_Model->_tableName);
+            }
+            
+            $retAry = array('error' => 1,"message" => '上传成功','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath);
                 
             if(!$fileId){
-                $retAry['message'] = 'db error';
+                $retAry['message'] = '数据库错误';
             }else{
                 $retAry['id'] = $fileId;
                 if(move_uploaded_file($_FILES[$keyname]['tmp_name'],$filePath.$newFilePath)){
@@ -116,7 +145,7 @@ class File extends TZ_Controller {
                 }
             }
         }catch(Exception $e){
-            $retAry = array('error' => 1,"message" => 'db error,'.$e->getCode());
+            $retAry = array('error' => 1,"message" => '数据库错误,'.$e->getCode());
         }
         
         if('Filedata' == $keyname){

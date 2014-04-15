@@ -13,6 +13,7 @@ body
   scrollbar-shadow-color:DEEFC6;
 }
 </style>
+</head>
 <frameset rows="60,*" cols="*" frameborder="no" border="0" framespacing="0">
   <frame src="{url_path('admin','top')}" name="topFrame" scrolling="no">
   <frameset cols="180,*" name="btFrame" frameborder="NO" border="0" framespacing="0">

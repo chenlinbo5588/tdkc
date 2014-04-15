@@ -19,7 +19,7 @@ jBoxConfig.defaults = {
     ajaxData: {},  /* 在窗口内容使用get:或post:前缀标识的情况下，ajax post的数据，例如：{ id: 1 } 或 "id=1" */
     iframeScrolling: 'auto', /* 在窗口内容使用iframe:前缀标识的情况下，iframe的scrolling属性值，可选值有：'auto'、'yes'、'no' */
 
-    title: 'jBox', /* 窗口的标题 */
+    title: '标题', /* 窗口的标题 */
     width: 350, /* 窗口的宽度，值为'auto'或表示像素的整数 */
     height: 'auto', /* 窗口的高度，值为'auto'或表示像素的整数 */
     bottomText: '', /* 窗口的按钮左边的内容，当没有按钮时此设置无效 */

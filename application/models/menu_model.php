@@ -20,7 +20,7 @@ class Menu_Model extends TZ_Model {
     }
     
     
-    public function getListByTree($parentId = 0,$separate = '----',$level = 0) {
+    public function getListByTree($parentId = 0,$selfid = 0,$separate = '----',$level = 0) {
         
         $parentId = $parentId < 0 ? 0 : intval($parentId);
         //$selfId   = $selfId < 0 ? 0 : intval($selfId);
@@ -31,6 +31,14 @@ class Menu_Model extends TZ_Model {
           ),
           'order' => 'displayorder DESC,pid ASC'
         );
+        
+        if(is_array($selfid)){
+            $condition['where_not_in'] = array(
+                array('key' => 'id' ,'value' => $selfid)
+                );
+        }else{
+            $condition['where']['id !='] =  $selfid;
+        }
         
         $result = $this->getList($condition);
         $childrenList = $result['data'];
@@ -47,7 +55,7 @@ class Menu_Model extends TZ_Model {
                 
                 $this->_menuTree[$item['id']] = $item;
                 
-                $this->getListByTree($item['id'],$separate,$level + 1);
+                $this->getListByTree($item['id'],$selfid, $separate,$level + 1);
             }
         }
 		

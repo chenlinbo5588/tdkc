@@ -26,7 +26,7 @@ class Dept_Model extends TZ_Model {
      * @param type $separate
      * @return type 
      */
-    public function getDeptListByTree($parentId = 0,$separate = '----',$level = 0) {
+    public function getDeptListByTree($parentId = 0,$selfid = 0,$separate = '----',$level = 0) {
         
         $parentId = $parentId < 0 ? 0 : intval($parentId);
         //$selfId   = $selfId < 0 ? 0 : intval($selfId);
@@ -37,6 +37,14 @@ class Dept_Model extends TZ_Model {
           ),
           'order' => 'pid ASC'
         );
+        
+        if(is_array($selfid)){
+            $condition['where_not_in'] = array(
+                array('key' => 'id' ,'value' => $selfid)
+                );
+        }else{
+            $condition['where']['id !='] =  $selfid;
+        }
         
         $result = $this->getList($condition);
         $childrenList = $result['data'];
@@ -53,7 +61,7 @@ class Dept_Model extends TZ_Model {
                 
                 $this->_deptTree[$item['id']] = $item;
                 
-                $this->getDeptListByTree($item['id'],$separate,$level + 1);
+                $this->getDeptListByTree($item['id'],$selfid,$separate,$level + 1);
             }
         }
 		

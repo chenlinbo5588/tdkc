@@ -30,11 +30,20 @@ class Menu extends TZ_Admin_Controller {
             
             if($menu){
                 
+                /*
                 $this->Menu_Model->fake_delete(array(
                     'id' =>  $_POST['id']
                 ));
+                */
                 
-                $this->sendFormatJson('success',array('operation' => 'delete', 'id' => $_POST['id'] , 'text' => '删除成功'));
+                $childs = $this->Menu_Model->getListByTree($menu['id']);
+                $ids = array($menu['id']);
+                foreach($childs as $key => $val){
+                    $ids[] = $val['id'];
+                }
+                $this->Menu_Model->fake_delete(array('id' => $ids));
+                
+                $this->sendFormatJson('success',array('operation' => 'delete', 'id' => implode(',',$ids) , 'text' => '删除成功'));
             }else{
                 $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '找不到记录,删除失败'));
             }
@@ -48,6 +57,7 @@ class Menu extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         
+        $selfid = (int)gpc('id', "GP",0);
         
         if($this->isPostRequest() && !empty($_POST['id'])){
             
@@ -92,7 +102,7 @@ class Menu extends TZ_Admin_Controller {
         }
         
         $this->Menu_Model->clearMenuTree();
-        $data = $this->Menu_Model->getListByTree();
+        $data = $this->Menu_Model->getListByTree(0,$selfid);
         $this->assign('menu',$menu);
         $this->assign('data',$data);
         $this->display('add');

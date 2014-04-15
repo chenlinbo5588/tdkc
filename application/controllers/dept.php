@@ -62,7 +62,7 @@ class Dept extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         
-        
+        $selfid = (int)gpc('id', "GP",0);
         if($this->isPostRequest() && !empty($_POST['id'])){
             
             $this->_addRules();

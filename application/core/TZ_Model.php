@@ -12,6 +12,16 @@ class TZ_Model extends CI_Model {
     }
     
     
+    public function sumByCondition($condition){
+        
+        $this->db->select_sum($condition['field']);
+        $this->db->where($condition['where']);
+        $query =  $this->db->get($this->_tableName);
+        
+        $data = $query->result_array();
+        return $data;
+    }
+    
     public function getCount($condition = array()){
         if($condition['where']){
             $this->db->where($condition['where']);
@@ -22,6 +32,11 @@ class TZ_Model extends CI_Model {
     
     public function getById($condition){
         if($condition['where']){
+            
+            if($condition['select']){
+                $this->db->select($condition['select']);
+            }
+            
             $this->db->where($condition['where']);
             $query = $this->db->get($this->_tableName);
             $data = $query->result_array();
@@ -65,6 +80,12 @@ class TZ_Model extends CI_Model {
         if($condition['where_in']){
             foreach($condition['where_in'] as $val){
                 $this->db->where_in($val['key'],$val['value']);
+            }
+        }
+        
+        if($condition['where_not_in']){
+            foreach($condition['where_not_in'] as $val){
+                $this->db->where_not_in($val['key'],$val['value']);
             }
         }
         

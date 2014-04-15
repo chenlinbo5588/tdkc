@@ -31,6 +31,20 @@
            }
             </style>
             <script>
+                
+                /*
+           FileProgress.prototype.setComplete = function () {
+                this.fileProgressElement.className = "progressContainer blue";
+                this.fileProgressElement.childNodes[3].className = "progressBarComplete";
+                this.fileProgressElement.childNodes[3].style.width = "";
+
+                var oSelf = this;
+                this.setTimer(setTimeout(function () {
+                    //oSelf.disappear();
+                }, 1000));
+            };*/
+
+
             $(function(){
                 /*
                 $("#filelist").delegate("a","click",function(e){
@@ -52,13 +66,17 @@
                                     this.customSettings.callback(file,serverData);
                                 }
                                 var response = $.parseJSON(serverData);
-                                if(0 == response.error){
-                                    var html = '<li>';
-                                    html += '<input type="hidden" name="file_id[]" value="' + response.id + '"/>';
-                                    html += '<span>' + file.name  + '</span>';
-                                    html += '</div>';
-                                    $("#filelist").append(html);
+                                
+                                var html = '';
+                                if(response.error){
+                                    html += '<li style="color:red;">';
+                                }else{
+                                    html += '<li style="color:blue;">';
                                 }
+                                html += '<span>' + file.name  + '&nbsp;' + response.message + '</span>';
+                                //html += '<input type="hidden" name="file_id[]" value="' + response.id + '"/>';
+                                html += '</li>';
+                                $("#filelist").append(html);
                             
                             } catch (ex) {
                                 this.debug(ex);

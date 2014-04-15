@@ -118,56 +118,6 @@ $(function(){
         var text = "确定要删除 " + s + " 吗";
         
         /*
-         *$("#replaceTxt").html(text);
-		var dialog = $("#dialog-confirm" ).dialog({
-			resizable: false,
-			
-			modal: true,
-			buttons: {
-				"确定" : function() {
-                    dialog.dialog( "close" );
-                    $.ajax({
-                        type :"POST",
-                        dataType:"json",
-                        url: that.attr('data-href'),
-                        data : {
-                            isajax:"1",
-                            id:that.attr('data-id')
-                        },
-                        success:function(data){
-                            dialog.dialog( "close" );
-                            $( "#dialog p" ).html(data.body.text);
-                            $( "#dialog").dialog({
-                                modal: true
-                            });
-            
-                            if(data.code == 'success'){
-                                var ids = data.body.id.split(',');
-                                for(var i = 0, j = ids.length; i < j; i++ ){
-                                    $("#row_" + ids[i]).remove();
-                                }
-                            }
-                            
-                            if(data.redirectUrl){
-                                location.href = redirectUrl;
-                            }
-                        },
-                        error:function(xhr, textStatus, errorThrown){
-                            $( "#dialog p" ).html("请求错误");
-                            $( "#dialog").dialog({
-                                modal: true
-                            });
-                        }
-                    });
-				},
-				"取消": function() {
-					$( this ).dialog( "close" );
-				}
-			}
-		});
-        */
-    
-    
         if(confirm(text)){
             $.ajax({
                 type :"POST",
@@ -181,6 +131,26 @@ $(function(){
                 error:ajax_error
             });
         }
+        */
+       
+       var submit = function (v, h, f) {
+            if (v == true){
+                $.ajax({
+                    type :"POST",
+                    dataType:"json",
+                    url: that.attr('data-href'),
+                    data : {
+                        isajax:"1",
+                        id:that.attr('data-id')
+                    },
+                    success:ajax_success,
+                    error:ajax_error
+                });
+            }
+            return true;
+        };
+        // 自定义按钮
+        $.jBox.confirm(text, "提示", submit, { buttons: { '确定': true, '取消': false} });
     });
 });
 
@@ -194,18 +164,29 @@ function ajax_success(data){
             $("#row_" + ids[i]).remove();
         }
     }
+    
+    var runafter = function(){
+        if(data.redirectUrl){
+            location.href = data.redirectUrl;
+        }
 
-    if(data.redirectUrl){
-        location.href = data.redirectUrl;
-    }
-
-    if(data.redirectInfo){
-        if(data.redirectInfo.jsReload){
-            location.reload();
-        }else{
-            location.href = data.redirectInfo.url;
+        if(data.redirectInfo){
+            if(data.redirectInfo.jsReload){
+                location.reload();
+            }else{
+                location.href = data.redirectInfo.url;
+            }
         }
     }
+    
+    if(typeof(data.body.wait) != "undefined"){
+        setTimeout(function(){
+            runafter();
+        },data.body.wait * 1000);
+    }else{
+        runafter();
+    }
+
 }
 
 function ajax_error(xhr, textStatus, errorThrown){
