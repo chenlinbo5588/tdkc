@@ -12,8 +12,8 @@
                             <label><strong>范围</strong>
                                 <select name="type" >
                                     <option value="">全部</option>
-                                    <option value="0" {if $smarty.get.inc_del === '0'}selected{/if}>内部</option>
-                                    <option value="1" {if $smarty.get.inc_del == '1'}selected{/if}>外部</option>
+                                    <option value="0" {if $smarty.get.inc_del === '0'}selected{/if}>内部通讯录</option>
+                                    <option value="1" {if $smarty.get.inc_del == '1'}selected{/if}>外部通讯录</option>
                                 </select>
                             </label>
                             <label><strong>是否包含已删除</strong>

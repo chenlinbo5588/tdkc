@@ -62,6 +62,23 @@ class TZ_Controller extends CI_Controller {
     protected function _init_config(){
         $this->_smarty->assign('NO_COVER_IMG',config_item('no_cover_image'));
         
+        $this->load->model('Menu_Model');
+        
+        $currentMenuInfo = $this->Menu_Model->getById(array(
+           'where' => array(
+               'url' => config_item('controller_trigger').'='.$this->tpldir.'&'.config_item('function_trigger').'='.$this->tplName
+           )
+        ));
+        
+        if($currentMenuInfo){
+            $parents = $this->Menu_Model->getParents($currentMenuInfo['id']);
+        }
+        
+        if($parents){
+            $parents = array_reverse($parents);
+            $this->_smarty->assign('breadcrumb',$parents);
+        }
+        
         if(ENVIRONMENT == 'production'){
             $this->_smarty->assign('js_compress','min.');
         }

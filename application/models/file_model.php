@@ -28,11 +28,11 @@ class File_Model extends TZ_Model {
     
     /**
      * 获得祖先列表
-     * @param type $selfid 
+     * @param $selfid 
      */
-    public function getParents($selfid = 0){
+    public function getParents($selfid = 0,$field = 'id,pid,file_name,is_dir'){
         
-        $condition['select'] = 'id,pid,file_name';
+        $condition['select'] = $field;
         $condition['where'] = array(
             'status' => 0,
             'id' => $selfid

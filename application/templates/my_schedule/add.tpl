@@ -19,7 +19,7 @@
                             <td><label class="required"><em>*</em><strong>日程标题</strong></td><td><input type="text" style="width:200px" name="title" value="{$info['title']}" placeholder="请输入日程标题"/></label>{form_error('title')}</td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>日程内容</strong></td><td><textarea name="content" style="width:400px;height:150px;">{$info['content']}</textarea></label><br/>{form_error('content')}</td>
+                            <td><label class="required"><em>*</em><strong>日程内容</strong></td><td><textarea name="content" style="width:500px;height:250px;">{$info['content']}</textarea></label><br/>{form_error('content')}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -41,7 +41,7 @@
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}
-                        alert('{$feedMessage}');
+                        $.jBox.alert('{$feedMessage}', '提示');
                     {/if}
                     });
                 </script>

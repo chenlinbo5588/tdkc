@@ -1,21 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-class File extends TZ_Controller {
+class Attachment extends TZ_Controller {
     public function __construct(){
         parent::__construct();
-        $this->load->model('File_Model');
+        $this->load->model('Attachment_Model');
     }
     
     public function index()
     {
-        $folder_id = (int)gpc('folder_id','G',0);
-        $uid = (int)gpc('uid','G',0);
-        
-        $this->assign('folder_id',$folder_id);
-        $this->assign('uid',$uid);
-        
-        $this->display();
+        die(0);
     }
     
     public function dir(){
@@ -27,9 +21,7 @@ class File extends TZ_Controller {
         $this->load->helper('directory');
         $this->load->helper('file');
         
-        $folder_id = (int)gpc('folder_id','G',0);
         $uid = (int)gpc('uid','G',0);
-        
         
         $keyname = 'Filedata';
         if(0 === $_FILES['imgFile']['error']){
@@ -41,20 +33,6 @@ class File extends TZ_Controller {
             'filesize'  => $_FILES[$keyname]['size'],
             'type'		=> $_FILES[$keyname]["type"],
         );
-        
-        $count = $this->File_Model->getCount(array(
-            'where' => array(
-                'user_id' => $uid,
-                'status' => 0,
-                'pid' => $folder_id,
-                'file_name' => $attachment['filename']
-            )
-        ));
-        
-        if($count){
-            $this->sendJson(array('error' => 1,"message" => '文件已经存在'));
-        }
-        
         
         $suffix = substr($attachment['filename'],strrpos($attachment['filename'],'.'));
         $suffix = strtolower($suffix);
@@ -93,9 +71,7 @@ class File extends TZ_Controller {
         $file_description = '';
         
         
-        
         $data = array(
-            'pid' => $folder_id,
             'file_name' => $attachment['filename'],
             'file_key' => $file_key,
             'file_extension' => $suffix,
@@ -115,24 +91,7 @@ class File extends TZ_Controller {
       
         try {
             
-            $fileId = $this->File_Model->add($data);
-            
-            /**
-             * 目录数上 每个节点都要增加 
-             */
-            $parents = $this->File_Model->getParents($folder_id);
-            $increseIds = array();
-            foreach($parents as $v){
-                $increseIds[] = $v['id'];
-            }
-            
-            
-            if($increseIds){
-                //file_put_contents("incres_parent.txt",print_r($increseIds,true));
-                $this->db->set('file_size', 'file_size+'. $attachment['filesize'], FALSE);
-                $this->db->where_in('id' ,$increseIds);
-                $this->db->update($this->File_Model->_tableName);
-            }
+            $fileId = $this->Attachment_Model->add($data);
             
             $retAry = array('error' => 1,"message" => '上传成功','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath);
                 
@@ -153,7 +112,6 @@ class File extends TZ_Controller {
         }else{
             header('Content-type: text/html; charset=UTF-8');
             echo json_encode(array('error' => 0, 'url' => $urlPath.$newFilePath));
-           
         }
     }
 }

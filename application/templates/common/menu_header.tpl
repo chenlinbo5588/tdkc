@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>menu</title>
+<title>{$TITLE}</title>
+<meta name="keywords" content="{$KEYWORDS}">
+<meta name="description" content="{$DESCRIPTION}">
 <link rel="stylesheet" href="/css/base.css" type="text/css" />
 <link rel="stylesheet" href="/css/menu.css" type="text/css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

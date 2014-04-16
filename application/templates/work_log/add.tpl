@@ -34,7 +34,7 @@
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}
-                        alert('{$feedMessage}');
+                        $.jBox.alert('{$feedMessage}', '提示');
                     {/if}
                     });
                 </script>

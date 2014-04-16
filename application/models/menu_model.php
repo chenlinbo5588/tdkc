@@ -6,6 +6,7 @@ class Menu_Model extends TZ_Model {
     public $_tableName = 'tb_menu';
     public $_menuTree = array() ;
     public $_fullTree = array();
+    public $_parentList = array();
     
     public function __construct(){
         parent::__construct();
@@ -18,6 +19,29 @@ class Menu_Model extends TZ_Model {
     public function clearMenuTree(){
         $this->_menuTree = array();
     }
+    
+    
+    /**
+     * 获得祖先列表
+     * @param $selfid 
+     */
+    public function getParents($selfid = 0,$field = '*'){
+        
+        $condition['select'] = $field;
+        $condition['where'] = array(
+            'status' => '正常',
+            'id' => $selfid
+        );
+        
+        $result = $this->getById($condition);
+        if($result){
+            $this->_parentList[] = $result;
+            $this->getParents($result['pid']);
+        }
+        
+        return $this->_parentList;
+    }
+    
     
     
     public function getListByTree($parentId = 0,$selfid = 0,$separate = '----',$level = 0) {

@@ -13,8 +13,8 @@
                                 <td><label class="required"><em>*</em><strong>类型</strong></td>
                                 <td>
                                     <select name="type" style="width:200px" >
-                                        <option value="0" {if $info['type'] === '0'}selected{/if}>内部</optin>
-                                        <option value="1" {if $info['type'] === '1'}selected{/if}>外部</optin>
+                                        <option value="0" {if $info['type'] === '0'}selected{/if}>内部通讯录</optin>
+                                        <option value="1" {if $info['type'] === '1'}selected{/if}>外部通讯录</optin>
                                     </select>
                                 </td>
                             </tr>
@@ -53,7 +53,7 @@
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}
-                        alert('{$feedMessage}');
+                        $.jBox.alert('{$feedMessage}', '提示');
                     {/if}
                     });
                 </script>

@@ -92,7 +92,7 @@ class TZ_Model extends CI_Model {
         if($condition['order']){
             $this->db->order_by($condition['order']);
         }else{
-            $this->db->order_by("updatetime desc");
+            $this->db->order_by("createtime DESC");
         }
         
         if($condition['pager']){

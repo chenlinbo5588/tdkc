@@ -30,7 +30,7 @@
                             <td></td>
                             <td>
                                 <div class="zzjg clearfix" >
-                                    <h3><span>成员列表</span>&nbsp;<a class="goback" href="javascript:history.go(-1);">【返回】</a></h3>
+                                    <h3><span>成员列表</span>&nbsp;<a class="goback" href="{url_path('dept')}">【返回】</a></h3>
                                     <div class="datalist">
                                         <ol id="dept_employ_list" class="style_decimal">
                                             {foreach from=$employs['data'] item=item}
@@ -58,7 +58,7 @@
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}
-                        alert('{$feedMessage}');
+                        $.jBox.alert('{$feedMessage}', '提示');
                     {/if}
                     });
                 </script>

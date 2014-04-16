@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>main</title>
+<title>{$TITLE}</title>
+<meta name="keywords" content="{$KEYWORDS}">
+<meta name="description" content="{$DESCRIPTION}">
 <base target="_self">
 <link rel="stylesheet" type="text/css" href="/css/base.css" />
 <link rel="stylesheet" type="text/css" href="/css/main.css" />

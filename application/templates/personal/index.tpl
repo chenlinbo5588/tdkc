@@ -18,10 +18,10 @@
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
             <li class="first {if $smarty.get.c == 'my_event'}active{/if}"><a href="{url_path('my_event')}">待办事宜</a></li>
-            <li class="{if $smarty.get.c == 'msg'}active{/if}"><a href="{url_path('msg')}">点对点消息</a></li>
+            <li class="{if $smarty.get.c == 'pm'}active{/if}"><a href="{url_path('pm')}">点对点消息</a></li>
             <li class="{if $smarty.get.c == 'my_schedule'}active{/if}"><a href="{url_path('my_schedule')}">日程安排</a></li>
             <li class="{if $smarty.get.c == 'my_file'}active{/if}"><a href="{url_path('my_file')}">我的文件</a></li>
-            {*<li class="{if $smarty.get.c == 'shared_file'}active{/if}"><a href="{url_path('shared_file')}">文件共享</a></li>*}
+            <li class="{if $smarty.get.c == 'share_file'}active{/if}"><a href="{url_path('share_file')}">文件共享</a></li>
             <li class="{if $smarty.get.c == 'work_log'}active{/if}"><a href="{url_path('work_log')}">工作日志</a></li>
             <li class="{if $smarty.get.c == 'contacts'}active{/if}"><a href="{url_path('contacts')}">通讯录</a></li>
             <li class="{if $smarty.get.c == 'check_io'}active{/if}"><a href="{url_path('check_io')}">考勤统计</a></li>

@@ -10,9 +10,30 @@ class My_File extends TZ_Admin_Controller {
     
 	public function index()
 	{
+        $pid = (int)gpc('pid','GP',0);
+        $this->_getList($pid);
+		$this->display();
+	}
+    
+    public function _getList($pid = 0){
+        
         $this->load->helper('url');
-        $pid = empty($_GET['pid']) ? 0 : intval($_GET['pid']);
         $this->load->helper('number');
+        
+        
+        if($pid){
+            
+            $currentFolder = $this->File_Model->getById(array(
+                'select' => 'id,pid,status,in_share',
+                'where' => array('id' => $pid,'status' => 0)
+            ));
+            //do update first
+            if($currentFolder['in_share']){
+                //$this->db->query("UPDATE {$this->File_Model->_tableName} SET in_share = 1 WHERE pid = {$pid} AND in_share = 0 LIMIT 100");
+            }else{
+                $this->db->query("UPDATE {$this->File_Model->_tableName} SET in_share = 0 WHERE pid = {$pid} AND in_share = 1 LIMIT 500");
+            }
+        }
         
         $condition = array();
         //$condition['select'] = 'id,pid,file_name,status,is_dir,file_size,createtime';
@@ -36,8 +57,9 @@ class My_File extends TZ_Admin_Controller {
         $this->assign('sizeInfo',$sizeInfo[0]);
         $this->assign('pid',$pid);
         $this->assign('data',$data);
-		$this->display();
-	}
+        
+    }
+    
     
     private function _addRules(){
         $this->form_validation->set_rules('folder_name', '文件夹名称', 'trim|required|min_length[1]|max_length[300]|htmlspecialchars');
@@ -45,54 +67,64 @@ class My_File extends TZ_Admin_Controller {
     
     
     public function addfolder(){
+        $pid = (int)gpc('pid','GP',0);
+        
+        $message = array();
         
         if($this->isPostRequest() && !empty($_POST['folder_name'])){
             $this->_addRules();
             if($this->form_validation->run()){
-                
-                $pid = (int)gpc('pid','GP',0);
-                $count = $this->File_Model->getCount(array(
-                   'where' => array(
-                       'user_id' => $this->_userProfile['id'],
-                       'file_name' => $_POST['folder_name'],
-                       'pid' => $pid,
-                       'is_dir' => 1,
-                       'status' => 0
-                   ) 
-                ));
-                
-                if($count){
-                    $this->sendFormatJson('error',array( 'text' => '文件夹已经存在'));
-                }
-                
-                $data = array(
-                    'pid' => $_POST['pid'],
-                    'file_name' => $_POST['folder_name'],
-                    //'file_name' => null,
-                    'createtime' => $now,
-                    'updatetime' => $now,
-                    'is_dir' => 1,
-                    'creator' => $this->_userProfile['name'],
-                    'updator' => $this->_userProfile['name'],
-                    'createtime' => $this->reqtime,
-                    'updatetime' => $this->reqtime,
-                    'user_id' => $this->_userProfile['id'],
-                    'ip' => get_ip()
-                );
 
-                $fileId = $this->File_Model->add($data);
+                for($i = 0; $i < 1; $i++){
+                    $count = $this->File_Model->getCount(array(
+                    'where' => array(
+                        'user_id' => $this->_userProfile['id'],
+                        'file_name' => $_POST['folder_name'],
+                        'pid' => $pid,
+                        'is_dir' => 1,
+                        'status' => 0
+                    ) 
+                    ));
 
-                if($fileId){
-                     $this->sendFormatJson('success',array('id' => $_POST['id'] , 'text' => '创建成功','wait' => 1),$_SERVER['HTTP_REFERER']);
-                }else{
-                    $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => form_error('name')));
+                    if($count){
+                        $message = $_POST['folder_name']. ' 文件夹已经存在';
+                        break;
+                    }
+
+                    $data = array(
+                        'pid' => $_POST['pid'],
+                        'file_name' => $_POST['folder_name'],
+                        //'file_name' => null,
+                        'createtime' => $now,
+                        'updatetime' => $now,
+                        'is_dir' => 1,
+                        'creator' => $this->_userProfile['name'],
+                        'updator' => $this->_userProfile['name'],
+                        'createtime' => $this->reqtime,
+                        'updatetime' => $this->reqtime,
+                        'user_id' => $this->_userProfile['id'],
+                        'ip' => get_ip()
+                    );
+
+                    $fileId = $this->File_Model->add($data);
+
+                    if($fileId){
+                        $message = '创建成功';
+                    }else{
+                        $message = '创建失败,数据库';
+                    }
                 }
             }else{
-                $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => form_error('name')));
+                $message = form_error('folder_name');
             }
         }else{
-            $this->sendFormatJson('error',array('id' => 0 , 'text' => "请输入文件夹名称"));
+            $message = '请输入文件夹名称';
         }
+        
+        $this->assign('message',$message);
+        
+        $this->_getList($pid);
+        $this->display('index');
     }
     
     
@@ -220,7 +252,7 @@ class My_File extends TZ_Admin_Controller {
         }
         
         if($updateIds){
-            $this->db->query("UPDATE {$this->File_Model->_tableName} SET pid = {$_POST[move_id]} WHERE id IN(".implode(',',$updateIds).')');
+            $this->db->query("UPDATE {$this->File_Model->_tableName} SET pid = {$_POST[move_id]}, updatetime = {$this->reqtime},updator = '{$this->_userProfile['name']}' WHERE id IN(".implode(',',$updateIds).')');
         }
         
         if($parentsFrom){
@@ -229,10 +261,10 @@ class My_File extends TZ_Admin_Controller {
                 $tpsIds[] = $v['id'];
             }
             
-            $this->db->query("UPDATE {$this->File_Model->_tableName} SET file_size = file_size - " .$changeSize ." WHERE id IN(".implode(',',$tpsIds).')');
+            $this->db->query("UPDATE {$this->File_Model->_tableName} SET file_size = file_size - {$changeSize}, updatetime = {$this->reqtime},updator = '{$this->_userProfile['name']}' WHERE id IN(".implode(',',$tpsIds).')');
         }
         if($parentsDir){
-            $this->db->query("UPDATE {$this->File_Model->_tableName} SET file_size = file_size + " .$changeSize ." WHERE id IN(".implode(',',$parentsDir).')');
+            $this->db->query("UPDATE {$this->File_Model->_tableName} SET file_size = file_size + {$changeSize}, updatetime = {$this->reqtime},updator = '{$this->_userProfile['name']}' WHERE id IN(".implode(',',$parentsDir).')');
         }
         
         /*
@@ -245,7 +277,6 @@ class My_File extends TZ_Admin_Controller {
         file_put_contents("text.txt",print_r($changeSize,true),FILE_APPEND);
         file_put_contents("text.txt",print_r($parentsDir,true),FILE_APPEND);
         */
-        
         
         return array(
             'ignored' => array(
@@ -287,6 +318,160 @@ class My_File extends TZ_Admin_Controller {
             $this->sendFormatJson('error',array('id' => 0 , 'text' => "请求错误"));
         }
         
+        redirect(url_path('my_file','index','pid='.$from_id));
     }
+    
+    public function delete(){
+        $from_id = (int)gpc('pid','GP',0);
+        
+        if($this->isPostRequest() && !empty($_POST['delete_id'])){
+            
+            $condition = array(
+              'select' => 'id,pid,is_dir,file_size,status',
+              'where' => array(
+                  'status' => 0,
+                  'user_id' => $this->_userProfile['id']
+              ),
+              'where_in' => array(
+                  array(
+                      'key' => 'id',
+                      'value' => $_POST['delete_id']
+                  )
+              )
+            );
+            $files = $this->File_Model->getList($condition);
+            $parents = $this->File_Model->getParents($from_id);
+            $parentsDir = array();
+            if($parents){
+                foreach($parents as $v){
+                    $parentsDir[] = $v['id'];
+                }
+            }
+        
+            if($files['data']){
+                $changeSize = 0;
+                $updateIds = array();
+                foreach($files['data'] as $key => $val){
+                    $updateIds[] = $val['id'];
+                    $changeSize += $val['file_size'];
+                }
+                
+                if($updateIds){
+                    $this->db->query("UPDATE {$this->File_Model->_tableName} SET status = 1 , updatetime = {$this->reqtime},updator = '{$this->_userProfile['name']}' WHERE id IN(".implode(',',$updateIds).')');
+                }
+                
+                if($parentsDir){
+                    $this->db->query("UPDATE {$this->File_Model->_tableName} SET file_size = file_size - {$changeSize} , updatetime = {$this->reqtime},updator = '{$this->_userProfile['name']}' WHERE id IN(".implode(',',$parentsDir).')');
+                }
+            }
+            
+            //$message = '删除成功';
+        }else{
+            //$message = '参数错误';
+        }
+        
+        redirect(url_path('my_file','index','pid='.$from_id));
+    }
+    
+    
+    public function share(){
+        $this->_shareOp('share');
+    }
+    
+    public function unshare(){
+        $this->_shareOp('unshare');
+    }
+    
+    
+    private function _shareOp($action = 'share'){
+        $from_id = (int)gpc('pid','GP',0);
+        
+        $text = array(
+            'share' => '共享',
+            'unshare' => '取消共享'
+        );
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            
+            $condition = array(
+              'select' => 'id,pid,is_dir,file_size,status',
+              'where' => array(
+                  'status' => 0,
+                  'user_id' => $this->_userProfile['id']
+              ),
+              'where_in' => array(
+                  array(
+                      'key' => 'id',
+                      'value' => $_POST['id']
+                  )
+              )
+            );
+            $files = $this->File_Model->getList($condition);
+            
+            /*
+            $parents = $this->File_Model->getParents($from_id);
+            $parentsDir = array();
+            if($parents){
+                foreach($parents as $v){
+                    $parentsDir[] = $v['id'];
+                }
+            }
+             */
+        
+            if($files['data']){
+                $updateIds = array();
+                foreach($files['data'] as $key => $val){
+                    $updateIds[] = $val['id'];
+                }
+                
+                if($action == 'share'){
+                    $in_share = 1;
+                }else{
+                    $in_share = 0;
+                }
+                if($updateIds){
+                    $this->db->query("UPDATE {$this->File_Model->_tableName} SET in_share = {$in_share} , updatetime = {$this->reqtime},updator = '{$this->_userProfile['name']}' WHERE id IN(".implode(',',$updateIds).') AND pid = 0');
+                }
+            }
+            
+            $message = $text[$action].'成功';
+        }else{
+            $message = $text[$action].'失败，请提供正确的参数';
+        }
+        
+        if(!empty($_POST['redirectUrl'])){
+            redirect($_POST['redirectUrl'],'javascript');
+        }else{
+            $this->assign('message',$message);
+            $this->_getList($from_id);
+            $this->display('index');
+        }
+        
+    }
+    
+    
+    public function download(){
+        $fid = (int)gpc('id','GP',0);
+        $file = $this->File_Model->getById(array(
+            'where' => array('id' => $fid),
+            'user_id' => $this->_userProfile['id'],
+            'is_dir' => 0,
+            'status' => 0
+        ));
+        
+        if(!$file){
+            redirect(url_path('my_file'),'javascript');
+        }else{
+            $this->load->helper('download');
+            $file_realpath = config_item('filestore_dir').$file['file_store_path'].$file['file_md5'].$file['file_extension'];
+            if(file_exists($file_realpath)){
+                $this->db->query("UPDATE {$this->File_Model->_tableName} SET file_downs = file_downs + 1 WHERE id = {$file['id']}");
+                force_download($file['file_real_name'],  file_get_contents($file_realpath));
+            }else{
+                redirect(url_path('my_file'),'javascript');
+            }
+        }
+    }
+    
 }
 
