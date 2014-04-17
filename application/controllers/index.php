@@ -4,8 +4,6 @@
 class Index extends TZ_Admin_Controller {
     public function __construct(){
         parent::__construct();
-        
-        $this->assign('cssFiles',array('site'));
     }
     
     public function index()

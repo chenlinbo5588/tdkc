@@ -30,6 +30,16 @@ class TZ_Model extends CI_Model {
         return $this->db->count_all_results($this->_tableName);
     }
     
+    public function queryById($id,$key = 'id'){
+        $query = $this->db->get_where($this->_tableName,array($key => $id));
+        $data = $query->result_array();
+        if($data[0]){
+            return $data[0];
+        }else{
+            return false;
+        }
+    }
+    
     public function getById($condition){
         if($condition['where']){
             

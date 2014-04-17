@@ -13,21 +13,25 @@ class Pm_Model extends TZ_Model {
     public function add($param){
         $now = time();
         
-        $data = array(
-            'id' => NULL,
-            'user_id' => $param['user_id'],
-            'to_user_id' => $param['to_user_id'],
-            'title' => $param['title'],
-            'content' => $param['content'],
-            'attachment' => $param['attachment'],
-            'creator' => $param['creator'],
-            'updator' => $param['updator'],
-            'createtime' => $now,
-            'updatetime' => $now
-        );
+        $data = array();
+        for($i = 0; $i < 2; $i++){
+            $data[] = array(
+                'id' => NULL,
+                'user_id' => $i == 0 ? $param['user_id'] : $param['to_user_id'],
+                'receivor' => $param['to_user_name'],
+                'driection' => $i,
+                'isnew' => $i,
+                'title' => $param['title'],
+                'content' => $param['content'],
+                'creator' => $param['creator'],
+                'updator' => $param['updator'],
+                'createtime' => $now,
+                'updatetime' => $now
+            );
+        }
         
-        return $this->db->insert($this->_tableName, $data);
-        
+       return $this->db->insert_batch($this->_tableName, $data); 
+       
     }
     
     /**

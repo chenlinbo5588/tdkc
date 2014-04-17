@@ -197,3 +197,20 @@ function ajax_error(xhr, textStatus, errorThrown){
 function abox(url,title,width,height){
 	$.jBox.open("iframe:"+url, title, width, height, {top:'10%', buttons: {}});
 }
+
+
+function selAll(name){
+    $("input[name='" +  name + "']").each(function(){
+       if(!$(this).prop("checked")){
+           $(this).prop("checked",true);
+       }
+    });
+}
+
+function noSelAll(name){
+    $("input[name='" +  name + "']").each(function(){
+       if($(this).prop("checked")){
+           $(this).prop("checked",false);
+       }
+    });
+}

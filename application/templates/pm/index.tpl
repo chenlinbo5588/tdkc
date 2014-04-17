@@ -1,15 +1,16 @@
 {include file="common/main_header.tpl"}
         <div class="filebar" >
-            <a href="{url_path('pm','index','action=send')}" id="upload" class="btn"><img src="/img/wp/upload_file_icon.gif" align="absmiddle"/>已发消息</a>
-            <a href="{url_path('pm','index','action=receive')}" id="add_folder" class="btn"><img src="/img/pm/yd.png" align="top"/>已收消息</a>
-            <a href="{url_path('pm','index','action=trash')}" id="move_oper" class="btn"><img src="/img/wp/folder.gif" align="absmiddle"/>垃圾箱</a>
+            <a href="{url_path('pm','index')}" class="btn"><img src="/img/pm/yd.png" align="top"/>收消息</a>
+            <a href="{url_path('pm','send')}" class="btn"><img src="/img/wp/upload_file_icon.gif" align="absmiddle"/>已发消息</a>
+            <a href="{url_path('pm','trash')}"class="btn"><img src="/img/wp/folder.gif" align="absmiddle"/>垃圾箱</a>
         </div>
+        
+        
         
         <div class="searchform row-fluid">
                 <form action="{url_path('pm')}" method="get" name="searchform">
                     <input type="hidden" value="pm" name="{config_item('controller_trigger')}"/>
-                    <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
-                    <input type="hidden" value="{$action}" name="action"/>
+                    <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
                             <label><strong>开始日期</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
@@ -24,44 +25,116 @@
             
             <div class="span12">
                 <table class="table">
+                    <colgroup>
+                        <col style="width:25px;"/>
+                        <col style="width:40px;"/>
+                        <col style="width:300px;"/>
+                        <col style="width:80px;"/>
+                        <col style="width:100px;"/>
+                        <col style="width:200px;"/>
+                    </colgroup>
                     <thead>
                         <tr>
-                            <th>序号</th>
-                            <th>标题</th>
-                            <th>内容</th>
+                            <td colspan="6">
+                                <div class="operator">
+                                    <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
+                                    <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
+                                    {if $action == 'receive'}
+                                    <a href="javascript:readedSelAll('id[]');" class="coolbg">设置已读</a>
+                                    {/if}
+                                    {if $action != 'trash'}
+                                    <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
                             <th>状态</th>
-                            <th>创建人</th>
-                            <th>创建时间</th>
-                            <th>最后修改人</th>
-                            <th>最后修改时间</th>
-                            <th>操作</th>
+                            <th>标题</th>
+                            <th>发件人</th>
+                            <th>收件人</th>
+                            <th>发件时间</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           <td>{$item['id']}</td>
-                           <td>{$item['title']}</td>
-                           <td>{$item['content']|escape}</td>
-                           <td>{$item['status']}</td>
+                           <th><input type="checkbox" name="id[]" value="{$item['id']}"/></th>
+                           <td>{if $item['isnew']}<span class="notice">未读</span>{else}<span class="readed">已读</span>{/if}</td>
+                           <td><a href="javascript:void(0);" class="pm_detail" data-href="{url_path('pm','detail','id=')}{$item['id']}">{$item['title']}</a></td>
                            <td>{$item['creator']}</td>
+                           <td>{$item['receivor']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
-                           <td>{$item['updator']}</td>
-                           <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
-                           <td>
-                               {if $item['status'] != '已删除'}
-                               <a href="{url_path('pm','edit','id=')}{$item['id']}">编辑</a>
-                               <a href="javascript:void(0);" data-title="{$item['title']}" data-href="{url_path('pm','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>
-                               {/if}
-                            </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">没有消息</td></tr>
+                            <tr><td colspan="7">没有消息</td></tr>
                         {/foreach}
                     </tbody>
                 </table>
                 {include file="pagination.tpl"}
+                
+                <form id="delete_form" name="delete_form" action="{url_path('pm','delete')}" method="post">
+                    <input type="hidden" name="action" value="{$action}"/>
+                    <input type="hidden" name="page" value="{$smarty.get.page}"/>
+                    <div class="inputlist">
+                    </div>
+                </form>
+                    
+                <form id="setread_form" name="setread_form" action="{url_path('pm','setread')}" method="post">
+                    <input type="hidden" name="action" value="{$action}"/>
+                    <input type="hidden" name="page" value="{$smarty.get.page}"/>
+                    <div class="inputlist">
+                    </div>
+                </form>
              </div>
-             
+             <script>
+                function readedSelAll(name){
+                    var checked = false;
+                    $("#setread_form .inputlist").html('');
+                    $("input[name='" +  name + "']").each(function(){
+                        if($(this).prop("checked")){
+                            checked = true;
+                            $('<input type="hidden" name="id[]" value="' + $(this).val() + '"/>').appendTo("#setread_form .inputlist");
+                        }
+                    });
+                    
+                    if(!checked){
+                        $.jBox.error('至少选择一条记录', '提示');
+                    }else{
+                        $("#setread_form").submit();
+                    }
+                }
+                
+                function deleteSelAll(name){
+                    var checked = false;
+                    $("#delete_form .inputlist").html('');
+                    $("input[name='" +  name + "']").each(function(){
+                        if($(this).prop("checked")){
+                            checked = true;
+                            $('<input type="hidden" name="id[]" value="' + $(this).val() + '"/>').appendTo("#delete_form .inputlist");
+                        }
+                    });
+                    
+                    if(!checked){
+                        $.jBox.error('至少选择一条记录', '提示');
+                    }else{
+                        $("#delete_form").submit();
+                    }
+                }
+                
+                $(function(){
+                    {if $message}
+                        $.jBox.tip('{$message}');
+                    {/if}
+                        
+                    $(".pm_detail").bind("click",function(e){
+                        var that = $(e.target);
+                        
+                        $.jBox("get:" + that.attr("data-href"),{ title:"消息详情",width:600 });
+                    });
+                });
+                 
+             </script>
             {include file="common/calendar.tpl"}
 {include file="common/main_footer.tpl"}

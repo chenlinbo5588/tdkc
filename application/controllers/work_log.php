@@ -128,7 +128,7 @@ class Work_Log extends TZ_Admin_Controller {
     }
     
     /**
-     * 删除日程 
+     * 删除 
      */
     public function delete()
 	{

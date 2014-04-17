@@ -16,7 +16,7 @@
                             <td><label class="required"><em>*</em><strong>消息标题</strong></td><td><input type="text" style="width:500px" name="title" value="{$info['title']}" placeholder="请输入消息标题"/></label>{form_error('title')}</td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>发送给</strong></td><td><input type="hidden" name="to_user_id" value=""/><input type="text" style="width:500px" name="to_user_name" value="{$info['to_user_name']}" placeholder="请输入收件人"/></label>{if form_error('to_user_id') != ''}<span class="validate_error">收件人信息错误&nbsp;</span>{/if}{form_error('to_user_name')}</td>
+                            <td><label class="required"><em>*</em><strong>发送给</strong></td><td><input type="hidden" id="to_user_id" name="to_user_id" value="{$info['to_user_id']}"/><input type="text" style="width:500px" id="to_user_name" name="to_user_name" value="{$info['to_user_name']}" placeholder="请输入收件人"/></label>{if form_error('to_user_id') != ''}<span class="validate_error">收件人信息错误&nbsp;</span>{/if}{form_error('to_user_name')}</td>
                         </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>消息内容</strong></td><td><textarea name="content" style="width:800px;height:400px;">{$info['content']}</textarea></label><br/>{form_error('content')}</td>
@@ -55,6 +55,20 @@
                     
                     
                     $(function(){
+                        $("#to_user_name").autocomplete({
+                            source: "{url_path('search','getUserList')}",
+                            minLength: 0,
+                            focus: function(event, ui) {
+                                $( "#to_user_name" ).val( ui.item.label );
+                            },
+                            select: function( event, ui ) {
+                                $( "#to_user_name" ).val( ui.item.label );
+                                $( "#to_user_id" ).val( ui.item.id );
+                                
+                            }
+                        });
+        
+                    
                     {if $feedback == 'success' && $action != 'edit'}
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('pm','add')}";
