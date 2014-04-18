@@ -24,10 +24,24 @@
             </div>
             
             <div class="span12">
+                
+                <div class="operator">
+                    {if $action != 'trash'}
+                    <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
+                    <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
+                    {/if}
+                    {if $action == 'receive'}
+                    <a href="javascript:readedSelAll('id[]');" class="coolbg">设置已读</a>
+                    {/if}
+                    {if $action != 'trash'}
+                    <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
+                    {/if}
+                </div>
+                {if $data['data']}
                 <table class="table">
                     <colgroup>
-                        <col style="width:25px;"/>
-                        <col style="width:40px;"/>
+                        {if $action != 'trash'}<col style="width:25px;"/>{/if}
+                        {if $action == 'receive'}<col style="width:40px;"/>{/if}
                         <col style="width:300px;"/>
                         <col style="width:80px;"/>
                         <col style="width:100px;"/>
@@ -35,43 +49,30 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <td colspan="6">
-                                <div class="operator">
-                                    <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
-                                    <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                                    {if $action == 'receive'}
-                                    <a href="javascript:readedSelAll('id[]');" class="coolbg">设置已读</a>
-                                    {/if}
-                                    {if $action != 'trash'}
-                                    <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
-                                    {/if}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>状态</th>
+                            {if $action != 'trash'}<th></th>{/if}
+                            {if $action == 'receive'}<th>状态</th>{/if}
                             <th>标题</th>
-                            <th>发件人</th>
-                            <th>收件人</th>
-                            <th>发件时间</th>
+                            <th>发送者</th>
+                            <th>接搜者</th>
+                            <th>发送时间</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           <th><input type="checkbox" name="id[]" value="{$item['id']}"/></th>
-                           <td>{if $item['isnew']}<span class="notice">未读</span>{else}<span class="readed">已读</span>{/if}</td>
+                           {if $action != 'trash'}<th class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></th>{/if}
+                           {if $action == 'receive'}<td>{if $item['isnew']}<span class="notice">未读</span>{else}<span class="readed">已读</span>{/if}</td>{/if}
                            <td><a href="javascript:void(0);" class="pm_detail" data-href="{url_path('pm','detail','id=')}{$item['id']}">{$item['title']}</a></td>
                            <td>{$item['creator']}</td>
                            <td>{$item['receivor']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                         </tr>
-                        {foreachelse}
-                            <tr><td colspan="7">没有消息</td></tr>
                         {/foreach}
                     </tbody>
                 </table>
+                {else}
+                    <p>无记录</p>
+                {/if}
                 {include file="pagination.tpl"}
                 
                 <form id="delete_form" name="delete_form" action="{url_path('pm','delete')}" method="post">

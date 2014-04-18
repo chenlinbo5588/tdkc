@@ -19,6 +19,7 @@ $lang['integer']			= "The %s field must contain an integer.";
 $lang['regex_match']		= "The %s field is not in the correct format.";
 $lang['matches']			= "The %s field does not match the %s field.";
 $lang['is_unique'] 			= "The %s field must contain a unique value.";
+$lang['is_unique_by_status'] 			= "The %s field must contain a unique value.";
 $lang['is_unique_not_self'] = "The %s field must contain a unique value。";
 $lang['is_natural']			= "The %s field must contain only positive numbers.";
 $lang['is_natural_no_zero']	= "The %s field must contain a number greater than zero.";

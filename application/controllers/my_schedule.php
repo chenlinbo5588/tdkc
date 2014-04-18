@@ -15,7 +15,7 @@ class My_schedule extends TZ_Admin_Controller {
         /**
          * 获得日程数据 
          */
-        $condition['order'] = "sdate asc";
+        $condition['order'] = "sdate ASC";
         
         if(!empty($_GET['title'])){
             $condition['like'] = array('title' => $_GET['title']);

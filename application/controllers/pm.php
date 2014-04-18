@@ -55,7 +55,7 @@ class Pm extends TZ_Admin_Controller {
             }
             
             if(!empty($_GET['edate'])){
-                $condition['where']['createtime <='] = strtotime($_GET['edate']);
+                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
             }
             
             $condition['where']['user_id'] = $this->_userProfile['id'];
@@ -178,7 +178,7 @@ class Pm extends TZ_Admin_Controller {
         $message = '';
         if($this->isPostRequest() && !empty($_POST['id'])){
             $action = strtolower($_POST['action']);
-            $set = "updator = '{$this->_userProfile['name']}', updatetime = {$this->reqtime},status = '删除',user_id = {$this->_userProfile['id']} ";
+            $set = "updator = '{$this->_userProfile['name']}', updatetime = {$this->reqtime},status = '已删除',user_id = {$this->_userProfile['id']} ";
             $where = " id IN(" . implode(',',$_POST['id']) .')';
             //echo "UPDATE {$this->Pm_Model->_tableName} SET {$set} WHERE {$where}";
             $this->db->query("UPDATE {$this->Pm_Model->_tableName} SET {$set} WHERE {$where}" );

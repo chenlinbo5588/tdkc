@@ -17,12 +17,12 @@
         <dt onClick='showHide("items2_1")'><b>系统管理</b></dt>
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
-            <li class="first {if $smarty.get.c == 'user'}active{/if}"><a href="{url_path('user')}">用户管理</a></li>
-            <li class="{if $smarty.get.c == 'role'}active{/if}"><a href="{url_path('role')}">角色管理</a></li>
-            <li class="{if $smarty.get.c == 'menu'}active{/if}"><a href="{url_path('menu')}">菜单管理</a></li>
-            <li class="{if $smarty.get.c == 'dept'}active{/if}"><a href="{url_path('dept')}">组织机构</a></li>
-            <li><a href="javascript:void(0);">项目类型设置</a></li>
-            <li><a href="javascript:void(0);">镇街设置</a></li>
+            <li><a href="{url_path('user')}">用户管理</a></li>
+            <li><a href="{url_path('role')}">角色管理</a></li>
+            <li><a href="{url_path('menu')}">菜单管理</a></li>
+            <li><a href="{url_path('dept')}">组织机构</a></li>
+            <li><a href="{url_path('project_type')}">项目类型设置</a></li>
+            <li><a href="{url_path('region')}">镇街设置</a></li>
           </ul>
         </dd>
       </dl>

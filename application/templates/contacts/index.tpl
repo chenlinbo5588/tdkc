@@ -72,7 +72,7 @@
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">没有工作日志</td></tr>
+                            <tr><td colspan="9">找不到数据</td></tr>
                         {/foreach}
                     </tbody>
                 </table>

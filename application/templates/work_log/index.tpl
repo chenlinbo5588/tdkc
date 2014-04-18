@@ -33,9 +33,7 @@
                             <th>标题</th>
                             <th>内容</th>
                             <th>状态</th>
-                            <th>创建人</th>
                             <th>创建时间</th>
-                            <th>最后修改人</th>
                             <th>最后修改时间</th>
                             <th>操作</th>
                         </tr>
@@ -47,9 +45,7 @@
                            <td>{$item['title']}</td>
                            <td>{$item['content']|escape}</td>
                            <td>{$item['status']}</td>
-                           <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
-                           <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                {if $item['status'] != '已删除'}
@@ -59,7 +55,7 @@
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">没有工作日志</td></tr>
+                            <tr><td colspan="7">没有工作日志</td></tr>
                         {/foreach}
                     </tbody>
                 </table>

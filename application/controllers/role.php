@@ -193,7 +193,6 @@ class Role extends TZ_Admin_Controller {
             
             //$condition['select'] = 'a,b';
             
-            $condition['order'] = "updatetime desc";
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],

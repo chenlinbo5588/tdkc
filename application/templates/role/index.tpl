@@ -55,7 +55,7 @@
                         </tr>
                         {foreachelse}
                             <tr>
-                                <td colspan="6">还没有角色 <a href="{url_path('role','add')}">点击开始添加</a></td>
+                                <td colspan="9">找不到数据</td>
                             </tr>
                         {/foreach}
                     </tbody>

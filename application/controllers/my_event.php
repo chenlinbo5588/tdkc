@@ -43,7 +43,7 @@ class My_event extends TZ_Admin_Controller {
             }
             
             if(!empty($_GET['edate'])){
-                $condition['where']['createtime <='] = strtotime($_GET['edate']);
+                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
             }
             
             if(!empty($_GET['status'])){

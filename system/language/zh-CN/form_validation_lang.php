@@ -20,6 +20,7 @@ $lang['integer']			= "%s 字段只能为整数.";
 $lang['regex_match']		= "%s 字段格式不正确.";
 $lang['matches']			= "%s 字段与 %s 字段不一致.";
 $lang['is_unique'] 			= "%s 字段必须唯一,该值已被占用.";
+$lang['is_unique_by_status'] 			= "%s 字段必须唯一,该值已被占用 。";
 $lang['is_unique_not_self'] = "%s 字段必须唯一,该值已被占用。";
 $lang['is_natural']			= "%s 字段必须是非负自然数.";
 $lang['is_natural_no_zero']	= "%s 字段必须是大于0的自然数.";

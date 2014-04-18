@@ -34,7 +34,7 @@
                         </tr>
                         {foreachelse}
                             <tr>
-                                <td colspan="6">还没有菜单 <a href="{url_path('menu','add')}">点击开始添加</a></td>
+                                <td colspan="8">找不到数据</td>
                             </tr>
                         {/foreach}
                     </tbody>

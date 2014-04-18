@@ -25,7 +25,6 @@ class Work_Log extends TZ_Admin_Controller {
                 $_GET['page'] = 1;
             }
             
-            $condition['order'] = "createtime desc";
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
@@ -43,7 +42,7 @@ class Work_Log extends TZ_Admin_Controller {
             }
             
             if(!empty($_GET['edate'])){
-                $condition['where']['createtime <='] = strtotime($_GET['edate']);
+                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
             }
             
             if($_GET['inc_del'] != '是'){

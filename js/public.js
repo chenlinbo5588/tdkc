@@ -101,10 +101,69 @@ function pageJs(num) {
 }
 
 
+
+$.fn.numeral = function() {     
+    $(this).css("ime-mode", "disabled");     
+    this.bind("keypress",function(e) {     
+    var code = (e.keyCode ? e.keyCode : e.which);  //兼容火狐 IE      
+        if(!$.browser.msie&&(e.keyCode==0x8))  //火狐下不能使用退格键     
+        {     
+                return ;     
+            }     
+            return code >= 48 && code<= 57;     
+    });     
+    this.bind("blur", function() {     
+        if (this.value.lastIndexOf(".") == (this.value.length - 1)) {     
+            this.value = this.value.substr(0, this.value.length - 1);     
+        } else if (isNaN(this.value)) {     
+            this.value = "";     
+        }     
+    });     
+    this.bind("paste", function() {     
+        var s = clipboardData.getData('text');     
+        if (!/\D/.test(s));     
+        value = s.replace(/^0*/, '');     
+        return false;     
+    });     
+    this.bind("dragenter", function() {     
+        return false;     
+    });     
+    this.bind("keyup", function() {     
+    if (/(^0+)/.test(this.value)) {     
+        this.value = this.value.replace(/^0*/, '');     
+        }     
+    });     
+};
+        
 /**
  * 公共删除逻辑
  */
 $(function(){
+    
+     $("input[name=jumpPage]").keydown(function(event){
+　　　　 // 注意此处不要用keypress方法，否则不能禁用　Ctrl+V 与　Ctrl+V,具体原因请自行查找keyPress与keyDown区分，十分重要，请细查
+        if ($.browser.msie) {  // 判断浏览器
+            if ( ((event.keyCode > 47) && (event.keyCode < 58)) || (event.keyCode == 8) ) { 　// 判断键值  
+                return true;  
+            } else { 
+                return false;  
+            }
+        } else {  
+            if ( ((event.which > 47) && (event.which < 58)) || (event.which == 8) || (event.keyCode == 17) ) {  
+                    return true;  
+            } else {  
+                    return false;  
+            }  
+        }}).focus(function() {
+        
+        
+        this.style.imeMode='disabled';   // 禁用输入法,禁止输入中文字符
+    });
+    
+    $("input.jumpBtn").bind("click",function(e){
+       pageJs($(e.target).closest("strong").find("input[name=jumpPage]").val());
+    });
+    
     $.loadingbar({
         'url' : [new RegExp("\&m=delete")]
     });

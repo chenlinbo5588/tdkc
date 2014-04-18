@@ -25,7 +25,6 @@ class Contacts extends TZ_Admin_Controller {
                 $_GET['page'] = 1;
             }
             
-            $condition['order'] = "createtime desc";
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],

@@ -156,8 +156,8 @@ class User extends TZ_Admin_Controller {
         
         if($this->isPostRequest() && !empty($_POST['id'])){
             
-            $this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|is_unique_not_self['.$this->User_Model->_tableName.'.account.id.'.$_POST['id'].']');
-            $this->form_validation->set_rules('gh', '工号', 'required|numeric|is_unique_not_self['.$this->User_Model->_tableName.'.gh.id.'.$_POST['id'].']');
+            $this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|is_unique_not_self['.$this->User_Model->_tableName.'.account.id.'.$_POST['id'].'.status.正常]');
+            $this->form_validation->set_rules('gh', '工号', 'required|numeric|is_unique_not_self['.$this->User_Model->_tableName.'.gh.id.'.$_POST['id'].'.status.正常]');
             
             $this->_addRules();
             if($this->form_validation->run()){
@@ -232,8 +232,8 @@ class User extends TZ_Admin_Controller {
             $this->assign('user',$_POST);
             
             
-            $this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|is_unique['.$this->User_Model->_tableName.'.account]');
-            $this->form_validation->set_rules('gh', '工号', 'required|numeric|is_unique['.$this->User_Model->_tableName.'.gh]' );
+            $this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|is_unique_by_status['.$this->User_Model->_tableName.'.account.status.正常]');
+            $this->form_validation->set_rules('gh', '工号', 'required|numeric|is_unique_by_status['.$this->User_Model->_tableName.'.gh.status.正常]' );
             
             $this->_addRules();
             
@@ -284,7 +284,6 @@ class User extends TZ_Admin_Controller {
             
             //$condition['select'] = 'a,b';
             
-            $condition['order'] = "createtime desc";
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],

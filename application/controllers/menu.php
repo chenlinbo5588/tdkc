@@ -62,7 +62,7 @@ class Menu extends TZ_Admin_Controller {
         if($this->isPostRequest() && !empty($_POST['id'])){
             
             $this->_addRules();
-            $this->form_validation->set_rules('url', '权限名称', 'required|callback_custom_url|is_unique_not_self['.$this->Menu_Model->_tableName.".url.id.".$_POST['id']."]");
+            $this->form_validation->set_rules('url', '权限名称', 'required|callback_custom_url|is_unique_not_self['.$this->Menu_Model->_tableName.".url.id.".$_POST['id'].".status.正常]");
             if($this->form_validation->run()){
                 
                 /**
@@ -144,7 +144,7 @@ class Menu extends TZ_Admin_Controller {
             $this->assign('menu',$_POST);
             
             $this->_addRules();
-            $this->form_validation->set_rules('url', '权限名称', 'required|callback_custom_url|is_unique['.$this->Menu_Model->_tableName.".url]");
+            $this->form_validation->set_rules('url', '权限名称', 'required|callback_custom_url|is_unique_by_status['.$this->Menu_Model->_tableName.".url.status.正常]");
             
             if($this->form_validation->run()){
                 // add

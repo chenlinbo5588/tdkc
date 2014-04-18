@@ -152,10 +152,10 @@ a:link,a:visited {
 		{*<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(1);"><img vspace="5" src="/img/frame/arrr.gif" border="0" width="5" height="8" alt="增大左框架" title="增大左框架" /></a></dd>*}
 		<dd><div class="itemsel" id="item1"><a href="{url_path('admin')}" onclick="changeSel(1)" target="_top">首页</a></div></dd>
 		<dd><div class="item" id="item2"><a href="{url_path('personal')}" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>
-		<dd><div class="item" id="item3"><a href="javascript:void(0);" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
-		<dd><div class="item" id="item4"><a href="javascript:void(0);" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
-		<dd><div class="item" id="item5"><a href="javascript:void(0);" onclick="changeSel(5)" target="menu">办公室</a></div></dd>
-		<dd><div class="item" id="item6"><a href="javascript:void(0);" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
+		<dd><div class="item" id="item3"><a href="{url_path('project')}" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
+		<dd><div class="item" id="item4"><a href="{url_path('project','guihua')}" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
+		<dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>
+		<dd><div class="item" id="item6"><a href="{url_path('information')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
 		<dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>
 		</dl>
 		</td>

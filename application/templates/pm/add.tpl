@@ -73,7 +73,7 @@
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('pm','add')}";
                         }else{
-                            location.href = "{url_path('pm')}";
+                            location.href = "{url_path('pm','send')}";
                         }
                     {/if}
                     

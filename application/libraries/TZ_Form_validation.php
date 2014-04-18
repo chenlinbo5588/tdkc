@@ -2,11 +2,18 @@
 
 class TZ_Form_validation extends CI_Form_validation {
     
-    public function is_unique_not_self($str,$field){
-        
+    public function is_unique_by_status($str,$field){
         list($table, $field,$key,$value)=explode('.', $field);
+		$query = $this->CI->db->get_where($table, array($field => $str,$key => $value));
+		
+		return $query->num_rows() === 0;
+    }
+    
+    
+    public function is_unique_not_self($str,$field){
+        list($table, $field,$key,$value,$key2,$value2)=explode('.', $field);
         
-        $query = $this->CI->db->get_where($table, array($field => $str));
+        $query = $this->CI->db->get_where($table, array($field => $str, $key2 => $value2));
         $result = $query->result_array();
         
         /*
@@ -14,13 +21,13 @@ class TZ_Form_validation extends CI_Form_validation {
         var_dump($query);
         print_r($result);
         */
-        
+
         if($query->num_rows() === 0){
             return true;
         }
         
         if($query->num_rows() == 1 && $value == $result[0][$key]){
-            return true;
+                return true;
         }else{
             return false;
         }

@@ -17,6 +17,14 @@
     display: block;
 }
 
+.center {
+    text-align: center;
+}
+
+.table .center {
+    text-align: center;
+}
+
 .readed {
     color:blue;
 }

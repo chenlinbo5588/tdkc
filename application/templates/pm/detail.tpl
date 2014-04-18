@@ -7,13 +7,13 @@
         </colgroup>
         <tbody>
             <tr>
-                <th>发件人</th><td>{$info['creator']}</td>
+                <th>发送人</th><td>{$info['creator']}</td>
             </tr>
             <tr>
-                <th>收件人</th><td>{$info['receivor']}</td>
+                <th>接受者</th><td>{$info['receivor']}</td>
             </tr>
             <tr>
-                <th>发件时间</th><td>{$info['createtime']|date_format:"Y-m-d H:i:s"}</td>
+                <th>发送时间</th><td>{$info['createtime']|date_format:"Y-m-d H:i:s"}</td>
             </tr>
             <tr>
                 <td colspan="2">{$info['content']}</td>
