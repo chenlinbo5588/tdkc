@@ -9,10 +9,10 @@
                     <table class="maintain">
                         <tbody>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>工作标题</strong></td><td><input type="text" style="width:400px" name="title" value="{$info['title']}" placeholder="请输入标题"/></label>{form_error('title')}</td>
+                            <td><label class="required"><em>*</em><strong>工作标题</strong></label></td><td><input type="text" style="width:400px" name="title" value="{$info['title']}" placeholder="请输入标题"/>{form_error('title')}</td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>工作内容</strong></td><td><textarea name="content" style="width:400px;height:150px;">{$info['content']}</textarea></label><br/>{form_error('content')}</td>
+                            <td><label class="required"><em>*</em><strong>工作内容</strong></label></td><td><textarea name="content" style="width:400px;height:150px;">{$info['content']}</textarea><br/>{form_error('content')}</td>
                         </tr>
                         <tr>
                             <td></td>

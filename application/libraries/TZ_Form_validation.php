@@ -34,7 +34,22 @@ class TZ_Form_validation extends CI_Form_validation {
         
     }
     
+    public function valid_mobile($mobile){
+        if(preg_match("/^(\+?86)?13[0-9]{1}[0-9]{8}$|15[0189]{1}[0-9]{8}$|189[0-9]{8}$/",$mobile)){   
+            return true;
+        }else{
+            return false;
+        }
+    }
     
+    
+    public function valid_telephone($telno){
+       if(preg_match("/^(((\d{3}))|(\d{3}-))?((0\d{2,3})|0\d{2,3}-)?[1-9]\d{6,8}$/",$telno)){
+           return true;
+       }else{
+           return false;
+       }
+    }
     
     public function valid_date($datestr,$format = ''){
         //echo $datestr;

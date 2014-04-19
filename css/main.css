@@ -67,7 +67,6 @@
 .required em {
     color:#f00;
     font-weight: bold;
-    padding:0 2px;
 }
 
 .notice {
@@ -80,6 +79,10 @@
 
 .success {
     color:blue;
+}
+
+.warning {
+    color:#f00;
 }
 
 .validate_error {
@@ -125,6 +128,48 @@
 }
 
 
+.btn-primary {
+    background:url(../img/btns.gif) no-repeat -114px -20px ;
+    height:20px;
+    line-height:22px;
+    width:70px;
+    color:#fff;
+    border:0px;
+    text-align:center;
+}
+
+.button-primary-m {
+	color:#fff;
+	background:url(../img/btns.gif) 0px -20px no-repeat;
+	height:20px; 
+    line-height:22px;
+	border:0; 
+    text-align:center; 
+    cursor:pointer; 
+    width:114px;
+    
+}
+.button-primary-l {
+	color:#fff;
+	background:url(../img/btns.gif) 0px -60px no-repeat;
+	height:20px; 
+    line-height:22px;
+	border:0; 
+    text-align:center; 
+    cursor:pointer; 
+    width:140px;
+}
+
+.btn-default {
+    background:url(../img/btns.gif) no-repeat -114px 0 ;
+    height:20px;
+    line-height:22px;
+    width:70px;
+    color:#fff;
+    border:0px;
+    text-align:center;
+}
+
 .container {
     padding:20px;
 }
@@ -133,8 +178,13 @@
     
 }
 
+.maintain .required , .maintain .optional {
+    
+}
+
 .maintain td ,.maintain tr th {
     padding:3px;
+    text-align: left;
 }
 
 

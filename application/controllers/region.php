@@ -142,10 +142,7 @@ class Region extends TZ_Admin_Controller {
     
     
     private function _initYear(){
-        $currentYear = date("Y"); 
-        $yearList = range(1990,$currentYear);
-        $yearList = array_reverse($yearList);
-        $this->assign('yearList',$yearList);
+        $this->assign('yearList',yearList());
     }
     
     private function _initZj(){

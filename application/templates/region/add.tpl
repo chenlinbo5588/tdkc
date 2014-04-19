@@ -20,10 +20,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>代码</strong></td><td><input type="text" style="width:200px" name="code" value="{$info['code']}" placeholder="请输入镇街代码"/></label><span class="tip">{form_error('code')} 如 A， 输入不区分大小写</span></td>
+                            <td><label class="required"><em>*</em><strong>代码</strong></label></td><td><input type="text" style="width:200px" name="code" value="{$info['code']}" placeholder="请输入镇街代码"/><span class="tip">{form_error('code')} 如 A， 最长5个字符,不区分大小写</span></td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>年份</strong></td>
+                            <td><label class="required"><em>*</em><strong>年份</strong></label></td>
                             <td>
                                 <select name="year"  style="width:200px" >
                                     {foreach from=$yearList item=item}
@@ -34,7 +34,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>排序</strong></td><td><input type="text" style="width:200px" name="displayorder" value="{$info['displayorder']}" placeholder="排序"/></label><span class="tip">{form_error('displayorder')} 项目登记时镇街显示的顺序,数字越大越前面</span></td>
+                            <td><label class="optional"><em></em><strong>排序</strong></label></td><td><input type="text" style="width:200px" name="displayorder" value="{$info['displayorder']}" placeholder="排序"/><span class="tip">{form_error('displayorder')} 项目登记时镇街显示的顺序,数字越大越前面</span></td>
                         </tr>
                         <tr>
                             <td></td>

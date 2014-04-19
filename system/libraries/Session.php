@@ -189,12 +189,15 @@ class CI_Session {
 		}
 
 		// Does the User Agent Match?
+        // @todo 修改了 Flash User Agent cookie 清除的问题， 不完美，待后续考虑
 		if ($this->sess_match_useragent == TRUE AND trim($session['user_agent']) != trim(substr($this->CI->input->user_agent(), 0, 120)))
-		{
-			$this->sess_destroy();
-			return FALSE;
-		}
-
+        {
+            if($this->CI->input->user_agent() != 'Shockwave Flash'){
+                $this->sess_destroy();
+                return FALSE;
+            }
+        }
+        
 		// Is there a corresponding session in the DB?
 		if ($this->sess_use_database === TRUE)
 		{

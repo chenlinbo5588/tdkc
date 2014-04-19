@@ -991,5 +991,12 @@ function filetype_url($file_extension = '',$size = ''){
 }
 
 
+function yearList($highYear = 0,$lowYear = 1990){
+    if(!$highYear){
+        $highYear = date("Y");
+    }
+    $yearList = range($lowYear,$highYear);
+    return array_reverse($yearList);
+}
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */

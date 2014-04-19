@@ -9,7 +9,7 @@
                     <table class="maintain">
                         <tbody>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>角色名称</strong></td><td><input type="text" style="width:200px" name="name" value="{$role['name']}" placeholder="请输入角色姓名"/></label>{form_error('name')}</td>
+                            <td><label class="required"><em>*</em><strong>角色名称</strong></label></td><td><input type="text" style="width:200px" name="name" value="{$role['name']}" placeholder="请输入角色姓名"/>{form_error('name')}</td>
                         </tr>
                         <tr>
                             <td></td>

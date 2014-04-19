@@ -211,7 +211,7 @@ class User extends TZ_Admin_Controller {
             $this->form_validation->set_rules('graduation_date', '毕业时间', 'required|valid_date[yyyy-mm-dd]');
         }
 
-        $this->form_validation->set_rules('mobile', '手机号码', 'required|numeric|exact_length[11]');
+        $this->form_validation->set_rules('mobile', '手机号码', 'required|valid_mobile');
         $this->form_validation->set_rules('enter_date', '入院时间', 'required|valid_date[yyyy-mm-dd]');
         $this->form_validation->set_rules('dept_id', '归属部门', 'required|integer|greater_than[0]');
     }

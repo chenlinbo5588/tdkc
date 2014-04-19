@@ -9,7 +9,7 @@
                     <table class="maintain">
                         <tbody>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>类型</strong></td>
+                            <td><label class="required"><em>*</em><strong>类型</strong></label></td>
                             <td>
                                 <select name="type" style="width:200px">
                                     <option value="测绘项目" {if $info['type'] == '测绘项目'}selected{/if}>测绘项目</option>
@@ -19,10 +19,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>名称</strong></td><td><input type="text" style="width:200px" name="name" value="{$info['name']}" placeholder="请输入名称"/></label>{form_error('name')}</td>
+                            <td><label class="required"><em>*</em><strong>名称</strong></label></td><td><input type="text" style="width:200px" name="name" value="{$info['name']}" placeholder="请输入名称"/>{form_error('name')}</td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>排序</strong></td><td><input type="text" style="width:200px" name="displayorder" value="{$info['displayorder']}" placeholder="排序"/></label><span class="tip">{form_error('displayorder')} 项目登记类型选择是显示的顺序,数字越大越前面</span></td>
+                            <td><label class="optional"><em></em><strong>排序</strong></label></td><td><input type="text" style="width:200px" name="displayorder" value="{$info['displayorder']}" placeholder="排序"/><span class="tip">{form_error('displayorder')} 项目登记类型选择是显示的顺序,数字越大越前面</span></td>
                         </tr>
                         <tr>
                             <td></td>

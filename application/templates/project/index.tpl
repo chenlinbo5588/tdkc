@@ -2,19 +2,10 @@
 <table width='99%' height="100%" border='0' cellspacing='0' cellpadding='0'>
   <tr>
     <td style='padding-left:3px;padding-top:8px' valign="top">
-	<!-- Item 1 Strat -->
-      <dl class='bitem'>
-        <dt onClick='showHide("items1_1")'><b>常用操作</b></dt>
-        <dd style='display:block' class='sitem' id='items1_1'>
-          <ul class='sitemu'>
-            <li><a href='archives.html' target='main'>常用操作1</a> </li>
-          </ul>
-        </dd>
-      </dl>
-      <!-- Item 1 End -->
+	{include file="common/user_favor.tpl"}
       <!-- Item 2 Strat -->
       <dl class='bitem'>
-        <dt onClick='showHide("items2_1")'><b>个人办公</b></dt>
+        <dt onClick='showHide("items2_1")'><b>测绘项目</b></dt>
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
             <li><a href="{url_path('project_ch','add')}">项目登记</a></li>
