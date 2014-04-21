@@ -56,7 +56,7 @@
                     
                     $(function(){
                         $("#to_user_name").autocomplete({
-                            source: "{url_path('search','getUserList')}",
+                            source: "{url_path('search','getUserList','user_id=')}{$userProfile['id']}",
                             minLength: 0,
                             focus: function(event, ui) {
                                 $( "#to_user_name" ).val( ui.item.label );

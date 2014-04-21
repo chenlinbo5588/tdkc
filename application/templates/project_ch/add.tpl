@@ -11,8 +11,8 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>录入类型</strong></label></td>
                             <td>
-                                <label><input type="radio" name="input_type" value="0" {if $inputType == 0}checked{/if}>正常登记</label>&nbsp;&nbsp;
-                                <label><input type="radio" name="input_type" value="1" {if $inputType == 1}checked{/if}>补录登记</label>
+                                <label><input type="radio" name="input_type"  value="0" {if $inputType == 0}checked{/if}>正常登记</label>&nbsp;&nbsp;
+                                <label><input type="radio" name="input_type"  value="1" {if $inputType == 1}checked{/if}>补录登记</label>
                                 <span class="tip">{form_error('input_type')}</span>
                             </td>
                         </tr>
@@ -30,9 +30,9 @@
                         <tr class="bulu">
                             <td><label class="required"><em>*</em><strong>登记月份</strong></label></td>
                             <td>
-                                <select name="year" style="width:300px" >
+                                <select name="month" style="width:300px" >
                                     {foreach from=$monthList item=item}
-                                        <option value="{$item}" {if $month == $item}selected{/if}>{if $item < 10}0{/if}{$item}月份</option>
+                                        <option value="{$item}" {if $info['month'] == $item || $month == $item}selected{/if}>{if $item < 10}0{/if}{$item}月份</option>
                                     {/foreach}
                                 </select>
                             </td>
@@ -40,15 +40,11 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>区域</strong></label></td>
                             <td>
-                                <input type="hidden" name="region_name" value=""/>
                                 <select name="region_code" style="width:300px">
                                     {foreach from=$regionList item=item}
                                     <option value="{$item['code']}" {if $info['region_code'] == $item['code']}selected{/if}>{$item['name']}</option>
                                     {/foreach}
                                 </select>
-                                {if !$regionList}
-                                   <span class="warning">该年度区域数据缺失，请联系管理员添加</span>
-                                {/if}
                                 {form_error('region_code')}
                             </td>
                         </tr>
@@ -91,6 +87,9 @@
                         <tr>
                             <td><label class="optional"><em></em><strong>接洽人固定号码</strong></label></td><td><input type="text" style="width:300px" name="manager_tel" value="{$info['manager_tel']}" placeholder="请输入接洽人固定号码"/><span class="tip">{form_error('manager_tel')}</span></td>
                         </tr>
+                        <tr>
+                            <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
+                        </tr>
                         
                         <tr>
                             <td><label class="optional"><em></em><strong>优先级</strong></label></td><td>
@@ -100,7 +99,10 @@
                         <tr>
                             <td></td>
                             <td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
-                                <input type="reset" name="reset" class="btn btn-sm btn-default" value="重置"/></td>
+                                <input type="reset" name="reset" class="btn btn-sm btn-default" value="重置"/>
+                                
+                                {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a href="{$gobackUrl}">返回</a>{/if}
+                            </td>
                         </tr>
                         </tbody>
                      </table>
@@ -108,15 +110,33 @@
                 <script>
                     $(function(){
                         $("#addyear").bind('change',function(e){
-                            location.href ="{url_path('project_ch','add','year=')}" + $(e.target).val() + '&input_type=' + $("input[name=input_type]:checked").val();
+                            $("select[name=region_code]").html('');
+                            $.ajax({
+                                type:"GET",
+                                url:'{url_path("search","getRegionList")}',
+                                data:{ year: $("select[name=year]").val() },
+                                dataType: "json",
+                                success:function(data){
+                                    if(data.length){
+                                        for(var i = 0; i < data.length; i++){
+                                            $("select[name=region_code]").append('<option value="' + data[i]['code'] + '">' + data[i]['name'] + '</option>');
+                                        }
+                                    }else{
+                                        $.jBox.alert('该年度区域数据缺失，请联系管理员添加', '提示');
+                                    }
+                                },
+                                erro:function(xhr, textStatus, errorThrown){
+                                    //$.jBox.error(content, title, options);
+                                    $.jBox.alert('获取年度镇街数据失败', '提示');
+                                }
+                            });
                         });
                         
-                    
                     {if $feedback == 'success' && $action != 'edit'}
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('project_ch','add')}";
                         }else{
-                            location.href = "{url_path('project_ch')}";
+                            location.href = "{url_path('project_ch','index','view=my')}";
                         }
                     {/if}
                     

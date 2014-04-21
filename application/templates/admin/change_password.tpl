@@ -19,13 +19,4 @@
                      </tr>
                 </table>
              </form>
-             <script>
-                $(function(){
-                {if $feedback == 'success'}
-                    setTimeout(function(){
-                        window.top.location.href = "{url_path('admin')}";
-                     },4000);
-                {/if}
-              });
-              </script>
 {include file="common/main_footer.tpl"}  

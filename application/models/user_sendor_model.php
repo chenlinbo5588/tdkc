@@ -1,9 +1,9 @@
 <?php
 
 
-class Contacts_Model extends TZ_Model {
+class User_Sendor_Model extends TZ_Model {
     
-    public $_tableName = 'tb_contacts';
+    public $_tableName = 'tb_user_sendor';
     
     public function __construct(){
         parent::__construct();
@@ -15,12 +15,9 @@ class Contacts_Model extends TZ_Model {
         
         $data = array(
             'id' => NULL,
-            'name' => $info['name'],
-            'type' => $info['type'],
-            'mobile' => $info['mobile'],
-            'tel' => $info['tel'],
-            'fax' => $info['fax'],
-            'address' => $info['address'],
+            'user_id' => $info['user_id'],
+            'sendor_id' => $info['sendor_id'],
+            'sendor' => $info['sendor'],
             'creator' => $info['creator'],
             'updator' => $info['updator'],
             'createtime' => $now,
@@ -57,10 +54,6 @@ class Contacts_Model extends TZ_Model {
         
         $data = array(
             'name' => $info['name'],
-            'type' => $info['type'],
-            'mobile' => $info['mobile'],
-            'tel' => $info['tel'],
-            'fax' => $info['fax'],
             'address' => $info['address'],
             'updator' => $info['updator'],
             'updatetime' => time()

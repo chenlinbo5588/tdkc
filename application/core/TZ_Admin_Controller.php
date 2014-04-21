@@ -25,14 +25,14 @@ class TZ_Admin_Controller extends TZ_Controller {
         
         $this->load->model('User_Model');
         
-        $this->load->library('encrypt');
+        //$this->load->library('encrypt');
         
         $user = $this->User_Model->getUserByAccount($session['account']);
-        
+        /*
         if($user[0]['psw'] != $this->encrypt->decode($session['psw'])){
             redirect(url_path('login'),'javascript:top');
         }
-        
+        */
         $this->load->model('User_Menu_Model');
         $this->load->model('Role_Menu_Model');
         

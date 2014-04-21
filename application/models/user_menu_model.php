@@ -21,8 +21,8 @@ class User_Menu_Model extends TZ_Model {
             'updatetime' => $now
         );
         
-        return $this->db->insert($this->_tableName, $data);
-        
+        $this->db->insert($this->_tableName, $data);
+        return $this->db->insert_id();
     }
     
     public function update(){

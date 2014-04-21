@@ -71,6 +71,20 @@ class TZ_Model extends CI_Model {
         return $this->db->update_batch($this->_tableName, $data,$key); 
     }
     
+    public function getMaxByWhere($field,$where = array()){
+        if($where){
+            $this->db->where($where);
+        }
+        
+        $this->db->select_max($field);
+        $query = $this->db->get($this->_tableName);
+        
+        $data = $query->result_array();
+        
+        return $data[0][$field];
+    }
+    
+    
     public function getList($condition = array()){
         
         $data = array();

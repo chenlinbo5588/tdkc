@@ -41,8 +41,9 @@ class Login extends TZ_Controller {
                 }
                 */
                 
-                $this->load->library('encrypt');
-                $user[0]['psw'] = $this->encrypt->encode($user[0]['psw']);
+                //$this->load->library('encrypt');
+                unset($user[0]['psw']);
+                //$user[0]['psw'] = $this->encrypt->encode($user[0]['psw']);
                 $profile['profile'] = $user[0];
                 
                 $this->session->set_userdata($profile);

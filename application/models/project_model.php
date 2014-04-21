@@ -14,11 +14,14 @@ class Project_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
+            'project_no' => $param['project_no'],
             'project_type' => $param['project_type'],
             'year' => $param['year'],
             'month' => $param['month'],
-            'region_code' => strtoupper($param['code']),
+            'region_code' => strtoupper($param['region_code']),
             'region_name' => $param['region_name'],
+            'master_serial' => $param['master_serial'],
+            'region_serial' => $param['region_serial'],
             'name' => $param['name'],
             'type' => $param['type'],
             'village' => $param['village'],
@@ -29,14 +32,17 @@ class Project_Model extends TZ_Model {
             'manager_mobile' => $param['manager_mobile'],
             'manager_tel' => $param['manager_tel'],
             'address' => $param['address'],
+            'descripton' => $param['descripton'],
             'displayorder' => $param['displayorder'],
+            'user_id' => $param['user_id'],
             'creator' => $param['creator'],
             'updator' => $param['updator'],
             'createtime' => $now,
             'updatetime' => $now
         );
         
-        return $this->db->insert($this->_tableName, $data);
+        $this->db->insert($this->_tableName, $data);
+        return $this->db->insert_id();
     }
     
     public function delete($param){
@@ -59,11 +65,7 @@ class Project_Model extends TZ_Model {
     
     public function update($param){
         $data = array(
-            'project_type' => $param['project_type'],
-            'year' => $param['year'],
             'month' => $param['month'],
-            'region_code' => strtoupper($param['code']),
-            'region_name' => $param['region_name'],
             'name' => $param['name'],
             'type' => $param['type'],
             'village' => $param['village'],
@@ -74,6 +76,7 @@ class Project_Model extends TZ_Model {
             'manager_mobile' => $param['manager_mobile'],
             'manager_tel' => $param['manager_tel'],
             'address' => $param['address'],
+            'descripton' => $param['descripton'],
             'displayorder' => $param['displayorder'],
             'updator' => $param['updator'],
             'updatetime' => time()

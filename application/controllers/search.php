@@ -1,13 +1,31 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Search extends TZ_Admin_Controller {
+class Search extends TZ_Controller {
 
 	public function index()
 	{
-        
 		die(0);
-        
 	}
+    
+    public function getRegionList(){
+        $year = (int)gpc("year","GP",date("Y"));
+        $this->load->model("Region_Model");
+        $regionList = $this->Region_Model->getList(array(
+            'select' => 'code,name',
+           'where' => array(
+               'year' => $year,
+               'status' => '正常'
+           )
+        ));
+        
+        
+        if($regionList['data']){
+            echo json_encode($regionList['data']);
+        }else{
+            echo json_encode(array());
+        }
+    }
+    
     
     /*
      * 
@@ -26,7 +44,7 @@ class Search extends TZ_Admin_Controller {
         $data = $this->User_Model->getList(
             array(
                 'select' => 'id,name',
-                'where' => array('status' => '正常','id !=' => $this->_userProfile['id']),
+                'where' => array('status' => '正常','id !=' => $_GET['user_id']),
                 'like' => array('name' => $q)
             )
         );
