@@ -34,7 +34,7 @@
 }
 
 .operator {
-    padding:10px;
+    padding:10px 0;
 }
 
 .coolbg {
@@ -69,6 +69,10 @@
     font-weight: bold;
 }
 
+.requireInput {
+    border:1px solid red;
+}
+
 .notice {
     color:#f00;
 }
@@ -76,6 +80,7 @@
 .failed {
     color:#f00;
 }
+
 
 .success {
     color:blue;
@@ -211,6 +216,10 @@
 
 .table tbody td,.table tbody th {
     
+}
+
+.wauto {
+    width:auto;
 }
 
 .filebar a {

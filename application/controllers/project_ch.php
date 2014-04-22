@@ -10,6 +10,7 @@ class project_ch extends TZ_Admin_Controller {
         $this->load->model('Region_Model');
         $this->load->model('Project_Type_Model');
         $this->load->model('Project_Model');
+        $this->load->model('Project_Mod_Model');
     }
     
 	public function index()
@@ -23,6 +24,40 @@ class project_ch extends TZ_Admin_Controller {
         $this->_getPageData();
 		$this->display();
 	}
+    
+    
+    
+    /**
+     * 项目布施
+     */
+    public function dispatch(){
+        
+        if(empty($_GET['page'])){
+            $_GET['page'] = 1;
+        }
+        
+        
+        $this->assign('action','dispatch');
+
+        //$condition['select'] = 'a,b';
+        $condition['order'] = "createtime DESC,displayorder DESC";
+        $condition['pager'] = array(
+            'page_size' => config_item('page_size'),
+            'current_page' => $_GET['page'],
+            'query_param' => url_path('project_ch','index')
+        );
+        $condition['where'] = array(
+            'status !=' => '已删除',
+            'sendor_id' => $this->_userProfile['id']
+        );
+
+        $data = $this->Project_Model->getList($condition);
+        $this->assign('page',$data['pager']);
+        $this->assign('data',$data);
+        
+        
+        $this->display('index');
+    }
     
     
     private function _addRules(){
@@ -88,6 +123,13 @@ class project_ch extends TZ_Admin_Controller {
         $this->assign('info',$info);
         
         $this->display();
+    }
+    
+    public function delete(){
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            
+            
+        }
     }
     
     public function add()
@@ -179,13 +221,21 @@ class project_ch extends TZ_Admin_Controller {
         }else{
             //$_POST['region_name'] = '';
         }
-
+        
         $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
         $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
         $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
+        
+        /**
+         * 添加时自己相当于自己发送给自己 
+         */
+        $_POST['sendor_id'] = $this->_userProfile['id'];
+        $_POST['sendor'] = $this->_userProfile['name'];
+        
         $insertid = $this->Project_Model->add($_POST);
         //$this->db->trans_complete();
         
+        $this->_addProjectLog($insertid,'添加',"{$this->_userProfile['name']} 添加了一条新记录");
         return $insertid;
         
     }
@@ -193,9 +243,7 @@ class project_ch extends TZ_Admin_Controller {
     
     public function edit(){
         $this->assign('action','edit');
-        
-        
-        
+     
         if($this->isPostRequest() && !empty($_POST['id'])){
             if(!empty($_POST['gobackUrl'])){
                 $this->assign('gobackUrl',$_POST['gobackUrl']);
@@ -213,7 +261,9 @@ class project_ch extends TZ_Admin_Controller {
                     /**
                      * 原记录删除 
                      */
-                    $this->Project_Model->fake_delete(array('id' => $_POST['id'] ));
+                    $this->Project_Model->fake_delete(array('id' => $_POST['id'],'updator' => $this->_userProfile['name']));
+                    $this->_addProjectLog($_POST['id'],'删除',"修改原记录时修改了年或者区域，则原记录{$_POST['name']}删除，新记录id={$insertid}",'system');
+                    
                     $info = $this->Project_Model->getById(array('where' => array('id' => $insertid)));
                     
                 }else{
@@ -222,6 +272,9 @@ class project_ch extends TZ_Admin_Controller {
                     $_POST['region_serial'] = $info['region_serial'];
                     $_POST['updator'] = $this->_userProfile['name'];
                     $this->Project_Model->update($_POST);
+                    
+                    $this->_addProjectLog($_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$_POST['name']}");
+                    
                     $info = $this->Project_Model->getById(array('where' => array('id' => $_POST['id'])));
                 }
                 
@@ -244,19 +297,159 @@ class project_ch extends TZ_Admin_Controller {
     }
     
     
+    
+    
+    
+    
+    private function _doSend($action,$ids,$user){
+        
+        $data = array(
+            'status' => '已发送',  
+            'sub_status' => '',
+            'sendor_id' => $user['id'],
+            'sendor' => $user['name'],
+            'update_user_id' => $this->_userProfile['id'],
+        );
+        
+        
+        $projectList = $this->Project_Model->getList(array(
+            'where_in' => array(
+                array(
+                    'key' => 'id', 'value' => $ids
+                )
+            )
+        ));
+
+        $projectInfo = array();
+        foreach($projectList['data'] as $v){
+            $projectInfo[$v['id']] = $v;
+        }
+
+        $event = array();
+        $failed = array();
+
+        //用 循环，方式批量更新
+        foreach($ids as $id){
+            $return = $this->Project_Model->updateByWhere($data,array('id' => $id, 'status' => '新增'));
+            if($return){
+                $event[] = $projectInfo[$id];
+                $this->_addProjectLog($id,$action,"{$this->_userProfile['name']} {$action} {$projectInfo[$id]['name']} 至 {$user['name']}");
+            }else{
+                $failed[] = $projectInfo[$id];
+            }
+        }
+
+        if($event){
+            
+            
+            
+        }
+        
+        return array('success' => $event, 'failed' => $failed);
+    }
+    
+    /**
+     * 退回 
+     */
+    public function tuihui(){
+        $ids =  gpc('id','GP',array());
+        if(empty($ids)){
+            die("参数错误,请重新请求");
+        }
+        if(!is_array($ids)){
+            $ids = (array)$ids;
+        }
+        
+        $this->assign("id",$ids);
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            
+            /*
+            $user = $this->User_Model->queryById($_POST['sendor']);
+            $result = $this->_doSend('发送',$ids, $user );
+            
+            //file_put_contents("debug.txt",print_r($_POST,true));
+            //file_put_contents("debug.txt",print_r($user,true),FILE_APPEND);
+            
+            $message = array();
+            if($result['success']){
+                foreach($result['success'] as $v){
+                    $message[] = '<p class="success">' . $v['project_no'] .'发送成功</p>';
+                }
+            }else{
+                foreach($result['failed'] as $v){
+                    $message[] = '<p class="failed">' . $v['project_no'] .'发送失败，可能已经被发送</p>';
+                }
+            }
+            $this->assign('reload',0);
+            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
+             * 
+             * 
+             */
+            $this->assign('reload',0);
+            $this->assign('message','测试');
+            $this->display('showMessage','common');
+            
+        }else{
+            $projectList = $this->Project_Model->getList(array(
+                'where_in' => array(
+                    array(
+                        'key' => 'id', 'value' => $ids
+                    )
+                )
+            ));
+            
+            $this->assign('projectList',$projectList['data']);
+            $this->display();
+        }
+    }
+    
+    
     public function send(){
         
-        $ids =  $_GET['id'];
+        $ids =  gpc('id','GP',array());
         if(empty($ids)){
             die("参数错误,请重新请求");
         }
         
-        if($this->isPostRequest()){
+        if(!is_array($ids)){
+            $ids = (array)$ids;
+        }
+        
+        $this->assign("id",$ids);
+        if($this->isPostRequest() && !empty($_POST['sendor'])){
+            $user = $this->User_Model->queryById($_POST['sendor']);
+            $result = $this->_doSend('发送',$ids, $user );
             
+            //file_put_contents("debug.txt",print_r($_POST,true));
+            //file_put_contents("debug.txt",print_r($user,true),FILE_APPEND);
+            
+            $message = array();
+            $reload = 0;
+            if($result['success']){
+                foreach($result['success'] as $v){
+                    $message[] = '<p class="success">' . $v['project_no'] .'发送成功</p>';
+                }
+                $reload = 1;
+            }else{
+                foreach($result['failed'] as $v){
+                    $message[] = '<p class="failed">' . $v['project_no'] .'发送失败，可能已经被发送</p>';
+                }
+            }
+            $this->assign('reload',$reload);
+            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
+            $this->display('showMessage','common');
             
         }else{
-            //$this->load->model('User_Sendor_Model');
+            $this->load->model('User_Sendor_Model');
             
+            $userSendorList = $this->User_Sendor_Model->getList(array(
+                'where' => array(
+                    'user_id' => $this->_userProfile['id']
+                    )
+                )
+            );
+            $this->assign('userSendorList',$userSendorList['data']);
             $this->display();
         }
     }
@@ -277,7 +470,7 @@ class project_ch extends TZ_Admin_Controller {
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
-                'query_param' => url_path('user','index',array('name' => $_GET['name']))
+                'query_param' => url_path('project_ch','index')
             );
             if(!empty($_GET['name'])){
                 $condition['like'] = array('name' => $_GET['name']);

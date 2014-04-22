@@ -273,3 +273,47 @@ function noSelAll(name){
        }
     });
 }
+
+
+
+function refresh(reload,sec){
+    if(reload){
+        if(!sec){
+            sec = 3;
+        }
+        setTimeout(function(){
+            location.reload();
+        },sec * 1000)
+        
+    }
+}
+
+function showConfirm(message,reload,sec,title,width,height){
+    title = title ? title : '提示';
+    width = width ? width : 'auto';
+    height = height ? height : 'auto';
+    
+    $.jBox.open(message,"提示",'auto','auto',{buttons: {} , closed:function(){
+         if(reload){
+             location.reload();
+         }
+    }});
+    
+    refresh(reload,sec);
+}
+
+function showInfo(message,reload,sec){
+    $.jBox.info(message,"提示");
+    refresh(reload,sec);
+}
+
+function showSuccess(message,reload,sec){
+    $.jBox.success(message,"提示");
+    refresh(reload,sec);
+}
+
+function showError(message,reload,sec){
+    $.jBox.error(message,"提示");
+    refresh(reload,sec);
+}
+

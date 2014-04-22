@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
             <div class="row-fluid">
-                <div class="notice">最多只能设置5个发送人</div>
+                {*<div class="notice">最多只能设置5个发送人</div>*}
                 
                 <style>
                     #selected {
@@ -18,30 +18,32 @@
                     }
                     
                     .userlist {
-                        width:800px;
+                        1width:800px;
                     }
-                    .userlist li {
+                    .userlist label {
                         border:1px solid #c7c7c7;
                         padding:5px;
                         margin:2px;
                         width:100px;
                         float:left;
+                        display:block;
+                        cursor:pointer;
                     }
                     
-                    .userlist li:hover {
+                    .userlist label:hover, .userlist label.selected {
                         border:1px solid red;
                     }
                     
-                    .userlist li label {
-                        display:block;
-                    }
-                    
-                </style>    
+                   
+                </style>
+                
+                {*
                 <div id="selected">
                     {foreach from=$userSendorList item=item}
                     <label><input type="hiddem" name="sendor[]" value="{$item['id']}" id="sel_{$item['id']}"/>{$item['name']}<a href="javascript:void(0);">删除</a></label>
                     {/foreach}
                 </div>
+                *}
                 {*<div>输入用户名<input type="text" name="sendor_name" id="sendor_name" value="" style="width:200px" placeholder="您也可以输入用户名称方式添加"/></div>*}
                 
                 
@@ -51,20 +53,34 @@
                 {else}
                 <form action="{url_path('sendor','add')}" method="post" name="infoform">
                 {/if}
-                
-                    <div><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></div>
-                    
-                    <ul class="userlist clearfix">
+                    <div style="margin:0 0 10px 0;"><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>&nbsp;<input type="button" name="cancel" class="btn btn-sm btn-default" value="取消选择"/></div>
+                    <div class="userlist clearfix">
                         {foreach from=$userList item=item}
-                        <li><label><input type="checkbox" name="sendor[]" value="{$item['id']}" data-name="{$item['name']}"/>{$item['name']}</label></li>
+                        {if in_array($item['id'],$userSendorList)}
+                        <label class="selected"><input type="checkbox" name="sendor[]" value="{$item['id']}" data-name="{$item['name']}" checked/>{$item['name']}</label>
+                        {else}
+                        <label><input type="checkbox" name="sendor[]" value="{$item['id']}" data-name="{$item['name']}" />{$item['name']}</label>
+                        {/if}
                         {/foreach}
                         
-                    </ul>
+                    </div>
                 </form>
                 <script>
                     $(function(){
+                        $("input[name=cancel]").bind("click",function(e){
+                            $(".userlist .selected").find("input[type=checkbox]").prop("checked",false);
+                            $(".userlist .selected").removeClass("selected");
+                        });
                     
-                    
+                        $(".userlist label").bind("click",function(e){
+                            //console.log($("input[type=checkbox]",e.target).prop("checked"));
+                            if($("input[type=checkbox]",e.target).prop("checked")){
+                                $(e.target).removeClass("selected");
+                            }else{
+                                $(e.target).addClass("selected");
+                            }
+                        });
+                        
                     {*
                     $("#sendor_name").autocomplete({
                         source: "{url_path('search','getUserList','user_id=')}{$userProfile['id']}",
@@ -84,7 +100,7 @@
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('sendor','add')}";
                         }else{
-                            location.href = "{url_path('sendor')}";
+                            location.href = "{url_path('sendor','index')}";
                         }
                     {/if}
                     

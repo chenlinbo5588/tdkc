@@ -136,7 +136,7 @@
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('project_ch','add')}";
                         }else{
-                            location.href = "{url_path('project_ch','index','view=my')}";
+                            location.href = "{url_path('project_ch','dispatch')}";
                         }
                     {/if}
                     

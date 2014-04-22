@@ -9,8 +9,7 @@
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
             <li><a href="{url_path('project_ch','add')}">项目登记</a></li>
-            <li><a href="{url_path('project_ch','dispatch')}">项目布置</a></li>
-            <li><a href="{url_path('project_ch','progress')}">项目进度</a></li>
+            <li><a href="{url_path('project_ch','dispatch')}">项目布施</a></li>
             <li><a href="{url_path('project_ch')}">项目查询</a></li>
           </ul>
         </dd>

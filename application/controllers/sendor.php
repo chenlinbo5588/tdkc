@@ -52,7 +52,7 @@ class Sendor extends TZ_Admin_Controller {
     
     
     private function _addRules(){
-        $this->form_validation->set_rules('name', '名称', 'required|min_length[3]|max_length[100]|htmlspecialchars');
+        
     }
     
     public function add()
@@ -60,39 +60,74 @@ class Sendor extends TZ_Admin_Controller {
         $userList = $this->User_Model->getList(array(
             'where' => array(
                 'status' => '正常',
-                'id != ' => 1,
+                'id !=  ' => 1,
                 'id != ' => $this->_userProfile['id']
             )
         ));
         
         $userSendorList = $this->User_Sendor_Model->getList(array(
                 'where' => array(
-                   'status' => '正常'
+                   'user_id' => $this->_userProfile['id']
                 )
             )
         );
         
         $this->assign('userList',$userList['data']);
+        
+        $selectedIds = array();
+        foreach($userSendorList['data'] as $val){
+            $selectedIds[] = $val['sendor_id'];
+        }
+        
+        ///print_r($selectedIds);
+        $this->assign('userSendorList',$selectedIds);
         $this->assign('userList',$userList['data']);
         
+        
+        
         if($this->isPostRequest()){
-            $this->assign('info',$_POST);
             
-            $this->_addRules();
-            
-            if($this->form_validation->run()){
+            if(!empty($_POST['sendor'])){
+                $selectedUser = $this->User_Model->getList(array(
+                    'where_in' => array(
+                        array(
+                            'key' => 'id','value' => $_POST['sendor']
+                        )
+                    )
+                ));
+
+                $data = array();
+
+                $now = time();
+                foreach($selectedUser['data'] as $val){
+                    $temp['user_id'] = $this->_userProfile['id'];
+                    $temp['sendor_id'] = $val['id'];
+                    $temp['sendor'] = $val['name'];
+                    $temp['creator'] = $this->_userProfile['name'];
+                    $temp['updator'] = $this->_userProfile['name'];
+                    $temp['createtime'] = $now;
+                    $temp['updatetime'] = $now;
+
+                    $data[] = $temp;
+                }
+
+
                 // add
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['user_id'] = $this->_userProfile['id'];
-                
-                $insertid = $this->User_Sendor_Model->add($_POST);
-                
-                $this->assign("feedback", "success");
-                $this->assign('feedMessage',"创建成功,您需要继续添加吗");
+
+                $this->User_Sendor_Model->deleteByWhere(array('user_id' => $this->_userProfile['id']));
+                //$this->User_Sendor_Model->updateByWhere(array('status' => '已删除'),array('user_id' => $this->_userProfile['id']));
+                $this->User_Sendor_Model->batchInsert($data);
             }else{
-                $this->assign("feedback", "failed");
-                $this->assign('feedMessage',"创建失败,请核对您输入的信息");
+                $this->User_Sendor_Model->deleteByWhere(array('user_id' => $this->_userProfile['id']));
             }
+            
+            $this->assign("feedback", "success");
+            $this->assign('feedMessage',"保存成功,是否继续设置");
+        }else{
+            $this->assign("feedback", "failed");
+            $this->assign('feedMessage',"创建失败,请核对您输入的信息");
         }
         
         $this->display();

@@ -59,6 +59,10 @@ class TZ_Model extends CI_Model {
         return false;
     }
     
+    public function deleteByWhere($where){
+        return $this->db->delete($this->_tableName,$where);
+    }
+    
     public function updateByWhere($data,$where){
         return $this->db->update($this->_tableName,$data,$where);
     }

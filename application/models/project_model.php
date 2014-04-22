@@ -56,7 +56,9 @@ class Project_Model extends TZ_Model {
         );
         
         $data = array(
-            'status' => '已删除'
+            'status' => '已删除',
+            'updator' => $param['updator'],
+            'updatetime' => time()
         );
         
         return $this->db->update($this->_tableName, $data, $where);

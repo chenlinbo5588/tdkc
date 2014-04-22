@@ -3,14 +3,18 @@
                 <table class="maintain">
                     <tbody>
                     <tr>
+                        <td><label class="required"><em></em><strong>项目编号</strong></label></td>
+                        <td>{$info['project_no']}</td>
+                    </tr>
+                    <tr>
                         <td><label class="required"><em></em><strong>录入类型</strong></label></td>
                         <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}补录登记{/if}</td>
                     </tr>
-                    <tr class="bulu">
+                    <tr>
                         <td><label class="required"><em></em><strong>登记年月</strong></label></td>
                         <td>{$info['year']}年</td>
                     </tr>
-                    <tr class="bulu">
+                    <tr>
                         <td><label class="required"><em></em><strong>登记月份</strong></label></td>
                         <td>{$info['month']}月份</td>
                     </tr>

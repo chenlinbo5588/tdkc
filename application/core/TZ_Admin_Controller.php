@@ -13,11 +13,6 @@ class TZ_Admin_Controller extends TZ_Controller {
     public function __construct(){
         parent::__construct();
         
-        /*
-         * 登录检查
-         */
-        
-        //检查用户和密码
         $session = $this->session->userdata['profile'];
         if(!$session){
             redirect(url_path('login'),'javascript:top');
@@ -27,7 +22,7 @@ class TZ_Admin_Controller extends TZ_Controller {
         
         //$this->load->library('encrypt');
         
-        $user = $this->User_Model->getUserByAccount($session['account']);
+        //$user = $this->User_Model->getUserByAccount($session['account']);
         /*
         if($user[0]['psw'] != $this->encrypt->decode($session['psw'])){
             redirect(url_path('login'),'javascript:top');
@@ -38,13 +33,18 @@ class TZ_Admin_Controller extends TZ_Controller {
         
         $userMenu = $this->User_Menu_Model->getList(array(
             'field' => 'id,url,auth_key',
-            'where' => array('user_id' => $user[0]['id'],'status' => 0)
+            'where' => array('user_id' => $session['id'],'status' => 0)
         ));
         
         
         $roleMenu = $this->Role_Menu_Model->getList(array(
             'field' => 'id,url,auth_key',
-            'where' => array('role_id' => $user[0]['role_id'],'status' => 0)
+            'where_in' => array(
+                array(
+                    'key' => 'role_id',
+                    'value' => array($session['role_id'],$session['share_role_id'])
+                )
+             )
         ));
         
         if($userMenu['data']){
@@ -58,4 +58,18 @@ class TZ_Admin_Controller extends TZ_Controller {
         $this->assign('userProfile',$session);
     }
     
+    
+    protected function _addProjectLog($project_id,$action,$content,$type = 'user'){
+        //记录日志
+        $this->Project_Mod_Model->add(
+            array(
+                'project_id' => $project_id,
+                'user_id' => $this->_userProfile['id'],
+                'type' => $type,
+                'action' => $action,
+                'content' => $content,
+                'creator' => "{$this->_userProfile['name']}",
+            )
+        );
+    }
 }

@@ -16,28 +16,41 @@
                                     {/foreach}
                                 </select>
                             </label>
+                            <label><strong>状态</strong>
+                                <select name="type" >
+                                    <option value="">全部</option>
+                                    <option value="新增">新增</option>
+                                    <option value="已发送">已发送</option>
+                                    <option value="已布施">已布施</option>
+                                    <option value="进行中">进行中</option>
+                                    <option value="审核中-初审">审核中-初审</option>
+                                    <option value="审核中-二审">审核中-二审</option>
+                                    <option value="已完成">已完成</option>
+                                </select>
+                            </label>
                             <label><input type="checkbox" name="view" value="my" {if $smarty.get.view == 'my'}checked{/if}/>我登记的</label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
                         </li>
                         
                      </ul>
                 </form>
-                
-               
             </div>
-            
             <div class="span12">
+                
+                {if $action == 'dispatch' }
                 <div class="operator">
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
                     <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
                     <a href="javascript:sendAll('id[]');" class="coolbg">发送</a>
+                    <a href="javascript:tuihuiSelAll('id[]');" class="coolbg">退回</a>
                 </div>
-                
+                {/if}
+                <form name="listform" action="" method="post">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>操作</th>
+                            {if $action == 'dispatch' }<th></th>{/if}
                             <th>登记编号</th>
                             <th>登记名称</th>
                             <th>类型</th>
@@ -46,13 +59,15 @@
                             <th>创建时间</th>
                             <th>最后修改人</th>
                             <th>最后修改时间</th>
-                            <th>操作</th>
+                            {if $action == 'dispatch' }<th>操作</th>{/if}
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
+                           {if $action == 'dispatch' }
                            <td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>
+                           {/if}
                            <td>{$item['project_no']}</td>
                            <td><a href="javascript:void(0);" class="info" data-id="{$item['id']}">{$item['name']|escape}</a></td>
                            <td>{$item['type']}</td>
@@ -61,74 +76,87 @@
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
+                           {if $action == 'dispatch' }
                            <td>
                                {if $item['status'] == '新增' && $item['user_id'] == $userProfile['id']}
                                <a href="{url_path('project_ch','edit','id=')}{$item['id']}">编辑</a>
-                               <a href="{url_path('project_ch','send','id=')}{$item['id']}">发送</a>
                                {/if}
                             </td>
+                            {/if}
                         </tr>
                         {foreachelse}
                             <tr>
-                                <td colspan="10">找不到数据</td>
+                                <td colspan="{if $action == 'dispatch' }10{else}8{/if}">找不到数据</td>
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
+                </form>
                 {include file="pagination.tpl"}
-                
-                <form id="delete_form" name="delete_form" action="{url_path('project_ch','delete')}" method="post">
-                    <input type="hidden" name="page" value="{$smarty.get.page}"/>
-                    <div class="inputlist">
-                    </div>
-                </form>
-                    
-                <form id="send_form" name="send_form" action="{url_path('project_ch','send')}" method="post">
-                    <div class="inputlist">
-                    </div>
-                </form>
-                
                 
              </div>
              <script>
                  function deleteSelAll(name){
                     var checked = false;
-                    $("#delete_form .inputlist").html('');
                     $("input[name='" +  name + "']").each(function(){
                         if($(this).prop("checked")){
                             checked = true;
-                            $('<input type="hidden" name="id[]" value="' + $(this).val() + '"/>').appendTo("#delete_form .inputlist");
                         }
                     });
                     
                     if(!checked){
                         $.jBox.error('至少选择一条记录', '提示');
                     }else{
-                        $("#delete_form").submit();
+                        
+                    }
+                }
+                
+                
+                function tuihuiSelAll(name){
+                    var checked = false;
+                    $("input[name='" +  name + "']").each(function(){
+                        if($(this).prop("checked")){
+                            checked = true;
+                        }
+                    });
+                    
+                    if(!checked){
+                        $.jBox.error('至少选择一条记录', '提示');
+                    }else{
+                        var param = $("form[name=listform]").serialize();
+                        $.jBox("get:{url_path('project_ch','tuihui')}" + '&' + param,{ title:"退回",width:500,buttons:{ } });
                     }
                 }
                 
                 function sendAll(name){
                     var checked = false;
-                    $("#send_form .inputlist").html('');
                     $("input[name='" +  name + "']").each(function(){
                         if($(this).prop("checked")){
                             checked = true;
-                            $('<input type="hidden" name="id[]" value="' + $(this).val() + '"/>').appendTo("#send_form .inputlist");
                         }
                     });
                     
                     if(!checked){
                         $.jBox.error('至少选择一条记录', '提示');
                     }else{
-                        var param = $("form[name=send_form]").serialize();
-                        $.jBox("get:{url_path('project_ch','send')}" + '&' + param,{ title:"发送",width:500,height:400});
+                        var param = $("form[name=listform]").serialize();
+                        $.jBox("get:{url_path('project_ch','send')}" + '&' + param,{ title:"发送",width:300,buttons:{ } });
                     }
                 }
                 
-                $("a.info").bind("click",function(e){
-                    $.jBox("get:{url_path('project_ch','detail','id=')}" + $(e.target).attr("data-id"),{ title:"测绘项目详情",width:800,height:600});
+                
+                
+                $(function(){
+                
+                    $("a.send").bind("click",function(e){
+                        $.jBox("get:{url_path('project_ch','send')}" + '&id=' + $(e.target).attr("data-id"),{ title:"发送"  ,width:300,buttons:{ } });
+                    });
+                    
+                    $("a.info").bind("click",function(e){
+                        $.jBox("get:{url_path('project_ch','detail','id=')}" + $(e.target).attr("data-id"),{ title:"测绘项目详情",width:800,height:600});
+                    });
                 });
+                
              </script>
              
              {include file="common/calendar.tpl"}
