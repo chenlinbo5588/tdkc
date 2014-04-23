@@ -36,7 +36,8 @@ class Sendor extends TZ_Admin_Controller {
                 $condition['like'] = array('name' => $_GET['name']);
             }
             $condition['where'] = array(
-                'status' => '正常'
+                'status' => '正常',
+                'user_id' => $this->_userProfile['id']
             );
             
             

@@ -48,6 +48,9 @@ class My_event extends TZ_Admin_Controller {
             
             if(!empty($_GET['status'])){
                 $condition['where']['status'] = $_GET['status'];
+            }else{
+                $_GET['status'] = '未处理';
+                $condition['where']['status'] = '未处理';
             }
             
             $data = $this->User_Event_Model->getList($condition);

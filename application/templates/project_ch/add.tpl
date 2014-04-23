@@ -1,4 +1,7 @@
 {include file="common/main_header.tpl"}
+    {if $action == 'edit'}
+    {include file="project_ch/modlist.tpl"}
+    {/if}
             <div class="row-fluid">
                 {if $action == 'edit'}
                 <form action="{url_path('project_ch','edit')}" method="post" name="addform">
@@ -76,7 +79,7 @@
                             <td><label class="required"><em>*</em><strong>联系人手机号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_mobile" value="{$info['contacter_mobile']}" placeholder="请输入联系人手机号码"/><span class="tip">{form_error('contacter_mobile')}</span></td>
                         </tr>
                          <tr>
-                            <td><label class="optional"><em></em><strong>联系人固定号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_tel" value="{$info['contacter_tel']}" placeholder="请输入联系人固定号码"/><span class="tip">{form_error('contacter_tel')}</span></td>
+                            <td><label class="optional"><em></em><strong>联系人固定电话</strong></label></td><td><input type="text" style="width:300px" name="contacter_tel" value="{$info['contacter_tel']}" placeholder="请输入联系人固定电话"/><span class="tip">{form_error('contacter_tel')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>接洽人名称</strong></label></td><td><input type="text" style="width:300px" name="manager" value="{$info['manager']}" placeholder="请输入接洽人名称"/><span class="tip">{form_error('manager')}</span></td>
@@ -85,7 +88,7 @@
                             <td><label class="required"><em>*</em><strong>接洽人手机号码</strong></label></td><td><input type="text" style="width:300px" name="manager_mobile" value="{$info['manager_mobile']}" placeholder="请输入接洽人手机号码"/><span class="tip">{form_error('manager_mobile')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>接洽人固定号码</strong></label></td><td><input type="text" style="width:300px" name="manager_tel" value="{$info['manager_tel']}" placeholder="请输入接洽人固定号码"/><span class="tip">{form_error('manager_tel')}</span></td>
+                            <td><label class="optional"><em></em><strong>接洽人固定电话</strong></label></td><td><input type="text" style="width:300px" name="manager_tel" value="{$info['manager_tel']}" placeholder="请输入接洽人固定电话"/><span class="tip">{form_error('manager_tel')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
@@ -101,7 +104,7 @@
                             <td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
                                 <input type="reset" name="reset" class="btn btn-sm btn-default" value="重置"/>
                                 
-                                {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a href="{$gobackUrl}">返回</a>{/if}
+                                {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                             </td>
                         </tr>
                         </tbody>

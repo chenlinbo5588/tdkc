@@ -34,9 +34,12 @@ class Project_Model extends TZ_Model {
             'address' => $param['address'],
             'descripton' => $param['descripton'],
             'displayorder' => $param['displayorder'],
+            'displayorder' => $param['displayorder'],
+            'sendor_id' => $param['user_id'],
+            'sendor' => $param['creator'],
             'user_id' => $param['user_id'],
             'creator' => $param['creator'],
-            'updator' => $param['updator'],
+            'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );

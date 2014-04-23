@@ -9,36 +9,17 @@ class User_Event_Model extends TZ_Model {
         parent::__construct();
     }
     
-    public function add($user){
+    public function add($param){
         
         $now = time();
         
-        if(!$user['psw']){
-            $user['psw'] = md5(config_item('encryption_key').'#123456!');
-        }
-        
         $data = array(
             'id' => NULL,
-            'name' => $user['name'],
-            'account' => $user['account'],
-            'id_card' => $user['id_card'],
-            'email' => $user['email'],
-            'gh' => $user['gh'],
-            'psw' => $user['psw'],
-            'sex' => $user['sex'],
-            'mobile' => $user['mobile'],
-            'tel' => $user['tel'],
-            'virtual_no' => $user['virtual_no'],
-            'dept_id' => $user['dept_id'],
-            'role_id' => $user['role_id'],
-            'school_name' => $user['school_name'],
-            'major' => $user['major'],
-            'graduation_date' => $user['graduation_date'],
-            'job_title' => $user['job_title'],
-            'current_job' => $user['current_job'],
-            'enter_date' => $user['enter_date'],
-            'creator' => $user['creator'],
-            'updator' => $user['updator'],
+            'user_id' => $param['user_id'],
+            'title' => $param['title'],
+            'url' => $param['url'],
+            'creator' => $param['creator'],
+            'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
@@ -71,23 +52,7 @@ class User_Event_Model extends TZ_Model {
     
     public function update($user){
         $data = array(
-            'name' => $user['name'],
-            'account' => $user['account'],
-            'id_card' => $user['id_card'],
-            'email' => $user['email'],
-            'gh' => $user['gh'],
-            'sex' => $user['sex'],
-            'mobile' => $user['mobile'],
-            'tel' => $user['tel'],
-            'virtual_no' => $user['virtual_no'],
-            'dept_id' => $user['dept_id'],
-            'role_id' => $user['role_id'],
-            'school_name' => $user['school_name'],
-            'major' => $user['major'],
-            'graduation_date' => $user['graduation_date'],
-            'job_title' => $user['job_title'],
-            'current_job' => $user['current_job'],
-            'enter_date' => $user['enter_date'],
+            'isnew' => $user['isnew'],
             'updator' => $user['updator'],
             'updatetime' => time()
         );

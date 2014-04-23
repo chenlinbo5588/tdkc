@@ -2,41 +2,6 @@
             <div class="row-fluid">
                 {*<div class="notice">最多只能设置5个发送人</div>*}
                 
-                <style>
-                    #selected {
-                        padding:15px 0;
-                    }
-                    
-                    #selected label {
-                        margin: 2px 4px;
-                        border:1px solid #c7c7c7;
-                        padding:5px;
-                    }
-                    
-                    #selected label a {
-                        padding: 0 5px;
-                    }
-                    
-                    .userlist {
-                        1width:800px;
-                    }
-                    .userlist label {
-                        border:1px solid #c7c7c7;
-                        padding:5px;
-                        margin:2px;
-                        width:100px;
-                        float:left;
-                        display:block;
-                        cursor:pointer;
-                    }
-                    
-                    .userlist label:hover, .userlist label.selected {
-                        border:1px solid red;
-                    }
-                    
-                   
-                </style>
-                
                 {*
                 <div id="selected">
                     {foreach from=$userSendorList item=item}
@@ -62,7 +27,6 @@
                         <label><input type="checkbox" name="sendor[]" value="{$item['id']}" data-name="{$item['name']}" />{$item['name']}</label>
                         {/if}
                         {/foreach}
-                        
                     </div>
                 </form>
                 <script>

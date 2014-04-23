@@ -23,13 +23,13 @@
                 <table class="table wauto">
                     <colgroup>
                         <col width="100"/>
-                        <col width="100"/>
+                        {*<col width="100"/>*}
                         <col width="150"/>
                     </colgroup>
                     <thead>
                         <tr>
                             <th>名称</th>
-                            <th>是否默认发送人</th>
+                            {*<th>是否默认发送人</th>*}
                             <th>创建时间</th>
                         </tr>
                     </thead>
@@ -37,11 +37,11 @@
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
                            <td>{$item['sendor']|escape}</td>
-                           <td>{if $item['isdefault'] == 1}是{else}否{/if}</td>
+                           {*<td>{if $item['isdefault'] == 1}是{else}否{/if}</td>*}
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="4">找不到数据</td></tr>
+                            <tr><td colspan="2">找不到数据</td></tr>
                         {/foreach}
                     </tbody>
                 </table>

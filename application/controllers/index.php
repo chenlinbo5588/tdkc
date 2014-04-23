@@ -25,7 +25,7 @@ class Index extends TZ_Admin_Controller {
         }catch(Exception $e){
             //
         }*/
-        
+        redirect(url_path('admin'));
         $this->assign('top_menu','首页');
         $this->display();
     }

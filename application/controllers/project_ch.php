@@ -11,6 +11,8 @@ class project_ch extends TZ_Admin_Controller {
         $this->load->model('Project_Type_Model');
         $this->load->model('Project_Model');
         $this->load->model('Project_Mod_Model');
+        $this->load->model('User_Event_Model');
+        $this->load->model('User_Sendor_Model');
     }
     
 	public function index()
@@ -20,12 +22,183 @@ class project_ch extends TZ_Admin_Controller {
          */
         $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
-        
+        $this->assign('action','index');
         $this->_getPageData();
 		$this->display();
 	}
     
+    private function _getLastOperator($project,$operaion){
+        
+        switch($operaion){
+            case '退回':
+                $user = $this->Project_Mod_Model->getList(array(
+                    'limit' => 1,
+                    'select' => 'project_id,user_id,creator',
+                    'where' => array(
+                        'project_id' => $project['id'],
+                        'action' => str_replace('已','',$project['status']),
+                        'type' => 'user'
+                    ),
+                    'order' => 'createtime DESC'
+                ));
+                break;
+        }
+        
+        return $user['data'][0];
+    }
     
+    
+    private function _getProjectModList($project_id,$limit = 20, $user_id = 0){
+        
+       
+        $condition['limit'] = $limit;
+        $condition['where']['project_id'] = $project_id;
+        $condition['where']['type'] = 'user';
+        if($user_id){
+            $condition['where']['user_id'] = $project_id;
+        }
+        
+        $data = $this->Project_Mod_Model->getList($condition);
+        return $data['data'];
+    }
+    
+    
+    
+    public function dispatchOne(){
+        
+        $project_id = (int)gpc("id",'GP',0);
+        $event_id = (int)gpc('event_id','GP',0);
+        
+        if(empty($project_id)){
+            die("参数错误,请重新请求");
+        }
+        
+        $this->_getSendorList();
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            $info = $this->Project_Model->queryById($project_id);
+            for($i = 0; $i < 1; $i++){
+                $gobackUrl = $_POST['gobackUrl'];
+                $op = $_POST['workflow'];
+                $eventReaded = false;
+                
+                
+                if($op == '退回'){
+                    $this->form_validation->set_rules('reason', '退回原因', 'required|min_length[3]|htmlspecialchars');
+                }else{
+                    $this->form_validation->set_rules('start_date', '开始日期', 'required|valid_date');
+                    $this->form_validation->set_rules('end_date', '结束日期', 'required|valid_date');
+                    $this->form_validation->set_rules('sendor', '指派人', 'required|is_natural_no_zero');
+                }
+                
+                if(!$this->form_validation->run()){
+                    $info['start_date'] = $_POST['start_date'];
+                    $info['end_date'] = $_POST['end_date'];
+                    break;
+                }
+                
+
+                if($op == '退回'){
+                    $lastUser = $this->_getLastOperator($info,$op);
+                    $data = array(
+                        'sendor_id' => $lastUser['user_id'],
+                        'sendor' => $lastUser['creator'],
+                        'status' => $info['last_status'],
+                        'sub_status' => $info['last_sub_status'],
+                        'last_status' => '',
+                        'last_sub_status' => '',
+                        'reason' => cut($_POST['reason'],200),
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => time()
+                    );
+
+                    //file_put_contents("debug.txt",print_r($info,true));
+                    //file_put_contents("debug.txt",print_r($data,true),FILE_APPEND);
+
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status']));
+
+                    if($return){
+                        $this->_addProjectLog($info['id'],'退回',"{$this->_userProfile['name']} 退回 {$info['project_no']} {$info['name']} 至 {$lastUser['creator']},退回原因:<span class=\"notice\">{$_POST['reason']}</span>",$data);
+
+                        $this->User_Event_Model->add(array(
+                            'user_id' => $lastUser['user_id'],
+                            'title' => cut($info['name'],100),
+                            'url' => url_path('project_ch','edit','id='.$info['id']),
+                            'creator' => $this->_userProfile['name']
+                        ));
+
+                        $eventReaded = true;
+                        $message = '退回成功';
+                    }else{
+                        //退回失败
+                        $message = '退回失败,或许已经被退回';
+                    }
+                }else{
+                    //分派任务
+
+                    //被指派人信息
+                    $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+
+                    $data = array(
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'status' => '已指派',
+                        'sub_status' => '',
+                        'last_status' => $info['status'],
+                        'last_sub_status' => $info['sub_status'],
+                        'updator' => $this->_userProfile['name'],
+                        'arrange_date' => time(),
+                        'start_date' => strtotime($_POST['start_date']),
+                        'end_date' => strtotime($_POST['end_date']),
+                        'updatetime' => time()
+                    );
+
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status']));
+
+                    if($return){
+                        $this->_addProjectLog($info['id'],'指派',"{$this->_userProfile['name']} 指派 {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
+                        $this->User_Event_Model->add(array(
+                            'user_id' => $sendorInfo['id'],
+                            'title' => cut($info['name'],100),
+                            'url' => url_path('project_ch','task','id='.$info['id']),
+                            'creator' => $this->_userProfile['name']
+                        ));
+
+                        $eventReaded = true;
+                        $message = '指派成功';
+                    }else{
+                        //退回失败
+                        $message = '指派失败,已经被指派';
+                    }
+                }
+
+                if($eventReaded){
+                    $this->User_Event_Model->updateByWhere(array(
+                        'isnew' => 0,
+                        'status' => '已处理',
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => time()
+                    ),array('id' => $event_id));
+
+                    //刷新
+                    $info = $this->Project_Model->queryById($project_id);
+                }
+            }
+            
+        }else{
+            $info = $this->Project_Model->queryById($project_id);
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
+        }
+        
+        $info['event_id'] = $event_id;
+        $this->assign('message',$message);
+        $this->assign('info',$info);
+        $this->assign('modList',$this->_getProjectModList($project_id));
+        //print_r($info);
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->display();
+        
+    }
     
     /**
      * 项目布施
@@ -192,7 +365,7 @@ class project_ch extends TZ_Admin_Controller {
     private function _add($year){
          // add
         $_POST['user_id'] = $this->_userProfile['id'];
-        $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
+        $_POST['creator'] = $this->_userProfile['name'];
         $_POST['project_type'] = 0;
 
         //$this->db->trans_start();
@@ -226,16 +399,10 @@ class project_ch extends TZ_Admin_Controller {
         $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
         $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
         
-        /**
-         * 添加时自己相当于自己发送给自己 
-         */
-        $_POST['sendor_id'] = $this->_userProfile['id'];
-        $_POST['sendor'] = $this->_userProfile['name'];
-        
         $insertid = $this->Project_Model->add($_POST);
         //$this->db->trans_complete();
         
-        $this->_addProjectLog($insertid,'添加',"{$this->_userProfile['name']} 添加了一条新记录");
+        $this->_addProjectLog($insertid,'新增',"{$this->_userProfile['name']} 新增项目,项目编号：{$_POST['project_no']}",$_POST);
         return $insertid;
         
     }
@@ -262,7 +429,7 @@ class project_ch extends TZ_Admin_Controller {
                      * 原记录删除 
                      */
                     $this->Project_Model->fake_delete(array('id' => $_POST['id'],'updator' => $this->_userProfile['name']));
-                    $this->_addProjectLog($_POST['id'],'删除',"修改原记录时修改了年或者区域，则原记录{$_POST['name']}删除，新记录id={$insertid}",'system');
+                    $this->_addProjectLog($_POST['id'],'删除',"修改原记录时修改了年或者区域，则原记录{$_POST['name']}删除，新记录id={$insertid}", $_POST, 'system');
                     
                     $info = $this->Project_Model->getById(array('where' => array('id' => $insertid)));
                     
@@ -273,7 +440,7 @@ class project_ch extends TZ_Admin_Controller {
                     $_POST['updator'] = $this->_userProfile['name'];
                     $this->Project_Model->update($_POST);
                     
-                    $this->_addProjectLog($_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$_POST['name']}");
+                    $this->_addProjectLog($_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$info['project_no']} {$_POST['name']}",$_POST);
                     
                     $info = $this->Project_Model->getById(array('where' => array('id' => $_POST['id'])));
                 }
@@ -291,7 +458,7 @@ class project_ch extends TZ_Admin_Controller {
         }
         
         $this->_initPageData($info['year']);
-        
+        $this->assign('modList',$this->_getProjectModList($info['id']));
         $this->assign('info',$info);
         $this->display('add');
     }
@@ -303,16 +470,7 @@ class project_ch extends TZ_Admin_Controller {
     
     private function _doSend($action,$ids,$user){
         
-        $data = array(
-            'status' => '已发送',  
-            'sub_status' => '',
-            'sendor_id' => $user['id'],
-            'sendor' => $user['name'],
-            'update_user_id' => $this->_userProfile['id'],
-        );
-        
-        
-        $projectList = $this->Project_Model->getList(array(
+       $projectList = $this->Project_Model->getList(array(
             'where_in' => array(
                 array(
                     'key' => 'id', 'value' => $ids
@@ -330,19 +488,36 @@ class project_ch extends TZ_Admin_Controller {
 
         //用 循环，方式批量更新
         foreach($ids as $id){
+            $data = array(
+                'status' => "已{$action}",
+                'sub_status' => '',
+                'last_status' => $projectInfo[$id]['status'],
+                'last_sub_status' => $projectInfo[$id]['sub_status'],
+                'sendor_id' => $user['id'],
+                'sendor' => $user['name']
+            );
+            
             $return = $this->Project_Model->updateByWhere($data,array('id' => $id, 'status' => '新增'));
             if($return){
                 $event[] = $projectInfo[$id];
-                $this->_addProjectLog($id,$action,"{$this->_userProfile['name']} {$action} {$projectInfo[$id]['name']} 至 {$user['name']}");
+                $this->_addProjectLog($id,$action,"{$this->_userProfile['name']} {$action} {$projectInfo[$id]['project_no']} {$projectInfo[$id]['name']} 至 {$user['name']}",$data);
             }else{
                 $failed[] = $projectInfo[$id];
             }
         }
-
+        
+        /**
+         * @todo add 
+         */
         if($event){
-            
-            
-            
+            foreach($event as $value){
+                $this->User_Event_Model->add(array(
+                    'user_id' => $user['id'],
+                    'title' => cut($value['name'],100),
+                    'url' => url_path('project_ch','dispatchOne','id='.$value['id']),
+                    'creator' => $this->_userProfile['name']
+                ));
+            }
         }
         
         return array('success' => $event, 'failed' => $failed);
@@ -364,28 +539,7 @@ class project_ch extends TZ_Admin_Controller {
         
         if($this->isPostRequest() && !empty($_POST['id'])){
             
-            /*
-            $user = $this->User_Model->queryById($_POST['sendor']);
-            $result = $this->_doSend('发送',$ids, $user );
             
-            //file_put_contents("debug.txt",print_r($_POST,true));
-            //file_put_contents("debug.txt",print_r($user,true),FILE_APPEND);
-            
-            $message = array();
-            if($result['success']){
-                foreach($result['success'] as $v){
-                    $message[] = '<p class="success">' . $v['project_no'] .'发送成功</p>';
-                }
-            }else{
-                foreach($result['failed'] as $v){
-                    $message[] = '<p class="failed">' . $v['project_no'] .'发送失败，可能已经被发送</p>';
-                }
-            }
-            $this->assign('reload',0);
-            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
-             * 
-             * 
-             */
             $this->assign('reload',0);
             $this->assign('message','测试');
             $this->display('showMessage','common');
@@ -441,21 +595,21 @@ class project_ch extends TZ_Admin_Controller {
             $this->display('showMessage','common');
             
         }else{
-            $this->load->model('User_Sendor_Model');
             
-            $userSendorList = $this->User_Sendor_Model->getList(array(
-                'where' => array(
-                    'user_id' => $this->_userProfile['id']
-                    )
-                )
-            );
-            $this->assign('userSendorList',$userSendorList['data']);
+            $this->_getSendorList();
             $this->display();
         }
     }
     
-    
-    
+    private function _getSendorList(){
+        $userSendorList = $this->User_Sendor_Model->getList(array(
+            'where' => array(
+                'user_id' => $this->_userProfile['id']
+                )
+            )
+        );
+        $this->assign('userSendorList',$userSendorList['data']);
+    }
     
     public function _getPageData(){
         try {

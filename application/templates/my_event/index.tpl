@@ -12,8 +12,8 @@
                             <label><strong>待办类型</strong>
                                 <select name="status">
                                    <option value="">全部</option>
-                                   <option value="未处理">未处理</option>
-                                   <option value="已处理">已处理</option>
+                                   <option value="未处理" {if $smarty.get.status == '未处理'}selected=""{/if}>未处理</option>
+                                   <option value="已处理" {if $smarty.get.status == '已处理'}selected=""{/if}>已处理</option>
                                 </select>
                             </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
@@ -26,35 +26,28 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>序号</th>
                             <th>标题</th>
-                            <th>内容</th>
                             <th>状态</th>
                             <th>创建人</th>
                             <th>创建时间</th>
-                            <th>最后修改人</th>
-                            <th>最后修改时间</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           <td>{$item['title']}</td>
-                           <td>{$item['content']|escape}</td>
+                           <td><a href="{$item['url']}&event_id={$item['id']}">{$item['title']}</a></td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
-                           <td>{$item['updator']}</td>
-                           <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                {if $item['status'] == '未处理'}
-                               <a href="{url_path('my_event','edit','id=')}{$item['id']}">处理</a>
+                               <a class="delete" href="javascript:void(0);" data-title="{$item['title']|escape}" data-id="{$item['id']}" data-href="{url_path('my_event','deal','id=')}{$item['id']}">设为已处理</a>
                                {/if}
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">找不到数据</td></tr>
+                            <tr><td colspan="6">找不到数据</td></tr>
                         {/foreach}
                     </tbody>
                 </table>

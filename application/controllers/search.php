@@ -7,6 +7,28 @@ class Search extends TZ_Controller {
 		die(0);
 	}
     
+    public function getProjectModList(){
+        
+        $limit = (int)gpc('limit','GP',20);
+        $project_id = (int)gpc('project_id','GP',0);
+        $user_id = (int)gpc('user_id','GP',0);
+        
+        $condition['limit'] = $limit;
+        $condition['where']['project_id'] = $project_id;
+        $condition['where']['type'] = 'user';
+        if($user_id){
+            $condition['where']['user_id'] = $project_id;
+        }
+        
+        $data = $this->Project_Mod_Model->getList($condition);
+        
+        $this->assign('list',$data['data']);
+        
+        $this->display();
+    }
+    
+    
+    
     public function getRegionList(){
         $year = (int)gpc("year","GP",date("Y"));
         $this->load->model("Region_Model");

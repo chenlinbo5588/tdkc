@@ -60,11 +60,13 @@ class TZ_Model extends CI_Model {
     }
     
     public function deleteByWhere($where){
-        return $this->db->delete($this->_tableName,$where);
+        $this->db->delete($this->_tableName,$where);
+        return $this->db->affected_rows();
     }
     
     public function updateByWhere($data,$where){
-        return $this->db->update($this->_tableName,$data,$where);
+        $this->db->update($this->_tableName,$data,$where);
+        return $this->db->affected_rows();
     }
     
     public function batchInsert($data){
@@ -126,6 +128,14 @@ class TZ_Model extends CI_Model {
         if($condition['pager']){
             $query = $this->db->get($this->_tableName,$condition['pager']['page_size'],($condition['pager']['current_page'] - 1) * $condition['pager']['page_size']);
         }else{
+            if($condition['limit']){
+                if(is_array($condition['limit'])){
+                    $this->db->limit($condition['limit'][0],$condition['limit'][1]);
+                }else{
+                    $this->db->limit($condition['limit']);
+                }
+            }
+            
             $query = $this->db->get($this->_tableName);
         }
         

@@ -16,9 +16,10 @@ class Project_Mod_Model extends TZ_Model {
             'project_id' => $param['project_id'],
             'user_id' => $param['user_id'],
             'action' => $param['action'],
-            'content' => $param['content'],
             'creator' => $param['creator'],
-            'createtime' => $now
+            'createtime' => $now,
+            'content' => $param['content'],
+            'user_data' => $param['user_data'],
         );
         
         $this->db->insert($this->_tableName, $data);

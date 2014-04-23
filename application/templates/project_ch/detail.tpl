@@ -1,5 +1,4 @@
-{include file="common/main_header.tpl"}
-            <div class="row-fluid">
+            <div class="pd20">
                 <table class="maintain">
                     <tbody>
                     <tr>
@@ -12,11 +11,7 @@
                     </tr>
                     <tr>
                         <td><label class="required"><em></em><strong>登记年月</strong></label></td>
-                        <td>{$info['year']}年</td>
-                    </tr>
-                    <tr>
-                        <td><label class="required"><em></em><strong>登记月份</strong></label></td>
-                        <td>{$info['month']}月份</td>
+                        <td>{$info['year']}年{$info['month']}月份</td>
                     </tr>
                     <tr>
                         <td><label class="required"><em></em><strong>区域</strong></label></td>
@@ -39,28 +34,13 @@
                         <td>{$info['village']|escape}</td>
                     </tr>
                     <tr>
-                        <td><label class="required"><em></em><strong>联系人名称</strong></label></td>
-                        <td>{$info['contacter']|escape}</td>
+                        <td><label class="required"><em></em><strong>联系人信息</strong></label></td>
+                        <td>姓名:{$info['contacter']|escape} 手机号码:{$info['contacter_mobile']} 固定号码:{$info['contacter_tel']}</td>
                     </tr>
+                    
                     <tr>
-                        <td><label class="required"><em></em><strong>联系人手机号码</strong></label></td>
-                        <td>{$info['contacter_mobile']}</td>
-                    </tr>
-                        <tr>
-                        <td><label class="optional"><em></em><strong>联系人固定号码</strong></label></td>
-                        <td>{$info['contacter_tel']}</td>
-                    </tr>
-                    <tr>
-                        <td><label class="required"><em></em><strong>接洽人名称</strong></label></td>
-                        <td>{$info['manager']|escape}</td>
-                    </tr>
-                    <tr>
-                        <td><label class="required"><em></em><strong>接洽人手机号码</strong></label></td>
-                        <td>{$info['manager_mobile']}</td>
-                    </tr>
-                    <tr>
-                        <td><label class="optional"><em></em><strong>接洽人固定号码</strong></label></td>
-                        <td>{$info['manager_tel']}</td>
+                        <td><label class="required"><em></em><strong>接洽人信息</strong></label></td>
+                        <td>姓名:{$info['manager']|escape} 手机号码:{$info['manager_mobile']} 固定号码:{$info['manager_tel']}</td>
                     </tr>
                     <tr>
                         <td><label class="optional"><em></em><strong>备注</strong></label></td>
@@ -71,20 +51,13 @@
                         <td>{$info['displayorder']}</td>
                     </tr>
                     <tr>
-                        <td><label class="optional"><em></em><strong>登记人</strong></label></td>
-                        <td>{$info['creator']}</td>
+                        <td><label class="optional"><em></em><strong>登记信息</strong></label></td>
+                        <td>登记人姓名:{$info['creator']} 登记时间：{$info['createtime']|date_format:"Y-m-d H:i:s"}</td>
                     </tr>
+                    
                     <tr>
-                        <td><label class="optional"><em></em><strong>登记时间</strong></label></td>
-                        <td>{$info['createtime']|date_format:"Y-m-d H:i:s"}</td>
-                    </tr>
-                    <tr>
-                        <td><label class="optional"><em></em><strong>最后修改人</strong></label></td>
-                        <td>{$info['updator']}</td>
-                    </tr>
-                    <tr>
-                        <td><label class="optional"><em></em><strong>最后修改时间</strong></label></td>
-                        <td>{$info['updatetime']|date_format:"Y-m-d H:i:s"}</td>
+                        <td><label class="optional"><em></em><strong>最后修改</strong></label></td>
+                        <td>修改人：{$info['updator']} 修改时间:{$info['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -101,4 +74,3 @@
                     });
                 </script>
             </div>
-{include file="common/main_footer.tpl"}

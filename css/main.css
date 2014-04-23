@@ -188,7 +188,7 @@
 }
 
 .maintain td ,.maintain tr th {
-    padding:3px;
+    padding:5px;
     text-align: left;
 }
 
@@ -387,4 +387,48 @@ ol.style_decimal , ul.style_decimal {
 }
 
 
+/**
+ *
+ * 发送人列表
+ */
+.userlist label,.userlist .item {
+    border:1px solid #c7c7c7;
+    padding:5px;
+    margin:2px;
+    width:100px;
+    float:left;
+    display:block;
+    cursor:pointer;
+}
 
+.userlist label:hover, .userlist label.selected ,.userlist .item:hover ,.userlist .item.selected {
+    border:1px solid red;
+}
+
+
+/**
+ * 项目操作日志
+ */
+ #proj_modpanel {
+    position: absolute;
+    right: 20px;
+    width: 400px;
+    border: 1px solid #c7c7c7;
+    background: #ddd;
+    padding:5px;
+ }
+
+ 
+ #proj_modpanel .panel_list {
+     max-height: 600px;
+     _height:600px;
+     overflow-y: auto;
+ }
+
+ .moditem .modcontent {
+     text-indent: 2em;
+ }
+ 
+ .goback {
+     color:#f00;
+ }

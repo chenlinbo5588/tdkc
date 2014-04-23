@@ -2,7 +2,7 @@
             <div class="searchform row-fluid">
                 <form action="{url_path('project_ch')}" method="get" name="searchform">
                     <input type="hidden" value="project_ch" name="{config_item('controller_trigger')}"/>
-                    <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
+                    <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
                             <label><strong>登记名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
@@ -43,7 +43,7 @@
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
                     <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
                     <a href="javascript:sendAll('id[]');" class="coolbg">发送</a>
-                    <a href="javascript:tuihuiSelAll('id[]');" class="coolbg">退回</a>
+                    {*<a href="javascript:tuihuiSelAll('id[]');" class="coolbg">退回</a>*}
                 </div>
                 {/if}
                 <form name="listform" action="" method="post">
@@ -111,7 +111,7 @@
                     }
                 }
                 
-                
+                {*
                 function tuihuiSelAll(name){
                     var checked = false;
                     $("input[name='" +  name + "']").each(function(){
@@ -127,6 +127,7 @@
                         $.jBox("get:{url_path('project_ch','tuihui')}" + '&' + param,{ title:"退回",width:500,buttons:{ } });
                     }
                 }
+                *}
                 
                 function sendAll(name){
                     var checked = false;
@@ -147,7 +148,6 @@
                 
                 
                 $(function(){
-                
                     $("a.send").bind("click",function(e){
                         $.jBox("get:{url_path('project_ch','send')}" + '&id=' + $(e.target).attr("data-id"),{ title:"发送"  ,width:300,buttons:{ } });
                     });
