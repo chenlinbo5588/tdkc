@@ -155,7 +155,7 @@ a:link,a:visited {
 		<dd><div class="item" id="item3"><a href="{url_path('project')}" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
 		<dd><div class="item" id="item4"><a href="{url_path('project','guihua')}" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
 		<dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>
-		<dd><div class="item" id="item6"><a href="{url_path('information')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
+		<dd><div class="item" id="item6"><a href="{url_path('info')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
 		<dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>
 		</dl>
 		</td>

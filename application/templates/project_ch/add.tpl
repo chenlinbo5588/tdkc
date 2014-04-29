@@ -93,7 +93,12 @@
                         <tr>
                             <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
                         </tr>
-                        
+                        {if $action == 'edit'}
+                        <tr>
+                            <td>退回原因</td>
+                            <td><span class="notice">{$info['reason']|escape}</span></td>
+                        </tr>
+                        {/if}
                         <tr>
                             <td><label class="optional"><em></em><strong>优先级</strong></label></td><td>
                                 <input type="text" name="displayorder" value="{$info['displayorder']}" placeholder="优先级"/>
@@ -139,7 +144,7 @@
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('project_ch','add')}";
                         }else{
-                            location.href = "{url_path('project_ch','dispatch')}";
+                            location.href = "{url_path('project_ch','send')}";
                         }
                     {/if}
                     

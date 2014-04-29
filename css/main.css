@@ -409,26 +409,34 @@ ol.style_decimal , ul.style_decimal {
 /**
  * 项目操作日志
  */
- #proj_modpanel {
+#proj_modpanel {
     position: absolute;
     right: 20px;
     width: 400px;
     border: 1px solid #c7c7c7;
     background: #ddd;
     padding:5px;
- }
-
+}
  
- #proj_modpanel .panel_list {
-     max-height: 600px;
-     _height:600px;
-     overflow-y: auto;
- }
+#proj_modpanel .panel_list {
+    max-height: 600px;
+    _height:600px;
+    overflow-y: auto;
+}
 
- .moditem .modcontent {
-     text-indent: 2em;
- }
+.moditem .modcontent {
+    text-indent: 2em;
+}
  
- .goback {
-     color:#f00;
- }
+ 
+.moditem .modaction {
+    color:red;
+}
+
+.goback {
+    color:#f00;
+}
+ 
+.workflow {
+     background:rgb(238, 238, 238);
+}

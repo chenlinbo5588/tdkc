@@ -1,12 +1,12 @@
-<div class="sendorList pd20">
+<div class="pd20">
     <style>
         .sendorList li {
-            margin:10px 0;
+            margin:5px 0;
         }
     </style>
     
     <iframe name="post_iframe" frameborder="0" height="0" width="0"/>
-     <form action="{url_path('project_ch','send')}" method="post" name="sf" target="post_iframe">
+     <form action="{url_path('project_ch','sendOne')}" method="post" name="sf" target="post_iframe">
         {foreach from=$id item=item}
         <input type="hidden" name="id[]" value="{$item}"/>     
         {/foreach}

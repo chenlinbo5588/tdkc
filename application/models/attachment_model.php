@@ -15,11 +15,7 @@ class Attachment_Model extends TZ_Model {
         $string = $this->db->insert_string($this->_tableName, $data);
         $query = $this->db->query($string);
         
-        if($this->db->affected_rows()){
-            return $this->db->insert_id();
-        }else{
-            return false;
-        }
+        return $this->db->insert_id();
     }
     
     

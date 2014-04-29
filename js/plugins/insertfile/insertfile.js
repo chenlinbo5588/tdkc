@@ -81,6 +81,7 @@ KindEditor.plugin('insertfile', function(K) {
 							url = K.formatUrl(url, 'absolute');
 						}
 						urlBox.val(url);
+                        titleBox.val(K.undef(data.title, ''));
 						if (self.afterUpload) {
 							self.afterUpload.call(self, url, data, name);
 						}

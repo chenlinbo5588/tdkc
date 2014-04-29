@@ -181,6 +181,7 @@ class TZ_Controller extends CI_Controller {
         }
         
         if(file_exists($file)){
+            header('P3P: CP="CAO COR CURa ADMa DEVa OUR IND ONL COM DEM PRE"');
             $this->_smarty->display($file);
         }else{
             echo "$file not found";
@@ -210,8 +211,11 @@ class TZ_Controller extends CI_Controller {
      * @param type $isJsonHead 
      */
     public function sendJson($data, $isJsonHead = true) {
-        if($isJsonHead)
+        if($isJsonHead){
             header("Content-Type:application/json; charset=utf-8");
+            header('P3P: CP="CAO COR CURa ADMa DEVa OUR IND ONL COM DEM PRE"');
+        }
+            
          exit(json_encode($data));
     }
     
@@ -224,9 +228,11 @@ class TZ_Controller extends CI_Controller {
      * @param type $isJsonHead 
      */
     public function sendFormatJson($respCode,$body,$redirectUrl = '',$isJsonHead = true){
-        if($isJsonHead)
-                header("Content-Type:application/json; charset=utf-8");
-
+        if($isJsonHead){
+            header("Content-Type:application/json; charset=utf-8");
+            header('P3P: CP="CAO COR CURa ADMa DEVa OUR IND ONL COM DEM PRE"');
+        }
+                
         $data = array(
             'code' => $respCode,
             'body' => $body

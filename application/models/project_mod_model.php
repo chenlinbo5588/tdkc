@@ -15,6 +15,7 @@ class Project_Mod_Model extends TZ_Model {
             'id' => NULL,
             'project_id' => $param['project_id'],
             'user_id' => $param['user_id'],
+            'type' => $param['type'],
             'action' => $param['action'],
             'creator' => $param['creator'],
             'createtime' => $now,

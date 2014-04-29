@@ -14,6 +14,8 @@ class TZ_Admin_Controller extends TZ_Controller {
         parent::__construct();
         
         $session = $this->session->userdata['profile'];
+        
+        //file_put_contents("session.txt",print_r($session,true));
         if(!$session){
             redirect(url_path('login'),'javascript:top');
         }
@@ -59,7 +61,7 @@ class TZ_Admin_Controller extends TZ_Controller {
     }
     
     
-    protected function _addProjectLog($project_id,$action,$content,$userData = array(),$type = 'user'){
+    protected function _addProjectLog($type,$project_id,$action,$content,$userData = array()){
         //记录日志
         $this->Project_Mod_Model->add(
             array(

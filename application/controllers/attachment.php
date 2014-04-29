@@ -16,10 +16,33 @@ class Attachment extends TZ_Controller {
         
     }
     
+    public function download(){
+        $fid = (int)gpc('id','GP',0);
+        $file = $this->Attachment_Model->getById(array(
+            'where' => array('id' => $fid)
+        ));
+        
+        if(!$file){
+            die();
+        }else{
+            $this->load->helper('download');
+            $file_realpath = config_item('filestore_dir').$file['file_store_path'].$file['file_md5'].$file['file_extension'];
+            if(file_exists($file_realpath)){
+                $this->db->query("UPDATE {$this->Attachment_Model->_tableName} SET file_downs = file_downs + 1 WHERE id = {$file['id']}");
+                force_download($file['file_real_name'],  file_get_contents($file_realpath));
+            }else{
+                die();
+            }
+        }
+    }
+        
+    
+    
     public function upload(){
         
         $this->load->helper('directory');
         $this->load->helper('file');
+        $this->load->helper('number');
         
         $uid = (int)gpc('uid','G',0);
         
@@ -93,7 +116,7 @@ class Attachment extends TZ_Controller {
             
             $fileId = $this->Attachment_Model->add($data);
             
-            $retAry = array('error' => 1,"message" => '上传成功','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath);
+            $retAry = array('error' => 1,'id' => $fileId, "message" => '上传成功','width' => $width,'height'=> $height, 'url' => $urlPath.$newFilePath);
                 
             if(!$fileId){
                 $retAry['message'] = '数据库错误';
@@ -111,7 +134,7 @@ class Attachment extends TZ_Controller {
             $this->sendJson($retAry);
         }else{
             header('Content-type: text/html; charset=UTF-8');
-            echo json_encode(array('error' => 0, 'url' => $urlPath.$newFilePath));
+            echo json_encode(array('error' => 0,'id' => $fileId, 'url' => $urlPath.$newFilePath,'title' => htmlspecialchars($attachment['filename']) ));
         }
     }
 }

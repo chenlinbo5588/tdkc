@@ -4,7 +4,7 @@
     <div class="panel_list">
     {foreach from=$modList item=item}
         <div class="moditem">
-            <h3 class="title">【{$item['createtime']|date_format:"Y-m-d H:i:s"}】 {$item['creator']} - {$item['action']}</h3>
+            <h3 class="title"><span class="modtime">【{$item['createtime']|date_format:"Y-m-d H:i:s"}】</span><span class="modcreator">{$item['creator']}</span> - <span class="modaction">{$item['action']}</span></h3>
             <div class="modcontent">
                 <p>{$item['content']}</p>
             </div>
