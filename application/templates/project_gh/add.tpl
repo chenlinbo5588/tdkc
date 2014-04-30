@@ -1,13 +1,13 @@
 {include file="common/main_header.tpl"}
     {if $action == 'edit'}
-    {include file="project_ch/modlist.tpl"}
+    {include file="project_gh/modlist.tpl"}
     {/if}
             <div class="row-fluid">
                 {if $action == 'edit'}
-                <form action="{url_path('project_ch','edit')}" method="post" name="addform">
+                <form action="{url_path('project_gh','edit')}" method="post" name="addform">
                     <input type="hidden" name="id" value="{$info['id']}"/>
                 {else}
-                <form action="{url_path('project_ch','add')}" method="post" name="addform">
+                <form action="{url_path('project_gh','add')}" method="post" name="addform">
                 {/if}
                     <table class="maintain">
                         <tbody>
@@ -148,9 +148,9 @@
                         
                     {if $feedback == 'success' && $action != 'edit'}
                         if(confirm('{$feedMessage}')){
-                            location.href = "{url_path('project_ch','add')}";
+                            location.href = "{url_path('project_gh','add')}";
                         }else{
-                            location.href = "{url_path('project_ch','send')}";
+                            location.href = "{url_path('project_gh','send')}";
                         }
                     {/if}
                     

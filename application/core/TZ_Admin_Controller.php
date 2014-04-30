@@ -61,18 +61,4 @@ class TZ_Admin_Controller extends TZ_Controller {
     }
     
     
-    protected function _addProjectLog($type,$project_id,$action,$content,$userData = array()){
-        //记录日志
-        $this->Project_Mod_Model->add(
-            array(
-                'project_id' => $project_id,
-                'user_id' => $this->_userProfile['id'],
-                'type' => $type,
-                'action' => $action,
-                'creator' => "{$this->_userProfile['name']}",
-                'content' => cut($content, 100, true),
-                'user_data' => json_encode($userData)
-            )
-        );
-    }
 }

@@ -3,24 +3,23 @@
 /**
  * 测绘项目管理 
  */
-class project_ch extends TZ_Admin_Controller {
+class project_gh extends TZ_Admin_Controller {
     
     public function __construct(){
         parent::__construct();
         $this->load->model('Region_Model');
         $this->load->model('Project_Type_Model');
-        $this->load->model('Project_Model');
-        $this->load->model('Project_Mod_Model');
+        $this->load->model('Project_Gh_Model');
+        $this->load->model('Project_Gh_Mod_Model');
         $this->load->model('User_Event_Model');
         $this->load->model('User_Sendor_Model');
         
         $this->load->helper('number');
     }
     
-    
     protected function _addProjectLog($type,$project_id,$action,$content,$userData = array()){
         //记录日志
-        $this->Project_Mod_Model->add(
+        $this->Project_Gh_Mod_Model->add(
             array(
                 'project_id' => $project_id,
                 'user_id' => $this->_userProfile['id'],
@@ -36,10 +35,7 @@ class project_ch extends TZ_Admin_Controller {
     
 	public function index()
 	{
-        /**
-         *项目类型 
-         */
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '规划项目'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         $this->assign('action','index');
         $this->_getPageData();
@@ -54,7 +50,7 @@ class project_ch extends TZ_Admin_Controller {
      */
     private function _getLastOperator($project,$operaion){
         
-        $user = $this->Project_Mod_Model->getList(array(
+        $user = $this->Project_Gh_Mod_Model->getList(array(
             'limit' => 1,
             'select' => 'project_id,user_id,creator',
             'where' => array(
@@ -79,7 +75,7 @@ class project_ch extends TZ_Admin_Controller {
             $condition['where']['user_id'] = $project_id;
         }
         
-        $data = $this->Project_Mod_Model->getList($condition);
+        $data = $this->Project_Gh_Mod_Model->getList($condition);
         return $data['data'];
     }
     
@@ -94,7 +90,7 @@ class project_ch extends TZ_Admin_Controller {
         if(empty($project_id)){
             die("参数错误,请重新请求");
         }
-        $info = $this->Project_Model->queryById($project_id);
+        $info = $this->Project_Gh_Model->queryById($project_id);
         if($this->isPostRequest() && !empty($_POST['id'])){
             if(!empty($_POST['logcontent'])){
                 $this->_addProjectLog('worklog', $_POST['id'],'添加',$_POST['logcontent']);
@@ -125,7 +121,7 @@ class project_ch extends TZ_Admin_Controller {
         $this->_getSendorList();
         $this->load->model('Attachment_Model');
         if($this->isPostRequest() && !empty($_POST['id'])){
-            $info = $this->Project_Model->queryById($project_id);
+            $info = $this->Project_Gh_Model->queryById($project_id);
             for($i = 0; $i < 1; $i++){
                 $gobackUrl = $_POST['gobackUrl'];
                 $op = $_POST['workflow'];
@@ -254,11 +250,11 @@ class project_ch extends TZ_Admin_Controller {
                 $_POST['event_id'] = $event_id;
                 $message = $this->_doWorkFlow($info, $_POST, $op, $lastOpName,$lastStatus);
                 
-                $info = $this->Project_Model->queryById($project_id);
+                $info = $this->Project_Gh_Model->queryById($project_id);
             }
             
         }else{
-            $info = $this->Project_Model->queryById($project_id);
+            $info = $this->Project_Gh_Model->queryById($project_id);
             $gobackUrl = $_SERVER['HTTP_REFERER'];
             if(!empty($info['files'])){
                 $this->assign('files',$this->_getFiles($info['files']));
@@ -268,6 +264,7 @@ class project_ch extends TZ_Admin_Controller {
         if(empty($message)){
             $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
         }
+        
         
         $info['event_id'] = $event_id;
         $this->assign('message',$message);
@@ -317,16 +314,16 @@ class project_ch extends TZ_Admin_Controller {
             //file_put_contents("debug.txt",print_r($info,true));
             //file_put_contents("debug.txt",print_r($data,true),FILE_APPEND);
 
-            $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status']));
+            $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status']));
 
             if($return){
                 $this->_addProjectLog('workflow', $info['id'],'退回',"{$this->_userProfile['name']} 退回 {$info['project_no']} {$info['name']} 至 {$lastUser['creator']},退回原因:<span class=\"notice\">{$param['reason']}</span>",$data);
                 switch($gobackStatus){
                     case '新增':
-                        $url = url_path('project_ch','edit','id='.$info['id']);
+                        $url = url_path('project_gh','edit','id='.$info['id']);
                         break;
                     default:
-                        $url = url_path('project_ch','task','id='.$info['id']);
+                        $url = url_path('project_gh','task','id='.$info['id']);
                         break;
                 }
                 
@@ -359,7 +356,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
@@ -383,7 +380,7 @@ class project_ch extends TZ_Admin_Controller {
                         'bz_remark' => $param['bz_remark']
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
@@ -406,7 +403,7 @@ class project_ch extends TZ_Admin_Controller {
                         'ss_remark' => $param['ss_remark']
                     );
 
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置'));
                     
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
@@ -426,7 +423,7 @@ class project_ch extends TZ_Admin_Controller {
                         'files' => implode(',',$param['file_id'])
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -444,7 +441,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time(),
                         'files' => implode(',',$param['file_id'])
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -457,7 +454,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time()
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
                         $eventReaded = true;
@@ -473,7 +470,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time(),
                         'files' => implode(',',$param['file_id'])
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -486,7 +483,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time()
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
                         $eventReaded = true;
@@ -504,7 +501,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审'));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -532,7 +529,7 @@ class project_ch extends TZ_Admin_Controller {
                 'project_id' => $info['id'],
                 'user_id' => $sendorInfo['id'],
                 'title' => cut($info['name'],100),
-                'url' => url_path('project_ch','task','id='.$info['id']),
+                'url' => url_path('project_gh','task','id='.$info['id']),
                 'creator' => $this->_userProfile['name']
             ));
         }
@@ -567,14 +564,14 @@ class project_ch extends TZ_Admin_Controller {
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
         $condition['where'] = array(
             'status' => '新增',
             'sendor_id' => $this->_userProfile['id']
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         
@@ -599,14 +596,14 @@ class project_ch extends TZ_Admin_Controller {
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
         $condition['where'] = array(
             'status' => '已发送',
             'sendor_id' => $this->_userProfile['id']
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         
@@ -631,24 +628,25 @@ class project_ch extends TZ_Admin_Controller {
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
         $condition['where'] = array(
             'sendor_id' => $this->_userProfile['id']
         );
         
         $condition['where_in'] = array(
-            array('key' => 'status' ,'value' => array('已布置','已实施','已提交'))
+          //array('key' => 'status' ,'value' => array('已布置','已实施','已完成','已提交初审','已提交'))  
+          array('key' => 'status' ,'value' => array('已布置','已实施','已完成','已提交'))
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         
         $this->display('index');
     }
     
-    /**
+     /**
      * 项目检查 
      */
     public function check(){
@@ -657,14 +655,14 @@ class project_ch extends TZ_Admin_Controller {
             $_GET['page'] = 1;
         }
         
-        $this->assign('action','implement');
+        $this->assign('action','check');
 
         //$condition['select'] = 'a,b';
         $condition['order'] = "createtime DESC,displayorder DESC";
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
         $condition['where'] = array(
             'sendor_id' => $this->_userProfile['id']
@@ -674,13 +672,12 @@ class project_ch extends TZ_Admin_Controller {
             array('key' => 'status' ,'value' => array('已完成'))
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         
         $this->display('index');
     }
-    
     
     
     /**
@@ -707,10 +704,10 @@ class project_ch extends TZ_Admin_Controller {
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         $this->display('index');
@@ -741,10 +738,10 @@ class project_ch extends TZ_Admin_Controller {
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         $this->display('index');
@@ -770,10 +767,10 @@ class project_ch extends TZ_Admin_Controller {
         $condition['pager'] = array(
             'page_size' => config_item('page_size'),
             'current_page' => $_GET['page'],
-            'query_param' => url_path('project_ch','index')
+            'query_param' => url_path('project_gh','index')
         );
 
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Project_Gh_Model->getList($condition);
         $this->assign('page',$data['pager']);
         $this->assign('data',$data);
         $this->display('index');
@@ -848,7 +845,7 @@ class project_ch extends TZ_Admin_Controller {
     public function detail(){
         
         $id = (int)gpc("id","GP",0);
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Project_Gh_Model->queryById($id);
         
         if(!$info){
             die("信息找不到");
@@ -917,7 +914,7 @@ class project_ch extends TZ_Admin_Controller {
         /**
          *项目类型 
          */
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '规划项目'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
         $this->assign('yearList',yearList());
@@ -930,16 +927,6 @@ class project_ch extends TZ_Admin_Controller {
          // add
         $_POST['user_id'] = $this->_userProfile['id'];
         $_POST['creator'] = $this->_userProfile['name'];
-
-        //$this->db->trans_start();
-        $master_serial = $this->Project_Model->getMaxByWhere('master_serial',array(
-            'year' => $year
-        ));
-
-        $region_serial = $this->Project_Model->getMaxByWhere('region_serial',array(
-            'year' => $year,
-            'region_code' => $_POST['region_code']
-        ));
 
         $regionName = $this->Region_Model->getList(array(
                 'select' => 'name',
@@ -956,12 +943,8 @@ class project_ch extends TZ_Admin_Controller {
             $_POST['region_name'] = '';
         }
         
-        $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
-        $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
-        $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
         
-        $insertid = $this->Project_Model->add($_POST);
-        //$this->db->trans_complete();
+        $insertid = $this->Project_Gh_Model->add($_POST);
         
         $this->_addProjectLog('workflow', $insertid,'新增',"{$this->_userProfile['name']} 新增项目,项目编号：{$_POST['project_no']}",$_POST);
         return $insertid;
@@ -979,32 +962,14 @@ class project_ch extends TZ_Admin_Controller {
                     
             $this->_addRules();
             if($this->form_validation->run()){
-                $info = $this->Project_Model->getById(array('where' => array('id' => $_POST['id'])));
-                //比较是否修改过年和区域，如果修改过的话 则用新记录代替
-                if($info['year'] != $_POST['year'] || $info['region_code'] != $_POST['region_code']){
-                    /**
-                     * 新记录建立 
-                     */
-                    $insertid = $this->_add($_POST['year']);
-                    /**
-                     * 原记录删除 
-                     */
-                    $this->Project_Model->fake_delete(array('id' => $_POST['id'],'updator' => $this->_userProfile['name']));
-                    $this->_addProjectLog('system',$_POST['id'],'删除',"修改原记录时修改了年或者区域，则原记录{$_POST['name']}删除，新记录id={$insertid}", $_POST);
-                    
-                    $info = $this->Project_Model->getById(array('where' => array('id' => $insertid)));
-                    
-                }else{
-                    //直接修改原记录
-                    $_POST['master_serial'] = $info['master_serial'];
-                    $_POST['region_serial'] = $info['region_serial'];
-                    $_POST['updator'] = $this->_userProfile['name'];
-                    $this->Project_Model->update($_POST);
-                    
-                    $this->_addProjectLog('system', $_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$info['project_no']} {$_POST['name']}",$_POST);
-                    
-                    $info = $this->Project_Model->getById(array('where' => array('id' => $_POST['id'])));
-                }
+                $info = $this->Project_Gh_Model->getById(array('where' => array('id' => $_POST['id'])));
+                
+                $_POST['updator'] = $this->_userProfile['name'];
+                $this->Project_Gh_Model->update($_POST);
+
+                $this->_addProjectLog('system', $_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$info['project_no']} {$_POST['name']}",$_POST);
+
+                $info = $this->Project_Gh_Model->getById(array('where' => array('id' => $_POST['id'])));
                 
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"修改成功");
@@ -1015,7 +980,7 @@ class project_ch extends TZ_Admin_Controller {
             }
         }else{
             $this->assign('gobackUrl',$_SERVER['HTTP_REFERER']);
-            $info = $this->Project_Model->getById(array('where' => array('id' => $_GET['id'])));
+            $info = $this->Project_Gh_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         
         $this->_initPageData($info['year']);
@@ -1031,7 +996,7 @@ class project_ch extends TZ_Admin_Controller {
     
     private function _doSend($action,$ids,$user){
         
-       $projectList = $this->Project_Model->getList(array(
+       $projectList = $this->Project_Gh_Model->getList(array(
             'where_in' => array(
                 array(
                     'key' => 'id', 'value' => $ids
@@ -1056,7 +1021,7 @@ class project_ch extends TZ_Admin_Controller {
                 'reason' => ''
             );
             
-            $return = $this->Project_Model->updateByWhere($data,array('id' => $id, 'status' => '新增'));
+            $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $id, 'status' => '新增'));
             if($return){
                 $event[] = $projectInfo[$id];
                 $this->_addProjectLog('workflow', $id,$action,"{$this->_userProfile['name']} {$action} {$projectInfo[$id]['project_no']} {$projectInfo[$id]['name']} 至 {$user['name']}",$data);
@@ -1071,7 +1036,7 @@ class project_ch extends TZ_Admin_Controller {
                     'project_id' => $value['id'],
                     'user_id' => $user['id'],
                     'title' => cut($value['name'],100),
-                    'url' => url_path('project_ch','task','id='.$value['id']),
+                    'url' => url_path('project_gh','task','id='.$value['id']),
                     'creator' => $this->_userProfile['name']
                 ));
             }
@@ -1079,44 +1044,6 @@ class project_ch extends TZ_Admin_Controller {
         
         return array('success' => $event, 'failed' => $failed);
     }
-    
-    /**
-     * 退回 
-     */
-    /**
-    public function tuihui(){
-        $ids =  gpc('id','GP',array());
-        if(empty($ids)){
-            die("参数错误,请重新请求");
-        }
-        if(!is_array($ids)){
-            $ids = (array)$ids;
-        }
-        
-        $this->assign("id",$ids);
-        
-        if($this->isPostRequest() && !empty($_POST['id'])){
-            
-            
-            $this->assign('reload',0);
-            $this->assign('message','测试');
-            $this->display('showMessage','common');
-            
-        }else{
-            $projectList = $this->Project_Model->getList(array(
-                'where_in' => array(
-                    array(
-                        'key' => 'id', 'value' => $ids
-                    )
-                )
-            ));
-            
-            $this->assign('projectList',$projectList['data']);
-            $this->display();
-        }
-    }
-     * 
-     */
     
     
     public function sendOne(){
@@ -1184,7 +1111,7 @@ class project_ch extends TZ_Admin_Controller {
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
-                'query_param' => url_path('project_ch','index')
+                'query_param' => url_path('project_gh','index')
             );
             if(!empty($_GET['name'])){
                 $condition['like'] = array('name' => $_GET['name']);
@@ -1201,7 +1128,7 @@ class project_ch extends TZ_Admin_Controller {
                 $condition['where']['user_id'] = $this->_userProfile['id'];
             }
             
-            $data = $this->Project_Model->getList($condition);
+            $data = $this->Project_Gh_Model->getList($condition);
             $this->assign('page',$data['pager']);
             $this->assign('data',$data);
             

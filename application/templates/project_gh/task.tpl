@@ -1,5 +1,5 @@
 {include file="common/main_header.tpl"}
-        {include file="project_ch/modlist.tpl"}
+        {include file="project_gh/modlist.tpl"}
         {*{include file="common/ke.tpl"}*}
         
         <style>
@@ -28,15 +28,11 @@
             
         </style>    
         <div>
-            <form name="saveForm" action="{url_path('project_ch','task')}" method="post">
+            <form name="saveForm" action="{url_path('project_gh','task')}" method="post">
                 <input type="hidden" name="event_id" value="{$info['event_id']}"/>
                 <input type="hidden" name="id" value="{$info['id']}"/>
                 <table class="maintain border1">
                     <tbody>
-                    <tr>
-                        <td>项目编号</td>
-                        <td>{$info['project_no']}</td>
-                    </tr>
                     <tr>
                         <td>录入类型</td>
                         <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}补录登记{/if}</td>

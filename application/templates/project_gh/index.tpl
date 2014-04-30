@@ -1,8 +1,8 @@
 {include file="common/main_header.tpl"}
             {if $action == 'index'}
             <div class="searchform row-fluid">
-                <form action="{url_path('project_ch')}" method="get" name="searchform">
-                    <input type="hidden" value="project_ch" name="{config_item('controller_trigger')}"/>
+                <form action="{url_path('project_gh')}" method="get" name="searchform">
+                    <input type="hidden" value="project_gh" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
@@ -37,7 +37,7 @@
                      </ul>
                 </form>
             </div>
-            {/if}
+            {/if}                
             <div class="span12">
                 
                 {if $action == 'send' }
@@ -54,7 +54,6 @@
                     <thead>
                         <tr>
                             {if $action == 'send' }<th></th>{/if}
-                            <th>登记编号</th>
                             <th>登记名称</th>
                             <th>类型</th>
                             <th>状态</th>
@@ -71,10 +70,9 @@
                            {if $action == 'send' }
                            <td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>
                            {/if}
-                           <td>{$item['project_no']}</td>
                            <td>
                            {if $action}
-                           <a href="{url_path('project_ch','task','id=')}{$item['id']}">{$item['name']|escape}</a>
+                           <a href="{url_path('project_gh','task','id=')}{$item['id']}">{$item['name']|escape}</a>
                            {else}
                            <a href="javascript:void(0);" class="info" data-id="{$item['id']}">{$item['name']|escape}</a>
                            {/if}
@@ -88,12 +86,12 @@
                            <td>
                                {if $action == 'send' }
                                 {if $item['status'] == '新增' && $item['user_id'] == $userProfile['id']}
-                                <a href="{url_path('project_ch','edit','id=')}{$item['id']}">编辑</a>
+                                <a href="{url_path('project_gh','edit','id=')}{$item['id']}">编辑</a>
                                 {/if}
                                {/if}
                                
                                {if $action == 'implement'}
-                               <a class="addlog" href="javascript:void(0);" data-id="{$item['id']}" data-href="{url_path('project_ch','log','id=')}{$item['id']}">添加日志</a>
+                               <a class="addlog" href="javascript:void(0);" data-id="{$item['id']}" data-href="{url_path('project_gh','log','id=')}{$item['id']}">添加日志</a>
                                {/if}
                             </td>
                             
@@ -134,7 +132,7 @@
                         $.jBox.error('至少选择一条记录', '提示');
                     }else{
                         var param = $("form[name=listform]").serialize();
-                        $.jBox("get:{url_path('project_ch','tuihui')}" + '&' + param,{ title:"退回",width:500,buttons:{ } });
+                        $.jBox("get:{url_path('project_gh','tuihui')}" + '&' + param,{ title:"退回",width:500,buttons:{ } });
                     }
                 }
                 *}
@@ -151,18 +149,18 @@
                         $.jBox.error('至少选择一条记录', '提示');
                     }else{
                         var param = $("form[name=listform]").serialize();
-                        $.jBox("get:{url_path('project_ch','sendOne')}" + '&' + param,{ title:"发送",width:300,buttons:{ } });
+                        $.jBox("get:{url_path('project_gh','sendOne')}" + '&' + param,{ title:"发送",width:300,buttons:{ } });
                     }
                 }
                 
                 $(function(){
-                    $("a.info").bind("click",function(e){
-                        $.jBox("get:{url_path('project_ch','detail','id=')}" + $(e.target).attr("data-id"),{ title:"测绘项目详情",width:800,height:600});
+                    $("a.addlog").bind("click",function(e){
+                        $.jBox("get:{url_path('project_gh','log','id=')}" + $(e.target).attr("data-id"),{ title:"添加项目日志",width:600,height:600});
                     });
                     
                     
-                    $("a.addlog").bind("click",function(e){
-                        $.jBox("get:{url_path('project_ch','log','id=')}" + $(e.target).attr("data-id"),{ title:"添加项目日志",width:600,height:600});
+                    $("a.info").bind("click",function(e){
+                        $.jBox("get:{url_path('project_gh','detail','id=')}" + $(e.target).attr("data-id"),{ title:"规划项目详情",width:800,height:600});
                     });
                 });
                 

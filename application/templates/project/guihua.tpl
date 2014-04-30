@@ -8,12 +8,15 @@
         <dt onClick='showHide("items2_1")'><b>规划项目</b></dt>
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
-              {*
-            <li><a href="{url_path('my_event')}">项目登记</a></li>
-            <li><a href="{url_path('pm')}">项目布置</a></li>
-            <li><a href="{url_path('my_schedule')}">项目进度</a></li>
-            <li><a href="{url_path('my_file')}">项目查询</a></li>
-            *}
+            <li><a href="{url_path('project_gh','add')}">项目登记</a></li>
+            <li><a href="{url_path('project_gh','send')}">项目发送</a></li>
+            <li><a href="{url_path('project_gh','dispatch')}">项目布施</a></li>
+            <li><a href="{url_path('project_gh','implement')}">项目实施</a></li>
+            <li><a href="{url_path('project_gh','check')}">项目质检</a></li>
+            <li><a href="{url_path('project_gh','first_sh')}">项目初审</a></li>
+            <li><a href="{url_path('project_gh','second_sh')}">项目复审</a></li>
+            <li><a href="{url_path('project_gh','fee')}">项目收费</a></li>
+            <li><a href="{url_path('project_gh')}">项目查询</a></li>
           </ul>
         </dd>
       </dl>

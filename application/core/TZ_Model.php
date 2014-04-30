@@ -147,6 +147,13 @@ class TZ_Model extends CI_Model {
             if($condition['where']){
                 $this->db->where($condition['where']);
             }
+            
+            if($condition['where_in']){
+                foreach($condition['where_in'] as $val){
+                    $this->db->where_in($val['key'],$val['value']);
+                }
+            }
+            
             if($condition['like']){
                 $this->db->like($condition['like']);
             }

@@ -180,7 +180,10 @@
 }
 
 .maintain {
-    
+}
+
+.maintain.border1 td , .maintain.border1 th {
+    border:1px solid black;
 }
 
 .maintain .required , .maintain .optional {
@@ -430,6 +433,10 @@ ol.style_decimal , ul.style_decimal {
  
  
 .moditem .modaction {
+    color:blue;
+}
+
+.moditem .action_failed {
     color:red;
 }
 

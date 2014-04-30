@@ -1,9 +1,9 @@
 <?php
 
 
-class Project_Model extends TZ_Model {
+class Project_Gh_Model extends TZ_Model {
     
-    public $_tableName = 'tb_project';
+    public $_tableName = 'tb_project_gh';
     
     public function __construct(){
         parent::__construct();
@@ -14,13 +14,10 @@ class Project_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'project_no' => $param['project_no'],
             'year' => $param['year'],
             'month' => $param['month'],
             'region_code' => strtoupper($param['region_code']),
             'region_name' => $param['region_name'],
-            'master_serial' => $param['master_serial'],
-            'region_serial' => $param['region_serial'],
             'name' => $param['name'],
             'type' => $param['type'],
             'village' => $param['village'],
