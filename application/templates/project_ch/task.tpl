@@ -26,32 +26,33 @@
                 
             }
             
-        </style>    
-        <div>
+        </style>
+        <div id="flowbar">
+            {foreach from=$statusHtml item=item}
+              {$item}  
+            {/foreach}
+        </div>
+        <div class="project_detail">
             <form name="saveForm" action="{url_path('project_ch','task')}" method="post">
                 <input type="hidden" name="event_id" value="{$info['event_id']}"/>
                 <input type="hidden" name="id" value="{$info['id']}"/>
                 <table class="maintain border1">
                     <tbody>
                     <tr>
-                        <td>项目编号</td>
+                        <td>流水号</td>
                         <td>{$info['project_no']}</td>
-                    </tr>
-                    <tr>
                         <td>录入类型</td>
                         <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}补录登记{/if}</td>
                     </tr>
                     <tr>
                         <td>登记年月</td>
                         <td>{$info['year']}年{$info['month']}月份</td>
-                    </tr>
-                    <tr>
                         <td>区域</td>
                         <td>{$info['region_name']}</td>
                     </tr>
                     <tr>
                         <td>登记类型</td>
-                        <td>{$info['type']}</td>
+                        <td colspan="3">{$info['type']}</td>
                     </tr>
                     {if in_array($info['status'],array('已通过复审', '已提交'))} 
                     <tr>
@@ -61,8 +62,6 @@
                         {else}
                         <td>{$info['title']}</td>
                         {/if}
-                    </tr>
-                    <tr>
                         <td>项目面积</td>
                         {if $info['status'] != '已提交'}
                         <td><input type="text" name="area" value="{$info['area']}" placeholder="请填写项目面积" style="width:150px;"/>{form_error('area')}</td>
@@ -73,50 +72,51 @@
                     {/if}
                     <tr>
                         <td>登记名称</td>
-                        <td>{$info['name']|escape}</td>
+                        <td colspan="3">{$info['name']|escape}</td>
                     </tr>
                     <tr>
                         <td>地址</td>
-                        <td>{$info['address']|escape}</td>
+                        <td colspan="3">{$info['address']|escape}</td>
                     </tr>
                     <tr>
                         <td>村名</td>
                         <td>{$info['village']|escape}</td>
+                        <td>目项来源</td>
+                        <td>{$info['source']|escape}</td>
+                        
                     </tr>
                     <tr>
                         <td>联系单位名称</td>
                         <td>{$info['union_name']|escape}</td>
-                    </tr>
-                    <tr>
-                        <td>目项来源</td>
-                        <td>{$info['source']|escape}</td>
-                    </tr>
-                    <tr>
+                   
                         <td>联系人信息</td>
-                        <td>姓名:{$info['contacter']|escape} 手机号码:{$info['contacter_mobile']} 固定电话:{$info['contacter_tel']}</td>
+                        <td><p>姓名:{$info['contacter']|escape}</p><p>手机号码:{$info['contacter_mobile']}</p><p>固定电话:{$info['contacter_tel']}</p></td>
                     </tr>
                     <tr>
                         <td>接洽人信息</td>
-                        <td>姓名:{$info['manager']|escape} 手机号码:{$info['manager_mobile']} 固定电话:{$info['manager_tel']}</td>
-                    </tr>
-                    <tr>
+                        <td><p>姓名:{$info['manager']|escape}</p><p>手机号码:{$info['manager_mobile']}</p><p>固定电话:{$info['manager_tel']}</p></td>
+                    
                         <td>备注</td>
                         <td>{$info['descripton']}</td>
                     </tr>
                     <tr>
                         <td>优先级</td>
                         <td>{$info['displayorder']}</td>
-                    </tr>
-                    <tr>
+                    
                         <td>登记信息</td>
                         <td>登记人姓名:{$info['creator']} 登记时间：{$info['createtime']|date_format:"Y-m-d H:i:s"}</td>
                     </tr>
                     {*
                     <tr>
-                        <td><label class="optional"><em></em><strong>最后修改</strong></label></td>
+                        <td>最后修改</td>
                         <td>修改人：{$info['updator']} 修改时间:{$info['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                     </tr>
                     *}
+                 </tbody>
+                </table>
+                    
+               <table  class="maintain border1">
+               <tbody>
                     <tr>
                         <td>测绘项目负责人</td>
                         <td>{$info['pm']}</td>
@@ -211,7 +211,7 @@
                     <tr>
                         <td>实施备注</td>
                         <td>
-                            <textarea name="ss_remark" rows="8" cols="50">{$info['ss_remark']|escape}</textarea>
+                            <textarea name="ss_remark" style="width: 500px; height: 150px;">{$info['ss_remark']|escape}</textarea>
                             <br/>
                             {form_error('ss_remark')}
                         </td>
@@ -256,7 +256,104 @@
                         </td>
                     </tr>
                     {/if}
+                    <tr>
+                        <td>自查主要意见</td>
+                        <td>
+                            {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
+                            <textarea style="width: 500px; height: 100px;" name="zc_yj">{$info['zc_yj']|escape}</textarea>
+                            <div>{form_error('zc_yj')}</div>
+                            {else}
+                                {$info['zc_yj']|escape}
+                             {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>自查修改和处理意见、说明</td>
+                        <td>
+                            {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
+                            <textarea style="width: 500px; height: 100px;" name="zc_remark">{$info['zc_remark']|escape}</textarea>
+                            <div>{form_error('zc_remark')}</div>
+                            {else}
+                                {$info['zc_remark']|escape}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>初审意见</td>
+                        <td>
+                            {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
+                            <textarea style="width: 500px; height: 100px;" name="cs_yj">{$info['cs_yj']|escape}</textarea>
+                            <div>{form_error('cs_yj')}</div>
+                            {else}
+                               {$info['cs_yj']|escape} 
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>初审修改和处理意见、说明</td>
+                        <td>
+                            {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
+                            <textarea style="width: 500px; height: 100px;" name="cs_remark">{$info['cs_remark']|escape}</textarea>
+                            <div>{form_error('cs_remark')}</div>
+                            {else}
+                                {$info['cs_remark']|escape} 
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>复审意见</td>
+                        <td>
+                            {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
+                            <textarea style="width: 500px; height: 100px;" name="fs_yj">{$info['fs_yj']|escape}</textarea>
+                            <div>{form_error('fs_yj')}</div>
+                            {else}
+                                {$info['fs_yj']|escape} 
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>复审修改和处理意见、说明</td>
+                        <td>
+                            {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
+                            <textarea style="width: 500px; height: 100px;" name="fs_remark">{$info['fs_remark']|escape}</textarea>
+                            <div>{form_error('fs_remark')}</div>
+                            {else}
+                                {$info['fs_remark']|escape} 
+                            {/if}
+                        </td>
+                    </tr>
                     
+                    <tr>
+                        
+                    
+                    </tr>
+                    
+                    
+                    {*
+                    {if $info['type'] == '日常宗地'}
+                    <tr>
+                        <td>请填写表格数据</td>
+                        <td>
+                            <p>
+                                <input type="hidden" name="doc_zddj" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地勘测定界成果报告" data-href="{url_path('project_ch','doc','categroy=zddj&id=')}{$info['id']}">宗地勘测定界成果报告</a>
+                                <div>{form_error('doc_zddj')}</div>
+                            </p>
+                            <p>
+                                <input type="hidden" name="doc_zdmj" value=""/><a class="docs" href="javascript:void(0);" data-title="土地面积分类表" data-href="{url_path('project_ch','doc','categroy=zdmj&id=')}{$info['id']}">土地面积分类表</a>
+                                <div>{form_error('doc_zdmj')}</div>
+                            </p>
+                            <p>
+                                <input type="hidden" name="doc_zdjz" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地界址调查表" data-href="{url_path('project_ch','doc','categroy=zdjz&id=')}{$info['id']}">宗地界址调查表</a>
+                                <div>{form_error('doc_zdjz')}</div>
+                            </p>
+                            <p>
+                                <input type="hidden" name="doc_zdbg" value=""/><a class="docs" href="javascript:void(0);" data-title="土地勘测定界成果变更情况表" data-href="{url_path('project_ch','doc','categroy=zdbg&id=')}{$info['id']}">土地勘测定界成果变更情况表</a>
+                                <div>{form_error('doc_zdbg')}</div>
+                            </p>
+                        </td>
+                    </tr>   
+                    {/if}
+                    *}
                     {if in_array($info['status'],array('新增', '已发送', '已实施',  '已完成', '已通过初审','已通过复审','已提交'))}
                     <tr>
                         <td>发送给</td>
@@ -292,6 +389,12 @@
                             $.jBox.tip('{$message}');
                         {/if}
                             
+                            {*
+                        $("a.docs").bind("click",function(e){
+                            $.jBox("get:" + $(e.target).attr("data-href"),{ title:$(e.target).attr("data-title"),width:1000,height:600});
+                        });
+                            *}
+                        
                         $(".Uploader").each(function(index){
                             var handler = {
                                 success:function(file,serverData){

@@ -203,6 +203,12 @@ class project_ch extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '完成'){
+                    /*
+                    $this->form_validation->set_rules('doc_zddj', '宗地勘测定界成果报告', 'required');
+                    $this->form_validation->set_rules('doc_zdmj', '土地面积分类表', 'required');
+                    $this->form_validation->set_rules('doc_zdjz', '宗地界址调查表', 'required');
+                    $this->form_validation->set_rules('doc_zdbg', '土地勘测定界成果变更情况表', 'required');
+                     */
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
@@ -210,14 +216,23 @@ class project_ch extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '提交初审'){
+                    $this->form_validation->set_rules('zc_yj', '自查意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
+                        $info['zc_yj'] = $_POST['zc_yj'];
+                        $info['zc_remark'] = $_POST['zc_remark'];
                         break;
                     }
                     
                 }elseif($op == '通过初审'){
+                    $this->form_validation->set_rules('cs_yj', '初审意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'required|max_length[300]');
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
+                        $info['cs_yj'] = $_POST['cs_yj'];
+                        $info['cs_remark'] = $_POST['cs_remark'];
                         break;
                     }
                 }elseif($op == '提交复审'){
@@ -228,8 +243,12 @@ class project_ch extends TZ_Admin_Controller {
                         break;
                     }
                 }elseif($op == '通过复审'){
+                    $this->form_validation->set_rules('fs_yj', '复审意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'required|max_length[300]');
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
+                        $info['fs_yj'] = $_POST['fs_yj'];
+                        $info['fs_remark'] = $_POST['fs_remark'];
                         break;
                     }
                 }elseif($op == '提交'){
@@ -269,6 +288,34 @@ class project_ch extends TZ_Admin_Controller {
             $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
         }
         
+        $status = array(
+            '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '提交','提交收费','归档'
+        );
+        
+        $statusKey = array_keys($status);
+        $currentKey = 0;
+        
+        //print_r($statusKey);
+        foreach($statusKey as $v){
+            if($status[$v] == str_replace('已','',$info['status'])){
+                $currentKey = $v;
+            }
+        }
+
+        $statusHtml = array();
+        foreach($status as $k => $v){
+            if($k < $currentKey){
+                $statusHtml[] = '<span class="status statusover">'.$v."</span>";
+                
+            }elseif($k == $currentKey){
+                $statusHtml[] = '<span class="status current">'.$v."</span>";
+                
+            }else{
+                $statusHtml[] = '<span class="status">'.$v."</span>";
+            }
+        }
+        
+        $this->assign('statusHtml',$statusHtml);
         $info['event_id'] = $event_id;
         $this->assign('message',$message);
         $this->assign('info',$info);
@@ -442,6 +489,8 @@ class project_ch extends TZ_Admin_Controller {
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time(),
+                        'zc_yj' => $param['zc_yj'],
+                        'zc_remark' => $param['zc_remark'],
                         'files' => implode(',',$param['file_id'])
                     );
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成'));
@@ -455,7 +504,9 @@ class project_ch extends TZ_Admin_Controller {
                     $data = array(
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
-                        'updatetime' => time()
+                        'updatetime' => time(),
+                        'cs_yj' => $param['cs_yj'],
+                        'cs_remark' => $param['cs_remark'],
                     );
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审'));
                     if($return){
@@ -1160,6 +1211,30 @@ class project_ch extends TZ_Admin_Controller {
             $this->display();
         }
     }
+    
+    /**
+     * 
+     */
+    public function doc(){
+        
+        $cate = gpc('categroy','GP','');
+        $id = gpc('id','GP',0);
+        
+        if(!$id){
+            die("参数非法");
+        }
+        
+        if(!$cate){
+            die("文档分类非法");
+        }
+        
+        $info = $this->Project_Model->queryById($id);
+        
+        $this->assign('info',$info);
+        $this->display($cate,'doc');
+    }
+    
+    
     
     private function _getSendorList(){
         $userSendorList = $this->User_Sendor_Model->getList(array(

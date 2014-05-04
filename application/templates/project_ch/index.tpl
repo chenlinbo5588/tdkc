@@ -54,7 +54,7 @@
                     <thead>
                         <tr>
                             {if $action == 'send' }<th></th>{/if}
-                            <th>登记编号</th>
+                            <th>流水号</th>
                             <th>登记名称</th>
                             <th>类型</th>
                             <th>状态</th>

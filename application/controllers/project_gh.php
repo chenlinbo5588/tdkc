@@ -266,6 +266,35 @@ class project_gh extends TZ_Admin_Controller {
         }
         
         
+        $status = array(
+            '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '提交','提交收费','归档'
+        );
+        
+        $statusKey = array_keys($status);
+        $currentKey = 0;
+        
+        //print_r($statusKey);
+        foreach($statusKey as $v){
+            if($status[$v] == str_replace('已','',$info['status'])){
+                $currentKey = $v;
+            }
+        }
+
+        $statusHtml = array();
+        foreach($status as $k => $v){
+            if($k < $currentKey){
+                $statusHtml[] = '<span class="status statusover">'.$v."</span>";
+                
+            }elseif($k == $currentKey){
+                $statusHtml[] = '<span class="status current">'.$v."</span>";
+                
+            }else{
+                $statusHtml[] = '<span class="status">'.$v."</span>";
+            }
+        }
+        
+        $this->assign('statusHtml',$statusHtml);
+        
         $info['event_id'] = $event_id;
         $this->assign('message',$message);
         $this->assign('info',$info);

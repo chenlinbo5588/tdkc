@@ -182,7 +182,7 @@
 .maintain {
 }
 
-.maintain.border1 td , .maintain.border1 th {
+.border1 td , .border1 th {
     border:1px solid black;
 }
 
@@ -413,14 +413,14 @@ ol.style_decimal , ul.style_decimal {
  * 项目操作日志
  */
 #proj_modpanel {
-    position: absolute;
+    position: fixed;
     right: 20px;
     width: 400px;
     border: 1px solid #c7c7c7;
     background: #ddd;
     padding:5px;
 }
- 
+
 #proj_modpanel .panel_list {
     max-height: 600px;
     _height:600px;
@@ -446,4 +446,48 @@ ol.style_decimal , ul.style_decimal {
  
 .workflow {
      background:rgb(238, 238, 238);
+}
+
+#flowbar {
+    position: fixed;
+    width:900px;
+    top:0px;
+    left:20px;
+    background: #fff;
+}
+
+#flowbar span {
+    color:#ACACAC;
+    font-size: 16px;
+    padding: 0 8px;
+}
+
+#flowbar .statusover {
+    color: #4bae10;
+    1background:url(../img/flow.png) no-repeat;
+}
+
+#flowbar .current {
+    color: red;
+}
+
+
+.project_detail {
+    width:900px;
+    margin:10px 0 0 0;
+}
+
+.project_detail .maintain {
+    width:100%;
+    margin:0 0 10px 0;
+}
+
+
+.doc table {
+    width: 100%;
+    
+}
+
+.doc th,.doc td {
+    padding:5px 2px;
 }

@@ -26,7 +26,12 @@
                 
             }
             
-        </style>    
+        </style>
+        <div id="flowbar">
+            {foreach from=$statusHtml item=item}
+              {$item}  
+            {/foreach}
+        </div>
         <div>
             <form name="saveForm" action="{url_path('project_gh','task')}" method="post">
                 <input type="hidden" name="event_id" value="{$info['event_id']}"/>

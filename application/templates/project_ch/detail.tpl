@@ -2,7 +2,7 @@
                 <table class="maintain">
                     <tbody>
                     <tr>
-                        <td><label class="required"><em></em><strong>项目编号</strong></label></td>
+                        <td><label class="required"><em></em><strong>流水号</strong></label></td>
                         <td>{$info['project_no']}</td>
                     </tr>
                     <tr>
