@@ -60,8 +60,7 @@ class project_ch extends TZ_Admin_Controller {
             'where' => array(
                 'project_id' => $project['id'],
                 'action' => $operaion,
-                'type !=' => 'system',
-                'user_id !=' => $this->_userProfile['id'],
+                'type !=' => 'system'
             ),
             'order' => 'createtime DESC'
         ));
@@ -136,6 +135,15 @@ class project_ch extends TZ_Admin_Controller {
                 
                 if($op == '退回'){
                     $this->form_validation->set_rules('reason', '退回原因', 'required|min_length[3]|htmlspecialchars');
+                    if($info['status'] == '已提交复审'){
+                        $this->form_validation->set_rules('fault[]', '缺陷信息', 'required');
+                    }
+                    
+                    if(!$this->form_validation->run()){
+                        $info['reason'] = $_POST['reason'];
+                        break;
+                    }
+                    
                     if($info['status'] == '已发送'){
                         $lastOpName = '新增';//前面那个操作名称
                         $lastStatus = '新增';
@@ -298,7 +306,7 @@ class project_ch extends TZ_Admin_Controller {
         //print_r($statusKey);
         foreach($statusKey as $v){
             if($status[$v] == str_replace('已','',$info['status'])){
-                $currentKey = $v;
+                $currentKey = $v + 1;
             }
         }
 
@@ -309,11 +317,47 @@ class project_ch extends TZ_Admin_Controller {
                 
             }elseif($k == $currentKey){
                 $statusHtml[] = '<span class="status current">'.$v."</span>";
-                
             }else{
                 $statusHtml[] = '<span class="status">'.$v."</span>";
             }
         }
+        
+        
+        if($info['status'] == '已提交复审'){
+            
+            $this->load->model('Fault_Model');
+            $sysFaultList = $this->Fault_Model->getList(array(
+                'order' => 'type ASC,level DESC'
+            ));
+            
+            $tmpFaultList = array();
+            foreach($sysFaultList['data'] as $v){
+                if(!isset($tmpFaultList[$v['type']])){
+                    $tmpFaultList[$v['type']] = array(
+                        'title' => $v['typename'],
+                        'list' => array()
+                    );
+                    $tmpFaultList[$v['type']]['list'][] = $v;
+                }else{
+                    $tmpFaultList[$v['type']]['list'][] = $v;
+                }
+            }
+            
+            $this->assign('sysFaultList',$tmpFaultList);
+        }
+        
+        
+        $this->load->model('Project_Fault_Model');
+
+        $userFaultList = $this->Project_Fault_Model->getList(array(
+            'where' => array(
+                'type' => 0,
+                'project_id' => $info['id'],
+                'status' => 0
+            )
+        ));
+        $this->assign('userFaultList',$userFaultList['data']);
+       
         
         $this->assign('statusHtml',$statusHtml);
         $info['event_id'] = $event_id;
@@ -364,7 +408,42 @@ class project_ch extends TZ_Admin_Controller {
             //file_put_contents("debug.txt",print_r($info,true));
             //file_put_contents("debug.txt",print_r($data,true),FILE_APPEND);
 
-            $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status']));
+            if($info['status'] == '已提交复审'){
+                $this->load->model('Project_Fault_Model');
+                $this->load->model('Fault_Model');
+                $this->Project_Fault_Model->updateByWhere(array('status' => 1),array(
+                    'type' => 0,
+                    'project_id' => $info['id'],
+                    'status' => 0
+                ));
+                
+                //print_r($param);
+                
+                $sysFaultList = $this->Fault_Model->getList(array(
+                    'where_in' => array(
+                        array('key' => 'code','value' => $param['fault'])
+                    )
+                ));
+                $insertData = array();
+                
+                foreach($sysFaultList['data'] as $fkey => $fvalue){
+                    $insertData[] = array(
+                        'type' => 0,
+                        'project_id' => $info['id'],
+                        'fault_code' => $fvalue['code'],
+                        'fault_name' => $fvalue['name'],
+                        'remark' => !empty($param[strtoupper($fvalue['code']).'_remark']) ? $param[strtoupper($fvalue['code']).'_remark'] : '',
+                        'score' => (double)$fvalue['score'],
+                        'creator' => $this->_userProfile['name'],
+                        'updator' => $this->_userProfile['name'],
+                        'createtime' => time(),
+                        'updatetime' => time()
+                    );
+                }
+                $this->Project_Fault_Model->batchInsert($insertData);
+            }
+            
+            $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status'],'sendor_id' => $this->_userProfile['id']));
 
             if($return){
                 $this->_addProjectLog('workflow', $info['id'],'退回',"{$this->_userProfile['name']} 退回 {$info['project_no']} {$info['name']} 至 {$lastUser['creator']},退回原因:<span class=\"notice\">{$param['reason']}</span>",$data);
@@ -406,7 +485,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
@@ -417,6 +496,7 @@ class project_ch extends TZ_Admin_Controller {
                 case '布置':
                     $sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
+                        /* 被布置的人 */
                         'pm_id' => $sendorInfo['id'],
                         'pm' => $sendorInfo['name'],
                         'sendor_id' => $sendorInfo['id'],
@@ -430,7 +510,7 @@ class project_ch extends TZ_Admin_Controller {
                         'bz_remark' => $param['bz_remark']
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
@@ -453,7 +533,7 @@ class project_ch extends TZ_Admin_Controller {
                         'ss_remark' => $param['ss_remark']
                     );
 
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置','sendor_id' => $this->_userProfile['id']));
                     
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
@@ -473,7 +553,7 @@ class project_ch extends TZ_Admin_Controller {
                         'files' => implode(',',$param['file_id'])
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -489,11 +569,13 @@ class project_ch extends TZ_Admin_Controller {
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time(),
+                        'zc_time' => time(),
+                        'zc_name' => $this->_userProfile['name'],
                         'zc_yj' => $param['zc_yj'],
                         'zc_remark' => $param['zc_remark'],
                         'files' => implode(',',$param['file_id'])
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -505,10 +587,12 @@ class project_ch extends TZ_Admin_Controller {
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time(),
+                        'cs_time' => time(),
+                        'cs_name' => $this->_userProfile['name'],
                         'cs_yj' => $param['cs_yj'],
                         'cs_remark' => $param['cs_remark'],
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
                         $eventReaded = true;
@@ -524,7 +608,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time(),
                         'files' => implode(',',$param['file_id'])
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -535,9 +619,13 @@ class project_ch extends TZ_Admin_Controller {
                     $data = array(
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
-                        'updatetime' => time()
+                        'updatetime' => time(),
+                        'fs_time' => time(),
+                        'fs_name' => $this->_userProfile['name'],
+                        'fs_yj' => $param['fs_yj'],
+                        'fs_remark' => $param['fs_remark'],
                     );
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
                         $eventReaded = true;
@@ -555,7 +643,7 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                     
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审'));
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -564,6 +652,9 @@ class project_ch extends TZ_Admin_Controller {
                     
                     break;
                 case '收费':
+                    /**
+                     * @todo 待完成  
+                     */
                     
                     break;
                 default:
@@ -889,7 +980,16 @@ class project_ch extends TZ_Admin_Controller {
     
     
     private function _formatProjectNo($year,$regionCode,$masterSerial,$regionSerial){
-        return strtoupper($regionCode).$year."-".$masterSerial."-".strtoupper($regionCode).$regionSerial;
+        
+        if($masterSerial < 1000){
+            $masterSerial = str_pad($masterSerial, 3,'0', STR_PAD_LEFT);
+        }
+
+        if($regionSerial < 1000){
+            $regionSerial = str_pad($regionSerial, 3,'0', STR_PAD_LEFT);
+        }
+        
+        return 'A'.$year."-".$masterSerial."-".strtoupper($regionCode).$regionSerial;
     }
     
     

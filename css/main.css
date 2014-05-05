@@ -1,3 +1,37 @@
+.fix {
+    position:fixed;
+}
+
+.fixbottom {
+    position:fixed;
+    bottom:0px;
+    width:100%;
+    height:20px;
+    padding:5px;
+    text-align: center;
+    background: #E0F8D9;
+}
+
+.backToTop {
+    background: #000;
+    display: none;
+    width: 18px;
+    line-height: 1.2;
+    padding: 5px 0;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    position: fixed;
+    _position: absolute;
+    right: 10px;
+    bottom: 100px;
+    _bottom: "auto";
+    cursor: pointer;
+    opacity: .6;
+    filter: Alpha(opacity=60);
+}
+
+
 .file_icon {
     background: url(../img/fileico_v4.png);
     background-position: 0 0;
@@ -414,7 +448,7 @@ ol.style_decimal , ul.style_decimal {
  */
 #proj_modpanel {
     position: fixed;
-    right: 20px;
+    right: 35px;
     width: 400px;
     border: 1px solid #c7c7c7;
     background: #ddd;
@@ -453,7 +487,8 @@ ol.style_decimal , ul.style_decimal {
     width:900px;
     top:0px;
     left:20px;
-    background: #fff;
+    background: black;
+    z-index:3;
 }
 
 #flowbar span {
@@ -464,7 +499,6 @@ ol.style_decimal , ul.style_decimal {
 
 #flowbar .statusover {
     color: #4bae10;
-    1background:url(../img/flow.png) no-repeat;
 }
 
 #flowbar .current {
@@ -475,13 +509,34 @@ ol.style_decimal , ul.style_decimal {
 .project_detail {
     width:900px;
     margin:10px 0 0 0;
+    position:relative;
 }
 
 .project_detail .maintain {
     width:100%;
-    margin:0 0 10px 0;
+    margin:0 0 20px 0;
 }
 
+.project_detail .maintain caption {
+    background: #ccc;
+    border: 1px solid black;
+    border-width: 1px 1px 0 1px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#project_nav {
+    position:absolute;
+    width:30px;
+    right:-30px;
+}
+
+#project_nav li {
+    border:1px solid black;
+    border-width:1px 1px 1px 0;
+    margin:2px 0;
+}
 
 .doc table {
     width: 100%;

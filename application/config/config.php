@@ -362,7 +362,7 @@ $config['validation_error'] = 'validate_error';
 $config['default_password'] = '123456';
 
 //@todo modify
-$config['page_size'] = 2;
+$config['page_size'] = 5;
 
 $config['fileicon_path'] = '/img/filetype';
 $config['filestore_path'] = '/filestore/';

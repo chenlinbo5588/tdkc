@@ -12,7 +12,7 @@
             <li><a href="{url_path('project_gh','send')}">项目发送</a></li>
             <li><a href="{url_path('project_gh','dispatch')}">项目布施</a></li>
             <li><a href="{url_path('project_gh','implement')}">项目实施</a></li>
-            <li><a href="{url_path('project_gh','check')}">项目质检</a></li>
+            <li><a href="{url_path('project_gh','check')}">项目自查</a></li>
             <li><a href="{url_path('project_gh','first_sh')}">项目初审</a></li>
             <li><a href="{url_path('project_gh','second_sh')}">项目复审</a></li>
             <li><a href="{url_path('project_gh','fee')}">项目收费</a></li>

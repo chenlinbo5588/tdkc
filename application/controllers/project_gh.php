@@ -56,8 +56,7 @@ class project_gh extends TZ_Admin_Controller {
             'where' => array(
                 'project_id' => $project['id'],
                 'action' => $operaion,
-                'type !=' => 'system',
-                'user_id !=' => $this->_userProfile['id'],
+                'type !=' => 'system'
             ),
             'order' => 'createtime DESC'
         ));
@@ -206,12 +205,17 @@ class project_gh extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '提交初审'){
+                    $this->form_validation->set_rules('zc_yj', '自查意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'required|max_length[300]');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
                         break;
                     }
                     
                 }elseif($op == '通过初审'){
+                    $this->form_validation->set_rules('cs_yj', '初审意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'required|max_length[300]');
+                    
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
                         break;
@@ -224,6 +228,9 @@ class project_gh extends TZ_Admin_Controller {
                         break;
                     }
                 }elseif($op == '通过复审'){
+                    $this->form_validation->set_rules('fs_yj', '复审意见', 'required|max_length[300]');
+                    $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'required|max_length[300]');
+                    
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
                         break;
@@ -276,7 +283,7 @@ class project_gh extends TZ_Admin_Controller {
         //print_r($statusKey);
         foreach($statusKey as $v){
             if($status[$v] == str_replace('已','',$info['status'])){
-                $currentKey = $v;
+                $currentKey = $v + 1;
             }
         }
 
@@ -343,7 +350,7 @@ class project_gh extends TZ_Admin_Controller {
             //file_put_contents("debug.txt",print_r($info,true));
             //file_put_contents("debug.txt",print_r($data,true),FILE_APPEND);
 
-            $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status']));
+            $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status'],'sendor_id' => $this->_userProfile['id']));
 
             if($return){
                 $this->_addProjectLog('workflow', $info['id'],'退回',"{$this->_userProfile['name']} 退回 {$info['project_no']} {$info['name']} 至 {$lastUser['creator']},退回原因:<span class=\"notice\">{$param['reason']}</span>",$data);
@@ -385,7 +392,7 @@ class project_gh extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                     
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
@@ -409,7 +416,7 @@ class project_gh extends TZ_Admin_Controller {
                         'bz_remark' => $param['bz_remark']
                     );
                     
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
@@ -432,7 +439,7 @@ class project_gh extends TZ_Admin_Controller {
                         'ss_remark' => $param['ss_remark']
                     );
 
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置','sendor_id' => $this->_userProfile['id']));
                     
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
@@ -452,7 +459,7 @@ class project_gh extends TZ_Admin_Controller {
                         'files' => implode(',',$param['file_id'])
                     );
                     
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -468,9 +475,13 @@ class project_gh extends TZ_Admin_Controller {
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time(),
+                        'zc_time' => time(),
+                        'zc_name' => $this->_userProfile['name'],
+                        'zc_yj' => $param['zc_yj'],
+                        'zc_remark' => $param['zc_remark'],
                         'files' => implode(',',$param['file_id'])
                     );
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -481,9 +492,13 @@ class project_gh extends TZ_Admin_Controller {
                     $data = array(
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
-                        'updatetime' => time()
+                        'updatetime' => time(),
+                        'cs_time' => time(),
+                        'cs_name' => $this->_userProfile['name'],
+                        'cs_yj' => $param['cs_yj'],
+                        'cs_remark' => $param['cs_remark'],
                     );
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
                         $eventReaded = true;
@@ -499,7 +514,7 @@ class project_gh extends TZ_Admin_Controller {
                         'updatetime' => time(),
                         'files' => implode(',',$param['file_id'])
                     );
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -510,9 +525,13 @@ class project_gh extends TZ_Admin_Controller {
                     $data = array(
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
-                        'updatetime' => time()
+                        'updatetime' => time(),
+                        'fs_time' => time(),
+                        'fs_name' => $this->_userProfile['name'],
+                        'fs_yj' => $param['fs_yj'],
+                        'fs_remark' => $param['fs_remark'],
                     );
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
                         $eventReaded = true;
@@ -530,7 +549,7 @@ class project_gh extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                     
-                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审'));
+                    $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
@@ -539,6 +558,9 @@ class project_gh extends TZ_Admin_Controller {
                     
                     break;
                 case '收费':
+                    /**
+                     * @todo 待完成  
+                     */
                     
                     break;
                 default:
@@ -664,8 +686,7 @@ class project_gh extends TZ_Admin_Controller {
         );
         
         $condition['where_in'] = array(
-          //array('key' => 'status' ,'value' => array('已布置','已实施','已完成','已提交初审','已提交'))  
-          array('key' => 'status' ,'value' => array('已布置','已实施','已完成','已提交'))
+            array('key' => 'status' ,'value' => array('已布置','已实施','已提交'))
         );
 
         $data = $this->Project_Gh_Model->getList($condition);

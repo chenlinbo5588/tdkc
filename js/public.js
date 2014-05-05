@@ -286,3 +286,111 @@ function showError(message,reload,sec){
     refresh(reload,sec);
 }
 
+
+
+$(function() {
+    var $backToTopTxt = "返回顶部", $backToTopEle = $('<div class="backToTop"></div>').appendTo($("body"))
+        .text($backToTopTxt).attr("title", $backToTopTxt).click(function() {
+            $("html, body").animate({ scrollTop: 0 }, 120);
+    }), $backToTopFun = function() {
+        var st = $(document).scrollTop(), winh = $(window).height();
+        (st > 0)? $backToTopEle.show(): $backToTopEle.hide();    
+        //IE6下的定位
+        if (!window.XMLHttpRequest) {
+            $backToTopEle.css("top", st + winh - 166);    
+        }
+    };
+    $(window).bind("scroll", $backToTopFun);
+    $(function() { $backToTopFun(); });
+    
+    
+    $("body").delegate(".toggle","click",function(){
+        var that = $(this),
+            t = that,
+            textFilter = t, 
+            temp,
+            i,j,
+            noslide,
+            tags = ['th','tr','td','table','tbody','thead','tfooter'];
+
+        if(that.attr("data-toggle")){
+            o = $.parseJSON(that.attr("data-toggle"));
+        }else{
+            o = $.parseJSON(that.attr("toggle"));
+        }
+
+        if(o.filer){
+            t = $(o.filter,that);
+        }
+
+        if(o.textFilter) {
+            textFilter = $(o.textFilter,that); 
+        }
+
+        temp = $(o.target).get(0);
+        noslide = false;
+
+        for(i = 0, j = tags.length; i < j; i++){
+            if(temp && (temp.tagName.toLowerCase() == tags[i])){
+                noslide = true;
+                break;
+            }
+        }
+
+        if(noslide){
+            if(o.wrapper){
+                $(o.target,that.closest(o.wrapper)).toggle();
+            }else{
+                $(o.target).toggle();
+            }
+
+        }else{
+            if(o.wrapper){
+                $(o.target,that.closest(o.wrapper)).slideToggle("normal");
+            }else{
+                $(o.target).slideToggle("normal");
+            }
+        }
+
+        /* 折叠 toggle_trigger */
+        if(o.toggleSelfClass){
+            if(typeof(o.toggleSelfClass) == "string"){
+                that.toggleClass(o.toggleSelfClass);
+            }else{
+                if(that.hasClass(o.toggleSelfClass[0])){
+                    that.removeClass(o.toggleSelfClass[0]).addClass(o.toggleSelfClass[1]);
+                }else{
+                    that.removeClass(o.toggleSelfClass[1]).addClass(o.toggleSelfClass[0]);
+                }
+            }
+        }
+
+        if(o.toggleParentClass){
+
+        }
+
+        /* 折叠触发者 */
+        if(o.toggleClass){
+            if(typeof(o.toggleClass) == "string"){
+                t.toggleClass(o.toggleClass);
+            }else{
+                if(t.hasClass(o.toggleClass[0])){
+                    t.removeClass(o.toggleClass[0]).addClass(o.toggleClass[1]);
+                }else{
+                    t.removeClass(o.toggleClass[1]).addClass(o.toggleClass[0]);
+                }
+            }
+        }
+
+        /* 切换触发者文本 */
+        if(o.toggleText){
+            if(textFilter.html() == o.toggleText[0]){
+                textFilter.html(o.toggleText[1]);
+            }else{
+                textFilter.html(o.toggleText[0]);
+            }
+        }
+    });
+    
+    
+});
