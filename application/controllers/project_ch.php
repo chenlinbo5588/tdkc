@@ -69,9 +69,12 @@ class project_ch extends TZ_Admin_Controller {
     }
     
     
-    private function _getProjectModList($project_id,$type = 'workflow',$limit = 50, $user_id = 0){
+    private function _getProjectModList($project_id,$type = 'workflow',$limit = 0, $user_id = 0){
         
-        $condition['limit'] = $limit;
+        if($limit){
+            $condition['limit'] = $limit;
+        }
+        
         $condition['where']['project_id'] = $project_id;
         $condition['where']['type'] = $type;
         if($user_id){
@@ -140,7 +143,7 @@ class project_ch extends TZ_Admin_Controller {
                     }
                     
                     if(!$this->form_validation->run()){
-                        $info['reason'] = $_POST['reason'];
+                        $this->assign('reasonTxt',$_POST['reason']);
                         break;
                     }
                     
@@ -175,9 +178,17 @@ class project_ch extends TZ_Admin_Controller {
                         $lastOpName = '通过初审';
                         $lastStatus = '已通过初审';
                         
-                    }elseif($info['status'] == '已提交'){
+                    }elseif($info['status'] == '项目已提交'){
                         $lastOpName = '通过复审';
                         $lastStatus = '已通过复审';
+                        
+                    }elseif($info['status'] == '已收费'){
+                        $lastOpName = '项目提交';
+                        $lastStatus = '项目已提交';
+                        
+                    }elseif($info['status'] == '已归档'){
+                        $lastOpName = '收费';
+                        $lastStatus = '已收费';
                     }
                     
                 }elseif($op == '发送'){
@@ -219,6 +230,11 @@ class project_ch extends TZ_Admin_Controller {
                      */
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                    
+                    if($info['type'] == '日常宗地'){
+                        $this->form_validation->set_rules('jz_list', '界址信息', 'required');
+                    }
+                    
                     if(!$this->form_validation->run()){
                         break;
                     }
@@ -259,7 +275,7 @@ class project_ch extends TZ_Admin_Controller {
                         $info['fs_remark'] = $_POST['fs_remark'];
                         break;
                     }
-                }elseif($op == '提交'){
+                }elseif($op == '项目提交'){
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('title', '项目成功名称', 'required|min_length[3]|max_length[200]');
@@ -268,12 +284,21 @@ class project_ch extends TZ_Admin_Controller {
                         $info['title'] = $_POST['title'];
                         break;
                     }
-                }elseif($op == '提交收费'){
+                }elseif($op == '收费'){
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
-                    $this->form_validation->set_rules('has_doc', '成果资料是否形成', 'required|is_natural_no_zero');
+                    $this->form_validation->set_rules('get_doc', '成果资料领取', 'required|is_natural');
+                    $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
+                    $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
+                    $this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural');
+                    $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural');
                     
                     if(!$this->form_validation->run()){
-                        $info['has_doc'] = $_POST['has_doc'];
+                        $info['get_doc'] = $_POST['get_doc'];
+                        $info['ys_amount'] = $_POST['ys_amount'];
+                        $info['ss_amount'] = $_POST['ss_amount'];
+                        $info['is_owed'] = $_POST['is_owed'];
+                        $info['fee_type'] = $_POST['fee_type'];
+                        
                         break;
                     }
                 }
@@ -297,7 +322,7 @@ class project_ch extends TZ_Admin_Controller {
         }
         
         $status = array(
-            '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '提交','提交收费','归档'
+            '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '项目提交','收费','归档'
         );
         
         $statusKey = array_keys($status);
@@ -446,7 +471,7 @@ class project_ch extends TZ_Admin_Controller {
             $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status'],'sendor_id' => $this->_userProfile['id']));
 
             if($return){
-                $this->_addProjectLog('workflow', $info['id'],'退回',"{$this->_userProfile['name']} 退回 {$info['project_no']} {$info['name']} 至 {$lastUser['creator']},退回原因:<span class=\"notice\">{$param['reason']}</span>",$data);
+                $this->_addProjectLog('workflow', $info['id'],$op,"{$this->_userProfile['name']} {$op}至 {$lastUser['creator']},{$op}原因:<span class=\"notice\">{$param['reason']}</span>",$data);
                 switch($gobackStatus){
                     case '新增':
                         $url = url_path('project_ch','edit','id='.$info['id']);
@@ -468,10 +493,6 @@ class project_ch extends TZ_Admin_Controller {
                 ));
 
                 $eventReaded = true;
-                $message = '退回成功';
-            }else{
-                //退回失败
-                $message = '退回失败,或许已经被退回';
             }
         }else{
             switch($op){
@@ -487,7 +508,7 @@ class project_ch extends TZ_Admin_Controller {
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
                         $eventReaded = true;
                     }
@@ -496,9 +517,10 @@ class project_ch extends TZ_Admin_Controller {
                 case '布置':
                     $sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
-                        /* 被布置的人 */
-                        'pm_id' => $sendorInfo['id'],
-                        'pm' => $sendorInfo['name'],
+                        /* 执行布置操作人 为项目负责人 */
+                        'pm_id' => $this->_userProfile['id'],
+                        'pm' => $this->_userProfile['name'],
+                        'dept_id' => $this->_userProfile['dept_id'],
                         'sendor_id' => $sendorInfo['id'],
                         'sendor' => $sendorInfo['name'],
                         'status' => '已'.$op,
@@ -512,7 +534,7 @@ class project_ch extends TZ_Admin_Controller {
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 至 {$sendorInfo['name']}",$data);
                         $pm = true;
                         $eventReaded = true;
                     }
@@ -525,7 +547,6 @@ class project_ch extends TZ_Admin_Controller {
                         /** 实际实施的人 */
                         'worker_id' => $this->_userProfile['id'],
                         'worker' => $this->_userProfile['name'],
-                        'dept_id' => $this->_userProfile['dept_id'],
                         'real_startdate' => time(),
                         'ny_enddate' => strtotime($_POST['ny_enddate']),
                         'wy_enddate' => strtotime($_POST['wy_enddate']),
@@ -536,7 +557,7 @@ class project_ch extends TZ_Admin_Controller {
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已布置','sendor_id' => $this->_userProfile['id']));
                     
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);
                         $eventReaded = true;
                     }
                     
@@ -555,7 +576,7 @@ class project_ch extends TZ_Admin_Controller {
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
                         $pm = true;
                     }
@@ -577,7 +598,7 @@ class project_ch extends TZ_Admin_Controller {
                     );
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已完成','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
                         $pm = true;
                     }
@@ -594,7 +615,7 @@ class project_ch extends TZ_Admin_Controller {
                     );
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);
                         $eventReaded = true;
                     }
                     break;
@@ -610,7 +631,7 @@ class project_ch extends TZ_Admin_Controller {
                     );
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
                         $pm = true;
                     }
@@ -627,35 +648,68 @@ class project_ch extends TZ_Admin_Controller {
                     );
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);
                         $eventReaded = true;
                     }
                     break;
-                case '提交':
+                case '项目提交':
                     $sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
                         'sendor_id' => $sendorInfo['id'],
                         'sendor' => $sendorInfo['name'],
                         'title' => $param['title'],
                         'area' => $param['area'],
-                        'status' => '已'.$op,
+                        'status' => '项目已提交',
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time()
                     );
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} {$info['project_no']} {$info['name']} 并发送至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
                         $eventReaded = true;
                         $pm = true;
                     }
                     
                     break;
                 case '收费':
-                    /**
-                     * @todo 待完成  
-                     */
+                    $sendorInfo = $this->User_Model->queryById($param['sendor']);
+                    $data = array(
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'get_doc' => $param['get_doc'],
+                        'get_doctime' => time(),
+                        'ys_amount' => $param['ys_amount'],
+                        'ss_amount' => $param['ss_amount'],
+                        'is_owed' => $param['is_owed'],
+                        'collect_date' => time(),
+                        'fee_type' => $param['fee_type'],
+                        'status' => '已'.$op,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => time()
+                    );
                     
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '项目已提交','sendor_id' => $this->_userProfile['id']));
+                    if($return){
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
+                        $eventReaded = true;
+                        $pm = true;
+                    }
+                    
+                    break;
+                case '归档':
+                    $data = array(
+                        'has_archiver' => 1,
+                        'status' => '已'.$op,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => time()
+                    );
+                    
+                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已收费','sendor_id' => $this->_userProfile['id']));
+                    if($return){
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);
+                        $eventReaded = true;
+                    }
                     break;
                 default:
                     break;
@@ -780,7 +834,7 @@ class project_ch extends TZ_Admin_Controller {
         );
         
         $condition['where_in'] = array(
-            array('key' => 'status' ,'value' => array('已布置','已实施','已提交'))
+            array('key' => 'status' ,'value' => array('已布置','已实施'))
         );
 
         $data = $this->Project_Model->getList($condition);
@@ -906,7 +960,36 @@ class project_ch extends TZ_Admin_Controller {
         //$condition['select'] = 'a,b';
         $condition['order'] = "createtime DESC,displayorder DESC";
         $condition['where'] = array(
-            'status' => '已提交'
+            'status' => '项目已提交'
+        );
+        
+        $condition['pager'] = array(
+            'page_size' => config_item('page_size'),
+            'current_page' => $_GET['page'],
+            'query_param' => url_path('project_ch','index')
+        );
+
+        $data = $this->Project_Model->getList($condition);
+        $this->assign('page',$data['pager']);
+        $this->assign('data',$data);
+        $this->display('index');
+    }
+    
+    
+    /**
+     * 归档 
+     */
+    public function archive(){
+        
+        if(empty($_GET['page'])){
+            $_GET['page'] = 1;
+        }
+        
+        $this->assign('action','archive');
+        //$condition['select'] = 'a,b';
+        $condition['order'] = "createtime DESC,displayorder DESC";
+        $condition['where'] = array(
+            'status' => '已收费'
         );
         
         $condition['pager'] = array(
@@ -931,7 +1014,7 @@ class project_ch extends TZ_Admin_Controller {
         $this->form_validation->set_rules('address', '登记地址', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
         
         if(!empty($_POST['village'])){
-            $this->form_validation->set_rules('village', '村名', 'trim|max_length[50]|htmlspecialchars');
+            $this->form_validation->set_rules('village', '村名', 'trim|max_length[100]|htmlspecialchars');
         }else{
             $_POST['village'] = trim($_POST['village']);
         }
@@ -1114,7 +1197,7 @@ class project_ch extends TZ_Admin_Controller {
         $insertid = $this->Project_Model->add($_POST);
         //$this->db->trans_complete();
         
-        $this->_addProjectLog('workflow', $insertid,'新增',"{$this->_userProfile['name']} 新增项目,项目编号：{$_POST['project_no']}",$_POST);
+        $this->_addProjectLog('workflow', $insertid,'新增',"{$this->_userProfile['name']} 新增",$_POST);
         return $insertid;
         
     }

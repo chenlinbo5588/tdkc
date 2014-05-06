@@ -5,11 +5,16 @@
 .fixbottom {
     position:fixed;
     bottom:0px;
+    left: 0px;
     width:100%;
-    height:20px;
-    padding:5px;
+    height:35px;
+    padding:5px 0;
     text-align: center;
     background: #E0F8D9;
+}
+
+.fixbottom .goback {
+    font-size: 16px;
 }
 
 .backToTop {
@@ -164,6 +169,27 @@
 
 .btn {
     cursor:pointer;
+}
+
+.btn-orange,.btn-gray {
+    background:url(../img/btn_orange.png) no-repeat 0 0;
+    width:101px;
+    height: 37px;
+    border:0px;
+    text-align:center;
+    color: #FFFFFF;
+    font-size: 16px;
+}
+.btn-gray {
+    background:url(../img/btn_gray.png) no-repeat 0 0;
+    color:#000;
+}
+
+.btn-orange:hover , .btn-gray:hover {
+    background-position: 0 -45px;
+}
+.btn-orange:active, .btn-gray:active {
+    background-position: 0 -90px;
 }
 
 
@@ -447,18 +473,17 @@ ol.style_decimal , ul.style_decimal {
  * 项目操作日志
  */
 #proj_modpanel {
-    position: fixed;
-    right: 35px;
-    width: 400px;
+    position: relative;
     border: 1px solid #c7c7c7;
     background: #ddd;
     padding:5px;
 }
 
 #proj_modpanel .panel_list {
-    max-height: 600px;
-    _height:600px;
+    max-height: 150px;
+    _height:150px;
     overflow-y: auto;
+    background: #fff;
 }
 
 .moditem .modcontent {
@@ -484,9 +509,9 @@ ol.style_decimal , ul.style_decimal {
 
 #flowbar {
     position: fixed;
-    width:900px;
+    width:100%;
     top:0px;
-    left:20px;
+    left:0px;
     background: black;
     z-index:3;
 }
@@ -507,7 +532,6 @@ ol.style_decimal , ul.style_decimal {
 
 
 .project_detail {
-    width:900px;
     margin:10px 0 0 0;
     position:relative;
 }
@@ -529,13 +553,16 @@ ol.style_decimal , ul.style_decimal {
 #project_nav {
     position:absolute;
     width:30px;
-    right:-30px;
+    right:0;
 }
 
 #project_nav li {
     border:1px solid black;
-    border-width:1px 1px 1px 0;
     margin:2px 0;
+    background: #ccc;
+}
+#project_nav li.first {
+    margin-top:0;
 }
 
 .doc table {

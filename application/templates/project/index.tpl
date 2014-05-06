@@ -16,6 +16,7 @@
             <li><a href="{url_path('project_ch','first_sh')}">项目初审</a></li>
             <li><a href="{url_path('project_ch','second_sh')}">项目复审</a></li>
             <li><a href="{url_path('project_ch','fee')}">项目收费</a></li>
+            <li><a href="{url_path('project_ch','archive')}">项目归档</a></li>
             <li><a href="{url_path('project_ch')}">项目查询</a></li>
           </ul>
         </dd>

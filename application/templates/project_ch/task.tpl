@@ -31,7 +31,7 @@
         </div>
         <div class="project_detail">
             <ul id="project_nav">
-                <li><a href="#anchor_base">基本信息</a></li>
+                <li class="first"><a href="#anchor_base">基本信息</a></li>
                 <li><a href="#anchor_work">作业信息</a></li>
                 <li><a href="#anchor_check">审核信息</a></li>
                 <li><a href="#anchor_doc">成果信息</a></li>
@@ -43,71 +43,82 @@
                 <a name="anchor_base" id="anchor_base"></a>
                 <table class="maintain border1">
                     <caption>基本信息</caption>
+                    <colgroup>
+                        <col width="100"/>
+                        <col width="800"/>
+                    </colgroup>
                     <tbody>
                     <tr>
                         <td>流水号</td>
                         <td>{$info['project_no']}</td>
+                    </tr>
+                    <tr>
                         <td>录入类型</td>
                         <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}补录登记{/if}</td>
                     </tr>
                     <tr>
                         <td>登记年月</td>
                         <td>{$info['year']}年{$info['month']}月份</td>
+                    </tr>
+                    <tr>
                         <td>区域</td>
                         <td>{$info['region_name']}</td>
                     </tr>
                     <tr>
                         <td>登记类型</td>
-                        <td colspan="3">{$info['type']}</td>
+                        <td>{$info['type']}</td>
                     </tr>
                     <tr>
                         <td>登记名称</td>
-                        <td colspan="3">{$info['name']|escape}</td>
+                        <td>{$info['name']|escape}</td>
                     </tr>
                     <tr>
                         <td>地址</td>
-                        <td colspan="3">{$info['address']|escape}</td>
+                        <td>{$info['address']|escape}</td>
                     </tr>
                     <tr>
                         <td>村名</td>
                         <td>{$info['village']|escape}</td>
+                    </tr>
+                    <tr>
                         <td>目项来源</td>
                         <td>{$info['source']|escape}</td>
-                        
                     </tr>
                     <tr>
                         <td>联系单位名称</td>
                         <td>{$info['union_name']|escape}</td>
-                   
+                   </tr>
+                   <tr>
                         <td>联系人信息</td>
                         <td><p>姓名:{$info['contacter']|escape}</p><p>手机号码:{$info['contacter_mobile']}</p><p>固定电话:{$info['contacter_tel']}</p></td>
                     </tr>
                     <tr>
                         <td>接洽人信息</td>
                         <td><p>姓名:{$info['manager']|escape}</p><p>手机号码:{$info['manager_mobile']}</p><p>固定电话:{$info['manager_tel']}</p></td>
-                    
+                    </tr>
+                    <tr>
                         <td>备注</td>
                         <td>{$info['descripton']}</td>
                     </tr>
                     <tr>
                         <td>优先级</td>
                         <td>{$info['displayorder']}</td>
-                    
+                    </tr>
+                    <tr>
                         <td>登记信息</td>
                         <td>登记人姓名:{$info['creator']} 登记时间：{$info['createtime']|date_format:"Y-m-d H:i:s"}</td>
                     </tr>
-                    {*
-                    <tr>
-                        <td>最后修改</td>
-                        <td>修改人：{$info['updator']} 修改时间:{$info['updatetime']|date_format:"Y-m-d H:i:s"}</td>
-                    </tr>
-                    *}
                  </tbody>
                 </table>
                <a name="anchor_work" id="anchor_work"></a>
                <table  class="maintain border1">
-               <tbody>
-                   <caption>作业信息</caption>
+                  <caption>作业信息</caption>
+                  <colgroup>
+                       <col width="100"/>
+                       <col width="800"/>
+                   </colgroup>
+                  <tbody>
+                   
                     <tr>
                         <td>测绘项目负责人</td>
                         <td>{$info['pm']}</td>
@@ -120,78 +131,47 @@
                         <td>当前处理人</td>
                         <td>{$info['sendor']}</td>
                     </tr>
-                    {if $info['sendor_id'] == $userProfile['id']}
-                    <tr class="workflow">
-                        <td><label class="required"><em></em><strong>流程选择</strong></label></td>
-                        <td>
-                            <select name="workflow" style="width:200px;">
-                                {if $info['status'] == '新增'}
-                                    <option value="发送" {if $smarty.post.workflow == '发送'}selected{/if}>发送</option>
-                                {elseif $info['status'] == '已发送'}
-                                    <option value="布置" {if $smarty.post.workflow == '布置'}selected{/if}>布置</option>
-                                {elseif $info['status'] == '已布置'}
-                                    <option value="实施" {if $smarty.post.workflow == '实施'}selected{/if}>实施</option>
-                                {elseif $info['status'] == '已实施'}
-                                    <option value="完成" {if $smarty.post.workflow == '完成'}selected{/if}>完成</option>
-                                {elseif $info['status'] == '已完成'}
-                                    <option value="提交初审" {if $smarty.post.workflow == '提交初审'}selected{/if}>提交初审</option>
-                                {elseif $info['status'] == '已提交初审'}
-                                    <option value="通过初审" {if $smarty.post.workflow == '通过初审'}selected{/if}>通过初审</option>
-                                {elseif $info['status'] == '已通过初审'}
-                                    <option value="提交复审" {if $smarty.post.workflow == '提交复审'}selected{/if}>提交复审</option>
-                                {elseif $info['status'] == '已提交复审'}
-                                    <option value="通过复审" {if $smarty.post.workflow == '通过复审'}selected{/if}>通过复审</option>
-                                {elseif $info['status'] == '已通过复审'}
-                                    <option value="提交" {if $smarty.post.workflow == '提交'}selected{/if}>提交</option>
-                                {elseif $info['status'] == '已提交'}
-                                    <option value="提交收费" {if $smarty.post.workflow == '提交收费'}selected{/if}>提交收费</option>
-                                {/if}
-                                
-                                {if !in_array($info['status'],array('新增','已提交'))}
-                                <option value="退回" {if $smarty.post.workflow == '退回'}selected{/if}>退回</option>
-                                {/if}
-                            </select>
-                        </td>
-                    </tr>
-                    {/if}
+                    
                     <tr class="tuihui" {if $smarty.post.workflow != '退回'}style="display: none;"{/if}>
                         <td>退回原因</td>
                         <td>
-                            <textarea name="reason" style="width: 500px; height: 100px;">{$info['reason']|escape}</textarea>
+                            <textarea name="reason" style="width: 500px; height: 100px;">{$reasonTxt|escape}</textarea>
                             <div>{form_error('reason')}</div>
                         </td>
                     </tr>
                     <tr>
-                        <td>当前缺陷</td>
+                        <td>缺陷历史</td>
                         <td>
-                            <table>
-                                <colgroup>
-                                    <col width="400"/>
-                                    <col width="40"/>
-                                    <col width="300"/>
-                                </colgroup>
-                                <thead>
-                                    <tr>
-                                        <th>缺陷项</th>
-                                        <th>扣分</th>
-                                        <th>备注</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {foreach from=$userFaultList item=item}
-                                    <tr>
-                                        <td>{$item['fault_code']}{$item['fault_name']}</td>
-                                        <td>{$item['score']}</td>
-                                        <td>{$item['remark']|escape}</td>
-                                    </tr>
-                                {/foreach}
-                                  </tbody>
-                            </table>
+                            <div class="notice">
+                                <table>
+                                    <colgroup>
+                                        <col width="400"/>
+                                        <col width="40"/>
+                                        <col width="300"/>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>缺陷项</th>
+                                            <th>扣分</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {foreach from=$userFaultList item=item}
+                                        <tr>
+                                            <td>{$item['fault_code']}{$item['fault_name']}</td>
+                                            <td>{$item['score']}</td>
+                                            <td>{$item['remark']|escape}</td>
+                                        </tr>
+                                    {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
                         </td>
                     </tr>
-                    
+                    {if $info['sendor_id'] == $userProfile['id'] && $info['status'] == '已提交复审'}
                     <tr class="fault" {if $smarty.post.workflow != '退回'}style="display: none;"{/if}>
-                        <td>缺陷信息</td>
+                        <td>缺陷扣分</td>
                         <td>
                             <div>{form_error('fault[]')}</div>
                             <div class="fault_wrapper">
@@ -236,6 +216,7 @@
                             </div>
                         </td>
                     </tr>
+                    {/if}
                     {if $info['status'] == '已发送'}
                     <tr id="timeReq">
                         <td>时间要求</td>
@@ -312,12 +293,49 @@
                     </tr>
                     {/if}
                     
-                    {if in_array($info['status'],array('已实施', '已完成','已提交初审',  '已通过初审', '已提交复审', '已通过复审','已提交'))}
+                    {if in_array($info['status'],array('已实施', '已完成','已提交初审',  '已通过初审', '已提交复审', '已通过复审','项目已提交'))}
                     {include file="common/upload.tpl"}
+                    <script>
+                        $(function(){
+                            $(".Uploader").each(function(index){
+                                var handler = {
+                                    success:function(file,serverData){
+                                        try {
+                                            var progress = new FileProgress(file, this.customSettings.progressTarget);
+                                            progress.setComplete();
+                                            progress.setStatus("Complete.");
+                                            progress.toggleCancel(false);
+
+                                            if(typeof(this.customSettings.callback) != "undefined"){
+                                                this.customSettings.callback(file,serverData);
+                                            }
+                                            var response = $.parseJSON(serverData);
+
+                                            var html = '';
+                                            if(response.error){
+                                                html += '<li style="color:red;">';
+                                            }else{
+                                                html += '<li style="color:blue;">';
+                                            }
+                                            html += '<div class="fname"><a title="点击下载" href="{url_path('attachment','download')}' + '&id=' + response.id + '">' + file.name  + '</a></div><div class="fsize">&nbsp;</div><a class="df" href="javascript:void(0);">删除</a>';
+                                            html += '<input type="hidden" name="file_id[]" value="' + response.id + '"/>';
+                                            html += '</li>';
+                                            $("#filelist").append(html);
+
+                                        } catch (ex) {
+                                            this.debug(ex);
+                                        }
+                                    }
+                                };
+
+                                createSwfUpload(index + 1,$(this).attr("data-url"),{},$(this).attr("data-allowsize"),$(this).attr("data-allowfile"),handler);
+                            });
+                        });
+                    </script>
                     <tr>
                         <td>图件文档</td>
                         <td>
-                            {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已提交'}
+                            {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '项目已提交'}
                             <div>
                                 <span class="uploader"></span>
                                 <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
@@ -338,7 +356,7 @@
                         </td>
                     </tr>
                     {/if}
-                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送', '已实施',  '已完成', '已通过初审','已通过复审','已提交'))}
+                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送', '已实施',  '已完成', '已通过初审','已通过复审','项目已提交'))}
                     <tr>
                         <td>发送给</td>
                         <td>
@@ -354,11 +372,92 @@
                         </td>
                     </tr>
                     {/if}
+                    {if $info['type'] == '日常宗地'}
+                    <tr>
+                        <td>界址信息</td>
+                        <td>
+                            {form_error('jz_list')}
+                            {if $info['status'] == '已实施'}
+                            <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
+                            {/if}
+                            <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
+                            <div id="jz_list">
+                                <table id="jzTable">
+                                    <caption>界址列表</caption>
+                                    <colgroup>
+                                        <col width="10%"/>
+                                        <col width="10%"/>
+                                        <col width="35%"/>
+                                        <col width="35%"/>
+                                        <col width="15%"/>
+                                    </colgroup>
+                                    <thead>
+                                        <th>四址</th>
+                                        <th>界址线</th>
+                                        <th>界址线位置</th>
+                                        <th>邻居名称</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <script type="x-my-template" id="jzRowTemplate">
+                        <tr>
+                            <td>
+                                <input type="hidden" value="" name="rowid"/>
+                                <select name="direction">
+                                    <option value="1">西</option>
+                                    <option value="2">北</option>
+                                    <option value="3">东</option>
+                                    <option value="4">南</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span class="point_start"></span> - <span class="point_end"></span>
+                            </td>
+                            <td>
+                                <input name="jz_name[]" type="text" style="width:200px" value="" placeholder="请输入界址线位置"/>
+                            </td>
+                            <td>
+                                <input name="neighbor[]" type="text" style="width:200px" value="" placeholder="请输入邻居名称"/>
+                            </td>
+                            <td><a href="javascript:void(0);" class="insertJz">插入界址点</a></td>
+                        </tr>
+                    </script>
+                    <script>
+                        $(function(){
+                            $("#addJz").bind("click",function(e){
+                                var rowcnt = $("#jzTable").find("tbody tr").size();
+                                var row = $($("#jzRowTemplate").html());
+                                
+                                row.find(".point_start").html(rowcnt + 1);
+                                row.find(".point_end").html(1);
+                                
+                                var trlast = $("#jzTable tbody tr:last");
+                                trlast.find(".point_end").html(rowcnt + 1);
+                                
+                                $("#jzTable").append(row);
+                            });
+                            
+                            $("#jzTable").delegate(".insertJz",'click',function(e){
+                                var currentTr = '';
+                                
+                            });
+                        });
+                    </script>
+                    {/if}
                     </tbody>
                 </table>
                <a name="anchor_check" id="anchor_check"></a>
                <table  class="maintain border1">
-                   <caption>审核信息</caption> 
+                   <caption>审核信息</caption>
+                   <colgroup>
+                        <col width="100"/>
+                        <col width="800"/>
+                    </colgroup>
                     <tbody>
                     <tr>
                         <td>自查主要意见</td>
@@ -481,11 +580,14 @@
                 <a name="anchor_doc" id="anchor_doc"></a>
                 <table class="maintain border1">
                    <caption>成果信息</caption>
+                   <colgroup>
+                       <col width="100"/>
+                       <col width="800"/>
+                   </colgroup>
                    <tbody>
-                    {if in_array($info['status'],array('已通过复审', '已提交'))} 
                     <tr>
                         <td>项目成果名称</td>
-                        {if $info['status'] != '已提交'}
+                        {if $info['status'] == '已通过复审'}
                         <td><input type="text" name="title" value="{$info['title']}" placeholder="请填写项目成果名称" style="width:300px;"/>{form_error('title')}</td>
                         {else}
                         <td>{$info['title']}</td>
@@ -493,42 +595,130 @@
                     </tr>
                     <tr>
                         <td>项目面积</td>
-                        {if $info['status'] != '已提交'}
-                        <td><input type="text" name="area" value="{$info['area']}" placeholder="请填写项目面积" style="width:150px;"/>{form_error('area')}</td>
+                        {if $info['status'] == '已通过复审'}
+                        <td><input type="text" name="area" value="{if $info['area']}{$info['area']}{/if}" placeholder="请填写项目面积" style="width:150px;"/>M<sup>2</sup>{form_error('area')}</td>
                         {else}
-                        <td>{$info['area']}</td>
+                        <td>{if $info['area']}{$info['area']}{/if}</td>
                         {/if}
                     </tr>
-                    {/if}
+                    <tr>
+                        <td>是否归档</td>
+                        <td>
+                            {if $info['has_archiver'] == 1}是{else}否{/if}
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <a name="anchor_fee" id="anchor_fee"></a>   
                 <table class="maintain border1">
                     <caption>收费信息</caption>
+                    <colgroup>
+                       <col width="100"/>
+                       <col width="800"/>
+                   </colgroup>
                     <tbody>
                         <tr>
-                            <td>成果资料已领取</td>
-                            <td></td>
+                            <td>成果资料领取</td>
+                            <td>
+                                {if $info['status'] == '项目已提交' && $info['sendor_id'] == $userProfile['id']}
+                                <label><input type="radio" name="get_doc" value="1" {if $info['get_doc'] == 1}checked{/if}>已领取</label>
+                                <label><input type="radio" name="get_doc" value="0" {if $info['get_doc'] == 0}checked{/if}>未领取</label>
+                                {form_error('get_doc')}
+                                {else}
+                                    {if $info['get_doc'] == 1}已{else}未{/if}领取
+                                {/if}
+                            </td>
                         </tr>
                         <tr>
                             <td>领取时间</td>
-                            <td></td>
+                            <td>{if $info['get_doctime']}{$info['get_doctime']|date_format:"Y-m-d"}{/if}</td>
                         </tr>
                         <tr>
-                            <td>收费</td>
+                            <td>应收金额</td>
                             <td>
-                                <label><input type="radio" name="fee" value="1"/>挂账</label>
-                                <label><input type="radio" name="fee" value="2"/>票开款收</label>
-                                <label><input type="radio" name="fee" value="3"/>票开款未收</label>
-                                <label><input type="radio" name="fee" value="4"/>票未开款收</label>
+                                {if $info['status'] == '项目已提交' && $info['sendor_id'] == $userProfile['id']}
+                                <input type="text" name="ys_amount" value="{$info['ys_amount']}"/>{form_error('ys_amount')}
+                                {else}
+                                    {$info['ys_amount']}
+                                {/if}
                             </td>
+                        </tr>
+                        <tr>
+                            <td>实收金额</td>
+                            <td>
+                                {if $info['status'] == '项目已提交' && $info['sendor_id'] == $userProfile['id']}
+                                <input type="text" name="ss_amount" value="{$info['ss_amount']}"/>{form_error('ss_amount')}
+                                {else}
+                                    {$info['ss_amount']}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>欠费情况</td>
+                            <td>
+                                {if $info['status'] == '项目已提交' && $info['sendor_id'] == $userProfile['id']}
+                                <label><input type="radio" name="is_owed" value="0" {if $info['is_owed'] == 0}checked{/if}/>不欠费</label>
+                                <label><input type="radio" name="is_owed" value="1" {if $info['is_owed'] == 1}checked{/if}/>欠费</label>
+                                {form_error('is_owed')}
+                                {else}
+                                    {if $info['is_owed'] == 0}不{/if}欠费
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>收费情况</td>
+                            <td>
+                                {if $info['status'] == '项目已提交' && $info['sendor_id'] == $userProfile['id']}
+                                <label><input type="radio" name="fee_type" value="1" {if $info['fee_type'] == 1}checked{/if}/>挂账</label>
+                                <label><input type="radio" name="fee_type" value="2" {if $info['fee_type'] == 2}checked{/if}/>票开款收</label>
+                                <label><input type="radio" name="fee_type" value="3" {if $info['fee_type'] == 3}checked{/if}/>票开款未收</label>
+                                <label><input type="radio" name="fee_type" value="4" {if $info['fee_type'] == 4}checked{/if}/>票未开款收</label>
+                                <div>{form_error('fee_type')}</div>
+                                {else}
+                                    {if $info['fee_type'] == 1}挂账
+                                    {elseif $info['fee_type'] == 2}票开款收
+                                    {elseif $info['fee_type'] == 3}票开款未收
+                                    {elseif $info['fee_type'] == 4}票未开款收
+                                    {/if}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>收费时间</td>
+                            <td>{if $info['collect_date']}{$info['collect_date']|date_format:"Y-m-d"}{/if}</td>
                         </tr>
                     </tbody>
                 </table> 
-                    
+                <div style="margin-bottom: 20px;">&nbsp;</div>    
                 <div class="fixbottom">
-                {if $info['sendor_id'] == $userProfile['id']}
-                <input type="submit" name="submit" class="btn btn-sm btn-primary" value="确定"/>
+                    <input type="hidden" name="workflow" value=""/>
+                {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已归档'}
+                    {if $info['status'] == '新增'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="发送"/>
+                    {elseif $info['status'] == '已发送'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="布置"/>
+                    {elseif $info['status'] == '已布置'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="实施"/>
+                    {elseif $info['status'] == '已实施'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="完成"/>
+                    {elseif $info['status'] == '已完成'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="提交初审"/>
+                    {elseif $info['status'] == '已提交初审'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="通过初审"/>
+                    {elseif $info['status'] == '已通过初审'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="提交复审"/>
+                    {elseif $info['status'] == '已提交复审'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="通过复审"/>
+                    {elseif $info['status'] == '已通过复审'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="项目提交"/>
+                    {elseif $info['status'] == '项目已提交'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
+                    {elseif $info['status'] == '已收费'}
+                        <input type="submit" name="submit" class="btn btn-orange" value="归档"/>
+                    {/if}
+                    {if !in_array($info['status'],array('新增','项目已提交','已收费','已归档'))}
+                        <input type="submit" name="submit" class="btn btn-sm btn-gray" value="退回"/>
+                    {/if}
                 {/if}
                 {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                 </div>
@@ -543,55 +733,47 @@
                             $.jBox("get:" + $(e.target).attr("data-href"),{ title:$(e.target).attr("data-title"),width:1000,height:600});
                         });
                             *}
-                        
-                        $(".Uploader").each(function(index){
-                            var handler = {
-                                success:function(file,serverData){
-                                    try {
-                                        var progress = new FileProgress(file, this.customSettings.progressTarget);
-                                        progress.setComplete();
-                                        progress.setStatus("Complete.");
-                                        progress.toggleCancel(false);
-
-                                        if(typeof(this.customSettings.callback) != "undefined"){
-                                            this.customSettings.callback(file,serverData);
-                                        }
-                                        var response = $.parseJSON(serverData);
-
-                                        var html = '';
-                                        if(response.error){
-                                            html += '<li style="color:red;">';
-                                        }else{
-                                            html += '<li style="color:blue;">';
-                                        }
-                                        html += '<div class="fname"><a title="点击下载" href="{url_path('attachment','download')}' + '&id=' + response.id + '">' + file.name  + '</a></div><div class="fsize">&nbsp;</div><a class="df" href="javascript:void(0);">删除</a>';
-                                        html += '<input type="hidden" name="file_id[]" value="' + response.id + '"/>';
-                                        html += '</li>';
-                                        $("#filelist").append(html);
-
-                                    } catch (ex) {
-                                        this.debug(ex);
-                                    }
-                                }
-                            };
-
-                            createSwfUpload(index + 1,$(this).attr("data-url"),{},$(this).attr("data-allowsize"),$(this).attr("data-allowfile"),handler);
+                        $("#filelist").delegate("a.df","click",function(e){
+                            if(confirm("确定要删除吗")){
+                                $(this).closest("li").remove();
+                            }
                         });
                         
-                        $(".userlist label").bind("click",function(e){
-                            $(".userlist label").removeClass("selected");
-                            $(e.target).closest("label").addClass("selected");
-                        });
-                        
-                        $("select[name=workflow]").bind("change",function(e){
-                            var select = $(e.target);
-                            if(select.val() == '退回'){
+                        $("input[name=submit]").bind('click',function(e){
+                            var that = $(e.target);
+                            var op = that.val();
+                            var cansubmit = true;
+                            $("input[name=workflow]").val(op);
+                            if(op == '退回'){
                                 $("#timeReq").hide();
                                 $(".tuihui").show();
                                 {if $info['status'] == '已提交复审'}
                                 $(".fault").show();
                                 {/if}
-                                $("textarea[name=reason]").focus();
+                            
+                                if(cansubmit && $.trim($("textarea[name=reason]").val()).length == 0){
+                                    $("textarea[name=reason]").focus();
+                                    $.jBox.tip("请填写退回原因",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                {if $info['status'] == '已提交复审'}
+                                if(cansubmit && $("input[name='fault[]']:checked").length == 0){
+                                    $.jBox.tip("请至少勾选一个缺陷",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                $("#faultList input[type=checkbox]").each(function(index){
+                                    var that = $(this);
+                                    if(that.prop("checked") && $.trim(that.closest("tr").find("input[type=text]:eq(0)").val()) == ''){
+                                        that.closest("tr").find("input[type=text]:eq(0)").focus();
+                                        $.jBox.tip("请填写扣分项目备注",'提示');
+                                        
+                                        cansubmit = false;
+                                    }
+                                });
+                                
+                                {/if}
                             }else{
                                 $("#timeReq").show();
                                 $(".tuihui").hide();
@@ -599,145 +781,143 @@
                                 $(".fault").hide();
                                 {/if}
                             }
-                        });
-                        
-                        $("#filelist").delegate("a.df","click",function(e){
-                            if(confirm("确定要删除吗")){
-                                $(this).closest("li").remove();
-                            }
-                        });
-                        
-                        $("form[name=saveForm]").bind('submit',function(e){
-                            if($("select[name=workflow]").val() == '退回'){
-                                if($.trim($("textarea[name=reason]").val()).length == 0){
-                                    $("textarea[name=reason]").focus();
-                                    $.jBox.tip("请填写退回原因",'提示');
-                                    return false;
-                                }
-                                
-                                {if $info['status'] == '已提交复审'}
-                                if($("input[name='fault[]']:checked").length == 0){
-                                    $.jBox.tip("请至少勾选一个缺陷",'提示');
-                                    return false;
-                                }
-                                
-                                var remarkInput = true;
-                                $("#faultList input[type=checkbox]").each(function(index){
-                                    var that = $(this);
-                                    if(that.prop("checked") && $.trim(that.closest("tr").find("input[type=text]:eq(0)").val()) == ''){
-                                        that.closest("tr").find("input[type=text]:eq(0)").focus();
-                                        remarkInput = false;
-                                        $.jBox.tip("请填写扣分项目备注",'提示');
-                                        
-                                        return false;
-                                    }
-                                });
-                                
-                                if(!remarkInput){
-                                    return false;
-                                }
-                                {/if}
-                                
-                            }
                             
                             {if $info['status'] == '已发送'}
-                            if($("select[name=workflow]").val() == '布置'){
-                                if($("#sdate").val() == '' || $("#edate").val() == ''){
+                            if(op == '布置'){
+                                if(cansubmit && ($("#sdate").val() == '' || $("#edate").val() == '')){
+                                    $("#sdate").focus();
                                     $.jBox.tip("请选择时间要求",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                                 
-                                if($("textarea[name=bz_remark]").val().length == 0){
+                                if(cansubmit && $("textarea[name=bz_remark]").val().length == 0){
                                     $("textarea[name=bz_remark]").focus();
                                     $.jBox.tip("请输入布置备注",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '已布置' }
-                            if($("select[name=workflow]").val() == '实施'){
-                                if($("#sdate").val() == '' || $("#edate").val() == ''){
+                            if(op == '实施'){
+                                if(cansubmit && ($("#sdate").val() == '' || $("#edate").val() == '')){
+                                    $("#sdate").focus();
                                     $.jBox.tip("请选择时间安排",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                                 
-                                if($("textarea[name=ss_remark]").val().length == 0){
+                                if(cansubmit && $("textarea[name=ss_remark]").val().length == 0){
                                     $("textarea[name=ss_remark]").focus();
                                     $.jBox.tip("请输入实施备注",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '已实施' }
-                            if($("select[name=workflow]").val() == '完成'){
-                                if($("input[name='file_id[]']").length == 0){
+                            if(op == '完成'){
+                                if(cansubmit && $("input[name='file_id[]']").length == 0){
                                     $.jBox.tip("请上传图件文档",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
+                                
+                                {if $info['type'] == '日常宗地'}
+                                if(cansubmit && $("input[name='neighbor[]']").length == 0){
+                                    $.jBox.tip("请录入界址信息",'提示');
+                                    cansubmit = false;
+                                }
+                                if(cansubmit){
+                                    $("#jzTable tbody tr").each(function(idx){
+                                        var tr = $(this);
+                                        //cansubmit = false;
+                                    });
+                                }
+                                {/if}
                             }
                             {elseif $info['status'] == '已完成' }
-                            if($("select[name=workflow]").val() == '提交初审'){    
-                                if($("textarea[name=zc_yj]").val().length == 0){
+                            if(op == '提交初审'){    
+                                if(cansubmit && $("textarea[name=zc_yj]").val().length == 0){
                                     $("textarea[name=zc_yj]").focus();
                                     $.jBox.tip("请输入自查意见",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                                 
-                                
-                                if($("textarea[name=zc_remark]").val().length == 0){
+                                if(cansubmit && $("textarea[name=zc_remark]").val().length == 0){
                                     $("textarea[name=zc_remark]").focus();
                                     $.jBox.tip("请输入自查修改和处理意见、说明",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '已提交初审' }
-                             if($("select[name=workflow]").val() == '通过初审'){    
-                                if($("textarea[name=cs_yj]").val().length == 0){
+                             if(op == '通过初审'){    
+                                if(cansubmit && $("textarea[name=cs_yj]").val().length == 0){
                                     $("textarea[name=cs_yj]").focus();
                                     $.jBox.tip("请输入初审意见",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                                 
-                                if($("textarea[name=cs_remark]").val().length == 0){
+                                if(cansubmit && $("textarea[name=cs_remark]").val().length == 0){
                                     $("textarea[name=cs_remark]").focus();
                                     $.jBox.tip("请输入初审修改和处理意见、说明",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '已提交复审' }
-                             if($("select[name=workflow]").val() == '通过复审'){    
-                                if($("textarea[name=fs_yj]").val().length == 0){
+                             if(op == '通过复审'){    
+                                if(cansubmit && $("textarea[name=fs_yj]").val().length == 0){
                                     $("textarea[name=fs_yj]").focus();
                                     $.jBox.tip("请输入复审意见",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                                 
-                                if($("textarea[name=fs_remark]").val().length == 0){
+                                if(cansubmit && $("textarea[name=fs_remark]").val().length == 0){
                                     $("textarea[name=fs_remark]").focus();
                                     $.jBox.tip("请输入复审修改和处理意见、说明",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '已通过复审' }
-                            if($("select[name=workflow]").val() == '提交'){    
-                                if($("input[name=title]").val().length == 0){
+                            if($op == '项目提交'){    
+                                if(cansubmit && $("input[name=title]").val().length == 0){
                                     $("input[name=title]").focus();
                                     $.jBox.tip("请输入项目成果名称",'提示');
-                                    return false;
+                                    cansubmit = false;
                                 }
                                 
-                                if($("input[name=area]").val().length == 0){
+                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area]").val())){
                                     $("input[name=area]").focus();
                                     $.jBox.tip("请输入项目面积",'提示');
-                                    return false;
+                                    cansubmit = false;
+                                }
+                            }
+                            {elseif $info['status'] == '项目已提交' }
+                            if(op == '收费'){    
+                                if(cansubmit && $("input[name=get_doc]:checked").length == 0){
+                                    $.jBox.tip("请勾选成果资料资料情况",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=ys_amount]").val())){
+                                    $.jBox.tip("应收金额非法",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=ss_amount]").val())){
+                                    $.jBox.tip("实收金额非法",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                if(cansubmit && $("input[name=fee_type]:checked").length == 0){
+                                    $.jBox.tip("请勾选收费情况",'提示');
+                                    cansubmit = false;
                                 }
                             }
                             {/if}
                         
-                            if($("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
+                            if(cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
                                 $.jBox.tip("请选择发送人",'提示');
-                                return false;
+                                cansubmit = false;
                             }
-                        
-                            return true;
+                            
+                            if(!cansubmit){
+                                e.preventDefault();
+                            }
                         });
                     });
                 </script>

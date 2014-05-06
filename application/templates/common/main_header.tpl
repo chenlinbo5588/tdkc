@@ -12,12 +12,12 @@
 <link rel="stylesheet" type="text/css" href="/css/ie6.css" />
 <![endif]-->
 <link href="/css/redmond/jquery-ui-1.10.4.custom.css" rel="stylesheet">
-
+{*
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
+    <script src="/js/html5shiv.js"></script>
 <![endif]-->
-
+*}
 <!-- Fav and touch icons -->
 <link rel="shortcut icon" href="/img/favicon.png">
 <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
