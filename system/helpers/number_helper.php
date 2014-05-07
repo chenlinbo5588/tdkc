@@ -72,5 +72,41 @@ if ( ! function_exists('byte_format'))
 }
 
 
+if ( ! function_exists('to_chinese_number')) {
+    
+    function to_chinese_number($num,$zero = '零',$lowcase = true){
+        //$c_digIT=array("零","拾","佰","仟","万");
+        //'O';
+        //$c_num=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖","拾");
+        
+        if($lowcase){
+            $c_num=array("零","一","二","三","四","五","六","七","八","九","十");
+        }else{
+            $c_num=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖","拾");
+        }
+        
+        
+        //$c_digIT[0] = $zero;
+        $c_num[0] = $zero;
+        
+        
+        if($num){
+            $str = (string)$num;
+            
+            $rt = array();
+            
+            for($i = 0; $i < strlen($str); $i++){
+                $rt[] = $c_num[substr($str,$i,1)];
+            }
+            
+            return implode('',$rt);
+        }else{
+            
+            return '';
+        }
+    }
+}
+ 
+
 /* End of file number_helper.php */
 /* Location: ./system/helpers/number_helper.php */

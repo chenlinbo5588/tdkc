@@ -361,9 +361,6 @@ $config['proxy_ips'] = '';
 $config['validation_error'] = 'validate_error';
 $config['default_password'] = '123456';
 
-//@todo modify
-$config['page_size'] = 5;
-
 $config['fileicon_path'] = '/img/filetype';
 $config['filestore_path'] = '/filestore/';
 $config['filestore_dir'] = $_SERVER['DOCUMENT_ROOT'].$config['filestore_path'];

@@ -1,27 +1,7 @@
 {include file="common/main_header.tpl"}
-        {include file="project_gh/modlist.tpl"}
+        {include file="project_gh/mod_list.tpl"}
         {*{include file="common/ke.tpl"}*}
         
-        <style>
-            .tj_list {
-                margin: 15px 0;
-                
-            }
-            
-            .tj_list li {
-                padding:5px;
-            }
-            
-            .tj_list .fname {
-                width:250px;
-                float:left;
-            }
-            
-            .tj_list .fsize {
-                width:100px;
-                float:left;
-            }
-        </style>
         <div id="flowbar">
             <span>规划项目</span>
             {foreach from=$statusHtml item=item}
@@ -35,6 +15,7 @@
                 <li><a href="#anchor_check">审核信息</a></li>
                 <li><a href="#anchor_doc">成果信息</a></li>
                 <li><a href="#anchor_fee">收费信息</a></li>
+                <li><a href="#anchor_log">项目日志</a></li>
             </ul>
             <form name="saveForm" action="{url_path('project_gh','task')}" method="post">
                 <input type="hidden" name="event_id" value="{$info['event_id']}"/>
@@ -120,7 +101,7 @@
                     </tr>
                     <tr class="workflow">
                         <td><label class="required"><em></em><strong>当前状态</strong></label></td>
-                        <td><b class="notice">{$info['status']}{$info['sub_status']}</b></td>
+                        <td><b class="hightlight success">{$info['status']}{$info['sub_status']}</b></td>
                     </tr>
                     <tr>
                         <td>当前处理人</td>
@@ -166,6 +147,12 @@
                          </td>
                      </tr>
                      <tr>
+                        <td>布置时间</td>
+                        <td>
+                           {if $info['arrange_date']}{$info['arrange_date']|date_format:"Y-m-d H:i:s"}{/if}
+                        </td>
+                    </tr>
+                     <tr>
                         <td>布置备注</td>
                         <td>{$info['bz_remark']|escape}</td>
                     </tr>
@@ -204,8 +191,16 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>实施时间</td>
+                        <td>{if $info['real_startdate']}{$info['real_startdate']|date_format:"Y-m-d H:i:s"}{/if}</td>
+                    </tr>
+                    <tr>
                         <td>实施备注</td>
                         <td>{$info['ss_remark']|escape}</td>
+                    </tr>
+                    <tr>
+                        <td>作业完成时间</td>
+                        <td>{if $info['real_enddate']}{$info['real_enddate']|date_format:"Y-m-d H:i:s"}{/if}</td>
                     </tr>
                     {/if}
                     {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送', '已实施',  '已完成', '已通过初审','已通过复审','项目已提交'))}
@@ -505,6 +500,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <a name="anchor_log" id="anchor_log"></a>
+                {include file="project_ch/log_list.tpl"}   
                 <div style="margin-bottom: 20px;">&nbsp;</div>    
                 <div class="fixbottom">
                     <input type="hidden" name="workflow" value=""/>

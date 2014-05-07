@@ -130,6 +130,7 @@ class Attachment extends TZ_Controller {
             $retAry = array('error' => 1,"message" => '数据库错误,'.$e->getCode());
         }
         
+        @unlink($_FILES[$keyname]['tmp_name']);
         if('Filedata' == $keyname){
             $this->sendJson($retAry);
         }else{

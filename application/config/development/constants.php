@@ -4,4 +4,5 @@
  * define('FILE_READ_MODE', 0644); 
  */
 
+define('CH_RCZD','日常宗地');
 

@@ -7,3 +7,8 @@
  */
 //$config['log_threshold'] = 1;
 $config['no_cover_image'] = '/img/no_cover.jpg';
+
+/**
+ * 分页大小 
+ */
+$config['page_size'] = 20;

@@ -1,28 +1,7 @@
 {include file="common/main_header.tpl"}
-        {include file="project_ch/modlist.tpl"}
+        {include file="project_ch/mod_list.tpl"}
         {*{include file="common/ke.tpl"}*}
         
-        <style>
-            .tj_list {
-                margin: 15px 0;
-                
-            }
-            
-            .tj_list li {
-                padding:5px;
-            }
-            
-            .tj_list .fname {
-                width:250px;
-                float:left;
-            }
-            
-            .tj_list .fsize {
-                width:100px;
-                float:left;
-            }
-            
-        </style>
         <div id="flowbar">
             <span>测绘项目</span>
             {foreach from=$statusHtml item=item}
@@ -36,6 +15,7 @@
                 <li><a href="#anchor_check">审核信息</a></li>
                 <li><a href="#anchor_doc">成果信息</a></li>
                 <li><a href="#anchor_fee">收费信息</a></li>
+                <li><a href="#anchor_log">项目日志</a></li>
             </ul>
             <form name="saveForm" action="{url_path('project_ch','task')}" method="post">
                 <input type="hidden" name="event_id" value="{$info['event_id']}"/>
@@ -118,14 +98,19 @@
                        <col width="800"/>
                    </colgroup>
                   <tbody>
-                   
+                    {if in_array($info['status'],array('已通过复审','项目已提交','已收费','已归档'))}
+                    <tr>
+                        <td>得分</td>
+                        <td>{$info['score'] - $info['faultScore']}</td>
+                    </tr>
+                    {/if}
                     <tr>
                         <td>测绘项目负责人</td>
                         <td>{$info['pm']}</td>
                     </tr>
                     <tr class="workflow">
                         <td><label class="required"><em></em><strong>当前状态</strong></label></td>
-                        <td><b class="notice">{$info['status']}{$info['sub_status']}</b></td>
+                        <td><b class="hightlight success">{$info['status']}{$info['sub_status']}</b></td>
                     </tr>
                     <tr>
                         <td>当前处理人</td>
@@ -143,11 +128,14 @@
                         <td>缺陷历史</td>
                         <td>
                             <div class="notice">
+                                {if $userFaultList}
+                                <a class="link_btn" href="{url_path('printer','fault','id=')}{$info['id']}" target="_blank">打印缺陷</a>
+                                {/if}
                                 <table>
                                     <colgroup>
-                                        <col width="400"/>
-                                        <col width="40"/>
-                                        <col width="300"/>
+                                        <col width="50%"/>
+                                        <col width="10%"/>
+                                        <col width="40%"/>
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -179,9 +167,9 @@
                                 <div id="faultList">
                                     <table>
                                         <colgroup>
-                                            <col width="400"/>
-                                            <col width="40"/>
-                                            <col width="300"/>
+                                            <col width="50%"/>
+                                            <col width="10%"/>
+                                            <col width="40%"/>
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -194,9 +182,9 @@
                                     <table class="fault_list">
                                             <caption>{$item['title']}</caption>
                                             <colgroup>
-                                                <col width="400"/>
-                                                <col width="40"/>
-                                                <col width="300"/>
+                                                <col width="50%"/>
+                                                <col width="10%"/>
+                                                <col width="40%"/>
                                             </colgroup>
                                             <tbody>
                                         {foreach from=$sysFaultList item=item}
@@ -250,6 +238,12 @@
                          </td>
                      </tr>
                      <tr>
+                        <td>布置时间</td>
+                        <td>
+                           {if $info['arrange_date']}{$info['arrange_date']|date_format:"Y-m-d H:i:s"}{/if}
+                        </td>
+                    </tr>
+                     <tr>
                         <td>布置备注</td>
                         <td>{$info['bz_remark']|escape}</td>
                     </tr>
@@ -288,8 +282,16 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>实施时间</td>
+                        <td>{if $info['real_startdate']}{$info['real_startdate']|date_format:"Y-m-d H:i:s"}{/if}</td>
+                    </tr>
+                    <tr>
                         <td>实施备注</td>
                         <td>{$info['ss_remark']|escape}</td>
+                    </tr>
+                    <tr>
+                        <td>作业完成时间</td>
+                        <td>{if $info['real_enddate']}{$info['real_enddate']|date_format:"Y-m-d H:i:s"}{/if}</td>
                     </tr>
                     {/if}
                     
@@ -372,7 +374,7 @@
                         </td>
                     </tr>
                     {/if}
-                    {if $info['type'] == '日常宗地'}
+                    {if $info['type'] == $smarty.const.CH_RCZD}
                     <tr>
                         <td>界址信息</td>
                         <td>
@@ -380,8 +382,10 @@
                             {if $info['status'] == '已实施'}
                             <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
                             {/if}
+                            <a class="link_btn" href="{url_path('printer','jzb','id=')}{$info['id']}" target="_blank">打印界址表</a>
                             <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
                             <div id="jz_list">
+                                <input type="hidden" name="jz_cnt" value="{count($jzList)}"/>
                                 <table id="jzTable">
                                     <caption>界址列表</caption>
                                     <colgroup>
@@ -389,7 +393,7 @@
                                         <col width="10%"/>
                                         <col width="35%"/>
                                         <col width="35%"/>
-                                        <col width="15%"/>
+                                        <col width="10%"/>
                                     </colgroup>
                                     <thead>
                                         <th>四址</th>
@@ -399,6 +403,52 @@
                                         <th></th>
                                     </thead>
                                     <tbody>
+                                    {if $info['status'] == '已实施' && $info['sendor_id'] == $userProfile['id']}
+                                        {foreach name=jzList from=$jzList item=item}
+                                        <tr>
+                                            <td>
+                                                <select name="direction[]">
+                                                    <option value="1" {if $item['direction'] == 1}selected{/if}>西</option>
+                                                    <option value="2" {if $item['direction'] == 2}selected{/if}>北</option>
+                                                    <option value="3" {if $item['direction'] == 3}selected{/if}>东</option>
+                                                    <option value="4" {if $item['direction'] == 4}selected{/if}>南</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <span class="point_start">{$smarty.foreach.jzList.index}</span> - <span class="point_end">{$smarty.foreach.jzList.index + 1}</span>
+                                            </td>
+                                            <td>
+                                                <input name="jz_name[]" type="text" style="width:100%" value="{$item['name']|escape}" placeholder="请输入界址线位置"/>
+                                            </td>
+                                            <td>
+                                                <input name="neighbor[]" type="text" style="width:100%" value="{$item['neighbor']|escape}" placeholder="请输入邻居名称"/>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="insertJz after">后插界址点</a>&nbsp;
+                                                <a href="javascript:void(0);" class="insertJz before">前插界址点</a>&nbsp;
+                                                <a href="javascript:void(0);" class="deleteJz">删除</a>
+                                            </td>
+                                        </tr>
+                                        {/foreach}
+                                    {else}
+                                        {foreach name=jzList from=$jzList item=item}
+                                        <tr>
+                                            <td>
+                                                {if $item['direction'] == 1}西
+                                                {elseif $item['direction'] == 2}北
+                                                {elseif $item['direction'] == 3}东
+                                                {elseif $item['direction'] == 4}南
+                                                {/if}
+                                            </td>
+                                            <td>
+                                                <span class="point_start">{$smarty.foreach.jzList.index + 1}</span> - <span class="point_end">{if $smarty.foreach.jzList.last}1{else}{$smarty.foreach.jzList.index + 2}{/if}</span>
+                                            </td>
+                                            <td>{$item['name']|escape}</td>
+                                            <td>{$item['neighbor']|escape}</td>
+                                            <td></td>
+                                        </tr>
+                                        {/foreach}
+                                    {/if}
                                     </tbody>
                                 </table>
                             </div>
@@ -407,8 +457,7 @@
                     <script type="x-my-template" id="jzRowTemplate">
                         <tr>
                             <td>
-                                <input type="hidden" value="" name="rowid"/>
-                                <select name="direction">
+                                <select name="direction[]">
                                     <option value="1">西</option>
                                     <option value="2">北</option>
                                     <option value="3">东</option>
@@ -419,12 +468,16 @@
                                 <span class="point_start"></span> - <span class="point_end"></span>
                             </td>
                             <td>
-                                <input name="jz_name[]" type="text" style="width:200px" value="" placeholder="请输入界址线位置"/>
+                                <input name="jz_name[]" type="text" style="width:100%" value="" placeholder="请输入界址线位置"/>
                             </td>
                             <td>
-                                <input name="neighbor[]" type="text" style="width:200px" value="" placeholder="请输入邻居名称"/>
+                                <input name="neighbor[]" type="text" style="width:100%" value="" placeholder="请输入邻居名称"/>
                             </td>
-                            <td><a href="javascript:void(0);" class="insertJz">插入界址点</a></td>
+                            <td>
+                                <a href="javascript:void(0);" class="insertJz after">后插界址点</a>&nbsp;
+                                <a href="javascript:void(0);" class="insertJz before">前插界址点</a>&nbsp;
+                                <a href="javascript:void(0);" class="deleteJz">删除</a>
+                            </td>
                         </tr>
                     </script>
                     <script>
@@ -442,9 +495,47 @@
                                 $("#jzTable").append(row);
                             });
                             
-                            $("#jzTable").delegate(".insertJz",'click',function(e){
-                                var currentTr = '';
+                            function refreshNum(){
+                                var rowcnt = $("#jzTable").find("tbody tr").size();
                                 
+                                for(i = 0;i < rowcnt; i++){
+                                    $("#jzTable tbody tr:eq(" + i + ") .point_start").html(i + 1);
+                                    
+                                    //$("#jzTable tbody tr:eq(" + i + ") select");
+                                    if((i + 1) != rowcnt){
+                                        $("#jzTable tbody tr:eq(" + i +") .point_end").html(i + 2);
+                                    }else{
+                                         $("#jzTable tbody tr:eq(" + i +") .point_end").html(1);
+                                    }
+                                }
+                            }
+                            
+                            $("#jzTable").delegate(".deleteJz",'click',function(e){
+                                $(this).closest("tr").remove();
+                                refreshNum();
+                            });
+                            
+                            $("#jzTable").delegate(".insertJz",'click',function(e){
+                                var currentTr = $(this).closest('tr'),
+                                    rowcnt = 0,
+                                    idx = currentTr.index(),
+                                    i = 0,
+                                    row = $($("#jzRowTemplate").html()),
+                                    isAfter = true;
+                                
+                                if($(this).hasClass("before")){
+                                    i = idx;
+                                    isAfter = false;
+                                }else{
+                                    i = idx + 1;
+                                }
+                               
+                                if(isAfter){
+                                    row.insertAfter(currentTr);
+                                }else{
+                                    row.insertBefore(currentTr);
+                                }
+                                refreshNum();
                             });
                         });
                     </script>
@@ -459,121 +550,122 @@
                         <col width="800"/>
                     </colgroup>
                     <tbody>
-                    <tr>
-                        <td>自查主要意见</td>
-                        <td>
-                            {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
-                            <textarea style="width: 500px; height: 100px;" name="zc_yj">{$info['zc_yj']|escape}</textarea>
-                            <div>{form_error('zc_yj')}</div>
-                            {else}
-                                {$info['zc_yj']|escape}
-                             {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>自查修改和处理意见、说明</td>
-                        <td>
-                            {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
-                            <textarea style="width: 500px; height: 100px;" name="zc_remark">{$info['zc_remark']|escape}</textarea>
-                            <div>{form_error('zc_remark')}</div>
-                            {else}
-                                {$info['zc_remark']|escape}
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>自查人</td>
-                        <td>{$info['zc_name']}</td>
-                    </tr>
-                    <tr>
-                        <td>自查时间</td>
-                        <td>{if $info['zc_time']}{$info['zc_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
-                    </tr>
-                    <tr>
-                        <td>初审意见</td>
-                        <td>
-                            {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
-                            <textarea style="width: 500px; height: 100px;" name="cs_yj">{$info['cs_yj']|escape}</textarea>
-                            <div>{form_error('cs_yj')}</div>
-                            {else}
-                               {$info['cs_yj']|escape} 
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>初审修改和处理意见、说明</td>
-                        <td>
-                            {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
-                            <textarea style="width: 500px; height: 100px;" name="cs_remark">{$info['cs_remark']|escape}</textarea>
-                            <div>{form_error('cs_remark')}</div>
-                            {else}
-                                {$info['cs_remark']|escape} 
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>初审人</td>
-                        <td>{$info['cs_name']}</td>
-                    </tr>
-                    <tr>
-                        <td>初审时间</td>
-                        <td>{if $info['cs_time']}{$info['cs_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
-                    </tr>
-                    <tr>
-                        <td>复审意见</td>
-                        <td>
-                            {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
-                            <textarea style="width: 500px; height: 100px;" name="fs_yj">{$info['fs_yj']|escape}</textarea>
-                            <div>{form_error('fs_yj')}</div>
-                            {else}
-                                {$info['fs_yj']|escape} 
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>复审修改和处理意见、说明</td>
-                        <td>
-                            {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
-                            <textarea style="width: 500px; height: 100px;" name="fs_remark">{$info['fs_remark']|escape}</textarea>
-                            <div>{form_error('fs_remark')}</div>
-                            {else}
-                                {$info['fs_remark']|escape} 
-                            {/if}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>复审人</td>
-                        <td>{$info['fs_name']}</td>
-                    </tr>
-                    <tr>
-                        <td>复审时间</td>
-                        <td>{if $info['fs_time']}{$info['fs_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
-                    </tr>
-                    {*
-                    {if $info['type'] == '日常宗地'}
-                    <tr>
-                        <td>请填写表格数据</td>
-                        <td>
-                            <p>
-                                <input type="hidden" name="doc_zddj" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地勘测定界成果报告" data-href="{url_path('project_ch','doc','categroy=zddj&id=')}{$info['id']}">宗地勘测定界成果报告</a>
-                                <div>{form_error('doc_zddj')}</div>
-                            </p>
-                            <p>
-                                <input type="hidden" name="doc_zdmj" value=""/><a class="docs" href="javascript:void(0);" data-title="土地面积分类表" data-href="{url_path('project_ch','doc','categroy=zdmj&id=')}{$info['id']}">土地面积分类表</a>
-                                <div>{form_error('doc_zdmj')}</div>
-                            </p>
-                            <p>
-                                <input type="hidden" name="doc_zdjz" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地界址调查表" data-href="{url_path('project_ch','doc','categroy=zdjz&id=')}{$info['id']}">宗地界址调查表</a>
-                                <div>{form_error('doc_zdjz')}</div>
-                            </p>
-                            <p>
-                                <input type="hidden" name="doc_zdbg" value=""/><a class="docs" href="javascript:void(0);" data-title="土地勘测定界成果变更情况表" data-href="{url_path('project_ch','doc','categroy=zdbg&id=')}{$info['id']}">土地勘测定界成果变更情况表</a>
-                                <div>{form_error('doc_zdbg')}</div>
-                            </p>
-                        </td>
-                    </tr>   
-                    {/if}
-                    *}
+                        <tr><td colspan="2"><a class="link_btn" href="{url_path('printer','check','id=')}{$info['id']}" target="_blank">打印审核表</a></td>   
+                        <tr>
+                            <td>自查主要意见</td>
+                            <td>
+                                {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
+                                <textarea style="width: 500px; height: 100px;" name="zc_yj">{$info['zc_yj']|escape}</textarea>
+                                <div>{form_error('zc_yj')}</div>
+                                {else}
+                                    {$info['zc_yj']|escape}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>自查修改和处理意见、说明</td>
+                            <td>
+                                {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
+                                <textarea style="width: 500px; height: 100px;" name="zc_remark">{$info['zc_remark']|escape}</textarea>
+                                <div>{form_error('zc_remark')}</div>
+                                {else}
+                                    {$info['zc_remark']|escape}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>自查人</td>
+                            <td>{$info['zc_name']}</td>
+                        </tr>
+                        <tr>
+                            <td>自查时间</td>
+                            <td>{if $info['zc_time']}{$info['zc_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
+                        </tr>
+                        <tr>
+                            <td>初审意见</td>
+                            <td>
+                                {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
+                                <textarea style="width: 500px; height: 100px;" name="cs_yj">{$info['cs_yj']|escape}</textarea>
+                                <div>{form_error('cs_yj')}</div>
+                                {else}
+                                {$info['cs_yj']|escape} 
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>初审修改和处理意见、说明</td>
+                            <td>
+                                {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
+                                <textarea style="width: 500px; height: 100px;" name="cs_remark">{$info['cs_remark']|escape}</textarea>
+                                <div>{form_error('cs_remark')}</div>
+                                {else}
+                                    {$info['cs_remark']|escape} 
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>初审人</td>
+                            <td>{$info['cs_name']}</td>
+                        </tr>
+                        <tr>
+                            <td>初审时间</td>
+                            <td>{if $info['cs_time']}{$info['cs_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
+                        </tr>
+                        <tr>
+                            <td>复审意见</td>
+                            <td>
+                                {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
+                                <textarea style="width: 500px; height: 100px;" name="fs_yj">{$info['fs_yj']|escape}</textarea>
+                                <div>{form_error('fs_yj')}</div>
+                                {else}
+                                    {$info['fs_yj']|escape} 
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>复审修改和处理意见、说明</td>
+                            <td>
+                                {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
+                                <textarea style="width: 500px; height: 100px;" name="fs_remark">{$info['fs_remark']|escape}</textarea>
+                                <div>{form_error('fs_remark')}</div>
+                                {else}
+                                    {$info['fs_remark']|escape} 
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>复审人</td>
+                            <td>{$info['fs_name']}</td>
+                        </tr>
+                        <tr>
+                            <td>复审时间</td>
+                            <td>{if $info['fs_time']}{$info['fs_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
+                        </tr>
+                        {*
+                        {if $info['type'] == '日常宗地'}
+                        <tr>
+                            <td>请填写表格数据</td>
+                            <td>
+                                <p>
+                                    <input type="hidden" name="doc_zddj" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地勘测定界成果报告" data-href="{url_path('project_ch','doc','categroy=zddj&id=')}{$info['id']}">宗地勘测定界成果报告</a>
+                                    <div>{form_error('doc_zddj')}</div>
+                                </p>
+                                <p>
+                                    <input type="hidden" name="doc_zdmj" value=""/><a class="docs" href="javascript:void(0);" data-title="土地面积分类表" data-href="{url_path('project_ch','doc','categroy=zdmj&id=')}{$info['id']}">土地面积分类表</a>
+                                    <div>{form_error('doc_zdmj')}</div>
+                                </p>
+                                <p>
+                                    <input type="hidden" name="doc_zdjz" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地界址调查表" data-href="{url_path('project_ch','doc','categroy=zdjz&id=')}{$info['id']}">宗地界址调查表</a>
+                                    <div>{form_error('doc_zdjz')}</div>
+                                </p>
+                                <p>
+                                    <input type="hidden" name="doc_zdbg" value=""/><a class="docs" href="javascript:void(0);" data-title="土地勘测定界成果变更情况表" data-href="{url_path('project_ch','doc','categroy=zdbg&id=')}{$info['id']}">土地勘测定界成果变更情况表</a>
+                                    <div>{form_error('doc_zdbg')}</div>
+                                </p>
+                            </td>
+                        </tr>   
+                        {/if}
+                        *}
                     
                     </tbody>
                 </table>
@@ -688,7 +780,9 @@
                             <td>{if $info['collect_date']}{$info['collect_date']|date_format:"Y-m-d"}{/if}</td>
                         </tr>
                     </tbody>
-                </table> 
+                </table>
+                <a name="anchor_log" id="anchor_log"></a>
+                {include file="project_ch/log_list.tpl"}
                 <div style="margin-bottom: 20px;">&nbsp;</div>    
                 <div class="fixbottom">
                     <input type="hidden" name="workflow" value=""/>
@@ -817,15 +911,25 @@
                                     cansubmit = false;
                                 }
                                 
-                                {if $info['type'] == '日常宗地'}
-                                if(cansubmit && $("input[name='neighbor[]']").length == 0){
-                                    $.jBox.tip("请录入界址信息",'提示');
+                                {if $info['type'] == $smarty.const.CH_RCZD}
+                                if(cansubmit && $("input[name='jz_name[]']").length < 4 ){
+                                    $.jBox.tip("请录入界址信息,至少四址",'提示');
                                     cansubmit = false;
                                 }
                                 if(cansubmit){
                                     $("#jzTable tbody tr").each(function(idx){
                                         var tr = $(this);
-                                        //cansubmit = false;
+                                        if($("input[name='jz_name[]']",tr).val() == ''){
+                                            $("input[name='jz_name[]']",tr).focus();
+                                            $.jBox.tip("请录入界址线位置",'提示');
+                                            cansubmit = false;
+                                            return false;
+                                        }else if($("input[name='neighbor[]']",tr).val() == ''){
+                                            $("input[name='neighbor[]']",tr).focus();
+                                            $.jBox.tip("请录入邻居名称",'提示');
+                                            cansubmit = false;
+                                            return false;
+                                        }
                                     });
                                 }
                                 {/if}

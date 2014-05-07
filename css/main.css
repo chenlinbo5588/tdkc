@@ -28,11 +28,11 @@
     text-align: center;
     position: fixed;
     _position: absolute;
-    right: 10px;
+    right: 0px;
     bottom: 100px;
     _bottom: "auto";
     cursor: pointer;
-    opacity: .6;
+    opacity: 0.6;
     filter: Alpha(opacity=60);
 }
 
@@ -169,6 +169,10 @@
 
 .btn {
     cursor:pointer;
+}
+
+.link_btn {
+    font-size:16px;
 }
 
 .btn-orange,.btn-gray {
@@ -486,6 +490,10 @@ ol.style_decimal , ul.style_decimal {
     background: #fff;
 }
 
+.panel_list .moditem {
+    padding: 3px 0;
+}
+
 .moditem .modcontent {
     text-indent: 2em;
 }
@@ -505,6 +513,10 @@ ol.style_decimal , ul.style_decimal {
  
 .workflow {
      background:rgb(238, 238, 238);
+}
+
+.workflow .hightlight {
+    font-size:18px;
 }
 
 #flowbar {
@@ -572,4 +584,22 @@ ol.style_decimal , ul.style_decimal {
 
 .doc th,.doc td {
     padding:5px 2px;
+}
+
+.tj_list {
+    margin: 15px 0;
+}
+
+.tj_list li {
+    padding:5px;
+}
+
+.tj_list .fname {
+    width:250px;
+    float:left;
+}
+
+.tj_list .fsize {
+    width:100px;
+    float:left;
 }

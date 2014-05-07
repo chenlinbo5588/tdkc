@@ -56,7 +56,7 @@ class project_gh extends TZ_Admin_Controller {
             'where' => array(
                 'project_id' => $project['id'],
                 'action' => $operaion,
-                'type !=' => 'system'
+                'type' => 'workflow'
             ),
             'order' => 'createtime DESC'
         ));
@@ -325,6 +325,7 @@ class project_gh extends TZ_Admin_Controller {
         $this->assign('message',$message);
         $this->assign('info',$info);
         $this->assign('modList',$this->_getProjectModList($project_id));
+        $this->assign('worklog',$this->_getProjectModList($project_id,'worklog'));
         $this->assign('gobackUrl',$gobackUrl);
         $this->display();
         

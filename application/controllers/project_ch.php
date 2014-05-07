@@ -60,7 +60,7 @@ class project_ch extends TZ_Admin_Controller {
             'where' => array(
                 'project_id' => $project['id'],
                 'action' => $operaion,
-                'type !=' => 'system'
+                'type' => 'workflow'
             ),
             'order' => 'createtime DESC'
         ));
@@ -231,9 +231,12 @@ class project_ch extends TZ_Admin_Controller {
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
-                    if($info['type'] == '日常宗地'){
-                        $this->form_validation->set_rules('jz_list', '界址信息', 'required');
+                    if($info['type'] == CH_RCZD){
+                        $this->form_validation->set_rules('jz_name[]', '界址信息', 'required');
                     }
+                    
+                    //header("Content-Type: text/html;charset=utf-8");
+                    //print_r($_POST);
                     
                     if(!$this->form_validation->run()){
                         break;
@@ -381,14 +384,33 @@ class project_ch extends TZ_Admin_Controller {
                 'status' => 0
             )
         ));
+        
+        $info['faultScore'] = 0;
+        foreach($userFaultList['data'] as $value){
+            $info['faultScore'] += $value['score'];
+        }
+        
         $this->assign('userFaultList',$userFaultList['data']);
-       
+        if($info['type'] == CH_RCZD){
+            $this->load->model('Project_Jz_Model');
+            
+            $jzList = $this->Project_Jz_Model->getList(array(
+                'where' => array(
+                    'project_id' => $info['id']
+                ),
+                'order' => 'direction ASC'
+            ));
+            
+            $this->assign('jzList',$jzList['data']);
+        }
+        
         
         $this->assign('statusHtml',$statusHtml);
         $info['event_id'] = $event_id;
         $this->assign('message',$message);
         $this->assign('info',$info);
         $this->assign('modList',$this->_getProjectModList($project_id));
+        $this->assign('worklog',$this->_getProjectModList($project_id,'worklog'));
         $this->assign('gobackUrl',$gobackUrl);
         $this->display();
         
@@ -563,6 +585,32 @@ class project_ch extends TZ_Admin_Controller {
                     
                     break;
                 case '完成':
+                    if($info['type'] == CH_RCZD){
+                        
+                        $this->load->model('Project_Jz_Model');
+                        $this->Project_Jz_Model->deleteByWhere(array(
+                            'project_id' => $info['id']
+                        ));
+                        
+                        $insertData = array();
+                        foreach($param['direction'] as $key => $val){
+                            $insertTime = time();
+                            
+                            $insertData[] = array(
+                                'project_id' => $info['id'],
+                                'direction' => $val,
+                                'name' => !empty($param['jz_name'][$key]) ? $param['jz_name'][$key] : '',
+                                'neighbor' => !empty($param['neighbor'][$key]) ? $param['neighbor'][$key] : '',
+                                'creator' => $this->_userProfile['name'],
+                                'updator' => $this->_userProfile['name'],
+                                'createtime' => $insertTime,
+                                'updatetime' => $insertTime
+                            );
+                        }
+                        
+                        $this->Project_Jz_Model->batchInsert($insertData);
+                    }
+                    
                     $sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
                         'sendor_id' => $sendorInfo['id'],

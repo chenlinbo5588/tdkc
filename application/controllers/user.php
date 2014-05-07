@@ -149,7 +149,7 @@ class User extends TZ_Admin_Controller {
         $this->assign('deptList',$data);
         
         $this->load->model('Role_Model');
-        $roleList = $this->Role_Model->getList(array('where' => array('status' => '正常')));
+        $roleList = $this->Role_Model->getList(array('where' => array('status' => '正常','type' => 2)));
         
         $this->assign('roleList',$roleList['data']);
         
@@ -224,7 +224,7 @@ class User extends TZ_Admin_Controller {
         $this->assign('deptList',$data);
         
         $this->load->model('Role_Model');
-        $roleList = $this->Role_Model->getList(array('where' => array('status' => '正常')));
+        $roleList = $this->Role_Model->getList(array('where' => array('status' => '正常','type' => 2)));
         
         $this->assign('roleList',$roleList['data']);
         
