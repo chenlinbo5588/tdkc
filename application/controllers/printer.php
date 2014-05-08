@@ -70,6 +70,21 @@ class Printer extends TZ_Controller {
         $this->display();
     }
     
+    /**
+     * 土地面积分类表 
+     */
+    public function mjb(){
+        $id = (int)gpc('id','GP',0);
+       
+        if(!$id){
+            die('参数错误');
+        }
+        
+        $info = $this->Project_Model->queryById($id);
+        $this->assign('info',$info);
+        
+        $this->display();
+    }
     
     public function check(){
         $id = (int)gpc('id','GP',0);
@@ -99,5 +114,5 @@ class Printer extends TZ_Controller {
     
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file printer.php */
+/* Location: ./application/controllers/printer.php */

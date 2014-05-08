@@ -18,16 +18,19 @@
                                 </select>
                             </label>
                             <label><strong>状态</strong>
-                                <select name="type" >
+                                <select name="status" >
                                     <option value="">全部</option>
                                     <option value="新增">新增</option>
                                     <option value="已发送">已发送</option>
-                                    <option value="已指派">已指派</option>
+                                    <option value="已布置">已布置</option>
                                     <option value="已实施">已实施</option>
                                     <option value="已完成">已完成</option>
-                                    <option value="审核中-初审">审核中-初审</option>
-                                    <option value="审核中-二审">审核中-二审</option>
+                                    <option value="已提交初审">已提交初审</option>
+                                    <option value="已提交复审">已提交复审</option>
                                     <option value="已提交">已提交</option>
+                                    <option value="项目已提交">项目已提交</option>
+                                    <option value="已收费">已收费</option>
+                                    <option value="已归档">已归档</option>
                                 </select>
                             </label>
                             {*<label><input type="checkbox" name="view" value="my" {if $smarty.get.view == 'my'}checked{/if}/>我登记的</label>*}
@@ -104,8 +107,16 @@
                 </form>
                 {include file="pagination.tpl"}
                 
+                <form id="delete_form" name="deleteForm" action="{url_path('project_ch','delete')}" method="post" target="post_iframe">
+                    <div class="inputlist">
+                        
+                    </div>
+                </form>
+                <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
+                
              </div>
              <script>
+                 {if $action == 'send' }
                  function deleteSelAll(name){
                     var checked = false;
                     $("input[name='" +  name + "']").each(function(){
@@ -114,30 +125,27 @@
                         }
                     });
                     
-                    if(!checked){
-                        $.jBox.error('至少选择一条记录', '提示');
-                    }else{
-                        
-                    }
-                }
-                
-                {*
-                function tuihuiSelAll(name){
-                    var checked = false;
-                    $("input[name='" +  name + "']").each(function(){
+                    $("#delete_form .inputlist").html('');
+                    $("input[name='" + name + "']").each(function(index){
                         if($(this).prop("checked")){
                             checked = true;
+                            $('<input type="hidden" name="delete_id[]" value="' + $(this).val() + '"/>').appendTo("#delete_form .inputlist");
                         }
                     });
                     
                     if(!checked){
                         $.jBox.error('至少选择一条记录', '提示');
                     }else{
-                        var param = $("form[name=listform]").serialize();
-                        $.jBox("get:{url_path('project_ch','tuihui')}" + '&' + param,{ title:"退回",width:500,buttons:{ } });
+                        var submit = function (v, h, f) {
+                            if (v == true){
+                                $("#delete_form").submit();
+                            }
+                            return true;
+                        };
+
+                        $.jBox.confirm("确定要删除吗", "提示", submit, { buttons: { '确定': true, '取消': false} });
                     }
                 }
-                *}
                 
                 function sendAll(name){
                     var checked = false;
@@ -151,9 +159,10 @@
                         $.jBox.error('至少选择一条记录', '提示');
                     }else{
                         var param = $("form[name=listform]").serialize();
-                        $.jBox("get:{url_path('project_ch','sendOne')}" + '&' + param,{ title:"发送",width:300,buttons:{ } });
+                        $.jBox("get:{url_path('project_ch','sendone')}" + '&' + param,{ title:"发送",width:300,buttons:{ } });
                     }
                 }
+                {/if}
                 
                 $(function(){
                     $("a.info").bind("click",function(e){

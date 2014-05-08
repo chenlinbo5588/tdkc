@@ -89,7 +89,7 @@ class File extends TZ_Controller {
         $newFilePath = $fileDir.'/'.$file_md5.$suffix;
         
         $now = time();
-        $file_key = random(8);
+        $file_key = md5($attachment['filename']);
         $file_description = '';
         
         

@@ -49,6 +49,10 @@
                         <td>{$info['type']}</td>
                     </tr>
                     <tr>
+                        <td>性质</td>
+                        <td>{$info['nature']}</td>
+                    </tr>
+                    <tr>
                         <td>登记名称</td>
                         <td>{$info['name']|escape}</td>
                     </tr>
@@ -378,13 +382,13 @@
                     <tr>
                         <td>界址信息</td>
                         <td>
-                            {form_error('jz_list')}
+                            <div>{form_error('jz_list')}</div>
+                            <a class="link_btn" href="{url_path('printer','jzb','id=')}{$info['id']}" target="_blank">打印界址表</a>
                             {if $info['status'] == '已实施'}
                             <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
                             {/if}
-                            <a class="link_btn" href="{url_path('printer','jzb','id=')}{$info['id']}" target="_blank">打印界址表</a>
                             <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
-                            <div id="jz_list">
+                            <div id="jz_list" style="margin:10px 0;">
                                 <input type="hidden" name="jz_cnt" value="{count($jzList)}"/>
                                 <table id="jzTable">
                                     <caption>界址列表</caption>
@@ -454,92 +458,65 @@
                             </div>
                         </td>
                     </tr>
-                    <script type="x-my-template" id="jzRowTemplate">
-                        <tr>
-                            <td>
-                                <select name="direction[]">
-                                    <option value="1">西</option>
-                                    <option value="2">北</option>
-                                    <option value="3">东</option>
-                                    <option value="4">南</option>
-                                </select>
-                            </td>
-                            <td>
-                                <span class="point_start"></span> - <span class="point_end"></span>
-                            </td>
-                            <td>
-                                <input name="jz_name[]" type="text" style="width:100%" value="" placeholder="请输入界址线位置"/>
-                            </td>
-                            <td>
-                                <input name="neighbor[]" type="text" style="width:100%" value="" placeholder="请输入邻居名称"/>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);" class="insertJz after">后插界址点</a>&nbsp;
-                                <a href="javascript:void(0);" class="insertJz before">前插界址点</a>&nbsp;
-                                <a href="javascript:void(0);" class="deleteJz">删除</a>
-                            </td>
-                        </tr>
-                    </script>
-                    <script>
-                        $(function(){
-                            $("#addJz").bind("click",function(e){
-                                var rowcnt = $("#jzTable").find("tbody tr").size();
-                                var row = $($("#jzRowTemplate").html());
-                                
-                                row.find(".point_start").html(rowcnt + 1);
-                                row.find(".point_end").html(1);
-                                
-                                var trlast = $("#jzTable tbody tr:last");
-                                trlast.find(".point_end").html(rowcnt + 1);
-                                
-                                $("#jzTable").append(row);
-                            });
-                            
-                            function refreshNum(){
-                                var rowcnt = $("#jzTable").find("tbody tr").size();
-                                
-                                for(i = 0;i < rowcnt; i++){
-                                    $("#jzTable tbody tr:eq(" + i + ") .point_start").html(i + 1);
-                                    
-                                    //$("#jzTable tbody tr:eq(" + i + ") select");
-                                    if((i + 1) != rowcnt){
-                                        $("#jzTable tbody tr:eq(" + i +") .point_end").html(i + 2);
-                                    }else{
-                                         $("#jzTable tbody tr:eq(" + i +") .point_end").html(1);
-                                    }
-                                }
-                            }
-                            
-                            $("#jzTable").delegate(".deleteJz",'click',function(e){
-                                $(this).closest("tr").remove();
-                                refreshNum();
-                            });
-                            
-                            $("#jzTable").delegate(".insertJz",'click',function(e){
-                                var currentTr = $(this).closest('tr'),
-                                    rowcnt = 0,
-                                    idx = currentTr.index(),
-                                    i = 0,
-                                    row = $($("#jzRowTemplate").html()),
-                                    isAfter = true;
-                                
-                                if($(this).hasClass("before")){
-                                    i = idx;
-                                    isAfter = false;
-                                }else{
-                                    i = idx + 1;
-                                }
-                               
-                                if(isAfter){
-                                    row.insertAfter(currentTr);
-                                }else{
-                                    row.insertBefore(currentTr);
-                                }
-                                refreshNum();
-                            });
-                        });
-                    </script>
-                    {/if}
+                     <tr>
+                        <td>土地面积分类表</td>
+                        <td>
+                            <div id="mjb">
+                                <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">打印面积分类表</a>
+                                <div>
+                                    <label>
+                                        <span>土地大类</span>
+                                        <select class="mj_cate" name="mj_cate1" id="mj_cate1">
+                                            <option value="">请选择</option>
+                                            <option value="农用地">农用地</option>
+                                            <option value="建设用地">建设用地</option>
+                                            <option value="未利用地">未利用地</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>一级分类</span>
+                                        <select class="mj_cate" name="mj_cate2" id="mj_cate2">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>二级分类</span>
+                                        <select name="mj_cate3"  id="mj_cate3">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </label>
+                                    <input type="text" name="onwer_name" value="" style="width:200px;" placeholder="请输入村名"/>
+                                    <input type="text" name="mj" value="" style="width:200px;" placeholder="请输入面积"/><span>平方米</span>
+                                    <input type="button" name="addMjItem" id="addMjItem" value="增加"/>
+                                </div>
+                                <div id="mjList" style="margin:10px 0;">
+                                    <table>
+                                        <caption>面积列表</caption>
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="10%"/>
+                                        </colgroup>
+                                        <thead>
+                                            <th>土地大类</th>
+                                            <th>一级分类</th>
+                                            <th>二级分类</th>
+                                            <th>村名</th>
+                                            <th>面积（平方米)</th>
+                                            <th></th>
+                                        </thead>
+                                        <tbody>
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                     </tr>
+                     {/if}   
                     </tbody>
                 </table>
                <a name="anchor_check" id="anchor_check"></a>
@@ -550,7 +527,7 @@
                         <col width="800"/>
                     </colgroup>
                     <tbody>
-                        <tr><td colspan="2"><a class="link_btn" href="{url_path('printer','check','id=')}{$info['id']}" target="_blank">打印审核表</a></td>   
+                        <tr><td></td><td><a class="link_btn" href="{url_path('printer','check','id=')}{$info['id']}" target="_blank">打印审核表</a></td>   
                         <tr>
                             <td>自查主要意见</td>
                             <td>
@@ -817,6 +794,189 @@
                 {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                 </div>
              </form>
+                {if $info['type'] == $smarty.const.CH_RCZD}
+                <script type="x-my-template" id="jzRowTemplate">
+                    <tr>
+                        <td>
+                            <select name="direction[]">
+                                <option value="1">西</option>
+                                <option value="2">北</option>
+                                <option value="3">东</option>
+                                <option value="4">南</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="point_start"></span> - <span class="point_end"></span>
+                        </td>
+                        <td>
+                            <input name="jz_name[]" type="text" style="width:100%" value="" placeholder="请输入界址线位置"/>
+                        </td>
+                        <td>
+                            <input name="neighbor[]" type="text" style="width:100%" value="" placeholder="请输入邻居名称"/>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0);" class="insertJz after">后插界址点</a>&nbsp;
+                            <a href="javascript:void(0);" class="insertJz before">前插界址点</a>&nbsp;
+                            <a href="javascript:void(0);" class="deleteJz">删除</a>
+                        </td>
+                    </tr>
+                </script>
+                <script type="x-my-template" id="mjRowTemplate">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a href="javascript:void(0);" class="deleteMj">删除</a>
+                        </td>
+                    </tr>
+                </script>
+                <script>
+                    $(function(){
+                        $("#addJz").bind("click",function(e){
+                            var rowcnt = $("#jzTable").find("tbody tr").size();
+                            var row = $($("#jzRowTemplate").html());
+
+                            row.find(".point_start").html(rowcnt + 1);
+                            row.find(".point_end").html(1);
+
+                            var trlast = $("#jzTable tbody tr:last");
+                            trlast.find(".point_end").html(rowcnt + 1);
+
+                            $("#jzTable").append(row);
+                        });
+
+                        function refreshNum(){
+                            var rowcnt = $("#jzTable").find("tbody tr").size();
+
+                            for(i = 0;i < rowcnt; i++){
+                                $("#jzTable tbody tr:eq(" + i + ") .point_start").html(i + 1);
+
+                                //$("#jzTable tbody tr:eq(" + i + ") select");
+                                if((i + 1) != rowcnt){
+                                    $("#jzTable tbody tr:eq(" + i +") .point_end").html(i + 2);
+                                }else{
+                                        $("#jzTable tbody tr:eq(" + i +") .point_end").html(1);
+                                }
+                            }
+                        }
+
+                        $("#jzTable").delegate(".deleteJz",'click',function(e){
+                            $(this).closest("tr").remove();
+                            refreshNum();
+                        });
+
+                        $("#jzTable").delegate(".insertJz",'click',function(e){
+                            var currentTr = $(this).closest('tr'),
+                                rowcnt = 0,
+                                idx = currentTr.index(),
+                                i = 0,
+                                row = $($("#jzRowTemplate").html()),
+                                isAfter = true;
+
+                            if($(this).hasClass("before")){
+                                i = idx;
+                                isAfter = false;
+                            }else{
+                                i = idx + 1;
+                            }
+
+                            if(isAfter){
+                                row.insertAfter(currentTr);
+                            }else{
+                                row.insertBefore(currentTr);
+                            }
+                            refreshNum();
+                        });
+                        
+                        var cacheData = [];
+                        
+                        function dataToOption(name,d){
+                            $("select[name=" + name + "]").html('');
+                            $("select[name=" + name + "]").append('<option value="">请选择</option>');
+                            for(var i = 0; i < d.length; i++){
+                                $("select[name=" + name + "]").append('<option value="' + d[i].code + '">' + d[i].name + '</option>');
+                            }
+                        }
+                        
+                        $("#addMjItem").bind("click",function(e){
+                        
+                            var div = $(e.target).closest("div");
+                            if($("#mj_cate1").val() == ''){
+                                $.jBox.tip("请选择土地大类",'提示');
+                                return;
+                            }
+                            
+                            if($("#mj_cate2").val() == ''){
+                                $.jBox.tip("请选择一级分类",'提示');
+                                return;
+                            }
+                            
+                            if($("#mj_cate3").val() == ''){
+                                $.jBox.tip("请选择二级分类",'提示');
+                                return;
+                            }
+                            
+                            if(div.find("input[name=onwer_name]").val() == ''){
+                                $.jBox.tip("请选择村名",'提示');
+                                return;
+                            }
+                            
+                            if(!/^[0-9]+(.[0-9]+)?$/.test(div.find("input[name=mj]").val())){
+                                $.jBox.tip("请选择合法的面积值",'提示');
+                                return;
+                            }
+                            
+                            var row = $($("#mjRowTemplate").html());
+                            
+                            row.find("td:eq(0)").html($("#mj_cate1").val());
+                            row.find("td:eq(1)").html($("#mj_cate2 option:selected").html() + '(' + $("#mj_cate2").val() + ')');
+                            row.find("td:eq(2)").html($("#mj_cate3 option:selected").html() + '(' + $("#mj_cate3").val() + ')');
+                            row.find("td:eq(3)").html(div.find("input[name=onwer_name]").val());
+                            row.find("td:eq(4)").html(div.find("input[name=mj]").val());
+                            
+                            $("#mjList tbody").append(row);
+                        });
+                        
+                        
+                        $(".mj_cate").bind("change",function(e){
+                            var sel = $(e.target);
+                            var selname = sel.prop('name');
+                            var idx = parseInt(selname.replace('mj_cate',''));
+                            var v = sel.val();
+                            
+                            if(!v){
+                                return ;
+                            }
+                            
+                            if(v && cacheData[v]){
+                                dataToOption('mj_cate' + (idx + 1),cacheData[v]);
+                            }else{
+                                
+                                $.ajax({
+                                    type:"GET",
+                                    url:"{url_path('search','getLandCategory')}",
+                                    dataType:"json",
+                                    data:{
+                                        'which' : idx,
+                                        'cate_name1' : $("select[name=mj_cate1]").val(),
+                                        'cate_name2' : $("select[name=mj_cate2]").val(),
+                                        'key' : v
+                                    },
+                                    success:function(data){
+                                        if(v && data.length){
+                                            cacheData[v] = data;
+                                        }
+                                        dataToOption('mj_cate' + (idx + 1),cacheData[v]);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>
+                {/if}
                 <script>
                     $(function(){
                         {if $message}

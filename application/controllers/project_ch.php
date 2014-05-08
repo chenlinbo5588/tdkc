@@ -9,6 +9,7 @@ class project_ch extends TZ_Admin_Controller {
         parent::__construct();
         $this->load->model('Region_Model');
         $this->load->model('Project_Type_Model');
+        $this->load->model('Project_Nature_Model');
         $this->load->model('Project_Model');
         $this->load->model('Project_Mod_Model');
         $this->load->model('User_Event_Model');
@@ -1054,7 +1055,7 @@ class project_ch extends TZ_Admin_Controller {
     
     
     private function _addRules(){
-        $this->form_validation->set_rules('input_type', '录入类型', 'required|is_natural');
+        
         $this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('region_code', '区域', 'required|alpha');
         $this->form_validation->set_rules('type', '登记类型', 'required' );
@@ -1107,10 +1108,11 @@ class project_ch extends TZ_Admin_Controller {
         if(trim($_POST['displayorder'])){
             $this->form_validation->set_rules('displayorder', '优先级', 'trim|is_natural|less_than[10]');
         }
+
     }
     
     
-    private function _formatProjectNo($year,$regionCode,$masterSerial,$regionSerial){
+    private function _formatProjectNo($year,$regionCode,$masterSerial,$regionSerial,$prefix = 'A'){
         
         if($masterSerial < 1000){
             $masterSerial = str_pad($masterSerial, 3,'0', STR_PAD_LEFT);
@@ -1120,7 +1122,7 @@ class project_ch extends TZ_Admin_Controller {
             $regionSerial = str_pad($regionSerial, 3,'0', STR_PAD_LEFT);
         }
         
-        return 'A'.$year."-".$masterSerial."-".strtoupper($regionCode).$regionSerial;
+        return $prefix.$year."-".$masterSerial."-".strtoupper($regionCode).$regionSerial;
     }
     
     
@@ -1142,18 +1144,61 @@ class project_ch extends TZ_Admin_Controller {
     
     
     /**
-     * @todo delete 
+     * 删除 
      */
     public function delete(){
-        if($this->isPostRequest() && !empty($_POST['id'])){
+        if($this->isPostRequest() && !empty($_POST['delete_id'])){
+            $message = array();
+            $reload = 0;
             
+            $successCnt = 0;
+            $failedCnt = 0;
             
+            foreach($_POST['delete_id'] as $val){
+                $flag = $this->Project_Model->updateByWhere(
+                    array(
+                        'status' => '已删除',
+                        'updatetime' => time(), 
+                        'updator' => $this->_userProfile['name']
+                    ),
+                    array(
+                        'status' => '新增',
+                        'id' => $val
+                    )
+                );
+                
+                if($flag){
+                    $successCnt++;
+                }else{
+                    $failedCnt++;
+                }
+            }
+            
+            if($successCnt){
+                $reload = 1;
+            }
+            
+            if($successCnt){
+                $message[] = '<p class="success">'.$successCnt.'个记录被删除成功</p>';
+            }
+            
+            if($failedCnt){
+                $message[] = '<p class="failed">'.$failedCnt.'个记录被删除失败</p>';
+            }
+            $this->assign('reload',$reload);
+            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
+            $this->display('showMessage','common');
+            
+        }else{
+            $this->assign('message','删除失败参数错误');
+            $this->display('showMessage','common');
         }
+        
     }
     
     public function add()
 	{
-        
+        $this->assign('action','add');
         /**
          *登记年份 
          */
@@ -1162,7 +1207,10 @@ class project_ch extends TZ_Admin_Controller {
         
         if($this->isPostRequest()){
             $this->assign('info',$_POST);
+            
+            $this->form_validation->set_rules('input_type', '录入类型', 'required|is_natural|less_than[2]');
             $this->_addRules();
+            $this->form_validation->set_rules('gen_serial', '是否生成流程号', 'is_natural|less_than[2]');
             
             if($this->form_validation->run()){
                 $this->_add($addYear);
@@ -1202,6 +1250,13 @@ class project_ch extends TZ_Admin_Controller {
         $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
+        /**
+         * 项目性质 
+         */
+        $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('natureList',$natureList['data']);
+        
+        
         $this->assign('yearList',yearList());
         $this->assign('monthList',range(1,12));
         
@@ -1214,15 +1269,25 @@ class project_ch extends TZ_Admin_Controller {
         $_POST['creator'] = $this->_userProfile['name'];
 
         //$this->db->trans_start();
-        $master_serial = $this->Project_Model->getMaxByWhere('master_serial',array(
-            'year' => $year
-        ));
+        if($_POST['input_type'] == '0' && $_POST['gen_serial']){
+            $master_serial = $this->Project_Model->getMaxByWhere('master_serial',array(
+                'year' => $year
+            ));
 
-        $region_serial = $this->Project_Model->getMaxByWhere('region_serial',array(
-            'year' => $year,
-            'region_code' => $_POST['region_code']
-        ));
+            $region_serial = $this->Project_Model->getMaxByWhere('region_serial',array(
+                'year' => $year,
+                'region_code' => $_POST['region_code']
+            ));
 
+            $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
+            $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
+            $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
+        }else{
+            $_POST['master_serial'] = 0;
+            $_POST['region_serial'] = 0;
+            $_POST['project_no'] = date("Ymdhis").mt_rand(0, 1000);
+        }
+        
         $regionName = $this->Region_Model->getList(array(
                 'select' => 'name',
                 'where' => array(
@@ -1231,16 +1296,12 @@ class project_ch extends TZ_Admin_Controller {
                     'status' => '正常'
                 )
         ));
-
+        
         if($regionName['data'][0]['name']){
             $_POST['region_name'] = $regionName['data'][0]['name'];
         }else{
             $_POST['region_name'] = '';
         }
-        
-        $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
-        $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
-        $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
         
         $insertid = $this->Project_Model->add($_POST);
         //$this->db->trans_complete();
@@ -1263,7 +1324,7 @@ class project_ch extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 $info = $this->Project_Model->getById(array('where' => array('id' => $_POST['id'])));
                 //比较是否修改过年和区域，如果修改过的话 则用新记录代替
-                if($info['year'] != $_POST['year'] || $info['region_code'] != $_POST['region_code']){
+                if($info['input_type'] == 0 && ($info['year'] != $_POST['year'] || $info['region_code'] != $_POST['region_code'])){
                     /**
                      * 新记录建立 
                      */
@@ -1362,46 +1423,7 @@ class project_ch extends TZ_Admin_Controller {
         return array('success' => $event, 'failed' => $failed);
     }
     
-    /**
-     * 退回 
-     */
-    /**
-    public function tuihui(){
-        $ids =  gpc('id','GP',array());
-        if(empty($ids)){
-            die("参数错误,请重新请求");
-        }
-        if(!is_array($ids)){
-            $ids = (array)$ids;
-        }
-        
-        $this->assign("id",$ids);
-        
-        if($this->isPostRequest() && !empty($_POST['id'])){
-            
-            
-            $this->assign('reload',0);
-            $this->assign('message','测试');
-            $this->display('showMessage','common');
-            
-        }else{
-            $projectList = $this->Project_Model->getList(array(
-                'where_in' => array(
-                    array(
-                        'key' => 'id', 'value' => $ids
-                    )
-                )
-            ));
-            
-            $this->assign('projectList',$projectList['data']);
-            $this->display();
-        }
-    }
-     * 
-     */
-    
-    
-    public function sendOne(){
+    public function sendone(){
         
         $ids =  gpc('id','GP',array());
         if(empty($ids)){
@@ -1443,30 +1465,6 @@ class project_ch extends TZ_Admin_Controller {
         }
     }
     
-    /**
-     * 
-     */
-    public function doc(){
-        
-        $cate = gpc('categroy','GP','');
-        $id = gpc('id','GP',0);
-        
-        if(!$id){
-            die("参数非法");
-        }
-        
-        if(!$cate){
-            die("文档分类非法");
-        }
-        
-        $info = $this->Project_Model->queryById($id);
-        
-        $this->assign('info',$info);
-        $this->display($cate,'doc');
-    }
-    
-    
-    
     private function _getSendorList(){
         $userSendorList = $this->User_Sendor_Model->getList(array(
             'where' => array(
@@ -1498,6 +1496,10 @@ class project_ch extends TZ_Admin_Controller {
             $condition['where'] = array(
                 'status !=' => '已删除'
             );
+            
+            if(!empty($_GET['status'])){
+                $condition['where']['status'] = $_GET['status'];
+            }
             
             if(!empty($_GET['type'])){
                 $condition['where']['type'] = $_GET['type'];

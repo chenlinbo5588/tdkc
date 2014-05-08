@@ -987,18 +987,62 @@ class project_gh extends TZ_Admin_Controller {
     
     
     /**
-     * @todo delete 
+     * 删除 
      */
     public function delete(){
-        if($this->isPostRequest() && !empty($_POST['id'])){
+        if($this->isPostRequest() && !empty($_POST['delete_id'])){
+            $message = array();
+            $reload = 0;
             
+            $successCnt = 0;
+            $failedCnt = 0;
             
+            foreach($_POST['delete_id'] as $val){
+                
+                $flag = $this->Project_Gh_Model->updateByWhere(
+                    array(
+                        'status' => '已删除',
+                        'updatetime' => time(), 
+                        'updator' => $this->_userProfile['name']
+                    ),
+                    array(
+                        'status' => '新增',
+                        'id' => $val
+                    )
+                );
+                
+                if($flag){
+                    $successCnt++;
+                }else{
+                    $failedCnt++;
+                }
+            }
+            
+            if($successCnt){
+                $reload = 1;
+            }
+            
+            if($successCnt){
+                $message[] = '<p class="success">'.$successCnt.'个记录被删除成功</p>';
+            }
+            
+            if($failedCnt){
+                $message[] = '<p class="failed">'.$failedCnt.'个记录被删除失败</p>';
+            }
+            $this->assign('reload',$reload);
+            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
+            $this->display('showMessage','common');
+            
+        }else{
+            $this->assign('message','删除失败参数错误');
+            $this->display('showMessage','common');
         }
+        
     }
     
     public function add()
 	{
-        
+        $this->assign('action','add');
         /**
          *登记年份 
          */
@@ -1176,7 +1220,7 @@ class project_gh extends TZ_Admin_Controller {
     }
     
     
-    public function sendOne(){
+    public function sendone(){
         
         $ids =  gpc('id','GP',array());
         if(empty($ids)){
@@ -1249,6 +1293,11 @@ class project_gh extends TZ_Admin_Controller {
             $condition['where'] = array(
                 'status !=' => '已删除'
             );
+
+            if(!empty($_GET['status'])){
+                $condition['where']['status'] = $_GET['status'];
+            }
+            
             
             if(!empty($_GET['type'])){
                 $condition['where']['type'] = $_GET['type'];

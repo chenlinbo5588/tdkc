@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
     {if $action == 'edit'}
-    {include file="project_gh/modlist.tpl"}
+    {include file="project_gh/mod_list.tpl"}
     {/if}
             <div class="row-fluid">
                 {if $action == 'edit'}
@@ -14,9 +14,13 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>录入类型</strong></label></td>
                             <td>
+                                {if $action == 'add'}
                                 <label><input type="radio" name="input_type"  value="0" {if $inputType == 0}checked{/if}>正常登记</label>&nbsp;&nbsp;
-                                <label><input type="radio" name="input_type"  value="1" {if $inputType == 1}checked{/if}>补录登记</label>
+                                <label><input type="radio" name="input_type"  value="1" {if $inputType == 1}checked{/if}>意向登记</label>
                                 <span class="tip">{form_error('input_type')}</span>
+                                {else}
+                                    {if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}意向登记{/if}
+                                {/if}
                             </td>
                         </tr>
                         <tr class="bulu">
@@ -99,12 +103,14 @@
                         <tr>
                             <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
                         </tr>
+                        {*
                         {if $action == 'edit'}
                         <tr>
                             <td>退回原因</td>
                             <td><span class="notice">{$info['reason']|escape}</span></td>
                         </tr>
                         {/if}
+                        *}
                         <tr>
                             <td><label class="optional"><em></em><strong>优先级</strong></label></td><td>
                                 <input type="text" name="displayorder" value="{$info['displayorder']}" placeholder="优先级"/>

@@ -81,6 +81,47 @@ class Search extends TZ_Controller {
         // json_encode is available in PHP 5.2 and above, or you can install a PECL module in earlier versions
         echo json_encode($result);
     }
+    
+    
+    public function getLandCategory(){
+        
+        $this->load->model('Land_Category_Model');
+        $cate_name1 = $_GET['cate_name1'];
+        $cate_name2 = $_GET['cate_name2'];
+        $which = $_GET['which'];
+        
+        $key = $_GET['key'];
+        $condition = array(
+            'order' => 'cate_id ASC ,createtime ASC' 
+        );
+        
+        switch($which){
+            case '1':
+                $condition['where'] = array(
+                    'cate_name' => $cate_name1,
+                    'pid' => 0
+                );
+                break;
+            case '2':
+                $d = $this->Land_Category_Model->queryById($cate_name2,'code');
+                $condition['where'] = array(
+                    'pid' => $d['id']
+                );
+                break;
+            default:
+                break;
+        }
+        
+        
+        $data = $this->Land_Category_Model->getList($condition);
+        
+        if(!$data['data']){
+            $data['data'] = array();
+        }
+        
+        $this->sendJson($data['data']);
+        
+    }
 }
 
 /* End of file welcome.php */

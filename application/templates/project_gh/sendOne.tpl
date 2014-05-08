@@ -5,8 +5,8 @@
         }
     </style>
     
-    <iframe name="post_iframe" frameborder="0" height="0" width="0"/>
-     <form action="{url_path('project_gh','sendOne')}" method="post" name="sf" target="post_iframe">
+    <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
+     <form action="{url_path('project_gh','sendone')}" method="post" name="sf" target="post_iframe">
         {foreach from=$id item=item}
         <input type="hidden" name="id[]" value="{$item}"/>     
         {/foreach}

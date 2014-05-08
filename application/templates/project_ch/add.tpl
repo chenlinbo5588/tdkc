@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
     {if $action == 'edit'}
-    {include file="project_ch/modlist.tpl"}
+    {include file="project_ch/mod_list.tpl"}
     {/if}
             <div class="row-fluid">
                 {if $action == 'edit'}
@@ -14,9 +14,14 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>录入类型</strong></label></td>
                             <td>
+                                {if $action == 'add'}
                                 <label><input type="radio" name="input_type"  value="0" {if $inputType == 0}checked{/if}>正常登记</label>&nbsp;&nbsp;
-                                <label><input type="radio" name="input_type"  value="1" {if $inputType == 1}checked{/if}>补录登记</label>
-                                <span class="tip">{form_error('input_type')}</span>
+                                <label><input type="radio" name="input_type"  value="1" {if $inputType == 1}checked{/if}>意向登记</label>
+                                <span class="tip">{form_error('input_type')}<em class="muted">意向登记不会生成流水号</em></span>
+                                {else}
+                                    {if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}意向登记{/if}
+                                {/if}
+                                
                             </td>
                         </tr>
                         <tr class="bulu">
@@ -64,6 +69,17 @@
                             </td>
                         </tr>
                         <tr>
+                            <td><label class="required"><em>*</em><strong>性质</strong></label></td>
+                            <td>
+                                <select name="nature" style="width:300px">
+                                    {foreach from=$natureList item=item}
+                                    <option value="{$item['name']}" {if $info['type'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                    {/foreach}
+                                </select>
+                                {form_error('type')}
+                            </td>
+                        </tr>
+                        <tr>
                             <td><label class="required"><em>*</em><strong>登记名称</strong></label></td><td><input type="text" style="width:600px" name="name" value="{$info['name']}" placeholder="请输入登记名称"/><span class="tip">{form_error('name')}</span></td>
                         </tr>
                         <tr>
@@ -99,17 +115,30 @@
                         <tr>
                             <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
                         </tr>
+                        {*
                         {if $action == 'edit'}
                         <tr>
                             <td>退回原因</td>
                             <td><span class="notice">{$info['reason']|escape}</span></td>
                         </tr>
                         {/if}
+                        *}
                         <tr>
                             <td><label class="optional"><em></em><strong>优先级</strong></label></td><td>
                                 <input type="text" name="displayorder" value="{$info['displayorder']}" placeholder="优先级"/>
                                 <span class="tip">{form_error('displayorder')} 默认空表示普通优先级 数字越大优先级越高</span></td>
                         </tr>
+                        {if $action == 'add'}
+                        <tr  id="gen_serial">
+                            <td><label class="required"><em>*</em><strong>是否生成流水号</strong></label></td>
+                            <td>
+                                <label><input type="radio" name="gen_serial" value="1" checked/>是</label>
+                                &nbsp;&nbsp;
+                                <label><input type="radio" name="gen_serial" value="0" />否</label>
+                                <span class="tip">{form_error('gen_serial')}</span>
+                            </td>
+                        </tr>
+                        {/if}
                         <tr>
                             <td></td>
                             <td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
