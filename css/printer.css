@@ -110,14 +110,57 @@ table td,table th {
 .clearfix{*zoom:1;}
 
 
+.btn-orange,.btn-gray {
+    background:url(../img/btn_orange.png) no-repeat 0 0;
+    width:101px;
+    height: 37px;
+    border:0px;
+    text-align:center;
+    color: #FFFFFF;
+    font-size: 16px;
+}
+.btn-gray {
+    background:url(../img/btn_gray.png) no-repeat 0 0;
+    color:#000;
+}
+
+.btn-orange:hover , .btn-gray:hover {
+    background-position: 0 -45px;
+}
+.btn-orange:active, .btn-gray:active {
+    background-position: 0 -90px;
+}
+
+
+
+
 .container {
     width: 750px;
     margin:0 auto;
 }
+input.noborder {
+    border:1px solid transparent;
+}
+
+textarea.noborder {
+    border:1px solid transparent;
+}
+
+.noborder.stathover {
+    border:1px solid #ccc;
+}
 
 
+/**
+ * 定义字体
+ */
+
+ 
+ 
 .border1 th , .border1 td {
     border:1px solid black;
+    padding: 5px;
+    height:20px;
 }
 
 .border2 th , .border2 td {
@@ -134,9 +177,10 @@ table td,table th {
 }
 
 /**
- * 界址表
+ * 打印自动分页
  */
-.jzb {
+.jzb , .mjb {
+    page-break-before:always;
     page-break-after:always;
     
 }
@@ -187,4 +231,12 @@ table td,table th {
 .check .title {
     height:40px;
     
+}
+
+
+/**
+ * 面积表
+ */
+input.viliage {
+    height:30px;
 }

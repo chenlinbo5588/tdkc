@@ -234,12 +234,19 @@ class project_ch extends TZ_Admin_Controller {
                     
                     if($info['type'] == CH_RCZD){
                         $this->form_validation->set_rules('jz_name[]', '界址信息', 'required');
+                        //$this->form_validation->set_rules('dl_area[]', '面积分类信息', 'required');
+                        $this->form_validation->set_rules('area_shgy', '收回国有土地面积', 'required');
+                        $this->form_validation->set_rules('area_sell', '出让面积', 'required');
+                        $this->form_validation->set_rules('area_allow', '允须使用面积', 'required');
                     }
                     
-                    //header("Content-Type: text/html;charset=utf-8");
-                    //print_r($_POST);
-                    
                     if(!$this->form_validation->run()){
+                        $info['direction'] = $_POST['direction'];
+                        $info['jz_name'] = $_POST['jz_name'];
+                        $info['neighbor'] = $_POST['neighbor'];
+                        $info['area_shgy'] = $_POST['area_shgy'];
+                        $info['area_sell'] = $_POST['area_sell'];
+                        $info['area_allow'] = $_POST['area_allow'];
                         break;
                     }
                     
@@ -393,6 +400,10 @@ class project_ch extends TZ_Admin_Controller {
         
         $this->assign('userFaultList',$userFaultList['data']);
         if($info['type'] == CH_RCZD){
+            
+            /**
+             * 取得界址信息 
+             */
             $this->load->model('Project_Jz_Model');
             
             $jzList = $this->Project_Jz_Model->getList(array(
@@ -403,6 +414,47 @@ class project_ch extends TZ_Admin_Controller {
             ));
             
             $this->assign('jzList',$jzList['data']);
+            
+            
+            /**
+             * 取得面积分类信息 
+             */
+            $this->load->model('Land_Category_Model');
+            $this->load->model('Project_Mj_Model');
+            
+            $projectMjList = $this->Project_Mj_Model->getList(array(
+                'where' => array(
+                    'type' => 0,
+                    'project_id' => $info['id']
+                ),
+                'order' => 'cate_id ASC , code1 ASC , code2 ASC '
+            ));
+            
+            $mjCodes = array();
+            $sysDL = array();
+            
+            foreach($projectMjList['data'] as $value){
+                $mjCodes[] = $value['code'];
+            }
+            
+            if($mjCodes){
+                $dlList = $this->Land_Category_Model->getList(array(
+                    'where_in' => array(
+                        array(
+                            'key' => 'code',
+                            'value' => $mjCodes
+                        )
+                    ) 
+                ));
+
+                foreach($dlList['data'] as $dl){
+                    $sysDL[$dl['code']] = $dl;
+                }
+                $this->assign('sysDL',$sysDL);
+            }
+            
+            $this->assign('projectMjList',$projectMjList['data']);
+            
         }
         
         
@@ -586,7 +638,18 @@ class project_ch extends TZ_Admin_Controller {
                     
                     break;
                 case '完成':
-                    if($info['type'] == CH_RCZD){
+                    $sendorInfo = $this->User_Model->queryById($param['sendor']);
+                    $data = array(
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'status' => '已'.$op,
+                        'updator' => $this->_userProfile['name'],
+                        'real_enddate' => time(),
+                        'updatetime' => time(),
+                        'files' => implode(',',$param['file_id'])
+                    );
+                    
+                    if($info['type'] == CH_RCZD && $info['status'] == '已实施'){
                         
                         $this->load->model('Project_Jz_Model');
                         $this->Project_Jz_Model->deleteByWhere(array(
@@ -610,18 +673,58 @@ class project_ch extends TZ_Admin_Controller {
                         }
                         
                         $this->Project_Jz_Model->batchInsert($insertData);
+                        
+                        /**
+                         * 面积表 
+                         */
+                        
+                        
+                        /**
+                        $this->load->model('Land_Category_Model');
+                        
+                        $sysLandCategory = $this->Land_Category_Model->getList(array(
+                            'order' => 'cate_id ASC ,code ASC' 
+                        ));
+                        $sysLandList = array();
+                        foreach($sysLandCategory['data'] as $v){
+                            $sysLandList[$v['code']] = $v;
+                        }
+                        
+                        $this->load->model('Project_Mj_Model');
+                        $this->Project_Mj_Model->deleteByWhere(array(
+                            'type' => 0,
+                            'project_id' => $info['id']
+                        ));
+                        
+                        if(!empty($param['dl_code1'])){
+                            $insMjData = array();
+                            foreach($param['dl_code1'] as $k => $v){
+                                $insertTime = time();
+                                $insMjData[] = array(
+                                    'type' => 0, //测绘面积分类表
+                                    'project_id' => $info['id'],
+                                    'owner' => !empty($param['viliage_name'][$k]) ? $param['viliage_name'][$k] : '',
+                                    'cate_id' => !empty($sysLandList[$v]['cate_id']) ? $sysLandList[$v]['cate_id'] : 0,
+                                    'cate_name' => !empty($sysLandList[$v]['cate_name']) ? $sysLandList[$v]['cate_name'] : '' ,
+                                    'code1' => $v,
+                                    'name1' => !empty($sysLandList[$v]['name']) ? $sysLandList[$v]['name'] : '',
+                                    'code2' => !empty($param['dl_code2'][$k]) ? $param['dl_code2'][$k] : '',
+                                    'name2' => !empty($sysLandList[$param['dl_code2'][$k]]['name']) ? $sysLandList[$param['dl_code2'][$k]]['name'] : '',
+                                    'area' => !empty($param['dl_area'][$k]) ? $param['dl_area'][$k] : '',
+                                    'creator' => $this->_userProfile['name'],
+                                    'updator' => $this->_userProfile['name'],
+                                    'createtime' => $insertTime,
+                                    'updatetime' => $insertTime
+                                );
+                            }
+                            $this->Project_Mj_Model->batchInsert($insMjData);
+                        }
+                        */
+                        
+                        $data['area_shgy'] = !empty($param['area_shgy']) ? $param['area_shgy'] : 0;
+                        $data['area_sell'] = !empty($param['area_sell']) ? $param['area_sell'] : 0;
+                        $data['area_allow'] = !empty($param['area_allow']) ? $param['area_allow'] : 0;
                     }
-                    
-                    $sendorInfo = $this->User_Model->queryById($param['sendor']);
-                    $data = array(
-                        'sendor_id' => $sendorInfo['id'],
-                        'sendor' => $sendorInfo['name'],
-                        'status' => '已'.$op,
-                        'updator' => $this->_userProfile['name'],
-                        'real_enddate' => time(),
-                        'updatetime' => time(),
-                        'files' => implode(',',$param['file_id'])
-                    );
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                     if($return){
@@ -1115,7 +1218,7 @@ class project_ch extends TZ_Admin_Controller {
     private function _formatProjectNo($year,$regionCode,$masterSerial,$regionSerial,$prefix = 'A'){
         
         if($masterSerial < 1000){
-            $masterSerial = str_pad($masterSerial, 3,'0', STR_PAD_LEFT);
+            $masterSerial = str_pad($masterSerial, 4,'0', STR_PAD_LEFT);
         }
 
         if($regionSerial < 1000){
@@ -1187,11 +1290,11 @@ class project_ch extends TZ_Admin_Controller {
             }
             $this->assign('reload',$reload);
             $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
-            $this->display('showMessage','common');
+            $this->display('showmessage','common');
             
         }else{
             $this->assign('message','删除失败参数错误');
-            $this->display('showMessage','common');
+            $this->display('showmessage','common');
         }
         
     }
@@ -1456,7 +1559,7 @@ class project_ch extends TZ_Admin_Controller {
             }
             $this->assign('reload',$reload);
             $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
-            $this->display('showMessage','common');
+            $this->display('showmessage','common');
             
         }else{
             

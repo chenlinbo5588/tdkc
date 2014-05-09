@@ -13,6 +13,8 @@ class Search extends TZ_Controller {
         $project_id = (int)gpc('project_id','GP',0);
         $user_id = (int)gpc('user_id','GP',0);
         
+        $this->load->model('Project_Mod_Model');
+        
         $condition['limit'] = $limit;
         $condition['where']['project_id'] = $project_id;
         $condition['where']['type'] = 'user';
@@ -42,9 +44,9 @@ class Search extends TZ_Controller {
         
         
         if($regionList['data']){
-            echo json_encode($regionList['data']);
+            $this->sendJson($regionList['data']);
         }else{
-            echo json_encode(array());
+            $this->sendJson(array());
         }
     }
     
@@ -57,8 +59,7 @@ class Search extends TZ_Controller {
         $q = strtolower($_GET["term"]);
         
         if(!$q){
-            echo json_encode(array());
-            $q = '';
+            $this->sendJson(array());
         }
         
         $this->load->model('User_Model');
@@ -79,7 +80,41 @@ class Search extends TZ_Controller {
         }
 
         // json_encode is available in PHP 5.2 and above, or you can install a PECL module in earlier versions
-        echo json_encode($result);
+        
+        $this->sendJson($result);
+    }
+    
+    
+    /**
+     * 根据项目流水号获得界址列表 
+     */
+    public function getJzListByProjectNO(){
+        $project_no = gpc('project_no','GP','');
+        if(empty($project_no)){
+            $this->sendJson(array());
+        }
+        
+        $this->load->model('Project_Model');
+        $info = $this->Project_Model->queryById(strtoupper($project_no),'project_no');
+        
+        if(!$info){
+            $this->sendJson(array());
+        }
+        
+        $this->load->model('Project_Jz_Model');
+            
+        $jzList = $this->Project_Jz_Model->getList(array(
+            'where' => array(
+                'project_id' => $info['id']
+            ),
+            'order' => 'direction ASC'
+        ));
+        
+        if($jzList['data']){
+            $this->sendJson($jzList['data']);
+        }else{
+            $this->sendJson(array());
+        }
     }
     
     
@@ -92,13 +127,13 @@ class Search extends TZ_Controller {
         
         $key = $_GET['key'];
         $condition = array(
-            'order' => 'cate_id ASC ,createtime ASC' 
+            'order' => 'cate_id ASC ,code ASC' 
         );
         
         switch($which){
             case '1':
                 $condition['where'] = array(
-                    'cate_name' => $cate_name1,
+                    'cate_id' => $cate_name1,
                     'pid' => 0
                 );
                 break;
@@ -124,5 +159,5 @@ class Search extends TZ_Controller {
     }
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file search.php */
+/* Location: ./application/controllers/search.php */

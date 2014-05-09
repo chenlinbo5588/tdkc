@@ -8,8 +8,8 @@
     </head>
     <body>
         <div class="container">
-            <h1 class="title">宗地勘测定界报告</h1>
-            <div>
+            <div class="zddj">
+                <h1 class="title">宗地勘测定界报告</h1>
                 <div>
                     <p>慈溪市土地勘测规划设计院有限公司于{$info['createtime']|date_format:"Y年m月"}月</p>
                     <p>受慈溪市国土资源局及慈溪市{$info['region_name']}国土资源所委托，对</p>

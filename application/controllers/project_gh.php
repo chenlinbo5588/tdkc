@@ -1031,11 +1031,11 @@ class project_gh extends TZ_Admin_Controller {
             }
             $this->assign('reload',$reload);
             $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
-            $this->display('showMessage','common');
+            $this->display('showmessage','common');
             
         }else{
             $this->assign('message','删除失败参数错误');
-            $this->display('showMessage','common');
+            $this->display('showmessage','common');
         }
         
     }
@@ -1253,7 +1253,7 @@ class project_gh extends TZ_Admin_Controller {
             }
             $this->assign('reload',$reload);
             $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
-            $this->display('showMessage','common');
+            $this->display('showmessage','common');
             
         }else{
             

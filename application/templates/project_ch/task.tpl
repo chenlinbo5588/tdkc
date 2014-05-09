@@ -380,14 +380,24 @@
                     {/if}
                     {if $info['type'] == $smarty.const.CH_RCZD}
                     <tr>
+                        <td>宗地勘测定界报告</td>
+                        <td>
+                            <a class="link_btn" href="{url_path('printer','zddj','id=')}{$info['id']}" target="_blank">打印宗地勘测定界报告</a>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>界址信息</td>
                         <td>
                             <div>{form_error('jz_list')}</div>
-                            <a class="link_btn" href="{url_path('printer','jzb','id=')}{$info['id']}" target="_blank">打印界址表</a>
-                            {if $info['status'] == '已实施'}
-                            <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
-                            {/if}
-                            <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
+                            <div>
+                                <a class="link_btn" href="{url_path('printer','jzb','id=')}{$info['id']}" target="_blank">打印界址表</a>
+                                {if $info['status'] == '已实施'}
+                                <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
+                                <label>请输入原流水号(不区分大小写)<input type="text" name="source_id" value="" placeholder="请输入原流水号"/></label>
+                                <input type="button" name="readJzFrom" id="readJzFrom" value="从已有界址读入"/>
+                                {/if}
+                                <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
+                            </div>
                             <div id="jz_list" style="margin:10px 0;">
                                 <input type="hidden" name="jz_cnt" value="{count($jzList)}"/>
                                 <table id="jzTable">
@@ -462,15 +472,17 @@
                         <td>土地面积分类表</td>
                         <td>
                             <div id="mjb">
-                                <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">打印面积分类表</a>
+                                {if $info['status'] == '已实施'}<a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a>{/if}
+                                {*
+                                {if $info['status'] == '已实施'}
                                 <div>
                                     <label>
                                         <span>土地大类</span>
                                         <select class="mj_cate" name="mj_cate1" id="mj_cate1">
                                             <option value="">请选择</option>
-                                            <option value="农用地">农用地</option>
-                                            <option value="建设用地">建设用地</option>
-                                            <option value="未利用地">未利用地</option>
+                                            <option value="1">农用地</option>
+                                            <option value="2">建设用地</option>
+                                            <option value="3">未利用地</option>
                                         </select>
                                     </label>
                                     <label>
@@ -485,11 +497,13 @@
                                             <option value="">请选择</option>
                                         </select>
                                     </label>
-                                    <input type="text" name="onwer_name" value="" style="width:200px;" placeholder="请输入村名"/>
-                                    <input type="text" name="mj" value="" style="width:200px;" placeholder="请输入面积"/><span>平方米</span>
+                                    <label><span>村名</span><input type="text" name="onwer_name" value="" style="width:150px;" placeholder="请输入村名"/></label>
+                                    <label><span>面积</span><input type="text" name="mj" value="" style="width:100px;" placeholder="请输入面积"/><span>平方米</span></label>
                                     <input type="button" name="addMjItem" id="addMjItem" value="增加"/>
                                 </div>
+                                {/if}
                                 <div id="mjList" style="margin:10px 0;">
+                                    <div>{form_error('dl_area[]')}</div>
                                     <table>
                                         <caption>面积列表</caption>
                                         <colgroup>
@@ -509,14 +523,72 @@
                                             <th></th>
                                         </thead>
                                         <tbody>
-                                        
+                                        {if $info['status'] == '已实施'}
+                                            {foreach from=$projectMjList item=item}
+                                            <tr>
+                                                <td>{$item['cate_name']|escape}</td>
+                                                <td><input type="hidden" name="dl_code1[]" value="{$item['code1']}"/>{$item['name1']}({$item['code1']})</td>
+                                                <td><input type="hidden" name="dl_code2[]" value="{$item['code2']}"/>{$item['name2']}({$item['code2']})</td>
+                                                <td><input type="hidden" name="viliage_name[]" value="{$item['owner']|escape}"/>{$item['owner']|escape}</td>
+                                                <td><input type="text" name="dl_area[]" value="{$item['area']}"/></td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="deleteMj">删除</a>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+                                        {else}
+                                            {foreach from=$projectMjList item=item}
+                                            <tr>
+                                                <td>{$item['cate_name']|escape}</td>
+                                                <td>{$item['name1']}({$item['code1']})</td>
+                                                <td>{$item['name2']}({$item['code2']})</td>
+                                                <td>{$item['owner']|escape}</td>
+                                                <td>{$item['area']}</td>
+                                                <td></td>
+                                            </tr>
+                                            {/foreach}
+                                        {/if}
                                         </tbody>
                                     </table>
                                 </div>
+                                *}
                             </div>
                         </td>
                      </tr>
-                     {/if}   
+                     <tr>
+                         <td>收回国有土地</td>
+                         <td>
+                             {if $info['status'] == '已实施'}
+                             <input type="text" name="area_shgy" value="{if $info['area_shgy']}{$info['area_shgy']}{/if}"/>
+                             {form_error('area_shgy')}
+                             {else}
+                                 {$info['area_shgy']}
+                             {/if}
+                         </td>
+                     </tr>
+                     <tr>
+                         <td>出让面积</td>
+                         <td>
+                             {if $info['status'] == '已实施'}
+                             <input type="text" name="area_sell" value="{if $info['area_sell']}{$info['area_sell']}{/if}"/>
+                             {form_error('area_sell')}
+                             {else}
+                                 {$info['area_sell']}
+                             {/if}
+                         </td>
+                     </tr>
+                     <tr>
+                         <td>允许使用</td>
+                         <td>
+                             {if $info['status'] == '已实施'}
+                             <input type="text" name="area_allow" value="{if $info['area_allow']}{$info['area_allow']}{/if}"/>
+                             {form_error('area_allow')}
+                             {else}
+                                 {$info['area_allow']}
+                             {/if}
+                         </td>
+                     </tr>
+                     {/if}
                     </tbody>
                 </table>
                <a name="anchor_check" id="anchor_check"></a>
@@ -618,32 +690,6 @@
                             <td>复审时间</td>
                             <td>{if $info['fs_time']}{$info['fs_time']|date_format:"Y-m-d H:i:s"}{/if}</td>
                         </tr>
-                        {*
-                        {if $info['type'] == '日常宗地'}
-                        <tr>
-                            <td>请填写表格数据</td>
-                            <td>
-                                <p>
-                                    <input type="hidden" name="doc_zddj" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地勘测定界成果报告" data-href="{url_path('project_ch','doc','categroy=zddj&id=')}{$info['id']}">宗地勘测定界成果报告</a>
-                                    <div>{form_error('doc_zddj')}</div>
-                                </p>
-                                <p>
-                                    <input type="hidden" name="doc_zdmj" value=""/><a class="docs" href="javascript:void(0);" data-title="土地面积分类表" data-href="{url_path('project_ch','doc','categroy=zdmj&id=')}{$info['id']}">土地面积分类表</a>
-                                    <div>{form_error('doc_zdmj')}</div>
-                                </p>
-                                <p>
-                                    <input type="hidden" name="doc_zdjz" value=""/><a class="docs" href="javascript:void(0);" data-title="宗地界址调查表" data-href="{url_path('project_ch','doc','categroy=zdjz&id=')}{$info['id']}">宗地界址调查表</a>
-                                    <div>{form_error('doc_zdjz')}</div>
-                                </p>
-                                <p>
-                                    <input type="hidden" name="doc_zdbg" value=""/><a class="docs" href="javascript:void(0);" data-title="土地勘测定界成果变更情况表" data-href="{url_path('project_ch','doc','categroy=zdbg&id=')}{$info['id']}">土地勘测定界成果变更情况表</a>
-                                    <div>{form_error('doc_zdbg')}</div>
-                                </p>
-                            </td>
-                        </tr>   
-                        {/if}
-                        *}
-                    
                     </tbody>
                 </table>
                 <a name="anchor_doc" id="anchor_doc"></a>
@@ -891,6 +937,46 @@
                             refreshNum();
                         });
                         
+                        $("#readJzFrom").bind("click",function(e){
+                            var that = $(e.target);
+                            var input = $("input[name=source_id]");
+                            if(input.val() == '' || input.val().length < 10){
+                                alert("请输入合法的流水号");
+                                return ;
+                            }
+                            
+                            that.prop("disabled",true);
+                            
+                            $.ajax({
+                                type:'GET',
+                                url: "{url_path('search','getJzListByProjectNO')}",
+                                dataType:"json",
+                                data : {
+                                    project_no: input.val()
+                                },
+                                success:function(resp){
+                                    that.prop("disabled",false);
+                                    if(resp.length){
+                                        for(var i = 0; i < resp.length; i++){
+                                            var row = $($("#jzRowTemplate").html());
+                                            row.find("select[name='direction[]'] option:eq(" + (resp[i].direction - 1) + ")").prop("selected", "selected");
+                                            row.find("input[name='jz_name[]']").val(resp[i].name);
+                                            row.find("input[name='neighbor[]']").val(resp[i].neighbor);
+                                            
+                                            $("#jzTable").append(row);
+                                        }
+                                        refreshNum();
+                                    }
+                                },
+                                complete:function(){
+                                    that.prop("disabled",false);
+                                },
+                                error:function(){
+                                    that.prop("disabled",false);
+                                }
+                            });
+                        });
+                        {*
                         var cacheData = [];
                         
                         function dataToOption(name,d){
@@ -931,15 +1017,18 @@
                             
                             var row = $($("#mjRowTemplate").html());
                             
-                            row.find("td:eq(0)").html($("#mj_cate1").val());
-                            row.find("td:eq(1)").html($("#mj_cate2 option:selected").html() + '(' + $("#mj_cate2").val() + ')');
-                            row.find("td:eq(2)").html($("#mj_cate3 option:selected").html() + '(' + $("#mj_cate3").val() + ')');
-                            row.find("td:eq(3)").html(div.find("input[name=onwer_name]").val());
-                            row.find("td:eq(4)").html(div.find("input[name=mj]").val());
+                            row.find("td:eq(0)").html($("#mj_cate1 option:selected").html());
+                            row.find("td:eq(1)").html('<input type="hidden" name="dl_code1[]" value="' + $("#mj_cate2").val() + '"/>' +  $("#mj_cate2 option:selected").html() + '(' + $("#mj_cate2").val() + ')');
+                            row.find("td:eq(2)").html('<input type="hidden" name="dl_code2[]" value="' + $("#mj_cate3").val() + '"/>' + $("#mj_cate3 option:selected").html() + '(' + $("#mj_cate3").val() + ')');
+                            row.find("td:eq(3)").html('<input type="hidden" name="viliage_name[]" value="' + div.find("input[name=onwer_name]").val() + '"/>' + div.find("input[name=onwer_name]").val());
+                            row.find("td:eq(4)").html('<input type="hidden" name="dl_area[]" value="' + div.find("input[name=mj]").val() + '"/>' + div.find("input[name=mj]").val());
                             
                             $("#mjList tbody").append(row);
                         });
                         
+                        $("#mjList").delegate(".deleteMj","click",function(e){
+                            $(this).closest("tr").remove();
+                        });
                         
                         $(".mj_cate").bind("change",function(e){
                             var sel = $(e.target);
@@ -974,6 +1063,7 @@
                                 });
                             }
                         });
+                        *}
                     });
                 </script>
                 {/if}
@@ -1092,6 +1182,36 @@
                                         }
                                     });
                                 }
+                                {*
+                                if(cansubmit){
+                                    $("#mjList input[name='dl_area[]']").each(function(index){
+                                        if(!/^[0-9]+(.[0-9]+)?$/.test($(this).val())){
+                                            $(this).focus();
+                                            $.jBox.tip("请输入合法的面积值",'提示');
+                                            cansubmit = false;
+                                            return false;
+                                        }
+                                    });
+                                }
+                                *}
+                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area_shgy]").val())){
+                                    $("input[name=area_shgy]").focus();
+                                    $.jBox.tip("请输入合法的收回国有土地面积值",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area_sell]").val())){
+                                    $("input[name=area_sell]").focus();
+                                    $.jBox.tip("请输入合法的出让面积值",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area_allow]").val())){
+                                    $("input[name=area_allow]").focus();
+                                    $.jBox.tip("请输入合法的允许使用面积值",'提示');
+                                    cansubmit = false;
+                                }
+                                
                                 {/if}
                             }
                             {elseif $info['status'] == '已完成' }
@@ -1174,7 +1294,7 @@
                             }
                             {/if}
                         
-                            if(cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
+                            if(op != '退回' && cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
                                 $.jBox.tip("请选择发送人",'提示');
                                 cansubmit = false;
                             }
