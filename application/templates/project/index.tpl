@@ -10,7 +10,7 @@
           <ul class='sitemu'>
             <li><a href="{url_path('project_ch','add')}">项目登记</a></li>
             <li><a href="{url_path('project_ch','send')}">项目发送</a></li>
-            <li><a href="{url_path('project_ch','dispatch')}">项目布施</a></li>
+            <li><a href="{url_path('project_ch','dispatch')}">项目布置</a></li>
             <li><a href="{url_path('project_ch','implement')}">项目实施</a></li>
             <li><a href="{url_path('project_ch','check')}">项目自查</a></li>
             <li><a href="{url_path('project_ch','first_sh')}">项目初审</a></li>

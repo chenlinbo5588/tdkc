@@ -1,7 +1,9 @@
 {include file="common/main_header.tpl"}
         {include file="project_gh/mod_list.tpl"}
         {*{include file="common/ke.tpl"}*}
-        
+        <style type="text/css">
+            .breadcrumb { margin: 20px 0 10px 0;}
+        </style> 
         <div id="flowbar">
             <span>规划项目</span>
             {foreach from=$statusHtml item=item}

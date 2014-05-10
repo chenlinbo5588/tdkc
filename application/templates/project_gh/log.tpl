@@ -51,7 +51,7 @@
                             $.ajax({
                                 type:"POST",
                                 url: "{url_path('project_gh','log')}",
-                                data: $("form[name=addform]").serialize(),
+                                data: $("form[name=addform]").serialize() + '&isajax=1',
                                 dataType:"json",
                                 success:ajax_success
                             });

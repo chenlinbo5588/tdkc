@@ -1,7 +1,9 @@
 {include file="common/main_header.tpl"}
         {include file="project_ch/mod_list.tpl"}
         {*{include file="common/ke.tpl"}*}
-        
+        <style type="text/css">
+            .breadcrumb { margin: 20px 0 10px 0;}
+        </style>    
         <div id="flowbar">
             <span>测绘项目</span>
             {foreach from=$statusHtml item=item}
@@ -133,13 +135,13 @@
                         <td>
                             <div class="notice">
                                 {if $userFaultList}
-                                <a class="link_btn" href="{url_path('printer','fault','id=')}{$info['id']}" target="_blank">打印缺陷</a>
+                                <a class="link_btn" href="{url_path('printer','fault','id=')}{$info['id']}" target="_blank">打印缺陷表</a>
                                 {/if}
                                 <table>
                                     <colgroup>
                                         <col width="50%"/>
                                         <col width="10%"/>
-                                        <col width="40%"/>
+                                        <col width="30%"/>
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -173,7 +175,7 @@
                                         <colgroup>
                                             <col width="50%"/>
                                             <col width="10%"/>
-                                            <col width="40%"/>
+                                            <col width="30%"/>
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -188,7 +190,7 @@
                                             <colgroup>
                                                 <col width="50%"/>
                                                 <col width="10%"/>
-                                                <col width="40%"/>
+                                                <col width="30%"/>
                                             </colgroup>
                                             <tbody>
                                         {foreach from=$sysFaultList item=item}
@@ -472,121 +474,13 @@
                         <td>土地面积分类表</td>
                         <td>
                             <div id="mjb">
-                                {if $info['status'] == '已实施'}<a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a>{/if}
-                                {*
                                 {if $info['status'] == '已实施'}
-                                <div>
-                                    <label>
-                                        <span>土地大类</span>
-                                        <select class="mj_cate" name="mj_cate1" id="mj_cate1">
-                                            <option value="">请选择</option>
-                                            <option value="1">农用地</option>
-                                            <option value="2">建设用地</option>
-                                            <option value="3">未利用地</option>
-                                        </select>
-                                    </label>
-                                    <label>
-                                        <span>一级分类</span>
-                                        <select class="mj_cate" name="mj_cate2" id="mj_cate2">
-                                            <option value="">请选择</option>
-                                        </select>
-                                    </label>
-                                    <label>
-                                        <span>二级分类</span>
-                                        <select name="mj_cate3"  id="mj_cate3">
-                                            <option value="">请选择</option>
-                                        </select>
-                                    </label>
-                                    <label><span>村名</span><input type="text" name="onwer_name" value="" style="width:150px;" placeholder="请输入村名"/></label>
-                                    <label><span>面积</span><input type="text" name="mj" value="" style="width:100px;" placeholder="请输入面积"/><span>平方米</span></label>
-                                    <input type="button" name="addMjItem" id="addMjItem" value="增加"/>
-                                </div>
+                                    <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a>
+                                {else}
+                                    <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}&type=print" target="_blank">打印面积分类表</a>
                                 {/if}
-                                <div id="mjList" style="margin:10px 0;">
-                                    <div>{form_error('dl_area[]')}</div>
-                                    <table>
-                                        <caption>面积列表</caption>
-                                        <colgroup>
-                                            <col width="10%"/>
-                                            <col width="20%"/>
-                                            <col width="20%"/>
-                                            <col width="20%"/>
-                                            <col width="20%"/>
-                                            <col width="10%"/>
-                                        </colgroup>
-                                        <thead>
-                                            <th>土地大类</th>
-                                            <th>一级分类</th>
-                                            <th>二级分类</th>
-                                            <th>村名</th>
-                                            <th>面积（平方米)</th>
-                                            <th></th>
-                                        </thead>
-                                        <tbody>
-                                        {if $info['status'] == '已实施'}
-                                            {foreach from=$projectMjList item=item}
-                                            <tr>
-                                                <td>{$item['cate_name']|escape}</td>
-                                                <td><input type="hidden" name="dl_code1[]" value="{$item['code1']}"/>{$item['name1']}({$item['code1']})</td>
-                                                <td><input type="hidden" name="dl_code2[]" value="{$item['code2']}"/>{$item['name2']}({$item['code2']})</td>
-                                                <td><input type="hidden" name="viliage_name[]" value="{$item['owner']|escape}"/>{$item['owner']|escape}</td>
-                                                <td><input type="text" name="dl_area[]" value="{$item['area']}"/></td>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="deleteMj">删除</a>
-                                                </td>
-                                            </tr>
-                                            {/foreach}
-                                        {else}
-                                            {foreach from=$projectMjList item=item}
-                                            <tr>
-                                                <td>{$item['cate_name']|escape}</td>
-                                                <td>{$item['name1']}({$item['code1']})</td>
-                                                <td>{$item['name2']}({$item['code2']})</td>
-                                                <td>{$item['owner']|escape}</td>
-                                                <td>{$item['area']}</td>
-                                                <td></td>
-                                            </tr>
-                                            {/foreach}
-                                        {/if}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                *}
                             </div>
                         </td>
-                     </tr>
-                     <tr>
-                         <td>收回国有土地</td>
-                         <td>
-                             {if $info['status'] == '已实施'}
-                             <input type="text" name="area_shgy" value="{if $info['area_shgy']}{$info['area_shgy']}{/if}"/>
-                             {form_error('area_shgy')}
-                             {else}
-                                 {$info['area_shgy']}
-                             {/if}
-                         </td>
-                     </tr>
-                     <tr>
-                         <td>出让面积</td>
-                         <td>
-                             {if $info['status'] == '已实施'}
-                             <input type="text" name="area_sell" value="{if $info['area_sell']}{$info['area_sell']}{/if}"/>
-                             {form_error('area_sell')}
-                             {else}
-                                 {$info['area_sell']}
-                             {/if}
-                         </td>
-                     </tr>
-                     <tr>
-                         <td>允许使用</td>
-                         <td>
-                             {if $info['status'] == '已实施'}
-                             <input type="text" name="area_allow" value="{if $info['area_allow']}{$info['area_allow']}{/if}"/>
-                             {form_error('area_allow')}
-                             {else}
-                                 {$info['area_allow']}
-                             {/if}
-                         </td>
                      </tr>
                      {/if}
                     </tbody>
@@ -890,7 +784,13 @@
 
                             var trlast = $("#jzTable tbody tr:last");
                             trlast.find(".point_end").html(rowcnt + 1);
-
+                            
+                            //找到最后已条记录的方向
+                            if(trlast){
+                                var dir = trlast.find("select[name='direction[]']").val();
+                                row.find("select[name='direction[]'] option:eq(" + (parseInt(dir) - 1) + ")").prop("selected", "selected");
+                            }
+                            
                             $("#jzTable").append(row);
                         });
 
@@ -904,7 +804,7 @@
                                 if((i + 1) != rowcnt){
                                     $("#jzTable tbody tr:eq(" + i +") .point_end").html(i + 2);
                                 }else{
-                                        $("#jzTable tbody tr:eq(" + i +") .point_end").html(1);
+                                    $("#jzTable tbody tr:eq(" + i +") .point_end").html(1);
                                 }
                             }
                         }
@@ -934,6 +834,12 @@
                             }else{
                                 row.insertBefore(currentTr);
                             }
+                            
+                            if(currentTr){
+                                var dir = currentTr.find("select[name='direction[]']").val();
+                                row.find("select[name='direction[]'] option:eq(" + (parseInt(dir) - 1) + ")").prop("selected", "selected");
+                            }
+                            
                             refreshNum();
                         });
                         
@@ -1181,35 +1087,6 @@
                                             return false;
                                         }
                                     });
-                                }
-                                {*
-                                if(cansubmit){
-                                    $("#mjList input[name='dl_area[]']").each(function(index){
-                                        if(!/^[0-9]+(.[0-9]+)?$/.test($(this).val())){
-                                            $(this).focus();
-                                            $.jBox.tip("请输入合法的面积值",'提示');
-                                            cansubmit = false;
-                                            return false;
-                                        }
-                                    });
-                                }
-                                *}
-                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area_shgy]").val())){
-                                    $("input[name=area_shgy]").focus();
-                                    $.jBox.tip("请输入合法的收回国有土地面积值",'提示');
-                                    cansubmit = false;
-                                }
-                                
-                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area_sell]").val())){
-                                    $("input[name=area_sell]").focus();
-                                    $.jBox.tip("请输入合法的出让面积值",'提示');
-                                    cansubmit = false;
-                                }
-                                
-                                if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area_allow]").val())){
-                                    $("input[name=area_allow]").focus();
-                                    $.jBox.tip("请输入合法的允许使用面积值",'提示');
-                                    cansubmit = false;
                                 }
                                 
                                 {/if}

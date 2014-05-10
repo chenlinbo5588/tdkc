@@ -4,7 +4,7 @@ Source Host: 192.168.1.118
 Source Database: tdkc
 Target Host: 192.168.1.118
 Target Database: tdkc
-Date: 2014/5/9 ������ 17:15:52
+Date: 2014/5/10 ������ 17:00:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -74,7 +74,7 @@ CREATE TABLE `tb_attachment` (
   KEY `idx_user_id` (`user_id`),
   KEY `idx_expire` (`expire_time`),
   KEY `idx_status` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=124 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=127 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_contacts
@@ -189,7 +189,7 @@ CREATE TABLE `tb_files` (
   KEY `idx_expire` (`expire_time`),
   KEY `idx_status` (`status`),
   KEY `idx_file_key` (`file_key`)
-) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_land_category
@@ -230,7 +230,7 @@ CREATE TABLE `tb_menu` (
   PRIMARY KEY (`id`),
   KEY `idx_auth_key` (`auth_key`),
   KEY `idx_url` (`url`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_pm
@@ -291,9 +291,6 @@ CREATE TABLE `tb_project` (
   `sendor` varchar(20) NOT NULL DEFAULT '' COMMENT '发送操作的接受者',
   `displayorder` tinyint(4) NOT NULL DEFAULT '0',
   `area` double unsigned NOT NULL DEFAULT '0' COMMENT '项目面积',
-  `area_shgy` double NOT NULL DEFAULT '0' COMMENT '收回国有土地面积',
-  `area_sell` double NOT NULL DEFAULT '0' COMMENT '出让面积',
-  `area_allow` double DEFAULT '0' COMMENT '允须使用面积',
   `score` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '得分',
   `status` varchar(20) NOT NULL DEFAULT '新增' COMMENT '目项状态',
   `sub_status` varchar(20) NOT NULL DEFAULT '',
@@ -347,7 +344,23 @@ CREATE TABLE `tb_project` (
   KEY `idx_region_type` (`region_code`,`type`),
   KEY `idx_sendor_id` (`sendor_id`),
   KEY `idx_pm_id` (`pm_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for tb_project_area
+-- ----------------------------
+CREATE TABLE `tb_project_area` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '0=测绘项目 1=规划项目',
+  `project_id` int(10) unsigned NOT NULL COMMENT 'project 表中的自增id',
+  `content` text,
+  `creator` varchar(10) NOT NULL DEFAULT '',
+  `updator` varchar(10) NOT NULL,
+  `createtime` int(11) unsigned NOT NULL,
+  `updatetime` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_type_pid` (`type`,`project_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_project_fault
@@ -489,7 +502,7 @@ CREATE TABLE `tb_project_jz` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_project_id` (`project_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=157 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_project_mj
@@ -531,7 +544,7 @@ CREATE TABLE `tb_project_mod` (
   KEY `idx_project_action` (`project_id`,`action`),
   KEY `idx_type` (`type`),
   KEY `idx_user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=366 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=377 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_project_nature
@@ -703,7 +716,7 @@ CREATE TABLE `tb_user_event` (
   PRIMARY KEY (`id`),
   KEY `idx_user_new` (`user_id`,`isnew`),
   KEY `idx_create` (`createtime`)
-) ENGINE=MyISAM AUTO_INCREMENT=297 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=304 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tb_user_menu
@@ -792,9 +805,14 @@ INSERT INTO `ci_sessions` VALUES ('63930e8c07f605f09744ad7e85cfe392', '127.0.0.1
 INSERT INTO `ci_sessions` VALUES ('cb83ee80279d04c158636e8855dcf20d', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1399359856', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"15\";s:7:\"account\";s:5:\"luhui\";s:4:\"name\";s:6:\"陆辉\";s:2:\"gh\";s:3:\"230\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"2\";}}');
 INSERT INTO `ci_sessions` VALUES ('c92ed09c2752e7c26f2a331afd09214d', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1399626047', '');
 INSERT INTO `ci_sessions` VALUES ('bee2650585d2997aaa539b43a08e6902', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1399626338', '');
-INSERT INTO `ci_sessions` VALUES ('45c722948d929ba6e5e10db5e345b881', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0', '1399626868', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"19\";s:7:\"account\";s:3:\"zy1\";s:4:\"name\";s:7:\"组员1\";s:2:\"gh\";s:3:\"500\";s:7:\"dept_id\";s:1:\"2\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"0\";}}');
+INSERT INTO `ci_sessions` VALUES ('9c26ff2b21a8ee2857539099e2b2b980', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', '1399712365', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"18\";s:7:\"account\";s:7:\"zhangwt\";s:4:\"name\";s:9:\"章武挺\";s:2:\"gh\";s:3:\"231\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"7\";}}');
+INSERT INTO `ci_sessions` VALUES ('9fd0a8b936e500880ddac78782bb7e2c', '127.0.0.1', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)', '1399707048', '');
+INSERT INTO `ci_sessions` VALUES ('0ae844ce7d9ae2f4769713da5e0861ba', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0', '1399711003', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"19\";s:7:\"account\";s:3:\"zy1\";s:4:\"name\";s:7:\"组员1\";s:2:\"gh\";s:3:\"500\";s:7:\"dept_id\";s:1:\"2\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"0\";}}');
 INSERT INTO `ci_sessions` VALUES ('660737be3c3c7f2899c035541e34e13f', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0', '1399600921', '');
-INSERT INTO `ci_sessions` VALUES ('52470ee8f33e9f7b41cb2bf769ecfc92', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397105542', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"IObxc0qxGfsSKAYkqBjDs4tGETCKfc3Hxn2PfKIf6V6apBWlxuaUe8Vc/dTpcJ77G6fJG0CGvEzmj2QCSkFFlA==\";}}');
+INSERT INTO `ci_sessions` VALUES ('ce87230ade21bd7a193f41d41325d575', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1399707263', '');
+INSERT INTO `ci_sessions` VALUES ('e05e9bcd22e228606f515afde3e7e11c', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1399707322', '');
+INSERT INTO `ci_sessions` VALUES ('268ec8695fcf22e7847fcdf82706b5c7', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .N', '1399707067', '');
+INSERT INTO `ci_sessions` VALUES ('9fdca2f415c6aa7f3263eb11784dd69c', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1399707216', '');
 INSERT INTO `ci_sessions` VALUES ('ba554d3df2afd25d8a9b22ab150118d6', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36', '1397119525', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:2:\"11\";s:7:\"account\";s:3:\"t51\";s:4:\"name\";s:9:\"测试是\";s:2:\"gh\";s:2:\"55\";s:3:\"psw\";s:88:\"IYaqE0URZe+feAlr+6VEanp+dpaM7ho58NZtd6wtnIKjwQ+57xFa5GGtEo5igohOPb2ApepMWndk8CzzxrAn0Q==\";}}');
 INSERT INTO `ci_sessions` VALUES ('a90179bf512771ce333865b1c3e859bf', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397119799', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:7:\"user_id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"FpHC8XqxstVnm3IWTllOue3xR4dVb3rq59HAJkQx6Y4HbN8b9TtFx2jaq+4hk8oXtQG77bpa9tn2oLRtFyQvdA==\";}}');
 INSERT INTO `ci_sessions` VALUES ('e381e8df1a19dc8e722317cf0dba6681', '192.168.1.121', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)', '1397190716', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:5:{s:2:\"id\";s:1:\"1\";s:7:\"account\";s:5:\"admin\";s:4:\"name\";s:15:\"超级管理员\";s:2:\"gh\";s:1:\"0\";s:3:\"psw\";s:88:\"joFWJ6jNhLCP7HIQk0lPrE9L+6y4W3PbC9tw3s1DomaFmNdycejD+BU6Qvr4HDo2w+tT90bpYSLH9xUBapPNSA==\";}}');
@@ -876,7 +894,7 @@ INSERT INTO `ci_sessions` VALUES ('918efcabe3f6aa04923551998dc35a66', '127.0.0.1
 INSERT INTO `ci_sessions` VALUES ('60dccb96e32cd4275c7d501d770c41eb', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.84 Safari/535.11 SE 2.X MetaSr 1.0', '1398729108', '');
 INSERT INTO `ci_sessions` VALUES ('56abca86e17d0315ff23da8cddd33a00', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1398823795', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"15\";s:7:\"account\";s:5:\"luhui\";s:4:\"name\";s:6:\"陆辉\";s:2:\"gh\";s:3:\"230\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"2\";}}');
 INSERT INTO `ci_sessions` VALUES ('9aabe0986dfbfc193bc555301a26c9e0', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', '1398818001', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"18\";s:7:\"account\";s:7:\"zhangwt\";s:4:\"name\";s:9:\"章武挺\";s:2:\"gh\";s:3:\"231\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"7\";}}');
-INSERT INTO `ci_sessions` VALUES ('cda91be000f5c3cd7c0211d47de6cda7', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', '1399626322', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"18\";s:7:\"account\";s:7:\"zhangwt\";s:4:\"name\";s:9:\"章武挺\";s:2:\"gh\";s:3:\"231\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"7\";}}');
+INSERT INTO `ci_sessions` VALUES ('26517bb21f9bf5683236abee51515afe', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36', '1399678730', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"18\";s:7:\"account\";s:7:\"zhangwt\";s:4:\"name\";s:9:\"章武挺\";s:2:\"gh\";s:3:\"231\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"7\";}}');
 INSERT INTO `ci_sessions` VALUES ('fa842c59465f4d65339a5345e7630dc4', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1398836827', 'a:2:{s:9:\"user_data\";s:0:\"\";s:7:\"profile\";a:7:{s:2:\"id\";s:2:\"15\";s:7:\"account\";s:5:\"luhui\";s:4:\"name\";s:6:\"陆辉\";s:2:\"gh\";s:3:\"230\";s:7:\"dept_id\";s:1:\"1\";s:13:\"share_role_id\";s:1:\"1\";s:7:\"role_id\";s:1:\"2\";}}');
 INSERT INTO `ci_sessions` VALUES ('abfd25752c944c535823ca6cb1a6a8c4', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1398823800', '');
 INSERT INTO `ci_sessions` VALUES ('43e76e02236c6f0d3afcc4789acb9021', '127.0.0.1', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR ', '1398836832', '');
@@ -1010,6 +1028,9 @@ INSERT INTO `tb_attachment` VALUES ('120', 'Noname2.txt', 'WRwcD0Dw', '', '.txt'
 INSERT INTO `tb_attachment` VALUES ('121', 'cache_mobile.php', 'YaADDLWf', '', '.php', '0', 'application/octet-stream', '', '2014/05/07/', 'cache_mobile.php', 'ca99da6e681b1144be139b2c64551839', '474', '0', '0', '0', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0', '', '', '1399430989', '1399430989', '127.0.0.1');
 INSERT INTO `tb_attachment` VALUES ('122', '临时.txt', 'ACPStYue', '', '.txt', '0', 'application/octet-stream', '', '2014/05/07/', '临时.txt', 'f6f5017f2429fc693a2f6b3ce668b4c4', '10899', '0', '0', '0', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0', '', '', '1399433133', '1399433133', '127.0.0.1');
 INSERT INTO `tb_attachment` VALUES ('123', 'cache_domain.php', '9768748af465f411286e13dfa50c5a58', '', '.php', '0', 'application/octet-stream', '', '2014/05/09/', 'cache_domain.php', '2a639d8d3fec0354f328c6b502d29371', '526', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '0', '0', '0', '', '', '1399595363', '1399595363', '127.0.0.1');
+INSERT INTO `tb_attachment` VALUES ('124', '帖子修改POST 数据.txt', 'b1cbac279f2a0efad68b9ab0eb8cc77a', '', '.txt', '0', 'application/octet-stream', '', '2014/05/10/', '帖子修改POST 数据.txt', '982a01f548464220504dded6586aaaed', '1100', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '0', '0', '0', '', '', '1399682350', '1399682350', '127.0.0.1');
+INSERT INTO `tb_attachment` VALUES ('125', 'tb_project_attr.sql', '2f8889d88f280f16d634e1cc0fc9e235', '', '.sql', '0', 'application/octet-stream', '', '2014/05/10/', 'tb_project_attr.sql', '59fe0a639453d9a868a9e40fab889ac1', '3315', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '0', '0', '0', '', '', '1399683373', '1399683373', '127.0.0.1');
+INSERT INTO `tb_attachment` VALUES ('126', 'button_lessThan_ALL20.gif', 'b204bf95318a812897ab27b668c8ac5a', '', '.gif', '1', 'application/octet-stream', '', '2014/05/10/', 'button_lessThan_ALL20.gif', 'ed3ef33365bdbe04265fe40c8401e1d9', '3609', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '0', '0', '0', '', '', '1399705057', '1399705057', '127.0.0.1');
 INSERT INTO `tb_contacts` VALUES ('1', '我的日程1', '0', '今天去办社保', '', '', '', '正常', '超级管理员', '超级管理员', '1397265793', '1397265793');
 INSERT INTO `tb_contacts` VALUES ('2', '我的日程2', '0', '今天下班去接小孩', '', '', '', '正常', '超级管理员', '超级管理员', '1397267173', '1397267173');
 INSERT INTO `tb_contacts` VALUES ('3', '我日日程3', '0', '几天能哈哈sas 环境阿莎哈啥', '', '', '', '正常', '超级管理员', '超级管理员', '1397267537', '1397267537');
@@ -46243,6 +46264,8 @@ INSERT INTO `tb_files` VALUES ('47', '0', '开发摘要.txt', 't0iK90kh', '', '.
 INSERT INTO `tb_files` VALUES ('48', '0', '临时.txt', '8YpjsCsS', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/04/30/', '临时.txt', '22a31edb728c5893d0082ad0f49de248', '10899', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '', '1398847503', '1398847503', '127.0.0.1');
 INSERT INTO `tb_files` VALUES ('49', '0', 'A', '', '', '', '0', '1', '', '', '', '', '', '24861', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '0', '0', '0', '章武挺', '章武挺', '1399519151', '1399519151', '127.0.0.1');
 INSERT INTO `tb_files` VALUES ('50', '49', 'forums.txt', 'c90265a91bd9d7d0841620d1a706af75', '', '.txt', '0', '0', 'application/octet-stream', '', '2014/05/08/', 'forums.txt', 'd88eefc02bcc14b65a729b9fd0bad867', '24861', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '0', '0', '0', '', '', '1399519160', '1399519160', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('51', '0', '测试', '', '', '', '0', '1', '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0', '组员1', '组员1', '1399709092', '1399709092', '127.0.0.1');
+INSERT INTO `tb_files` VALUES ('52', '51', 'dssdsd', '', '', '', '0', '1', '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0', '组员1', '组员1', '1399709131', '1399709131', '127.0.0.1');
 INSERT INTO `tb_land_category` VALUES ('1', '0', '1', '农用地', '01', '耕地', '0', '超级管理员', '超级管理员', '1399532590', '1399532590');
 INSERT INTO `tb_land_category` VALUES ('2', '1', '1', '农用地', '011', '水田', '0', '超级管理员', '超级管理员', '1399532591', '1399532591');
 INSERT INTO `tb_land_category` VALUES ('3', '1', '1', '农用地', '012', '水浇地', '0', '超级管理员', '超级管理员', '1399532592', '1399532592');
@@ -46333,6 +46356,82 @@ INSERT INTO `tb_menu` VALUES ('12', '72b95f3a861c94731dd30c3d01236b9e', '组织�
 INSERT INTO `tb_menu` VALUES ('13', '21aebe87cdbb8f5d5a2466f1109c1f68', '添加组织架构', 'c=dept&m=add', '12', '0', '正常', '超级管理员', '超级管理员', '1397524417', '1397524417');
 INSERT INTO `tb_menu` VALUES ('14', '463382ba53f06edcfa2c42fa5ef5b46a', '修改组织架构', 'c=dept&m=edit', '12', '0', '正常', '超级管理员', '超级管理员', '1397524435', '1397524435');
 INSERT INTO `tb_menu` VALUES ('15', '082e60c9805b2ea88a94df8224a054f2', '删除组织架构', 'c=dept&m=delete', '12', '0', '正常', '超级管理员', '超级管理员', '1397524452', '1397524452');
+INSERT INTO `tb_menu` VALUES ('17', '3871f346a8dd6c649ec69b939de33454', '项目类型设置', 'c=project_type&m=index', '1', '0', '正常', '超级管理员', '超级管理员', '1399707634', '1399707634');
+INSERT INTO `tb_menu` VALUES ('18', '1712087ce2ed98f9cbdb672398745802', '添加项目类型', 'c=project_type&m=add', '17', '0', '正常', '超级管理员', '超级管理员', '1399707671', '1399707671');
+INSERT INTO `tb_menu` VALUES ('19', 'cd058727a2195c56535f4268b1cf8707', '修改项目类型', 'c=project_type&m=edit', '17', '0', '正常', '超级管理员', '超级管理员', '1399707691', '1399707691');
+INSERT INTO `tb_menu` VALUES ('20', '28986bda330fbaaf5d627729c8822d9e', '删除项目类型', 'c=project_type&m=delete', '17', '0', '正常', '超级管理员', '超级管理员', '1399707712', '1399707712');
+INSERT INTO `tb_menu` VALUES ('21', 'abfd6b6683b88da9175358a4e4c63dea', '镇街设置', 'c=region&m=index', '1', '0', '正常', '超级管理员', '超级管理员', '1399707789', '1399707789');
+INSERT INTO `tb_menu` VALUES ('22', '3c76255cceda50d44f5f39875f3ed871', '添加镇街', 'c=region&m=add', '21', '0', '正常', '超级管理员', '超级管理员', '1399707816', '1399707816');
+INSERT INTO `tb_menu` VALUES ('23', 'aa2631f03dfeea1f24565f6994685a87', '修改镇街', 'c=region&m=edit', '21', '0', '正常', '超级管理员', '超级管理员', '1399707841', '1399707841');
+INSERT INTO `tb_menu` VALUES ('24', '3e42e1efe8a5ba0373d46f87b417de54', '删除镇街', 'c=region&m=delete', '21', '0', '正常', '超级管理员', '超级管理员', '1399707859', '1399707859');
+INSERT INTO `tb_menu` VALUES ('25', '3e36f15e7d9759a2531e5b378e062c9c', '个人办公', 'c=personal&m=index', '0', '0', '正常', '超级管理员', '超级管理员', '1399707945', '1399707945');
+INSERT INTO `tb_menu` VALUES ('26', '7033165b78d27478f72ef4c50c3bd860', '待办事宜', 'c=my_event&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399707975', '1399707975');
+INSERT INTO `tb_menu` VALUES ('27', '6641d4752c2db358abd01241d9070d48', '设置已处理', 'c=my_event&m=deal', '26', '0', '正常', '超级管理员', '超级管理员', '1399708044', '1399708044');
+INSERT INTO `tb_menu` VALUES ('28', '52a523edc986c77155bdfb3ee08c0fe9', '点对点消息', 'c=pm&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399708093', '1399708093');
+INSERT INTO `tb_menu` VALUES ('29', 'f017d87c9c3f62a727d3b3ac6137de7c', '已发消息', 'c=pm&m=send', '28', '0', '正常', '超级管理员', '超级管理员', '1399708132', '1399708810');
+INSERT INTO `tb_menu` VALUES ('30', '87b98189372cfbdd698ff257c0ef6a22', '垃圾箱', 'c=pm&m=trash', '28', '0', '正常', '超级管理员', '超级管理员', '1399708160', '1399708160');
+INSERT INTO `tb_menu` VALUES ('31', 'ade969e95fdf730ab5564e098c537639', '日程安排', 'c=my_schedule&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399708208', '1399708208');
+INSERT INTO `tb_menu` VALUES ('32', '5570c1f22171f005e9c8d8f6c2132929', '添加日程', 'c=my_schedule&m=add', '31', '0', '正常', '超级管理员', '超级管理员', '1399708225', '1399708225');
+INSERT INTO `tb_menu` VALUES ('33', '27994307c71850f2f4410723a0f9cb45', '修改日程', 'c=my_schedule&m=edit', '31', '0', '正常', '超级管理员', '超级管理员', '1399708237', '1399708237');
+INSERT INTO `tb_menu` VALUES ('34', 'a29b20c2e6668c8e03cbb199f8694c78', '删除日程', 'c=my_schedule&m=delete', '31', '0', '正常', '超级管理员', '超级管理员', '1399708250', '1399708250');
+INSERT INTO `tb_menu` VALUES ('35', '76defa80571027666efbef1c28ff5a6f', '菜单管理', 'c=menu&m=index', '1', '0', '正常', '超级管理员', '超级管理员', '1399708341', '1399708341');
+INSERT INTO `tb_menu` VALUES ('36', '67246622091841ec40fc6ac5b9d220e5', '添加菜单', 'c=menu&m=add', '35', '0', '正常', '超级管理员', '超级管理员', '1399708397', '1399708397');
+INSERT INTO `tb_menu` VALUES ('37', 'c406d08fc839c424af1409c51de6e0ea', '修改菜单', 'c=menu&m=edit', '35', '0', '正常', '超级管理员', '超级管理员', '1399708420', '1399708420');
+INSERT INTO `tb_menu` VALUES ('38', 'e73dc3f58e17e691e11a4f7a46ccbf4a', '删除菜单', 'c=menu&m=delete', '35', '0', '正常', '超级管理员', '超级管理员', '1399708440', '1399708440');
+INSERT INTO `tb_menu` VALUES ('39', 'd4e9f07cff4222b4691a364a06ad7db3', '收消息', 'c=pm&m=receive', '28', '0', '正常', '超级管理员', '超级管理员', '1399708581', '1399708581');
+INSERT INTO `tb_menu` VALUES ('40', '9b5ea1c274e57505e3ea089940756a5d', '添加消息', 'c=pm&m=add', '28', '0', '正常', '超级管理员', '超级管理员', '1399708751', '1399708751');
+INSERT INTO `tb_menu` VALUES ('41', '2121367600d8b6bfb2ccc001a4f8d554', '我的文件', 'c=my_file&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399708868', '1399708868');
+INSERT INTO `tb_menu` VALUES ('42', '7452fc283ec7ec0b904989d999758281', '新建文件夹', 'c=my_file&m=addfolder', '41', '0', '正常', '超级管理员', '超级管理员', '1399708952', '1399708952');
+INSERT INTO `tb_menu` VALUES ('43', '6e255ae7ac6b5f90bd13a82117e7d83a', '移动', 'c=my_file&m=move', '41', '0', '正常', '超级管理员', '超级管理员', '1399708982', '1399708982');
+INSERT INTO `tb_menu` VALUES ('44', '52f0c01371b6765eb6493e8a3f251fd9', '删除文件', 'c=my_file&m=delete', '41', '0', '正常', '超级管理员', '超级管理员', '1399709040', '1399709040');
+INSERT INTO `tb_menu` VALUES ('45', 'a31f9c3580a432654e05d2f137f01260', '浏览目录', 'c=my_file&m=list_dir', '41', '0', '正常', '超级管理员', '超级管理员', '1399709079', '1399709939');
+INSERT INTO `tb_menu` VALUES ('46', '33494314d13fc6ca710407f5bd6b6ecb', '共享', 'c=my_file&m=share', '41', '0', '正常', '超级管理员', '超级管理员', '1399709202', '1399709202');
+INSERT INTO `tb_menu` VALUES ('47', '2df17fcd1e7b7138e64bf9f1d93eb67a', '取消共享', 'c=my_file&m=unshare', '41', '0', '正常', '超级管理员', '超级管理员', '1399709219', '1399709219');
+INSERT INTO `tb_menu` VALUES ('48', 'a8b863780acab6b43eb0b4180d3bfb62', '下载', 'c=my_file&m=download', '41', '0', '正常', '超级管理员', '超级管理员', '1399709245', '1399709245');
+INSERT INTO `tb_menu` VALUES ('49', 'c5e4f0b898af522e118abf1b52b9ef21', '文件共享', 'c=share_file&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399709455', '1399709455');
+INSERT INTO `tb_menu` VALUES ('50', '6702339a03c4feeb41ae42d53c0e1e7e', '下载', 'c=share_file&m=download', '49', '0', '正常', '超级管理员', '超级管理员', '1399709512', '1399709512');
+INSERT INTO `tb_menu` VALUES ('51', '5dc721f68c2fc1ede039b5c050f8ce53', '工作日志', 'c=work_log&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399709539', '1399709539');
+INSERT INTO `tb_menu` VALUES ('52', '32b73a21631ee67a094dc7fe9e42f48b', '添加工作日志', 'c=work_log&m=add', '51', '0', '正常', '超级管理员', '超级管理员', '1399709558', '1399709558');
+INSERT INTO `tb_menu` VALUES ('53', '0e845c32c498e34c3e2968cd556061f4', '修改工作日志', 'c=work_log&m=edit', '51', '0', '正常', '超级管理员', '超级管理员', '1399709574', '1399709574');
+INSERT INTO `tb_menu` VALUES ('54', '8c72a7d95ab041dee40ee335ff90abcc', '删除工作日志', 'c=work_log&m=delete', '51', '0', '正常', '超级管理员', '超级管理员', '1399709600', '1399709600');
+INSERT INTO `tb_menu` VALUES ('55', 'e06bf2f5a045bd2bb2694c900fb78c7b', '通讯录', 'c=contacts&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399709644', '1399709644');
+INSERT INTO `tb_menu` VALUES ('56', '06eb8ff6ba96f9f409761bdeb0b4bf96', '添加通讯录', 'c=contacts&m=add', '55', '0', '正常', '超级管理员', '超级管理员', '1399709666', '1399709666');
+INSERT INTO `tb_menu` VALUES ('57', 'c82805ef03d31cd4ff7e5df37d563850', '修改通讯录', 'c=contacts&m=edit', '55', '0', '正常', '超级管理员', '超级管理员', '1399709687', '1399709687');
+INSERT INTO `tb_menu` VALUES ('58', 'aaf5d40bb8b4613855f62d44e710bbea', '删除通讯录', 'c=contacts&m=delete', '55', '0', '正常', '超级管理员', '超级管理员', '1399709708', '1399709708');
+INSERT INTO `tb_menu` VALUES ('59', '005c19d974523ba9582161fda5048cd4', '发送人设置', 'c=sendor&m=index', '25', '0', '正常', '超级管理员', '超级管理员', '1399709739', '1399709739');
+INSERT INTO `tb_menu` VALUES ('60', '0d6774ad883fbf31879ab792535428d1', '设置发送人', 'c=sendor&m=add', '59', '0', '正常', '超级管理员', '超级管理员', '1399709775', '1399709775');
+INSERT INTO `tb_menu` VALUES ('61', '827ee17f5a310860cb37215fa9954029', '测绘项目', 'c=project&m=index', '0', '0', '正常', '超级管理员', '超级管理员', '1399710035', '1399711073');
+INSERT INTO `tb_menu` VALUES ('62', '080a38203fecdc1a0ca8d6df5fa15589', '项目登记', 'c=project_ch&m=add', '61', '0', '正常', '超级管理员', '超级管理员', '1399710063', '1399710063');
+INSERT INTO `tb_menu` VALUES ('63', 'e1818a1327585855d9a343267e809d76', '项目发送', 'c=project_ch&m=send', '61', '0', '正常', '超级管理员', '超级管理员', '1399710092', '1399710092');
+INSERT INTO `tb_menu` VALUES ('64', '0a1b1d68f1902f5932384daad8ff0748', '项目布置', 'c=project_ch&m=dispatch', '61', '0', '正常', '超级管理员', '超级管理员', '1399710160', '1399710160');
+INSERT INTO `tb_menu` VALUES ('65', '5c41ae629f0c0a45726637aca2d646d4', '项目实施', 'c=project_ch&m=implement', '61', '0', '正常', '超级管理员', '超级管理员', '1399710183', '1399710183');
+INSERT INTO `tb_menu` VALUES ('66', '5888bfc709b8879bf98547556d929676', '项目自查', 'c=project_ch&m=check', '61', '0', '正常', '超级管理员', '超级管理员', '1399710208', '1399710208');
+INSERT INTO `tb_menu` VALUES ('67', '6c92ddaae4e92e1b896e598bacf7c573', '项目初审', 'c=project_ch&m=first_sh', '61', '0', '正常', '超级管理员', '超级管理员', '1399710252', '1399710252');
+INSERT INTO `tb_menu` VALUES ('68', '4da9f7e64ffc856b2619565347414a63', '项目复审', 'c=project_ch&m=second_sh', '61', '0', '正常', '超级管理员', '超级管理员', '1399710275', '1399710275');
+INSERT INTO `tb_menu` VALUES ('69', 'a267b04c74c0c389eb6315cef60cae77', '项目收费', 'c=project_ch&m=fee', '61', '0', '正常', '超级管理员', '超级管理员', '1399710353', '1399710353');
+INSERT INTO `tb_menu` VALUES ('70', 'c3d2bcbc72a8d279e5f0c1de7997ae79', '项目归档', 'c=project_ch&m=archive', '61', '0', '正常', '超级管理员', '超级管理员', '1399710429', '1399710429');
+INSERT INTO `tb_menu` VALUES ('71', 'd7e45af8ed069458012720f113e8ad88', '项目删除', 'c=project_ch&m=delete', '61', '0', '正常', '超级管理员', '超级管理员', '1399710544', '1399710544');
+INSERT INTO `tb_menu` VALUES ('72', '58ecc392d9730d3ce4e50259d780fff9', '项目流转', 'c=project_ch&m=task', '61', '0', '正常', '超级管理员', '超级管理员', '1399710564', '1399710564');
+INSERT INTO `tb_menu` VALUES ('73', '10661b553fef74f915ac4cdc4c28d766', '项目修改', 'c=project_ch&m=edit', '61', '0', '正常', '超级管理员', '超级管理员', '1399710606', '1399710606');
+INSERT INTO `tb_menu` VALUES ('74', '0f72d3fbd2c4e37ad5b6f7651f2d3507', '项目日志', 'c=project_ch&m=log', '61', '0', '正常', '超级管理员', '超级管理员', '1399710664', '1399710664');
+INSERT INTO `tb_menu` VALUES ('75', '0d9b47e0270e51f920e3bfe5472252c3', '项目批量发送', 'c=project_ch&m=sendone', '61', '0', '正常', '超级管理员', '超级管理员', '1399710694', '1399710723');
+INSERT INTO `tb_menu` VALUES ('76', 'bffbd6e6c690b5378d58419cc6817156', '项目查询', 'c=project_ch&m=index', '61', '0', '正常', '超级管理员', '超级管理员', '1399710998', '1399710998');
+INSERT INTO `tb_menu` VALUES ('77', '79c4fa4b1faea804a0b13d41ea8577cc', '规划项目', 'c=project&m=guihua', '0', '0', '正常', '超级管理员', '超级管理员', '1399711646', '1399711646');
+INSERT INTO `tb_menu` VALUES ('78', '7d2e8bd57fe8aabf378fe66e6c36af17', '项目登记', 'c=project_gh&m=add', '77', '0', '正常', '超级管理员', '超级管理员', '1399711820', '1399711820');
+INSERT INTO `tb_menu` VALUES ('79', '78846784a4f2dc28efe53383373ae1b6', '项目发送', 'c=project_gh&m=send', '77', '0', '正常', '超级管理员', '超级管理员', '1399711856', '1399711856');
+INSERT INTO `tb_menu` VALUES ('80', 'ce5f7a873db3f932bc11e5a23be24179', '项目布置', 'c=project_gh&m=dispatch', '77', '0', '正常', '超级管理员', '超级管理员', '1399711890', '1399711890');
+INSERT INTO `tb_menu` VALUES ('81', 'faac4383071e26c0435bbbbb1bde5c15', '项目实施', 'c=project_gh&m=implement', '77', '0', '正常', '超级管理员', '超级管理员', '1399711909', '1399711909');
+INSERT INTO `tb_menu` VALUES ('82', '0d27b7c62b8cbd73124076ebfaf0cf8b', '项目自查', 'c=project_gh&m=check', '77', '0', '正常', '超级管理员', '超级管理员', '1399711928', '1399711928');
+INSERT INTO `tb_menu` VALUES ('83', 'f5710f2c8d61d722ed8013ad21afb751', '项目初审', 'c=project_gh&m=first_sh', '77', '0', '正常', '超级管理员', '超级管理员', '1399711946', '1399711946');
+INSERT INTO `tb_menu` VALUES ('84', 'f4961aea334d237529e2e616c7110640', '项目复审', 'c=project_gh&m=second_sh', '77', '0', '正常', '超级管理员', '超级管理员', '1399711973', '1399711973');
+INSERT INTO `tb_menu` VALUES ('85', 'cd7279cacef73f0f92a7d140ba98a607', '项目收费', 'c=project_gh&m=fee', '77', '0', '正常', '超级管理员', '超级管理员', '1399711986', '1399711986');
+INSERT INTO `tb_menu` VALUES ('86', 'f50dd0b7dc1a11cdf5f5ead13163d23b', '项目归档', 'c=project_gh&m=archive', '77', '0', '正常', '超级管理员', '超级管理员', '1399712002', '1399712002');
+INSERT INTO `tb_menu` VALUES ('87', '0bb88c9cea320fec002ad20e5cc45648', '项目删除', 'c=project_gh&m=delete', '77', '0', '正常', '超级管理员', '超级管理员', '1399712016', '1399712016');
+INSERT INTO `tb_menu` VALUES ('88', 'd1048bf51e263a2c6ee0435a050cb9b7', '项目流转', 'c=project_gh&m=task', '77', '0', '正常', '超级管理员', '超级管理员', '1399712030', '1399712030');
+INSERT INTO `tb_menu` VALUES ('89', '4bf6ae16b826e447b5182533763518f5', '项目修改', 'c=project_gh&m=edit', '77', '0', '正常', '超级管理员', '超级管理员', '1399712046', '1399712046');
+INSERT INTO `tb_menu` VALUES ('90', 'b300ba7e5a7527b196d631f19773acf0', '项目批量发送', 'c=project_gh&m=sendone', '77', '0', '正常', '超级管理员', '超级管理员', '1399712071', '1399712071');
+INSERT INTO `tb_menu` VALUES ('91', '369916db18a566b348902647c7760d86', '项目日志', 'c=project_gh&m=log', '77', '0', '正常', '超级管理员', '超级管理员', '1399712130', '1399712130');
+INSERT INTO `tb_menu` VALUES ('92', '4154e0acedbb2699260dab8766021a13', '项目查询', 'c=project_gh&m=index', '77', '0', '正常', '超级管理员', '超级管理员', '1399712193', '1399712193');
 INSERT INTO `tb_pm` VALUES ('18', '1', '', '测试消息', '<p>\r\n	我要发消息了\r\n</p>\r\n<p>\r\n	<a class=\"ke-insertfile\" href=\"/filestore/2014/04/17/18a96867c33852a33d4e1b2f3478dc55.vsd\" target=\"_blank\">附件</a>\r\n</p>', '0', '0', '正常', '超级管理员', '超级管理员', '1397727986', '1397727986');
 INSERT INTO `tb_pm` VALUES ('19', '11', '', '测试消息', '<p>\r\n	我要发消息了\r\n</p>\r\n<p>\r\n	<a class=\"ke-insertfile\" href=\"/filestore/2014/04/17/18a96867c33852a33d4e1b2f3478dc55.vsd\" target=\"_blank\">附件</a>\r\n</p>', '1', '1', '正常', '超级管理员', '超级管理员', '1397727986', '1397727986');
 INSERT INTO `tb_pm` VALUES ('20', '11', '', '给管理员的', '我要开权限', '0', '0', '正常', '测试是', '测试是', '1397728341', '1397728341');
@@ -46345,14 +46444,16 @@ INSERT INTO `tb_pm` VALUES ('26', '11', '超级管理员', '我再发个管理�
 INSERT INTO `tb_pm` VALUES ('27', '1', '超级管理员', '我再发个管理员', '我答案很傻sas爱上', '0', '1', '正常', '测试是', '超级管理员', '1397729386', '1397729498');
 INSERT INTO `tb_pm` VALUES ('28', '11', '超级管理员', '消息哈师大', '<p>\r\n	哈sas哈啥说的话撒的撒的\r\n</p>\r\n<p>\r\n	<br />\r\n</p>', '0', '0', '正常', '测试是', '测试是', '1397780707', '1397780707');
 INSERT INTO `tb_pm` VALUES ('29', '1', '超级管理员', '消息哈师大', '<p>\r\n	哈sas哈啥说的话撒的撒的\r\n</p>\r\n<p>\r\n	<br />\r\n</p>', '0', '1', '正常', '测试是', '超级管理员', '1397780707', '1397781047');
-INSERT INTO `tb_project` VALUES ('42', '20140508014127905', '2014', '7', 'B', '附海镇', '0', '0', '哈哈啥婚纱', '', '1', '个人建房', '', '东山村', '加上的话也有', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '哈啥哈哈啥事哈哈', '', '1', '0', '', '0', '', '18', '章武挺', '0', '0', '0', '0', '0', '100', '已删除', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399513287', '1399513287', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO `tb_project` VALUES ('43', 'A2014-001-A001', '2014', '5', 'A', '龙山镇', '1', '1', '阿莎哈啥是撒哈花洒哈啥', '', '0', '日常宗地', '', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '1', '0', '', '0', '', '18', '章武挺', '0', '0', '0', '0', '0', '100', '已删除', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399513461', '1399513461', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO `tb_project` VALUES ('44', '20140508014500858', '2014', '5', 'A', '龙山镇', '0', '0', '啊哈啥啥撒谎哈时候', '', '1', '日常宗地', '', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '1', '0', '', '0', '', '18', '章武挺', '0', '0', '0', '0', '0', '100', '已删除', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399513500', '1399514867', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO `tb_project` VALUES ('45', 'A2014-002-A002', '2014', '5', 'A', '龙山镇', '2', '2', '家世界安静时家按时间', '', '0', '日常宗地', '', '', '', '', '小陈', '13565542312', '057463289878', '夏小林', '13795666666', '', '哈哈啥婚纱', '', '1', '0', '', '0', '', '19', '组员1', '0', '0', '0', '0', '0', '100', '已发送', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399518741', '1399518741', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO `tb_project` VALUES ('46', 'A2014-003-A003', '2014', '5', 'A', '龙山镇', '3', '3', '哈啥沙和尚', '', '0', '日常宗地', '重测', '', '', '', 'ahshashashh', '13565542312', '', '夏小林', '13795666666', '', '撒娇阿莎花洒哈啥', '怨念哈哈啥事', '2', '19', '组员1', '18', '章武挺', '19', '组员1', '0', '0', '899', '122', '0', '100', '已完成', '', '哈哈和莎莎', '0', '0', '0', '0', '1399528198', '1399507200', '1400803200', '1399528247', '1399613388', '1400803200', '1399593600', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399519755', '1399613388', '开始干活了', '阿萨飒飒', '0', '0', '0', '', '', '', '', '', '', '', '', '', '123');
-INSERT INTO `tb_project` VALUES ('47', 'A2014-004-A004', '2014', '5', 'A', '龙山镇', '4', '4', '哈哈哈哈花洒哈啥', '', '0', '日常宗地', '变更', '', '', '', '家属姐爱喝啥', '15122325566', '', '小哈撒', '15122325566', '', '哈哈啥撒时候', '', '1', '18', '章武挺', '19', '组员1', '19', '组员1', '0', '0', '0', '0', '0', '100', '已实施', '', '', '0', '0', '0', '0', '1399624192', '1400198400', '1401321600', '1399624209', '0', '1401235200', '1400198400', '0', '100', '0', '0', '0', '0', '0', '0', '19', '组员1', '组员1', '1399528091', '1399624209', '哈花洒哈啥审核', '哈沙和尚沙河', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO `tb_project` VALUES ('48', 'A2014-005-D001', '2014', '5', 'D', '逍林镇', '5', '1', '哈萨公司gasgas公告', '', '0', '日常宗地', '新增', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '1', '0', '', '0', '', '19', '组员1', '0', '0', '0', '0', '0', '100', '已发送', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399539390', '1399539390', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO `tb_project` VALUES ('49', 'A2014-006-A005', '2014', '5', 'A', '龙山镇', '6', '5', '阿萨沙和尚', '', '0', '日常宗地', '分割', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '爱喝啥啥呵呵呵', '哈哈撒花审核', '2', '19', '组员1', '18', '章武挺', '18', '章武挺', '0', '0', '0', '0', '0', '100', '已实施', '', '', '0', '0', '0', '0', '1399614545', '1399593600', '1400716800', '1399614564', '0', '1400198400', '1399593600', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399614502', '1399614564', '开始实施', '按时完成', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('42', '20140508014127905', '2014', '7', 'B', '附海镇', '0', '0', '哈哈啥婚纱', '', '1', '个人建房', '', '东山村', '加上的话也有', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '哈啥哈哈啥事哈哈', '', '1', '0', '', '0', '', '18', '章武挺', '0', '0', '100', '已删除', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399513287', '1399513287', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('43', 'A2014-001-A001', '2014', '5', 'A', '龙山镇', '1', '1', '阿莎哈啥是撒哈花洒哈啥', '', '0', '日常宗地', '', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '1', '0', '', '0', '', '18', '章武挺', '0', '0', '100', '已删除', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399513461', '1399513461', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('44', '20140508014500858', '2014', '5', 'A', '龙山镇', '0', '0', '啊哈啥啥撒谎哈时候', '', '1', '日常宗地', '', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '1', '0', '', '0', '', '18', '章武挺', '0', '0', '100', '已删除', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399513500', '1399514867', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('45', 'A2014-002-A002', '2014', '5', 'A', '龙山镇', '2', '2', '家世界安静时家按时间', '', '0', '日常宗地', '', '', '', '', '小陈', '13565542312', '057463289878', '夏小林', '13795666666', '', '哈哈啥婚纱', '', '1', '0', '', '0', '', '19', '组员1', '0', '0', '100', '已发送', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399518741', '1399518741', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('46', 'A2014-003-A003', '2014', '5', 'A', '龙山镇', '3', '3', '哈啥沙和尚', '', '0', '日常宗地', '重测', '', '', '', 'ahshashashh', '13565542312', '', '夏小林', '13795666666', '', '撒娇阿莎花洒哈啥', '怨念哈哈啥事', '2', '19', '组员1', '18', '章武挺', '19', '组员1', '0', '0', '100', '已完成', '', '哈哈和莎莎', '0', '0', '0', '0', '1399528198', '1399507200', '1400803200', '1399528247', '1399613388', '1400803200', '1399593600', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399519755', '1399613388', '开始干活了', '阿萨飒飒', '0', '0', '0', '', '', '', '', '', '', '', '', '', '123');
+INSERT INTO `tb_project` VALUES ('47', 'A2014-004-A004', '2014', '5', 'A', '龙山镇', '4', '4', '哈哈哈哈花洒哈啥', '', '0', '日常宗地', '变更', '', '', '', '家属姐爱喝啥', '15122325566', '', '小哈撒', '15122325566', '', '哈哈啥撒时候', '', '1', '18', '章武挺', '19', '组员1', '19', '组员1', '0', '0', '100', '已实施', '', '', '0', '0', '0', '0', '1399624192', '1400198400', '1401321600', '1399624209', '0', '1401235200', '1400198400', '0', '100', '0', '0', '0', '0', '0', '0', '19', '组员1', '组员1', '1399528091', '1399624209', '哈花洒哈啥审核', '哈沙和尚沙河', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('48', 'A2014-005-D001', '2014', '5', 'D', '逍林镇', '5', '1', '哈萨公司gasgas公告', '', '0', '日常宗地', '新增', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '1', '0', '', '0', '', '19', '组员1', '0', '0', '100', '已发送', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399539390', '1399539390', '', '', '0', '0', '0', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO `tb_project` VALUES ('49', 'A2014-006-A005', '2014', '5', 'A', '龙山镇', '6', '5', '阿萨沙和尚', '', '0', '日常宗地', '分割', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '爱喝啥啥呵呵呵', '哈哈撒花审核', '2', '19', '组员1', '18', '章武挺', '19', '组员1', '0', '0', '100', '已完成', '', '', '0', '0', '0', '0', '1399614545', '1399593600', '1400716800', '1399614564', '1399682361', '1400198400', '1399593600', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399614502', '1399682361', '开始实施', '按时完成', '0', '0', '0', '', '', '', '', '', '', '', '', '', '124');
+INSERT INTO `tb_project` VALUES ('50', 'A2014-0007-D002', '2014', '5', 'D', '逍林镇', '7', '2', '销路has哈哈撒花', '', '0', '日常宗地', '变更', '', '加上的话也有', '', '小陈', '13565542312', '057463289878', '夏小林', '13795666666', '021-56556611', '浒山街道东山路', '原边哈哈哈', '2', '19', '组员1', '18', '章武挺', '19', '组员1', '0', '0', '100', '已完成', '', '', '0', '0', '0', '0', '1399683214', '1400198400', '1401321600', '1399683284', '1399683389', '1400803200', '1400457600', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399683084', '1399683389', '下周开始干活', '按时完成', '0', '0', '0', '', '', '', '', '', '', '', '', '', '125');
+INSERT INTO `tb_project` VALUES ('51', 'A2014-0008-C001', '2014', '5', 'C', '长河镇', '8', '1', '有哈沙和尚', '', '0', '日常宗地', '变更', '', '', '', '小陈', '13565542312', '', '夏小林', '13795666666', '', '浒山街道东山路', '', '2', '19', '组员1', '18', '章武挺', '19', '组员1', '0', '0', '100', '已完成', '', '', '0', '0', '0', '0', '1399705034', '1400025600', '1401321600', '1399705048', '1399705123', '1400803200', '1400112000', '0', '100', '0', '0', '0', '0', '0', '0', '18', '章武挺', '章武挺', '1399702864', '1399705123', '哈哈啥事', '哈哈啥事', '0', '0', '0', '', '', '', '', '', '', '', '', '', '126');
 INSERT INTO `tb_project_fault` VALUES ('3', '0', '36', 'A4', '高差改正项目不齐全', '哈哈是撒谎和', '5', '0', '组员1', '组员1', '1399339077', '1399339077');
 INSERT INTO `tb_project_fault` VALUES ('4', '0', '36', 'C1', '其它的轻微差、错、漏', '呵呵呵说的话', '0.5', '0', '组员1', '组员1', '1399339077', '1399339077');
 INSERT INTO `tb_project_gh` VALUES ('3', '2014', '5', 'A', '龙山镇', '加上大家上大街上的蒋介石的姐姐姐姐家', '贾莎莎花洒好呵呵呵', '0', '新增用地报批1', '', '', '', '', '小陈', '13565542312', '057463289878', '夏小林', '13795666666', '', '哈沙和尚', '加紧时间按时间', '2', '19', '组员1', '18', '章武挺', '19', '组员1', '0', '1000', '60', '已归档', '', '1', '0', '0', '1399346206', '1399345766', '1399507200', '1400716800', '1399345907', '1399345929', '1400716800', '1400025600', '0', '60', '3000.1', '2890.2', '1', '0', '1399346206', '3', '18', '章武挺', '组员1', '1399345589', '1399346267', '哈哈是撒谎和', '哈哈沙和尚', '1399345969', '1399346008', '1399346051', '组员1', '章武挺', '组员1', '无', '哈哈是哈哈和哥哥哥哥', '安徽省has', '无', '哈啥沙和尚', '加上后', '110');
@@ -46422,6 +46523,41 @@ INSERT INTO `tb_project_jz` VALUES ('121', '46', '1', '啊哈沙和尚呵呵呵'
 INSERT INTO `tb_project_jz` VALUES ('120', '46', '2', '爱上姐姐爱上姐姐姐姐', '啊啥沙和尚', '章武挺', '章武挺', '1399613388', '1399613388');
 INSERT INTO `tb_project_jz` VALUES ('119', '46', '3', '爱撒谎时候', '卡卡是卡斯柯', '章武挺', '章武挺', '1399613388', '1399613388');
 INSERT INTO `tb_project_jz` VALUES ('118', '46', '4', '爱啥啥', '哈哈哈哈', '章武挺', '章武挺', '1399613388', '1399613388');
+INSERT INTO `tb_project_jz` VALUES ('122', '49', '1', '哈撒很傻很傻哈哈', '哈哈沙和尚', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('123', '49', '1', '哈哈沙和尚', '阿古斯嘎嘎三个', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('124', '49', '1', '巴萨哈哈', '哈哈啥事', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('125', '49', '2', '哈哈说好话', '能拿上你呢', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('126', '49', '2', '哈哈啥时候', 'has哈哈撒花', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('127', '49', '2', '阿莎哈啥审核', '爸爸说罢睡吧睡吧', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('128', '49', '2', '哈哈啥时候', '哈哈啥事', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('129', '49', '2', '啊哈哈花洒哈啥', '爱上gas个', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('130', '49', '2', '和哈花洒哈啥', '哈氏合金安徽省', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('131', '49', '3', '个哈啥啥尴尬', '嘎嘎嘎三个', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('132', '49', '3', 'gas尴尬三个撒个', '阿斯钢gas噶', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('133', '49', '3', '嘎嘎嘎三个', '阿古斯伽师瓜', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('134', '49', '4', 'gas尴尬三个', 'gas尴尬事', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_project_jz` VALUES ('135', '50', '1', '哈哈啥时候', '哈啥婚纱', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('136', '50', '1', '哈啥花洒哈哈', '哈啥婚纱和', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('137', '50', '2', '哈哈啥事', '哈啥婚纱', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('138', '50', '2', '哈哈啥事', '加上姐姐爱上家', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('139', '50', '2', '哈哈啥事', '哈撒审核', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('140', '50', '3', '哈哈沙和尚', '阿斯静安四季就', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('141', '50', '4', '哈哈和莎莎', '爱书吧审核', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('142', '50', '4', '爸爸是巴萨版本', 'abs八十八', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('143', '50', '4', '纳萨斯你呢', '按时那是你', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_project_jz` VALUES ('144', '51', '1', '哈撒很傻很傻哈哈', '哈哈沙和尚', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('145', '51', '1', '哈哈沙和尚', '阿古斯嘎嘎三个', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('146', '51', '1', '巴萨哈哈', '哈哈啥事', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('147', '51', '2', '和哈花洒哈啥', '哈氏合金安徽省', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('148', '51', '2', '啊哈哈花洒哈啥', '爱上gas个', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('149', '51', '2', '哈哈啥时候', '哈哈啥事', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('150', '51', '2', '阿莎哈啥审核', '爸爸说罢睡吧睡吧', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('151', '51', '2', '哈哈啥时候', 'has哈哈撒花', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('152', '51', '2', '哈哈说好话', '能拿上你呢', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('153', '51', '3', '个哈啥啥尴尬', '嘎嘎嘎三个', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('154', '51', '3', 'gas尴尬三个撒个', '阿斯钢gas噶', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('155', '51', '3', '嘎嘎嘎三个', '阿古斯伽师瓜', '章武挺', '章武挺', '1399705123', '1399705123');
+INSERT INTO `tb_project_jz` VALUES ('156', '51', '4', 'gas尴尬三个', 'gas尴尬事', '章武挺', '章武挺', '1399705123', '1399705123');
 INSERT INTO `tb_project_mj` VALUES ('265', '0', '46', '大山村', '1', '农用地', '01', '耕地', '011', '水田', '300', '章武挺', '章武挺', '1399613388', '1399613388');
 INSERT INTO `tb_project_mj` VALUES ('266', '0', '46', '大山村', '1', '农用地', '02', '园地', '021', '果园', '567', '章武挺', '章武挺', '1399613388', '1399613388');
 INSERT INTO `tb_project_mod` VALUES ('284', '36', '19', 'workflow', '新增', '组员1', '1399338104', '组员1 新增项目,项目编号：A2014-001-A001', '{\"input_type\":\"0\",\"year\":\"2014\",\"month\":\"5\",\"region_code\":\"A\",\"type\":\"\\u65e5\\u5e38\\u5b97\\u5730\",\"name\":\"\\u54c8\\u5565\\u54c8\\u54c8\\u6c99\\u548c\\u5c1a\\u5475\\u5475\\u5475\",\"address\":\"\\u8d3e\\u838e\\u838e\\u82b1\\u6d12\\u597d\",\"village\":\"\",\"union_name\":\"\",\"source\":\"\",\"contacter\":\"\\u5c0f\\u590f\",\"contacter_mobile\":\"15122325566\",\"contacter_tel\":\"\",\"manager\":\"\\u5c0f\\u54c8\\u6492\",\"manager_mobile\":\"15122325566\",\"manager_tel\":\"\",\"descripton\":\"\",\"displayorder\":\"\",\"submit\":\"\\u4fdd\\u5b58\",\"user_id\":\"19\",\"creator\":\"\\u7ec4\\u54581\",\"region_name\":\"\\u9f99\\u5c71\\u9547\",\"master_serial\":1,\"region_serial\":1,\"project_no\":\"A2014-001-A001\"}');
@@ -46506,6 +46642,17 @@ INSERT INTO `tb_project_mod` VALUES ('362', '49', '19', 'workflow', '布置', '�
 INSERT INTO `tb_project_mod` VALUES ('363', '49', '18', 'workflow', '实施', '章武挺', '1399614564', '章武挺 实施', '{\"status\":\"\\u5df2\\u5b9e\\u65bd\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"worker_id\":\"18\",\"worker\":\"\\u7ae0\\u6b66\\u633a\",\"real_startdate\":1399614564,\"ny_enddate\":1400198400,\"wy_enddate\":1399593600,\"updatetime\":1399614564,\"ss_remark\":\"\\u5f00\\u59cb\\u5b9e\\u65bd\"}');
 INSERT INTO `tb_project_mod` VALUES ('364', '47', '18', 'workflow', '布置', '章武挺', '1399624192', '章武挺 布置 至 组员1', '{\"pm_id\":\"18\",\"pm\":\"\\u7ae0\\u6b66\\u633a\",\"dept_id\":\"1\",\"sendor_id\":\"19\",\"sendor\":\"\\u7ec4\\u54581\",\"status\":\"\\u5df2\\u5e03\\u7f6e\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"arrange_date\":1399624192,\"start_date\":1400198400,\"end_date\":1401321600,\"updatetime\":1399624192,\"bz_remark\":\"\\u54c8\\u6c99\\u548c\\u5c1a\\u6c99\\u6cb3\"}');
 INSERT INTO `tb_project_mod` VALUES ('365', '47', '19', 'workflow', '实施', '组员1', '1399624209', '组员1 实施', '{\"status\":\"\\u5df2\\u5b9e\\u65bd\",\"updator\":\"\\u7ec4\\u54581\",\"worker_id\":\"19\",\"worker\":\"\\u7ec4\\u54581\",\"real_startdate\":1399624209,\"ny_enddate\":1401235200,\"wy_enddate\":1400198400,\"updatetime\":1399624209,\"ss_remark\":\"\\u54c8\\u82b1\\u6d12\\u54c8\\u5565\\u5ba1\\u6838\"}');
+INSERT INTO `tb_project_mod` VALUES ('366', '49', '18', 'workflow', '完成', '章武挺', '1399682361', '章武挺 完成 并流转至 组员1', '{\"sendor_id\":\"19\",\"sendor\":\"\\u7ec4\\u54581\",\"status\":\"\\u5df2\\u5b8c\\u6210\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"real_enddate\":1399682361,\"updatetime\":1399682361,\"files\":\"124\",\"area_shgy\":\"899\",\"area_sell\":\"122\",\"area_allow\":0}');
+INSERT INTO `tb_project_mod` VALUES ('367', '50', '18', 'workflow', '新增', '章武挺', '1399683084', '章武挺 新增', '{\"input_type\":\"0\",\"year\":\"2014\",\"month\":\"5\",\"region_code\":\"D\",\"type\":\"\\u65e5\\u5e38\\u5b97\\u5730\",\"nature\":\"\\u53d8\\u66f4\",\"name\":\"\\u9500\\u8defhas\\u54c8\\u54c8\\u6492\\u82b1\",\"address\":\"\\u6d52\\u5c71\\u8857\\u9053\\u4e1c\\u5c71\\u8def\",\"village\":\"\",\"union_name\":\"\\u52a0\\u4e0a\\u7684\\u8bdd\\u4e5f\\u6709\",\"source\":\"\",\"contacter\":\"\\u5c0f\\u9648\",\"contacter_mobile\":\"13565542312\",\"contacter_tel\":\"057463289878\",\"manager\":\"\\u590f\\u5c0f\\u6797\",\"manager_mobile\":\"13795666666\",\"manager_tel\":\"021-56556611\",\"descripton\":\"\\u539f\\u8fb9\\u54c8\\u54c8\\u54c8\",\"displayorder\":\"\",\"gen_serial\":\"1\",\"submit\":\"\\u4fdd\\u5b58\",\"user_id\":\"18\",\"creator\":\"\\u7ae0\\u6b66\\u633a\",\"master_serial\":7,\"region_serial\":2,\"project_no\":\"A2014-0007-D002\",\"region_name\":\"\\u900d\\u6797\\u9547\"}');
+INSERT INTO `tb_project_mod` VALUES ('368', '50', '18', 'workflow', '发送', '章武挺', '1399683094', '章武挺 发送 至 组员1', '{\"sendor_id\":\"19\",\"sendor\":\"\\u7ec4\\u54581\",\"status\":\"\\u5df2\\u53d1\\u9001\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"updatetime\":1399683094}');
+INSERT INTO `tb_project_mod` VALUES ('369', '50', '19', 'workflow', '布置', '组员1', '1399683214', '组员1 布置 至 章武挺', '{\"pm_id\":\"19\",\"pm\":\"\\u7ec4\\u54581\",\"dept_id\":\"2\",\"sendor_id\":\"18\",\"sendor\":\"\\u7ae0\\u6b66\\u633a\",\"status\":\"\\u5df2\\u5e03\\u7f6e\",\"updator\":\"\\u7ec4\\u54581\",\"arrange_date\":1399683214,\"start_date\":1400198400,\"end_date\":1401321600,\"updatetime\":1399683214,\"bz_remark\":\"\\u6309\\u65f6\\u5b8c\\u6210\"}');
+INSERT INTO `tb_project_mod` VALUES ('370', '50', '18', 'workflow', '实施', '章武挺', '1399683284', '章武挺 实施', '{\"status\":\"\\u5df2\\u5b9e\\u65bd\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"worker_id\":\"18\",\"worker\":\"\\u7ae0\\u6b66\\u633a\",\"real_startdate\":1399683284,\"ny_enddate\":1400803200,\"wy_enddate\":1400457600,\"updatetime\":1399683284,\"ss_remark\":\"\\u4e0b\\u5468\\u5f00\\u59cb\\u5e72\\u6d3b\"}');
+INSERT INTO `tb_project_mod` VALUES ('371', '50', '18', 'workflow', '完成', '章武挺', '1399683389', '章武挺 完成 并流转至 组员1', '{\"sendor_id\":\"19\",\"sendor\":\"\\u7ec4\\u54581\",\"status\":\"\\u5df2\\u5b8c\\u6210\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"real_enddate\":1399683389,\"updatetime\":1399683389,\"files\":\"125\",\"area_shgy\":\"899\",\"area_sell\":\"20\",\"area_allow\":\"500\"}');
+INSERT INTO `tb_project_mod` VALUES ('372', '51', '18', 'workflow', '新增', '章武挺', '1399702864', '章武挺 新增', '{\"input_type\":\"0\",\"year\":\"2014\",\"month\":\"5\",\"region_code\":\"C\",\"type\":\"\\u65e5\\u5e38\\u5b97\\u5730\",\"nature\":\"\\u53d8\\u66f4\",\"name\":\"\\u6709\\u54c8\\u6c99\\u548c\\u5c1a\",\"address\":\"\\u6d52\\u5c71\\u8857\\u9053\\u4e1c\\u5c71\\u8def\",\"village\":\"\",\"union_name\":\"\",\"source\":\"\",\"contacter\":\"\\u5c0f\\u9648\",\"contacter_mobile\":\"13565542312\",\"contacter_tel\":\"\",\"manager\":\"\\u590f\\u5c0f\\u6797\",\"manager_mobile\":\"13795666666\",\"manager_tel\":\"\",\"descripton\":\"\",\"displayorder\":\"\",\"gen_serial\":\"1\",\"submit\":\"\\u4fdd\\u5b58\",\"user_id\":\"18\",\"creator\":\"\\u7ae0\\u6b66\\u633a\",\"master_serial\":8,\"region_serial\":1,\"project_no\":\"A2014-0008-C001\",\"region_name\":\"\\u957f\\u6cb3\\u9547\"}');
+INSERT INTO `tb_project_mod` VALUES ('373', '51', '18', 'workflow', '发送', '章武挺', '1399705017', '章武挺 发送 至 组员1', '{\"sendor_id\":\"19\",\"sendor\":\"\\u7ec4\\u54581\",\"status\":\"\\u5df2\\u53d1\\u9001\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"updatetime\":1399705017}');
+INSERT INTO `tb_project_mod` VALUES ('374', '51', '19', 'workflow', '布置', '组员1', '1399705034', '组员1 布置 至 章武挺', '{\"pm_id\":\"19\",\"pm\":\"\\u7ec4\\u54581\",\"dept_id\":\"2\",\"sendor_id\":\"18\",\"sendor\":\"\\u7ae0\\u6b66\\u633a\",\"status\":\"\\u5df2\\u5e03\\u7f6e\",\"updator\":\"\\u7ec4\\u54581\",\"arrange_date\":1399705034,\"start_date\":1400025600,\"end_date\":1401321600,\"updatetime\":1399705034,\"bz_remark\":\"\\u54c8\\u54c8\\u5565\\u4e8b\"}');
+INSERT INTO `tb_project_mod` VALUES ('375', '51', '18', 'workflow', '实施', '章武挺', '1399705048', '章武挺 实施', '{\"status\":\"\\u5df2\\u5b9e\\u65bd\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"worker_id\":\"18\",\"worker\":\"\\u7ae0\\u6b66\\u633a\",\"real_startdate\":1399705048,\"ny_enddate\":1400803200,\"wy_enddate\":1400112000,\"updatetime\":1399705048,\"ss_remark\":\"\\u54c8\\u54c8\\u5565\\u4e8b\"}');
+INSERT INTO `tb_project_mod` VALUES ('376', '51', '18', 'workflow', '完成', '章武挺', '1399705123', '章武挺 完成 并流转至 组员1', '{\"sendor_id\":\"19\",\"sendor\":\"\\u7ec4\\u54581\",\"status\":\"\\u5df2\\u5b8c\\u6210\",\"updator\":\"\\u7ae0\\u6b66\\u633a\",\"real_enddate\":1399705123,\"updatetime\":1399705123,\"files\":\"126\"}');
 INSERT INTO `tb_project_nature` VALUES ('1', '变更', '测绘项目', '0', '正常', '超级管理员', '超级管理员', '1397786851', '1397786851');
 INSERT INTO `tb_project_nature` VALUES ('2', '转让', '测绘项目', '0', '正常', '超级管理员', '超级管理员', '1397786858', '1397786858');
 INSERT INTO `tb_project_nature` VALUES ('3', '分割', '测绘项目', '0', '正常', '超级管理员', '超级管理员', '1397786858', '1397786858');
@@ -46627,6 +46774,13 @@ INSERT INTO `tb_user_event` VALUES ('293', '19', '46', '哈啥沙和尚', '/inde
 INSERT INTO `tb_user_event` VALUES ('294', '19', '49', '阿萨沙和尚', '/index.php?c=project_ch&m=task&id=49', '1', '未处理', '章武挺', '章武挺', '1399614515', '1399614515');
 INSERT INTO `tb_user_event` VALUES ('295', '18', '49', '阿萨沙和尚', '/index.php?c=project_ch&m=task&id=49', '1', '未处理', '组员1', '组员1', '1399614545', '1399614545');
 INSERT INTO `tb_user_event` VALUES ('296', '19', '47', '哈哈哈哈花洒哈啥', '/index.php?c=project_ch&m=task&id=47', '1', '未处理', '章武挺', '章武挺', '1399624192', '1399624192');
+INSERT INTO `tb_user_event` VALUES ('297', '19', '49', '阿萨沙和尚', '/index.php?c=project_ch&m=task&id=49', '1', '未处理', '章武挺', '章武挺', '1399682361', '1399682361');
+INSERT INTO `tb_user_event` VALUES ('298', '19', '50', '销路has哈哈撒花', '/index.php?c=project_ch&m=task&id=50', '1', '未处理', '章武挺', '章武挺', '1399683094', '1399683094');
+INSERT INTO `tb_user_event` VALUES ('299', '18', '50', '销路has哈哈撒花', '/index.php?c=project_ch&m=task&id=50', '1', '未处理', '组员1', '组员1', '1399683214', '1399683214');
+INSERT INTO `tb_user_event` VALUES ('300', '19', '50', '销路has哈哈撒花', '/index.php?c=project_ch&m=task&id=50', '1', '未处理', '章武挺', '章武挺', '1399683389', '1399683389');
+INSERT INTO `tb_user_event` VALUES ('301', '19', '51', '有哈沙和尚', '/index.php?c=project_ch&m=task&id=51', '1', '未处理', '章武挺', '章武挺', '1399705017', '1399705017');
+INSERT INTO `tb_user_event` VALUES ('302', '18', '51', '有哈沙和尚', '/index.php?c=project_ch&m=task&id=51', '1', '未处理', '组员1', '组员1', '1399705034', '1399705034');
+INSERT INTO `tb_user_event` VALUES ('303', '19', '51', '有哈沙和尚', '/index.php?c=project_ch&m=task&id=51', '1', '未处理', '章武挺', '章武挺', '1399705123', '1399705123');
 INSERT INTO `tb_user_menu` VALUES ('1', '11', '970ee07bcf77cf54e167c83a5e6d3c27', '1', '超级管理员', '测试是', '1397114183', '1397117741');
 INSERT INTO `tb_user_menu` VALUES ('2', '11', '134f34825e4f179f4355bb8bc369ead0', '1', '超级管理员', '测试是', '1397114183', '1397117741');
 INSERT INTO `tb_user_menu` VALUES ('3', '11', 'f607c898371146232b4fd31ce8b8c0b9', '1', '超级管理员', '测试是', '1397114183', '1397117741');

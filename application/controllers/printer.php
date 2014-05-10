@@ -98,73 +98,52 @@ class Printer extends TZ_Controller {
         if(!$id){
             die('参数错误');
         }
+        
+        $type = $_GET['type'];
+        
+        
         $this->load->helper('number');
         $info = $this->Project_Model->queryById($id);
+        
+        if(!$info){
+            die('找不到记录');
+        }
+        
         $this->assign('info',$info);
-        
-        
+ 
         $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         
-        
         $this->assign('dateInfo',$dateInfo);
         
-        
-        /**
-         * 计算有多少村 
-         */
-        
-        /*
-        $this->load->model('Project_Mj_Model');
-        $mjList = $this->Project_Mj_Model->getList(array(
-            'where' => array(
-                'type' => 0,
-                'project_id' => $info['id']
-            )
-        ));
-        */
-        /**
-         * 首先计算 录入的面积地 类是否已经 超出了 默认表格的地类数量 ,
-         * 如果超过 先查找 那个超过了
-         * 如果那个土地大类超过了，则查看于自己属于同一个大类的，是否是空闲的,如果空闲者利用 将其替换掉
-         * 如果与自己属于同一个大类的满了，再查看其他大类是否 有空闲，如果有则借一行，
-         * 
-         * 土地大类至少有一行
-         */
-        
-        /*
-        $dl = array();
-        
-        $tableDl = array(
-        );
-        
-        
-        
-        if($mjList['data']){
-            foreach($mjList['data'] as $v){
-                $dl[] = $v['code2'];
-            }
-        }
-        
-        $dl = array_unique($dl);
-        if(count($dl)){
-            
-        }
-        */
-        /*
         $this->load->model('Land_Category_Model');
         $sysLandCategory = $this->Land_Category_Model->getList(array(
             'where' => array(
-                'pid' => 0
+                'pid !=' => 0
             ),
             'order' => 'cate_id ASC ,code ASC' 
         ));
         
+        $dlList = array();
+        foreach($sysLandCategory['data'] as $v){
+            $dlList[$v['cate_id']][] = $v;
+        }
         
-        $this->assign('sysLandCategory',$sysLandCategory['data']);
-         * 
-         */
+        $this->load->model('Project_Area_Model');
+        $mj = $this->Project_Area_Model->getList(array(
+            'where' => array(
+                'type' => 0,
+                'project_id' => $info['id']
+            ),
+            'order' => 'createtime DESC',
+            'limit' => 1
+        ));
+
+        if($mj['data'][0]){
+            $this->assign('mjb',$mj['data'][0]);
+        }
+        $this->assign('dlList',$dlList );
         $this->display();
     }
     

@@ -228,7 +228,7 @@
                                             $.ajax({
                                                 type:"POST",
                                                 url: "{url_path('my_file','move')}",
-                                                data:$("form[name=filelist]").serialize() + '&move_id=' + $("input[name=move_id]").val() + "&from_id={$pid}",
+                                                data:$("form[name=filelist]").serialize() + '&isajax=1&move_id=' + $("input[name=move_id]").val() + "&from_id={$pid}",
                                                 dataType:"json",
                                                 success:ajax_success,
                                                 error:ajax_error

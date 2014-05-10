@@ -5,26 +5,255 @@
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
         <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
+        <!--[if lt IE 7]>
+        <link rel="stylesheet" type="text/css" href="/css/ie6.css" />
+        <![endif]-->
     </head>
     <body>
         
+        <form name="mjbForm" method="post" action="{url_path('project_ch','savemjb')}" target="post_iframe">
+            <input type="hidden" name="id" value="{$info['id']}"/>
+            <textarea name="mjb" style="display: none;"></textarea>
+            <div id="oparea" class="center">
+                <input type="submit" name="submit" value="保存"  class="btn btn-sm btn-orange"/>
+                <a href="javascript:void(0);" id="addMjb">+增加面积表</a>
+                <div><em>键盘组合建 Alt + Enter 隐藏本区域</em></div>
+            </div>
+            <div class="container">
+                {if $mjb}
+                    {$mjb['content']}
+                {else}
+                <div class="mjb">
+                    <h1 title="将文字清空可删除当前面积分类表" class="center inputarea mjb_title">土地面积分类表</h1>
+                    <div  class="unit">面积单位：平方米</div>
+                    <table class="border1" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <td class="center toptitle" colspan="3">编号</td>
+                                <td colspan="4"><span class="bh" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{$info['nature']}</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="center toptitle" colspan="3" >单位名称</td>
+                                <td colspan="4" class="inputarea">{$info['name']|escape}</td>
+                            </tr>
+                            <tr class="center">
+                                <td colspan="3" class="toptitle">主送部门</td>
+                                <td colspan="4" class="toptitle">市国土资源局</td>
+                            </tr>
+                            <tr class="title_col">
+                                <td colspan="3">
+                                    <span style="float:right">分村土地面积</span>
+                                    <br/>
+                                    <span>土地分类</span>
+                                </td>
+                                <td class="center inputarea"></td>
+                                <td class="center inputarea"></td>
+                                <td class="center inputarea"></td>
+                                <td class="center xj">小计</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="center dl_1">
+                                <td class="cp1" rowspan="6">农<br/>用<br/>地</td>
+                                <td class="cp2" rowspan="2">
+                                    <span class="dlname">耕地</span>
+                                </td>
+                                <td class="cp3 dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="cp4 area"></td>
+                                <td class="cp5 area"></td>
+                                <td class="cp6 area"></td>
+                                <td class="cp7 sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_1">
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_1">
+                                <td><span class="dlname">园地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_1">
+                                <td><span class="dlname">林地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_1">
+                                <td><span class="dlname">牧草地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_1">
+                                <td><span class="dlname">其他农用地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+
+                            <tr class="center dl_2">
+                                <td rowspan="5">建<br/>设<br/>用<br/>地</td>
+                                <td rowspan="2"><span class="dlname">住宅用地</span</td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_2">
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_2">
+                                <td><span class="dlname">交通用地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_2">
+                                <td><span class="dlname">机关团体</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_2">
+                                <td><span class="dlname">工矿仓储用地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_3">
+                                <td>未利<br/>用地</td>
+                                <td><span class="dlname">其他用地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="center" >
+                                <td colspan="3">小计</td>
+                                <td class="col_sum"></td>
+                                <td class="col_sum"></td>
+                                <td class="col_sum"></td>
+                                <td class="col_sub_sum"></td>
+                            </tr>
+                            <tr class="center">
+                                <td colspan="3">收回国有土地</td>
+                                <td colspan="4" class="number inputarea">{$info['area_shgy']}</td>
+                            </tr>
+                            <tr class="center">
+                                <td colspan="3">合计</td>
+                                <td colspan="4" class="total_sum"></td>
+                            </tr>
+                            <tr class="center">
+                                <td rowspan="2">其中</td>
+                                <td colspan="2">出让面积</td>
+                                <td colspan="4" class="number inputarea">{$info['area_sell']}</td>
+                            </tr>
+                            <tr class="center">
+                                <td colspan="2">允许使用</td>
+                                <td colspan="4" class="number inputarea">{$info['area_allow']}</td>
+                            </tr>
+                            <tr class="remark center">
+                                <td colspan="3">备注</td>
+                                <td class="alignleft inputarea" colspan="4">{$info['descripton']|escape}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="mjb_db">
+                        <p>测量者: {$info['pm']}</p>
+                        <p>填写者: {$info['worker']}</p>
+                        <p>审核者: <span class="checkor">{$info['cs_name']}</span></p>
+
+                        <div class="center mjb_lk">
+                            <p>慈溪市土地勘测规划设计院有限公司</p>
+                            <p>{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</p>
+                        </div>
+                    </div>
+                </div>
+                {/if}
+            </div>
+        </form>
+        <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
+        
         <script type="x-my-template" id="mjbTemplate">
             <div class="mjb">
-                <h1 class="center">土地面积分类表</h1>
-                <div style="text-align: right;padding:2px 10px;">面积单位：平方米</div>
+                <h1 title="将文字清空可删除当前面积分类表" class="center inputarea mjb_title">土地面积分类表</h1>
+                <div  class="unit">面积单位：平方米</div>
                 <table class="border1" style="table-layout: fixed;">
                     <thead>
                         <tr>
-                            <td class="center" colspan="3" style="letter-spacing:20px;">编号</td>
-                            <td colspan="4">NO( {$info['project_no']} ) 字 ( {$info['region_name']|cutText:1:''}) 性质: <input type="text" name="nature" class="noborder"  value="{$info['nature']}"/></td>
+                            <td class="center toptitle" colspan="3">编号</td>
+                            <td colspan="4"><span class="bh" >NO( {$info['project_no']} )</span><span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{$info['nature']}</span></span></td>
                         </tr>
                         <tr>
-                            <td class="center" colspan="3" style="letter-spacing:20px;">单位名称</td>
-                            <td colspan="4">{$info['name']|escape}</td>
+                            <td class="center toptitle" colspan="3" >单位名称</td>
+                            <td colspan="4" class="inputarea">{$info['name']|escape}</td>
                         </tr>
                         <tr class="center">
-                            <td colspan="3" style="letter-spacing:20px;">主送部门</td>
-                            <td colspan="4" style="letter-spacing:20px;">市国土资源局</td>
+                            <td colspan="3" class="toptitle">主送部门</td>
+                            <td colspan="4" class="toptitle">市国土资源局</td>
                         </tr>
                         <tr class="title_col">
                             <td colspan="3">
@@ -32,26 +261,32 @@
                                 <br/>
                                 <span>土地分类</span>
                             </td>
-                            <td><input type="text" class="viliage noborder" name="v1" value=""/></td>
-                            <td><input type="text" class="viliage noborder" name="v2" value=""/></td>
-                            <td><input type="text" class="viliage noborder" name="v3" value=""/></td>
-                            <td class="center" style="letter-spacing:20px;">小计</td>
+                            <td class="center inputarea"></td>
+                            <td class="center inputarea"></td>
+                            <td class="center inputarea"></td>
+                            <td class="center xj">小计</td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="center dl_1">
-                            <td style="width: 40px;" rowspan="6"><div>农</div><div>用</div><div>地</div></td>
-                            <td style="width: 60px;" rowspan="2">
+                            <td class="cp1" rowspan="6"><div>农</div><div>用</div><div>地</div></td>
+                            <td class="cp2" rowspan="2">
                                 <span class="dlname">耕地</span>
                             </td>
-                            <td style="width:80px;" class="dlcode2"></td>
-                            <td style="width:100px;" class="area"></td>
-                            <td style="width:100px;" class="area"></td>
-                            <td style="width:100px;" class="area"></td>
-                            <td style="width:100px;" class="sub_sum"></td>
+                            <td class="cp3 dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
+                            <td class="cp4 area"></td>
+                            <td class="cp5 area"></td>
+                            <td class="cp6 area"></td>
+                            <td class="cp7 sub_sum"></td>
                         </tr>
                         <tr class="center dl_1">
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
@@ -59,7 +294,10 @@
                         </tr>
                         <tr class="center dl_1">
                             <td><span class="dlname">园地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
@@ -67,7 +305,10 @@
                         </tr>
                         <tr class="center dl_1">
                             <td><span class="dlname">林地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
@@ -75,7 +316,10 @@
                         </tr>
                         <tr class="center dl_1">
                             <td><span class="dlname">牧草地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
@@ -83,7 +327,10 @@
                         </tr>
                         <tr class="center dl_1">
                             <td><span class="dlname">其他农用地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
@@ -93,47 +340,65 @@
                         <tr class="center dl_2">
                             <td rowspan="5"><div>建</div><div>设</div><div>用</div><div>地</div></td>
                             <td rowspan="2"><span class="dlname">住宅用地</span</td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="sub_sum"></td>
                         </tr>
-                        <tr class="center">
-                            <td class="dlcode2"></td>
+                        <tr class="center dl_2">
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="sub_sum"></td>
                         </tr>
-                        <tr class="center">
+                        <tr class="center dl_2">
                             <td><span class="dlname">交通用地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="sub_sum"></td>
                         </tr>
-                        <tr class="center">
+                        <tr class="center dl_2">
                             <td><span class="dlname">机关团体</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="sub_sum"></td>
                         </tr>
-                        <tr class="center">
+                        <tr class="center dl_2">
                             <td><span class="dlname">工矿仓储用地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="sub_sum"></td>
                         </tr>
-                        <tr class="center">
+                        <tr class="center dl_3">
                             <td><div>未利</div><div>用地</div></td>
                             <td><span class="dlname">其他用地</span></td>
-                            <td class="dlcode2"></td>
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
                             <td class="area"></td>
                             <td class="area"></td>
                             <td class="area"></td>
@@ -141,245 +406,303 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <td class="center" colspan="3">小计</td>
-                            <td class="col_sub_sum"></td>
-                            <td class="col_sub_sum"></td>
-                            <td class="col_sub_sum"></td>
+                        <tr class="center" >
+                            <td colspan="3">小计</td>
+                            <td class="col_sum"></td>
+                            <td class="col_sum"></td>
+                            <td class="col_sum"></td>
                             <td class="col_sub_sum"></td>
                         </tr>
-                        <tr class="center" >
+                        <tr class="center">
                             <td colspan="3">收回国有土地</td>
-                            <td colspan="4">{$info['area_shgy']}</td>
+                            <td colspan="4" class="number inputarea">{$info['area_shgy']}</td>
                         </tr>
-                        <tr class="center" >
+                        <tr class="center">
                             <td colspan="3">合计</td>
                             <td colspan="4" class="total_sum"></td>
                         </tr>
                         <tr class="center">
                             <td rowspan="2">其中</td>
                             <td colspan="2">出让面积</td>
-                            <td colspan="4">{$info['area_sell']}</td>
+                            <td colspan="4" class="number inputarea">{$info['area_sell']}</td>
                         </tr>
                         <tr class="center">
                             <td colspan="2">允许使用</td>
-                            <td colspan="4">{$info['area_allow']}</td>
+                            <td colspan="4" class="number inputarea">{$info['area_allow']}</td>
                         </tr>
-                        <tr style="height:60px;" class="center">
+                        <tr class="remark center">
                             <td colspan="3">备注</td>
-                            <td style="text-align:left;" colspan="4">
-                                <input type="text" class="noborder" style="width:100%;height:60px;" value="{$info['descripton']|escape}"/>
-                            </td>
+                            <td class="alignleft inputarea" colspan="4">{$info['descripton']|escape}</td>
                         </tr>
                     </tfoot>
                 </table>
-                <div style="position:relative;padding:10px 30px;">
+                <div class="mjb_db">
                     <p>测量者: {$info['pm']}</p>
                     <p>填写者: {$info['worker']}</p>
-                    <p>审核者: {$info['cs_name']}</p>
+                    <p>审核者: <span class="checkor">{$info['cs_name']}</span></p>
 
-                    <div class="center" style="position:absolute;right:10px;top:20px;">
+                    <div class="center mjb_lk">
                         <p>慈溪市土地勘测规划设计院有限公司</p>
                         <p>{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</p>
                     </div>
                 </div>
-            </div>
+            </div>    
         </script>
-        <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
-        <form name="mjbForm" method="post" action="{url_path('project_ch','mjb')}" target="post_iframe">
-            <input type="hidden" name="id" value="{$info['id']}"/>
-            <div class="center">
-                <input type="submit" name="submit" value="保存"  class="btn btn-sm btn-orange"/>
-            </div>
-            <div class="container">
-                <div class="mjb">
-                    <h1 class="center">土地面积分类表</h1>
-                    <div style="text-align: right;padding:2px 10px;">面积单位：平方米</div>
-                    <table class="border1" style="table-layout: fixed;">
-                        <thead>
-                            <tr>
-                                <td class="center" colspan="3" style="letter-spacing:20px;">编号</td>
-                                <td colspan="4"><span>NO( {$info['project_no']} ) 字 ( {$info['region_name']|cutText:1:''}) 性质: <input type="text" name="nature" class="noborder"  value="{$info['nature']}"/></span></td>
-                            </tr>
-                            <tr>
-                                <td class="center" colspan="3" style="letter-spacing:20px;">单位名称</td>
-                                <td colspan="4">{$info['name']|escape}</td>
-                            </tr>
-                            <tr class="center">
-                                <td colspan="3" style="letter-spacing:20px;">主送部门</td>
-                                <td colspan="4" style="letter-spacing:20px;">市国土资源局</td>
-                            </tr>
-                            <tr class="title_col">
-                                <td colspan="3">
-                                    <span style="float:right">分村土地面积</span>
-                                    <br/>
-                                    <span>土地分类</span>
-                                </td>
-                                <td><input type="text" class="viliage noborder" name="v1" value=""/></td>
-                                <td><input type="text" class="viliage noborder" name="v2" value=""/></td>
-                                <td><input type="text" class="viliage noborder" name="v3" value=""/></td>
-                                <td class="center" style="letter-spacing:20px;">小计</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="center dl_1">
-                                <td style="width: 40px;" rowspan="6"><div>农</div><div>用</div><div>地</div></td>
-                                <td style="width: 60px;" rowspan="2">
-                                    <span class="dlname">耕地</span>
-                                </td>
-                                <td style="width:80px;" class="dlcode2"></td>
-                                <td style="width:100px;" class="area"></td>
-                                <td style="width:100px;" class="area"></td>
-                                <td style="width:100px;" class="area"></td>
-                                <td style="width:100px;" class="sub_sum"></td>
-                            </tr>
-                            <tr class="center dl_1">
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center dl_1">
-                                <td><span class="dlname">园地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center dl_1">
-                                <td><span class="dlname">林地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center dl_1">
-                                <td><span class="dlname">牧草地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center dl_1">
-                                <td><span class="dlname">其他农用地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-
-                            <tr class="center dl_2">
-                                <td rowspan="5"><div>建</div><div>设</div><div>用</div><div>地</div></td>
-                                <td rowspan="2"><span class="dlname">住宅用地</span</td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td><span class="dlname">交通用地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td><span class="dlname">机关团体</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td><span class="dlname">工矿仓储用地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td><div>未利</div><div>用地</div></td>
-                                <td><span class="dlname">其他用地</span></td>
-                                <td class="dlcode2"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="area"></td>
-                                <td class="sub_sum"></td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td class="center" colspan="3">小计</td>
-                                <td class="col_sub_sum"></td>
-                                <td class="col_sub_sum"></td>
-                                <td class="col_sub_sum"></td>
-                                <td class="col_sub_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td colspan="3">收回国有土地</td>
-                                <td colspan="4">{$info['area_shgy']}</td>
-                            </tr>
-                            <tr class="center">
-                                <td colspan="3">合计</td>
-                                <td colspan="4" class="total_sum"></td>
-                            </tr>
-                            <tr class="center">
-                                <td rowspan="2">其中</td>
-                                <td colspan="2">出让面积</td>
-                                <td colspan="4">{$info['area_sell']}</td>
-                            </tr>
-                            <tr class="center">
-                                <td colspan="2">允许使用</td>
-                                <td colspan="4">{$info['area_allow']}</td>
-                            </tr>
-                            <tr style="height:60px;" class="center">
-                                <td colspan="3">备注</td>
-                                <td style="text-align:left;" colspan="4">
-                                    <input type="text" class="noborder" style="width:100%;height:60px;" value="{$info['descripton']|escape}"/>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <div style="position:relative;padding:10px 30px;">
-                        <p>测量者: {$info['pm']}</p>
-                        <p>填写者: {$info['worker']}</p>
-                        <p>审核者: {$info['cs_name']}</p>
-                        
-                        <div class="center" style="position:absolute;right:10px;top:20px;">
-                            <p>慈溪市土地勘测规划设计院有限公司</p>
-                            <p>{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
         <script>
+            var dlList = {
+                'd1':[
+                {foreach name="dl" from=$dlList[1] item=item}
+                   { "code" : "{$item['code']}", "name" : "{$item['name']}" } {if !$smarty.foreach.dl.last},{/if}
+                {/foreach}
+                ],
+                'd2':[
+                {foreach name="dl" from=$dlList[2] item=item}
+                   { "code" : "{$item['code']}", "name" : "{$item['name']}" } {if !$smarty.foreach.dl.last},{/if}
+                {/foreach}
+                ],
+                'd3':[
+                {foreach name="dl" from=$dlList[3] item=item}
+                   { "code" : "{$item['code']}", "name" : "{$item['name']}" } {if !$smarty.foreach.dl.last},{/if}
+                {/foreach}
+                ]
+            };
+            
+            function showConfirm(message,reload,sec,title,width,height){
+                title = title ? title : '提示';
+                width = width ? width : 'auto';
+                height = height ? height : 'auto';
+
+                alert(message);
+                
+                if(reload){
+                    location.reload();
+                }
+            }
+            
             $(function(){
-                $(".noborder").bind("mouseenter",function(e){
+                var areaReg = /^\d+(.\d*)?$/;
+                
+                var dataToOption = function(index,sel){
+                    var html = [];
+                    html.push('<option value="">请选择</option>');
+                    for(var i = 0; i < dlList[index].length; i++){
+                        html.push('<option value="' + dlList[index][i].code + '" ' + (sel == dlList[index][i].code ? "selected" : '') + '>' + dlList[index][i].name + '(' + dlList[index][i].code + ')</option>');
+                    }
+                   return html.join('');
+                }
+                
+                $("form[name=mjbForm]").bind("keydown",function(e){
+                    if(e.keyCode == 13){
+                        return false;
+                    }
+                });
+                
+                var reSum = function(obj){
+                    var table = $(obj).closest("table");
+                    var col_sub_sum = 0;
+                    
+                    $(".sub_sum",table).each(function(index){
+                        var sub_sum = $(this);
+                        var total = 0;
+                        var areas = $(sub_sum).closest("tr").find(".area");
+                        
+                        $(areas).each(function(idx){
+                            if($(this).html() != ''){
+                                total += parseFloat($(this).html());
+                            }
+                        });
+                        
+                        if(total > 0){
+                            sub_sum.html(total.toFixed(2));
+                        }
+                        
+                        col_sub_sum += total;
+                    });
+                    
+                    
+                    $(".col_sum",table).each(function(index){
+                        var total = 0;
+                        var col_sub_sum = $(this);
+                        $("tbody tr",table).each(function(idx){
+                            var area = $(".area:eq(" + index + ")",this).html();
+                            
+                            if(area != ''){
+                                total += parseFloat(area);
+                            }
+                        });
+                        if(total > 0){
+                            $(this).html(total.toFixed(2));
+                        }
+                        
+                        col_sub_sum += total;
+                    });
+                    
+                    if(col_sub_sum > 0){
+                        $(".col_sub_sum",table).html(col_sub_sum.toFixed(2));
+                        $(".total_sum",table).html(col_sub_sum.toFixed(2));
+                    }
+                    
+                };
+                
+                //同步审核人名称
+                $(".checkor").html("{$info['cs_name']}");
+                $("#addMjb").bind('click',function(e){
+                    $(".container").append($($("#mjbTemplate").html()));
+                });
+                
+                
+                $("body").bind("keydown",function(e){
+                    if(e.altKey && e.keyCode == 13){
+                        $("#oparea").slideToggle();
+                    }
+                });
+                
+                {*
+                 面积处理
+                 *}
+                $("body").delegate(".area","click",function(e){
+                    var that = $(e.target);
+                    var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
+                    that.html(txt);
+                    txt.focus();
+                    
+                    var doSetVal = function(){
+                        if($.trim(txt.val()) != '' && areaReg.test(txt.val())){
+                            var v = parseFloat(txt.val());
+                            that.html(v.toFixed(2));
+                        }else{
+                            that.html('');
+                        }
+                        txt.remove();
+                        
+                        reSum(that);
+                    };
+                    
+                    txt.bind("keydown",function(e){
+                        if(e.keyCode == 13){
+                            doSetVal();
+                        }
+                    });
+                    
+                    txt.bind('blur',function(e){
+                        doSetVal();
+                    });
+                });
+                
+                
+                {*
+                 地类选择
+                 *}
+                $("body").delegate(".dlcode2","click",function(e){
+                    var that = $(e.target);
+                    var code = '';
+                    var currentHtml = that.find(".showtext").html();
+                   
+                   if(currentHtml){
+                        var leftc = currentHtml.indexOf('(');
+                        var right = currentHtml.indexOf(')');
+                        
+                        if(leftc && right){
+                            code = currentHtml.substring(leftc + 1, right);
+                        }
+                   }
+                   
+                    that.find(".txtcode2").html('');
+                    that.find(".showtext").hide();
+                    if(that.closest("tr").hasClass("dl_1")){
+                        that.find(".txtcode2").html(dataToOption('d1',code));
+                    }else if(that.closest("tr").hasClass("dl_2")){
+                        that.find(".txtcode2").html(dataToOption('d2',code));
+                    }else if(that.closest("tr").hasClass("dl_3")){
+                        that.find(".txtcode2").html(dataToOption('d3',code));
+                    }
+                    
+                    that.find(".txtcode2").show().focus();
+                });
+                
+                {*
+                 地类选择后显示的文本
+                 *}
+                $("body").delegate(".showtext","click",function(e){
+                    $(e.target).closest(".dlcode2").trigger("click");
+                });
+                
+                {*
+                    地类下拉框
+                 *}
+                $("body").delegate(".txtcode2","change",function(e){
+                    var that = $(e.target);
+                    var v = that.val();
+                    var name = '';
+                    if(v != ''){
+                        name = $("option:selected",that).html();
+                        name = name.substring(0, name.indexOf('('));
+                    }
+                    that.siblings(".showtext").html(name + '<br/>(' + v  + ')').show();
+                    that.hide();
+                });
+                
+                
+                $("body").delegate(".noborder","mouseenter",function(e){
                     $(e.target).addClass("stathover");
                 });
                 
-                $(".noborder").bind("mouseleave",function(e){
+                $("body").delegate(".noborder","mouseleave",function(e){
                     $(e.target).removeClass("stathover");
                 });
                 
-                $(".dlname").bind("click",function(e){
+                $("body").delegate(".inputarea","click",function(e){
+                    var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
+                    var that = $(e.target);
+                    var number = false;
+                    var mjbTitle = false;
+                    if(that.hasClass("number")){
+                        number = true;
+                    }else if(that.hasClass('mjb_title')){
+                        mjbTitle = true;
+                    }
+                    
+                    that.html(txt);
+                    txt.focus();
+                    
+                    var setval = function(){
+                        var a = txt.val();
+                        
+                        if(number){
+                            if(areaReg.test(a)){
+                                that.html(parseFloat(a).toFixed(2));
+                            }else{
+                                that.html('');
+                            }
+                        }else{
+                            if(mjbTitle){
+                                if(a == ''){
+                                    that.closest(".mjb").remove();
+                                }else{
+                                    that.html('土地面积分类表');
+                                }
+                            }else{
+                                that.html(a);
+                            }
+                        }
+                        txt.remove();
+                    }
+                    
+                    txt.bind("keydown",function(e){
+                        if(e.keyCode == 13){
+                            setval();
+                        }
+                    });
+                    
+                    txt.bind('blur',function(e){
+                        setval();
+                    });
+                });
+                
+                {*
+                    一级分类名称修改，主要为了防止有 行不够用的情况,可以利用没有用到大类 ，将其修改掉名称
+                 *}
+                $("body").delegate(".dlname","click",function(e){
                     var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
                     $(e.target).hide();
                     txt.insertBefore($(e.target));
@@ -398,6 +721,10 @@
                     });
                 });
                 
+                {* 提交按钮 *}
+                $("input[name=submit]").bind("click",function(e){
+                    $("textarea[name=mjb]").val($(".container").html());
+                });
             });
         
         </script>

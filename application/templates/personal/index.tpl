@@ -9,14 +9,14 @@
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
             <li><a href="{url_path('my_event')}">待办事宜</a></li>
-            <li><a href="{url_path('pm')}">点对点消息</a></li>
+            <li><a href="{url_path('pm','receive')}">点对点消息</a></li>
             <li><a href="{url_path('my_schedule')}">日程安排</a></li>
             <li><a href="{url_path('my_file')}">我的文件</a></li>
             <li><a href="{url_path('share_file')}">文件共享</a></li>
             <li><a href="{url_path('work_log')}">工作日志</a></li>
             <li><a href="{url_path('sendor')}">发送人设置</a></li>
             <li><a href="{url_path('contacts')}">通讯录</a></li>
-            <li><a href="{url_path('check_io')}">考勤统计</a></li>
+            <li><a href="{url_path('kq')}">考勤统计</a></li>
           </ul>
         </dd>
       </dl>

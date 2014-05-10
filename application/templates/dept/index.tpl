@@ -15,9 +15,9 @@
                         <tr id="row_{$item['id']}">
                         {if $item['id'] != 1}
                             <td><a class="delete" href="javascript:void(0);" data-title="{$item['name']}" data-id="{$item['id']}" data-href="{url_path('dept','delete','id=')}{$item['id']}">【删除】</a>
-                            <a class="tree_item" href="{url_path('dept','edit','id=')}{$item['id']}&ajax=1&inlayer=yes">{$item['sep']}{$item['name']}</a></td>
+                            <a class="tree_item" href="{url_path('dept','edit','id=')}{$item['id']}">{$item['sep']}{$item['name']}</a></td>
                         {else}
-                            <td><a href="{url_path('dept','edit','id=')}{$item['id']}&ajax=1&inlayer=yes">{$item['name']}</a></td>
+                            <td><a href="{url_path('dept','edit','id=')}{$item['id']}">{$item['name']}</a></td>
                          {/if}
                         </div>
                         {foreachelse}

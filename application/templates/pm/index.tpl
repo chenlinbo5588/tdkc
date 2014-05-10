@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
         <div class="filebar" >
-            <a href="{url_path('pm','index')}" class="btn"><img src="/img/pm/yd.png" align="top"/>收消息</a>
+            <a href="{url_path('pm','receive')}" class="btn"><img src="/img/pm/yd.png" align="top"/>收消息</a>
             <a href="{url_path('pm','send')}" class="btn"><img src="/img/wp/upload_file_icon.gif" align="absmiddle"/>已发消息</a>
             <a href="{url_path('pm','trash')}"class="btn"><img src="/img/wp/folder.gif" align="absmiddle"/>垃圾箱</a>
         </div>

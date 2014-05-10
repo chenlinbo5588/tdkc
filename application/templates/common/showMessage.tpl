@@ -8,7 +8,7 @@
 
 <body>
 <script>
-    parent.showConfirm('{$message}',{$reload});
+    parent.showConfirm('{$message}',{if $reload}{$reload}{else}0{/if});
 </script>
 
 </body>

@@ -16,7 +16,7 @@
                 <table class="fulltable border1" style="table-layout:fixed">
                     <colgroup>
                         <col width="40"/>
-                        <col width="30"/>
+                        <col width="40"/>
                         <col width="150"/>
                         <col width="150"/>
                         <col width="70"/>
@@ -113,10 +113,10 @@
         <script>
             $(function(){
                 $(".jzb table").each(function(index){
-                    $(".direction_1:eq(0)",$(this)).html('西');
-                    $(".direction_2:eq(0)",$(this)).html('北');
-                    $(".direction_3:eq(0)",$(this)).html('东');
-                    $(".direction_4:eq(0)",$(this)).html('南');
+                    $(".direction_1:eq(0)",$(this)).html('西').addClass("borderTop");
+                    $(".direction_2:eq(0)",$(this)).html('北').addClass("borderTop");
+                    $(".direction_3:eq(0)",$(this)).html('东').addClass("borderTop");
+                    $(".direction_4:eq(0)",$(this)).html('南').addClass("borderTop");
                 });
             });
         </script>

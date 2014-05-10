@@ -1,7 +1,7 @@
 {include file="common/main_header.tpl"}
 <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td><div style='float:left'> <img height="14" src="/img/frame/book1.gif" width="20" />&nbsp;欢迎使用内容管理系统，建站的首选工具。 </div>
+    <td><div style='float:left'> <img height="14" src="/img/frame/book1.gif" width="20" />&nbsp;欢迎使用{$TITLE}。 </div>
       <div style='float:right;padding-right:8px;'>
         <!--  //保留接口  -->
       </div></td>
@@ -18,6 +18,7 @@
     <td>&nbsp;</td>
   </tr>
 </table>
+{*
 <table width="98%" align="center" border="0" cellpadding="4" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px">
   <tr>
     <td colspan="2" background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'>
@@ -70,18 +71,5 @@
     <td>Cms_2009_UTF8</td>
   </tr>
 </table>
-{*
-<table width="98%" align="center" border="0" cellpadding="4" cellspacing="1" bgcolor="#CBD8AC">
-  <tr bgcolor="#EEF4EA">
-    <td colspan="2" background="/img/frame/wbg.gif" class='title'><span>使用帮助</span></td>
-  </tr>
-  <tr bgcolor="#FFFFFF">
-    <td height="32">官方交流网站：</td>
-    <td><a href="http://www.865171.cn" target="_blank"><u>http://www.865171.cn</u></a></td>
-  </tr>
-  <tr bgcolor="#FFFFFF">
-    <td width="25%" height="32">更多后台模板：</td>
-    <td width="75%"><a href="http://www.865171.cn/admin-templates" target="_blank"><u>http://www.865171.cn/admin-templates</u></a></td>
-  </tr>
-</table>*}
+*}
 {include file="common/main_footer.tpl"}

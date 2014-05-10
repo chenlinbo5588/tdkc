@@ -8,10 +8,10 @@
 <base target="_self">
 <link rel="stylesheet" type="text/css" href="/css/base.css" />
 <link rel="stylesheet" type="text/css" href="/css/main.css" />
+<link href="/css/redmond/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 <!--[if lt IE 7]>
 <link rel="stylesheet" type="text/css" href="/css/ie6.css" />
 <![endif]-->
-<link href="/css/redmond/jquery-ui-1.10.4.custom.css" rel="stylesheet">
 {*
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
