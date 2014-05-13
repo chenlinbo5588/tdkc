@@ -1,9 +1,9 @@
 <?php
 
 
-class Role_Model extends TZ_Model {
+class Announce_Model extends TZ_Model {
     
-    public $_tableName = 'tb_role';
+    public $_tableName = 'tb_announce';
     
     public function __construct(){
         parent::__construct();
@@ -14,18 +14,23 @@ class Role_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'name' => $param['name'],
             'type' => $param['type'],
+            'title' => $param['title'],
+            'content' => $param['content'],
             'creator' => $param['creator'],
             'updator' => $param['updator'],
             'createtime' => $now,
             'updatetime' => $now
         );
         
-        $this->db->insert($this->_tableName, $data);
-        return $this->db->insert_id();
+       $this->db->insert($this->_tableName, $data); 
+       return $this->db->insert_id();
     }
     
+    /**
+     * really delete
+     * @param type $user 
+     */
     public function delete($param){
         
     }
@@ -44,18 +49,20 @@ class Role_Model extends TZ_Model {
     }
     
     
-    public function update($param){
+    public function update($schedule){
         $data = array(
-            'name' => $param['name'],
-            'updator' => $param['updator'],
+            'title' => $schedule['title'],
+            'content' => $schedule['content'],
+            'updator' => $schedule['updator'],
             'updatetime' => time()
         );
         
         $where = array(
-            'id' => $param['id']
+            'id' => $schedule['id']
         );
         
         return $this->db->update($this->_tableName, $data, $where);
     }
+    
     
 }

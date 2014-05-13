@@ -157,6 +157,22 @@ class Search extends TZ_Controller {
         $this->sendJson($data['data']);
         
     }
+    
+    /**
+     * 
+     */
+    public function getNewMsg(){
+        
+        $this->load->model('Pm_Model');
+        $msgCount = $this->Pm_Model->getCount(array(
+           'where' => array(
+               'user_id' => (int)gpc('uid','GP',0),
+               'isnew' => 1
+           )
+        ));
+        
+        $this->sendJson(array('newcount' => $msgCount));
+    }
 }
 
 /* End of file search.php */

@@ -134,7 +134,7 @@ class File extends TZ_Controller {
                 $this->db->update($this->File_Model->_tableName);
             }
             
-            $retAry = array('error' => 1,"message" => '上传成功','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath);
+            $retAry = array('error' => 1,"message" => '上传成功','width' => $width,'height'=> $height,'size' => $data['file_size'], 'url' => $urlPath.$newFilePath,'title' => htmlspecialchars($attachment['filename']));
                 
             if(!$fileId){
                 $retAry['message'] = '数据库错误';
@@ -154,7 +154,7 @@ class File extends TZ_Controller {
             $this->sendJson($retAry);
         }else{
             header('Content-type: text/html; charset=UTF-8');
-            echo json_encode(array('error' => 0, 'url' => $urlPath.$newFilePath));
+            echo json_encode(array('error' => 0, 'url' => $urlPath.$newFilePath,'title' => htmlspecialchars($attachment['filename'])));
            
         }
     }

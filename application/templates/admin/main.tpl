@@ -10,66 +10,58 @@
     <td height="1" background="/img/frame/sp_bg.gif" style='padding:0px'></td>
   </tr>
 </table>
-<table width="98%" align="center" border="0" cellpadding="3" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px;margin-top:8px;">
-  <tr>
-    <td background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'><span>消息</span></td>
-  </tr>
-  <tr bgcolor="#FFFFFF">
-    <td>&nbsp;</td>
-  </tr>
-</table>
-{*
-<table width="98%" align="center" border="0" cellpadding="4" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px">
-  <tr>
-    <td colspan="2" background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'>
-    	<div style='float:left'><span>快捷操作</span></div>
-    	<div style='float:right;padding-right:10px;'></div>
-   </td>
-  </tr>
-  <tr bgcolor="#FFFFFF">
-    <td height="30" colspan="2" align="center" valign="bottom"><table width="100%" border="0" cellspacing="1" cellpadding="1">
+      
+<div class="fm">
+    <table class="table" width="98%" align="center" border="0" cellpadding="3" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px;margin-top:8px;">
+    <tr>
+        <td background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'><span><a href="{url_path('pm','receive')}">新消息({$messageCount})</a></span></td>
+    </tr>
+    </table>
+</div>
+<div class="fm">
+    <table class="table" width="98%" align="center" border="0" >
         <tr>
-          <td width="15%" height="31" align="center"><img src="/img/frame/qc.gif" width="90" height="30" /></td>
-          <td width="85%" valign="bottom"><div class='icoitem'>
-              <div class='ico'><img src='/img/frame/addnews.gif' width='16' height='16' /></div>
-              <div class='txt'><a href=''><u>文档列表</u></a></div>
-            </div>
-            <div class='icoitem'>
-              <div class='ico'><img src='/img/frame/menuarrow.gif' width='16' height='16' /></div>
-              <div class='txt'><a href=''><u>评论管理</u></a></div>
-            </div>
-            <div class='icoitem'>
-              <div class='ico'><img src='/img/frame/manage1.gif' width='16' height='16' /></div>
-              <div class='txt'><a href=''><u>内容发布</u></a></div>
-            </div>
-            <div class='icoitem'>
-              <div class='ico'><img src='/img/frame/file_dir.gif' width='16' height='16' /></div>
-              <div class='txt'><a href=''><u>栏目管理</u></a></div>
-            </div>
-            <div class='icoitem'>
-              <div class='ico'><img src='/img/frame/part-index.gif' width='16' height='16' /></div>
-              <div class='txt'><a href=''><u>更新系统缓存</u></a></div>
-            </div>
-            <div class='icoitem'>
-              <div class='ico'><img src='/img/frame/manage1.gif' width='16' height='16' /></div>
-              <div class='txt'><a href=''><u>修改系统参数</u></a></div>
-            </div></td>
+            <td background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>公告</span></td>
+    </tr>
+    {foreach from=$announceList item=item}
+        <tr>
+            <td><a class="news_item" href="javascript:void(0);" data-href="{url_path('news','andetail','id=')}{$item['id']}">{$item['title']|escape}</a></td>
         </tr>
-      </table></td>
-  </tr>
-</table>
-<table width="98%" align="center" border="0" cellpadding="4" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px">
-  <tr bgcolor="#EEF4EA">
-    <td colspan="2" background="/img/frame/wbg.gif" class='title'><span>系统基本信息</span></td>
-  </tr>
-  <tr bgcolor="#FFFFFF">
-    <td width="25%" bgcolor="#FFFFFF">您的级别：</td>
-    <td width="75%" bgcolor="#FFFFFF">管理员</td>
-  </tr>
-  <tr bgcolor="#FFFFFF">
-    <td>软件版本信息：</td>
-    <td>Cms_2009_UTF8</td>
-  </tr>
-</table>
-*}
+    {/foreach}
+    </table>
+</div>
+<div class="fm">
+    <table class="table" width="98%" align="center" border="0" >
+        <tr>
+            <td background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>新闻</span></td>
+    </tr>
+    {foreach from=$newsList item=item}
+        <tr>
+            <td><a class="news_item" href="javascript:void(0);" data-href="{url_path('news','detail','id=')}{$item['id']}">{$item['title']|escape}</a></td>
+        </tr>
+    {/foreach}
+    </table>
+</div>
+
+<div class="fm">
+    <table class="table" width="98%" align="center" border="0" >
+        <tr>
+            <td background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>制度建设</span></td>
+    </tr>
+    {foreach from=$zhiduList item=item}
+        <tr>
+            <td><a href="{url_path('attachment','download','id=')}{$item['id']}" >{$item['title']|escape}</a></td>
+        </tr>
+    {/foreach}
+    </table>
+</div>
+<script>
+    $(function(){
+        $(".news_item").bind("click",function(e){
+            var that = $(e.target);
+            $.jBox("get:" + that.attr("data-href"),{ title:"详情",width:700,height:600 });
+        });
+    });
+    
+</script>    
 {include file="common/main_footer.tpl"}

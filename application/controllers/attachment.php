@@ -116,7 +116,7 @@ class Attachment extends TZ_Controller {
             
             $fileId = $this->Attachment_Model->add($data);
             
-            $retAry = array('error' => 1,'id' => $fileId, "message" => '上传成功','width' => $width,'height'=> $height, 'url' => $urlPath.$newFilePath);
+            $retAry = array('error' => 1,'id' => $fileId, "message" => '上传成功','width' => $width,'height'=> $height, 'url' => $urlPath.$newFilePath,'title' => htmlspecialchars($attachment['filename']));
                 
             if(!$fileId){
                 $retAry['message'] = '数据库错误';

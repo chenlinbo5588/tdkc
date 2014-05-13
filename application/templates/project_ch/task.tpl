@@ -702,6 +702,7 @@
                 {include file="project_ch/log_list.tpl"}
                 <div style="margin-bottom: 20px;">&nbsp;</div>    
                 <div class="fixbottom">
+                    <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                     <input type="hidden" name="workflow" value=""/>
                 {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已归档'}
                     {if $info['status'] == '新增'}
@@ -1178,6 +1179,9 @@
                             
                             if(!cansubmit){
                                 e.preventDefault();
+                            }else{
+                                $(".fixbottom .btn").hide();
+                                $("#loading").show();
                             }
                         });
                     });

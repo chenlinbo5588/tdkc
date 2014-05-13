@@ -144,7 +144,7 @@ class Pm extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         if($this->isPostRequest() && !empty($_POST['id'])){
-            $this->form_validation->set_rules('id', '工作编号', 'required|is_natural_no_zero');
+            $this->form_validation->set_rules('id', '消息编号', 'required|is_natural_no_zero');
             
             $this->_addRules();
             if($this->form_validation->run()){

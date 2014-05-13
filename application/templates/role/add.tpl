@@ -9,8 +9,20 @@
                     <table class="maintain">
                         <tbody>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>角色名称</strong></label></td><td><input type="text" style="width:200px" name="name" value="{$role['name']}" placeholder="请输入角色姓名"/>{form_error('name')}</td>
+                            <td><label class="required"><em>*</em><strong>角色名称</strong></label></td>
+                            <td><input type="text" style="width:200px" name="name" value="{$role['name']}" placeholder="请输入角色姓名"/>{form_error('name')}</td>
                         </tr>
+                        {if $userProfile['id'] == 1}
+                        <tr>
+                            <td><label class="required"><em>*</em><strong>角色类型</strong></label></td>
+                            <td>
+                                <select style="width:200px" name="type">
+                                    <option value="2">用户角色</option>
+                                    <option value="1">系统角色</option>
+                                </select>{form_error('name')}
+                            </td>
+                        </tr>   
+                        {/if}
                         <tr>
                             <td></td>
                             <td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></td>

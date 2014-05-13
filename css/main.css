@@ -605,3 +605,9 @@ ol.style_decimal , ul.style_decimal {
     width:100px;
     float:left;
 }
+/**
+ * 
+ */
+.fm {
+    margin:10px 0;
+}

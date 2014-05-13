@@ -156,6 +156,11 @@ class Role extends TZ_Admin_Controller {
     
     private function _addRules(){
         $this->form_validation->set_rules('name', '角色名称', 'required|min_length[2]|max_length[10]');
+        
+        if($this->_userProfile['id'] == 1){
+            $this->form_validation->set_rules('type', '角色类型', 'required|is_natural|less_than[2]');
+        }
+        
     }
 
     public function add()
@@ -168,6 +173,14 @@ class Role extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 // add
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
+                
+                if(empty($_POST['type'])){
+                    $_POST['type'] = 2;
+                }else{
+                    if(!in_array($_POST['type'],array(1,2))){
+                        $_POST['type'] = 2;
+                    }
+                }
                 
                 $insertid = $this->Role_Model->add($_POST);
                 

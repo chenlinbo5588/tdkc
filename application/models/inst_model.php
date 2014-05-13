@@ -1,9 +1,9 @@
 <?php
 
 
-class Role_Model extends TZ_Model {
+class Inst_Model extends TZ_Model {
     
-    public $_tableName = 'tb_role';
+    public $_tableName = 'tb_inst';
     
     public function __construct(){
         parent::__construct();
@@ -14,18 +14,22 @@ class Role_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'name' => $param['name'],
-            'type' => $param['type'],
+            'title' => $param['title'],
+            'file_id' => $param['file_id'],
             'creator' => $param['creator'],
             'updator' => $param['updator'],
             'createtime' => $now,
             'updatetime' => $now
         );
         
-        $this->db->insert($this->_tableName, $data);
-        return $this->db->insert_id();
+       $this->db->insert($this->_tableName, $data); 
+       return $this->db->insert_id();
     }
     
+    /**
+     * really delete
+     * @param type $user 
+     */
     public function delete($param){
         
     }
@@ -46,7 +50,8 @@ class Role_Model extends TZ_Model {
     
     public function update($param){
         $data = array(
-            'name' => $param['name'],
+            'title' => $param['title'],
+            'file_id' => $param['file_id'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
@@ -57,5 +62,6 @@ class Role_Model extends TZ_Model {
         
         return $this->db->update($this->_tableName, $data, $where);
     }
+    
     
 }

@@ -16,10 +16,71 @@ class Admin extends TZ_Admin_Controller {
      * 这三个函数需要权限检查 
      */
     public function top(){
+        /**
+         * 获得消息数量 
+         */
+        $this->load->model('Pm_Model');
+        $msgCount = $this->Pm_Model->getCount(array(
+           'where' => array(
+               'user_id' => $this->_userProfile['id'],
+               'isnew' => 1
+           )
+        ));
         
+        $this->load->model('Announce_Model');
+        $notice = $this->Announce_Model->getList(array(
+            'where' => array(
+                'type' => 1
+            ),
+            'limit' => 1
+        ));
+        
+        $this->assign('notice',$notice['data'][0]);
+        $this->assign('messageCount',$msgCount);
         $this->display();
     }
     public function main(){
+        $this->load->model('Inst_Model');
+        $zhiduList = $this->Inst_Model->getList(array(
+           'where' => array(
+               'status' => '正常'
+           ) 
+        ));
+        
+        $this->assign('zhiduList',$zhiduList['data']);
+        
+        $this->load->model('News_Model');
+        $newsList = $this->News_Model->getList(array(
+           'where' => array(
+               'is_publish' => 1,
+               'status' => '正常'
+           ),
+           
+          'limmit' => 10
+        ));
+        
+        $this->assign('newsList',$newsList['data']);
+        
+        $this->load->model('Announce_Model');
+        $announceList = $this->Announce_Model->getList(array(
+           'where' => array(
+               'type' => 0,
+               'status' => '正常'
+           ),
+          'limmit' => 10
+        ));
+        
+        $this->assign('announceList',$announceList['data']);
+        
+        $this->load->model('Pm_Model');
+        $msgCount = $this->Pm_Model->getCount(array(
+           'where' => array(
+               'user_id' => $this->_userProfile['id'],
+               'isnew' => 1
+           )
+        ));
+        
+        $this->assign('messageCount',$msgCount);
         $this->display();
     }
     
@@ -49,7 +110,7 @@ class Admin extends TZ_Admin_Controller {
                     /**
                     * 更新数据库 
                     */
-                    $this->db->set('updatetime','now()',false);
+                    $this->db->set('updatetime',time());
                     $this->db->where(array(
                         'account' => $session['profile']['account']
                     ));

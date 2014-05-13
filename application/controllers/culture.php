@@ -1,0 +1,217 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Culture extends TZ_Admin_Controller {
+
+    
+    public function __construct(){
+        parent::__construct();
+        $this->load->model('News_Model');
+    }
+	
+	public function index()
+	{
+        $this->_getPageData();
+        $this->display();
+	}
+    
+    private function _getPageData(){
+        try {
+            if(empty($_GET['page'])){
+                $_GET['page'] = 1;
+            }
+            
+            $condition['pager'] = array(
+                'page_size' => config_item('page_size'),
+                'current_page' => $_GET['page'],
+                'query_param' => url_path('culture','index')
+            );
+            
+            if(!empty($_GET['title'])){
+                $condition['like'] = array('title' => $_GET['title']);
+            }
+            
+            $condition['where'] = array();
+            $condition['where']['status'] = '正常';
+            
+            if(!empty($_GET['sdate'])){
+                $condition['where']['createtime >='] = strtotime($_GET['sdate']);
+            }
+            
+            if(!empty($_GET['edate'])){
+                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
+            }
+            
+            $data = $this->News_Model->getList($condition);
+            $this->assign('page',$data['pager']);
+            $this->assign('data',$data);
+            
+            
+        }catch(Exception $e){
+            //@todo error code here
+        }
+        
+    }
+    
+    
+    private function _addRules(){
+        $this->form_validation->set_rules('title', '标题', 'required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('content', '内容', 'required|min_length[3]');
+    }
+    
+    public function add()
+	{
+        if($this->isPostRequest()){
+            $this->assign('info',$_POST);
+            
+            $this->_addRules();
+            
+            if($this->form_validation->run()){
+                // add
+                $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
+                $insertid = $this->News_Model->add($_POST);
+                
+                $this->assign("feedback", "success");
+                $this->assign('feedMessage',"创建成功,您需要继续添加吗");
+            }else{
+                $this->assign("feedback", "failed");
+                $this->assign('feedMessage',"创建失败,请核对您输入的信息");
+            }
+        }
+        
+        $this->display();
+		
+	}
+    
+    /**
+     * 
+     */
+    public function detail(){
+        
+        $id = (int)gpc("id","GP",0);
+        $pm = $this->News_Model->queryById($id);
+        
+        if(!$pm){
+            die("信息找不到");
+        }
+        $this->assign('info',$pm);
+        $this->display();
+    }
+    
+    
+    /**
+     * 修改 
+     */
+    public function edit(){
+        $this->assign('action','edit');
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            $this->form_validation->set_rules('id', '公告编号', 'required|is_natural_no_zero');
+            
+            $this->_addRules();
+            if($this->form_validation->run()){
+                // add
+                $_POST['updator'] = $this->_userProfile['name'];
+                $this->News_Model->update($_POST);
+                $info = $this->News_Model->getById(array('where' => array('id' => $_POST['id'])));
+                
+                $this->assign("feedback", "success");
+                $this->assign('feedMessage',"修改成功");
+            }else{
+                $info = $_POST;
+                $this->assign("feedback", "failed");
+                $this->assign('feedMessage',"修改失败,请核对您输入的信息");
+            }
+        }else{
+            $info = $this->News_Model->getById(array('where' => array('id' => $_GET['id'])));
+        }
+        
+        $this->assign('info',$info);
+        $this->display('add');
+    }
+    
+    
+    private function _doOp($action,$msg = ''){
+        
+        $message = array();
+        $reload = 0;
+        $success = 0;
+        $failed = 0;
+        foreach($_POST['opid'] as $v){
+            $d = array(
+                'updator' => $this->_userProfile['name'],
+                'updatetime' => time()
+            );
+            
+            switch($action){
+                case 'delete':
+                    $d['status'] = '已删除';
+                    break;
+                case 'publish':
+                    $d['is_publish'] = 1;
+                    break;
+                case 'unpublish':
+                    $d['is_publish'] = 0;
+                    break;
+                default:
+                    break;
+            }
+            
+            $flag = $this->News_Model->updateByWhere($d,array('id' => $v));
+
+            if($flag){
+                $success++;
+            }else{
+                $failed++;
+            }
+        }
+
+        if($success){
+            $reload = 1;
+            $message[] = '<p class="success">'.$success.'个'.$msg.'成功</p>';
+        }
+
+        if($failed){
+            $message[] = '<p class="failed">'.$failed.'个'.$msg.'失败</p>';
+        }
+
+        $this->assign('reload',$reload);
+        $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
+        $this->display('showmessage','common');
+        
+    }
+    
+    /**
+     * 删除 
+     */
+    public function delete()
+	{
+        if($this->isPostRequest() && !empty($_POST['opid'])){
+            $this->_doOp('delete','删除');
+        }else{
+            $this->assign('message','参数错误');
+            $this->display('showmessage','common');
+        }
+    }
+    
+    
+    public function publish()
+	{
+        if($this->isPostRequest() && !empty($_POST['opid'])){
+            $this->_doOp('publish','发布');
+        }else{
+            $this->assign('message','参数错误');
+            $this->display('showmessage','common');
+        }
+    }
+    
+    
+    public function unpublish()
+	{
+        if($this->isPostRequest() && !empty($_POST['opid'])){
+            $this->_doOp('unpublish','取消发布');
+        }else{
+            $this->assign('message','参数错误');
+            $this->display('showmessage','common');
+        }
+    }
+}
+

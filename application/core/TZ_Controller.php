@@ -8,7 +8,7 @@ require(APPPATH.'third_party/smarty'.TZ_SMATY_VERSION.'/Smarty.class.php');
  */
 class TZ_Controller extends CI_Controller {
     public $_smarty = null;
-    public $tpldir = '';
+    public $tplDir = '';
     public $tplName = '';
     public $isAjax = 0;
     public $reqtime;
@@ -28,9 +28,9 @@ class TZ_Controller extends CI_Controller {
         $str = $this->uri->assoc_to_uri($array);
         //echo $str;
          */
-        $this->tpldir = empty($_GET[''.config_item('controller_trigger')]) ? 'index' : strtolower($_GET[''.config_item('controller_trigger')]);
-        $this->tplName = empty($_GET[''.config_item('function_trigger')]) ? 'index' : strtolower($_GET[''.config_item('function_trigger')]);
-        $this->isAjax = !empty($_GET['isajax']) ? 1:0;
+        $this->tplDir =  gpc(config_item('controller_trigger'), 'GP', 'index');
+        $this->tplName = gpc(config_item('function_trigger'),'GP', 'index');
+        $this->isAjax = gpc('isajax','GP',0);
         
         $this->reqtime = $_SERVER['REQUEST_TIME'];
         
@@ -60,13 +60,11 @@ class TZ_Controller extends CI_Controller {
     }
     
     protected function _init_config(){
-        $this->_smarty->assign('NO_COVER_IMG',config_item('no_cover_image'));
-        
         $this->load->model('Menu_Model');
         
         $currentMenuInfo = $this->Menu_Model->getById(array(
            'where' => array(
-               'url' => config_item('controller_trigger').'='.$this->tpldir.'&'.config_item('function_trigger').'='.$this->tplName
+               'url' => config_item('controller_trigger').'='.$this->tplDir.'&'.config_item('function_trigger').'='.$this->tplName
            )
         ));
         
@@ -169,7 +167,7 @@ class TZ_Controller extends CI_Controller {
     public function display($pageTplName = '',$dir = ''){
         
         if(!$dir){
-            $file = TZ_TPL_PATH.trim($this->tpldir,'/').'/';
+            $file = TZ_TPL_PATH.trim($this->tplDir,'/').'/';
         }else{
             $file = TZ_TPL_PATH.trim($dir,'/').'/';
         }
@@ -185,9 +183,8 @@ class TZ_Controller extends CI_Controller {
             $this->_smarty->display($file);
         }else{
             echo "$file not found";
-            die();
         }
-        
+        die();
     }
     
     public function isGetRequest(){

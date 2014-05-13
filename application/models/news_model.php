@@ -1,10 +1,9 @@
 <?php
 
 
-
 class News_Model extends TZ_Model {
     
-    public $_tableName = 'news';
+    public $_tableName = 'tb_news';
     
     public function __construct(){
         parent::__construct();
@@ -12,46 +11,57 @@ class News_Model extends TZ_Model {
     
     
     public function add($param){
-        
+        $now = time();
         $data = array(
-            'news_id' => NULL,
+            'id' => NULL,
             'title' => $param['title'],
-            'title' => $param['title2'],
-            'cover_img' => $param['cover_img'],
             'content' => $param['content'],
-            'status' => $param['status'],
-            'createtime' => $param['createtime'],
-            'updatetime' => $param['updatetime']
+            'creator' => $param['creator'],
+            'updator' => $param['updator'],
+            'createtime' => $now,
+            'updatetime' => $now
         );
         
-        $string = $this->db->insert_string($this->_tableName, $data);
-        $this->db->query($string);
-        
-        if($this->db->affected_rows()){
-            return $this->db->insert_id();
-        }else{
-            return false;
-        }
+       $this->db->insert($this->_tableName, $data); 
+       return $this->db->insert_id();
     }
     
-    public function update($param){
+    /**
+     * really delete
+     * @param type $user 
+     */
+    public function delete($param){
         
-        $data = array(
-            'title' => $param['title'],
-            'title2' => $param['title2'],
-            'cover_img' => $param['cover_img'],
-            'content' => $param['content'],
-            'updatetime' => $param['updatetime']
+    }
+    
+    public function fake_delete($param){
+        
+        $where = array(
+            'id' => $param['id']
         );
         
-        $where = "news_id = " . $param['news_id'];
-        $string = $this->db->update_string($this->_tableName, $data,$where);
-        $this->db->query($string);
+        $data = array(
+            'status' => '已删除'
+        );
         
-        if($this->db->affected_rows()){
-            return true;
-        }else{
-            return false;
-        }
+        return $this->db->update($this->_tableName, $data, $where);
     }
+    
+    
+    public function update($schedule){
+        $data = array(
+            'title' => $schedule['title'],
+            'content' => $schedule['content'],
+            'updator' => $schedule['updator'],
+            'updatetime' => time()
+        );
+        
+        $where = array(
+            'id' => $schedule['id']
+        );
+        
+        return $this->db->update($this->_tableName, $data, $where);
+    }
+    
+    
 }

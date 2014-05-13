@@ -53,7 +53,7 @@
                             {if $action == 'receive'}<th>状态</th>{/if}
                             <th>标题</th>
                             <th>发送者</th>
-                            <th>接搜者</th>
+                            <th>接收者</th>
                             <th>发送时间</th>
                         </tr>
                     </thead>

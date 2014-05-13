@@ -6,7 +6,8 @@
 <meta name="keywords" content="{$KEYWORDS}">
 <meta name="description" content="{$DESCRIPTION}">
 <link href="/css/base.css" rel="stylesheet" type="text/css">
-<script language='javascript'>
+<script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
+<script>
 var preFrameW = '206,*';
 var FrameHide = 0;
 var curStyle = 1;
@@ -132,36 +133,108 @@ a:link,a:visited {
 </style>
 </head>
 <body bgColor='#ffffff'>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" background="/img/frame/topbg.gif">
-  <tr>
-    <td width='20%' height="60"><img src="/img/frame/logo.gif" /></td>
-    <td width='80%' align="right" valign="bottom">
-    	<table width="1000" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-      <td align="right" height="26" style="padding-right:10px;line-height:26px;">
-        	您好：<span class="username">{$userProfile['name']}</span>，{$TITLE}
-        	[<a href="{url_path('admin','change_password')}" target="main">修改密码</a>]
-        	[<a href="{url_path('logout')}" target="_top">注销退出</a>]&nbsp;
-      </td>
-      </tr>
-      <tr>
-        <td align="right" height="34" class="rmain">
-		<dl id="tpa">
-		{*<dd class='img'><a href="javascript:ChangeMenu(-1);"><img vspace="5" src="/img/frame/arrl.gif" border="0" width="5" height="8" alt="缩小左框架"  title="缩小左框架" /></a></dd>*}
-		<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(0);"><img vspace="3" src="/img/frame/arrfc.gif" border="0" width="12" height="12" alt="显示/隐藏左框架" title="显示/隐藏左框架" /></a></dd>
-		{*<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(1);"><img vspace="5" src="/img/frame/arrr.gif" border="0" width="5" height="8" alt="增大左框架" title="增大左框架" /></a></dd>*}
-		<dd><div class="itemsel" id="item1"><a href="{url_path('admin')}" onclick="changeSel(1)" target="_top">首页</a></div></dd>
-		<dd><div class="item" id="item2"><a href="{url_path('personal')}" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>
-		<dd><div class="item" id="item3"><a href="{url_path('project')}" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
-		<dd><div class="item" id="item4"><a href="{url_path('project','guihua')}" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
-		<dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>
-		<dd><div class="item" id="item6"><a href="{url_path('info')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
-		<dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>
-		</dl>
-		</td>
-      </tr>
-    </table></td>
-  </tr>
-</table>
+<div style="position: relative;">
+    {if $notice}
+    <div style="position:absolute;width:400px;top:30px;margin-left:200px;">
+        <marquee scrollamount="2" scrolldelay="10" align="top">{$notice['title']|escape}</marquee>
+    </div>
+    {/if}
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" background="/img/frame/topbg.gif">
+    <tr>
+        <td width='20%' height="60"><img src="/img/frame/logo.gif" /></td>
+        <td width='80%' align="right" valign="bottom">
+            <table width="1000" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+        <td align="right" height="26" style="padding-right:10px;line-height:26px;">
+                您好：<span class="username">{$userProfile['name']}</span>，
+                [<a style="color:#f00;" href="{url_path('pm','receive')}" target="main"><span id="newmsg">新消息({$messageCount})</span></a>]
+                [<a href="{url_path('admin','change_password')}" target="main">修改密码</a>]
+                [<a href="{url_path('logout')}" target="_top">注销退出</a>]&nbsp;
+        </td>
+        </tr>
+        <tr>
+            <td align="right" height="34" class="rmain">
+            <dl id="tpa">
+            {*<dd class='img'><a href="javascript:ChangeMenu(-1);"><img vspace="5" src="/img/frame/arrl.gif" border="0" width="5" height="8" alt="缩小左框架"  title="缩小左框架" /></a></dd>*}
+            <dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(0);"><img vspace="3" src="/img/frame/arrfc.gif" border="0" width="12" height="12" alt="显示/隐藏左框架" title="显示/隐藏左框架" /></a></dd>
+            {*<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(1);"><img vspace="5" src="/img/frame/arrr.gif" border="0" width="5" height="8" alt="增大左框架" title="增大左框架" /></a></dd>*}
+            <dd><div class="itemsel" id="item1"><a href="{url_path('admin')}" onclick="changeSel(1)" target="_top">首页</a></div></dd>
+            <dd><div class="item" id="item2"><a href="{url_path('personal')}" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>
+            <dd><div class="item" id="item3"><a href="{url_path('project')}" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
+            <dd><div class="item" id="item4"><a href="{url_path('project','guihua')}" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
+            <dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>
+            <dd><div class="item" id="item6"><a href="{url_path('info')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
+            <dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>
+            </dl>
+            </td>
+        </tr>
+        </table></td>
+    </tr>
+    </table>
+</div>
+<script>
+    var rotate = 0;
+    var shakTitle = null;
+    var reqList = [];
+    function checkNewMsg(){
+        if(reqList.length){
+            return;
+        }
+    
+        var ajax = $.ajax({
+            type:"GET",
+            url:"{url_path('search','getNewMsg')}",
+            data : {
+                uid : "{$userProfile['id']}"
+            },
+            dataType:"json",
+            success:function(sd){
+                $("#newmsg").html("新消息(" + sd.newcount + ")");
+                if(sd.newcount){
+                    if(shakTitle){
+                        clearInterval(shakTitle);
+                    }
+                    shakTitle = setInterval(function(){
+                        if(rotate % 2){
+                            top.document.title = "【　　　】";
+                        }else{
+                            top.document.title = "【新消息】"
+                        }
+                        rotate++;
+
+                        if(rotate > 100000){
+                            rotate = 0;
+                        }
+                    },1000);
+                }else{
+                    if(shakTitle){
+                        clearInterval(shakTitle);
+                    }
+                    top.document.title = "{$TITLE}";
+                }
+            },
+            complete:function(){
+                rotate = 0;
+                reqList.pop();
+            },
+            error:function(){
+                rotate = 0;
+                reqList.pop();
+            }
+        });
+        
+        reqList.push(ajax);
+    }
+
+    {if $messageCount}
+    checkNewMsg();
+    {/if}
+
+    $(function(){
+        setInterval(function(){
+            checkNewMsg();
+        },1000 * 60);
+    });
+</script>            
 </body>
 </html>
