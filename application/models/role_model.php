@@ -47,6 +47,7 @@ class Role_Model extends TZ_Model {
     public function update($param){
         $data = array(
             'name' => $param['name'],
+            'type' => $param['type'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );

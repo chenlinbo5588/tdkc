@@ -139,6 +139,7 @@ class Menu_Model extends TZ_Model {
     public function update($param){
         $data = array(
             'name' => $param['name'],
+            'auth_key' => md5($param['url']),
             'updator' => $param['updator'],
             'updatetime' => time()
         );

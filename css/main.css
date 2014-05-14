@@ -173,6 +173,11 @@
     cursor:pointer;
 }
 
+.btn.active,.active {
+    font-weight: bold;
+    font-size:14px;
+}
+
 .link_btn {
     font-size:16px;
 }

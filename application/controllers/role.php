@@ -47,7 +47,7 @@ class Role extends TZ_Admin_Controller {
                 $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
 
                 if($this->form_validation->run()){
-
+                    
                     $updateCount = $this->Role_Menu_Model->updateByWhere(
                             array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
                             array('role_id' => $_POST['id'])
@@ -136,6 +136,15 @@ class Role extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
+                
+                if(empty($_POST['type'])){
+                    $_POST['type'] = 2;
+                }else{
+                    if(!in_array($_POST['type'],array(1,2))){
+                        $_POST['type'] = 2;
+                    }
+                }
+                
                 $this->Role_Model->update($_POST);
                 $role = $this->Role_Model->getById(array('where' => array('id' => $_POST['id'])));
                 
@@ -156,11 +165,7 @@ class Role extends TZ_Admin_Controller {
     
     private function _addRules(){
         $this->form_validation->set_rules('name', '角色名称', 'required|min_length[2]|max_length[10]');
-        
-        if($this->_userProfile['id'] == 1){
-            $this->form_validation->set_rules('type', '角色类型', 'required|is_natural|less_than[2]');
-        }
-        
+        $this->form_validation->set_rules('type', '角色类型', 'required|is_natural|less_than[3]');
     }
 
     public function add()

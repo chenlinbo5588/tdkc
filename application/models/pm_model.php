@@ -57,17 +57,17 @@ class Pm_Model extends TZ_Model {
     }
     
     
-    public function update($schedule){
+    public function update($param){
         $data = array(
-            'title' => $schedule['title'],
-            'content' => $schedule['content'],
-            'updator' => $schedule['updator'],
+            'title' => $param['title'],
+            'content' => $param['content'],
+            'updator' => $param['updator'],
             'updatetime' => time()
         );
         
         $where = array(
-            'id' => $schedule['id'],
-            'user_id' => $schedule['user_id']
+            'id' => $param['id'],
+            'user_id' => $param['user_id']
         );
         
         return $this->db->update($this->_tableName, $data, $where);

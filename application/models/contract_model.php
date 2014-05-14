@@ -1,9 +1,9 @@
 <?php
 
 
-class Announce_Model extends TZ_Model {
+class Contract_Model extends TZ_Model {
     
-    public $_tableName = 'tb_announce';
+    public $_tableName = 'tb_contract';
     
     public function __construct(){
         parent::__construct();
@@ -14,14 +14,21 @@ class Announce_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'type' => $param['type'],
             'title' => $param['title'],
-            'content' => $param['content'],
+            'sign_time' => $param['sign_time'],
+            'amount' => $param['amount'],
+            'linkman' => $param['linkman'],
+            'is_comp' => $param['is_comp'],
             'creator' => $param['creator'],
-            'updator' => $param['updator'],
+            'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
+        
+        if($data['file_id']){
+            $data['file_id'] = $param['file_id'];
+            $data['file_name'] = $param['file_name'];
+        }
         
        $this->db->insert($this->_tableName, $data); 
        return $this->db->insert_id();
@@ -52,10 +59,18 @@ class Announce_Model extends TZ_Model {
     public function update($param){
         $data = array(
             'title' => $param['title'],
-            'content' => $param['content'],
+            'sign_time' => $param['sign_time'],
+            'amount' => $param['amount'],
+            'linkman' => $param['linkman'],
+            'is_comp' => $param['is_comp'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
+        
+        if($param['file_id']){
+            $data['file_id'] = $param['file_id'];
+            $data['file_name'] = $param['file_name'];
+        }
         
         $where = array(
             'id' => $param['id']

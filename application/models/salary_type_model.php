@@ -1,9 +1,9 @@
 <?php
 
 
-class Announce_Model extends TZ_Model {
+class Salary_Type_Model extends TZ_Model {
     
-    public $_tableName = 'tb_announce';
+    public $_tableName = 'tb_salary_type';
     
     public function __construct(){
         parent::__construct();
@@ -14,23 +14,18 @@ class Announce_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'type' => $param['type'],
-            'title' => $param['title'],
-            'content' => $param['content'],
+            'name' => $param['name'],
+            'displayorder' => $param['displayorder'],
             'creator' => $param['creator'],
-            'updator' => $param['updator'],
+            'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
         
-       $this->db->insert($this->_tableName, $data); 
-       return $this->db->insert_id();
+        $this->db->insert($this->_tableName, $data);
+        return $this->db->insert_id();
     }
     
-    /**
-     * really delete
-     * @param type $user 
-     */
     public function delete($param){
         
     }
@@ -51,8 +46,8 @@ class Announce_Model extends TZ_Model {
     
     public function update($param){
         $data = array(
-            'title' => $param['title'],
-            'content' => $param['content'],
+            'name' => $param['name'],
+            'displayorder' => $param['displayorder'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
@@ -63,6 +58,5 @@ class Announce_Model extends TZ_Model {
         
         return $this->db->update($this->_tableName, $data, $where);
     }
-    
     
 }

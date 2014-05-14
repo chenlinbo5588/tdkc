@@ -51,10 +51,10 @@
                             <td><label class="optional"><em></em><strong>虚拟号码</strong></label></td><td><input type="text" name="virtual_no" value="{$user['virtual_no']}" placeholder="请输入虚拟号"/><span class="tip">{form_error('virtual_no')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>毕业院校</strong></label></td><td><input type="text" name="school_name" value="{$user['school_name']}" placeholder="请输入毕业院校"/><span class="tip">{form_error('virtual_no')}</span></td>
+                            <td><label class="optional"><em></em><strong>毕业院校</strong></label></td><td><input type="text" name="school_name" value="{$user['school_name']}" placeholder="请输入毕业院校"/><span class="tip">{form_error('school_name')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>专业名称</strong></label></td><td><input type="text" name="major" value="{$user['major']}" placeholder="请输入专业名称"/><span class="tip">{form_error('virtual_no')}</span></td>
+                            <td><label class="optional"><em></em><strong>专业名称</strong></label></td><td><input type="text" name="major" value="{$user['major']}" placeholder="请输入专业名称"/><span class="tip">{form_error('major')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="optional"><em></em><strong>毕业时间</strong></label></td><td><input type="text" name="graduation_date" class="Wdate" readonly onclick="WdatePicker()" value="{$user['graduation_date']}" placeholder="请输入毕业时间"/><span class="tip">{form_error('graduation_date')}</span></td>
@@ -84,7 +84,7 @@
                                 <select name="role_id">
                                 <option value="0">无</option>
                                 {foreach from=$roleList item=item}
-                                <option value="{$item['id']}" {if $user['role_id'] == $item['id']}selected{/if}>{$item['name']}</option>
+                                <option value="{$item['id']}" {if $user['role_id'] == $item['id']}selected{/if}>{if $item['type'] == 2}用户{else}系统{/if}角色--{$item['name']}</option>
                                 {/foreach}
                                 </select>
                             </td>

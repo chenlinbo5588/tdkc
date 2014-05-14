@@ -1,30 +1,31 @@
 <?php
 
 
-class Announce_Model extends TZ_Model {
+class User_Salary_Model extends TZ_Model {
     
-    public $_tableName = 'tb_announce';
+    public $_tableName = 'tb_user_salary';
     
     public function __construct(){
         parent::__construct();
     }
     
     
-    public function add($param){
+    public function add($info){
         $now = time();
+        
         $data = array(
             'id' => NULL,
-            'type' => $param['type'],
-            'title' => $param['title'],
-            'content' => $param['content'],
-            'creator' => $param['creator'],
-            'updator' => $param['updator'],
+            'user_id' => $info['user_id'],
+            'sendor_id' => $info['sendor_id'],
+            'sendor' => $info['sendor'],
+            'creator' => $info['creator'],
+            'updator' => $info['updator'],
             'createtime' => $now,
             'updatetime' => $now
         );
         
-       $this->db->insert($this->_tableName, $data); 
-       return $this->db->insert_id();
+        $this->db->insert($this->_tableName, $data);
+        return $this->db->insert_id();
     }
     
     /**
@@ -49,16 +50,17 @@ class Announce_Model extends TZ_Model {
     }
     
     
-    public function update($param){
+    public function update($info){
+        
         $data = array(
-            'title' => $param['title'],
-            'content' => $param['content'],
-            'updator' => $param['updator'],
+            'name' => $info['name'],
+            'address' => $info['address'],
+            'updator' => $info['updator'],
             'updatetime' => time()
         );
         
         $where = array(
-            'id' => $param['id']
+            'id' => $info['id']
         );
         
         return $this->db->update($this->_tableName, $data, $where);

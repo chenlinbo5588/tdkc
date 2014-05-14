@@ -68,7 +68,6 @@ class Pm extends TZ_Admin_Controller {
                     break;
                 case 'send':
                     $condition['where']['driection'] = 0;
-                    $data = $this->Pm_Model->getList($condition);
                     break;
                 case 'trash':
                     $condition['where']['status'] = '已删除';

@@ -1,24 +1,23 @@
 <?php
 
 
-class Announce_Model extends TZ_Model {
+class Out_Model extends TZ_Model {
     
-    public $_tableName = 'tb_announce';
+    public $_tableName = 'tb_out';
     
     public function __construct(){
         parent::__construct();
     }
     
-    
     public function add($param){
         $now = time();
         $data = array(
             'id' => NULL,
-            'type' => $param['type'],
+            'send_time' => $param['send_time'],
             'title' => $param['title'],
-            'content' => $param['content'],
+            'file_code' => $param['file_code'],
             'creator' => $param['creator'],
-            'updator' => $param['updator'],
+            'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
@@ -51,8 +50,9 @@ class Announce_Model extends TZ_Model {
     
     public function update($param){
         $data = array(
+            'send_time' => $param['send_time'],
             'title' => $param['title'],
-            'content' => $param['content'],
+            'file_code' => $param['file_code'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
@@ -63,6 +63,7 @@ class Announce_Model extends TZ_Model {
         
         return $this->db->update($this->_tableName, $data, $where);
     }
+    
     
     
 }

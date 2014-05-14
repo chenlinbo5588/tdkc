@@ -27,6 +27,8 @@ class User_Model extends TZ_Model {
         
         if(!$user['psw']){
             $user['psw'] = md5(config_item('encryption_key').config_item('default_password'));
+        }else{
+            $user['psw'] = md5(config_item('encryption_key').$user['psw']);
         }
         
         $data = array(
@@ -54,6 +56,25 @@ class User_Model extends TZ_Model {
             'createtime' => $now,
             'updatetime' => $now
         );
+        
+        if(!empty($user['birthday'])){
+            $data['birthday'] = $user['birthday'];
+            
+            $year = substr($data['birthday'],0,4);
+            $age = (int)date("Y") - (int)$year;
+            
+            if($age > 0){
+                $data['age'] = $age;
+            }
+        }
+        
+        if(!empty($user['title_time'])){
+            $data['title_time'] = $user['title_time'];
+        }
+        
+        if(!empty($user['contract_year'])){
+            $data['contract_year'] = $user['contract_year'];
+        }
         
         $this->db->insert($this->_tableName, $data);
         return $this->db->insert_id();
@@ -103,6 +124,29 @@ class User_Model extends TZ_Model {
             'updator' => $user['updator'],
             'updatetime' => time()
         );
+        
+        if($user['psw']){
+            $data['psw'] = md5(config_item('encryption_key').$user['psw']);
+        }
+        
+        if(!empty($user['birthday'])){
+            $data['birthday'] = $user['birthday'];
+            
+            $year = substr($data['birthday'],0,4);
+            $age = (int)date("Y") - (int)$year;
+            
+            if($age > 0){
+                $data['age'] = $age;
+            }
+        }
+        
+        if(!empty($user['title_time'])){
+            $data['title_time'] = $user['title_time'];
+        }
+        
+        if(!empty($user['contract_year'])){
+            $data['contract_year'] = $user['contract_year'];
+        }
         
         if(!empty($user['psw'])){
             $data['psw'] = md5(config_item('encryption_key').$user['psw']);

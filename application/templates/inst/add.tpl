@@ -10,7 +10,7 @@
                     <table class="maintain">
                         <tbody>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>制度名称</strong></label></td><td><input type="text" style="width:500px" name="title" id="title" value="{$info['title']}" placeholder="请输入标题"/>{form_error('title')}</td>
+                            <td><label class="required"><em>*</em><strong>制度名称</strong></label></td><td><input type="text" style="width:500px" name="title" id="title" value="{$info['title']}" placeholder="请输入标题"/>{form_error('file_id')}{form_error('title')}</td>
                         </tr>
                         <tr>
                             <td></td>

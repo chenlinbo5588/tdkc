@@ -15,7 +15,7 @@ class News extends TZ_Controller {
     }
     
     /**
-     * 
+     * 新闻详情
      */
     public function detail(){
         
@@ -29,7 +29,9 @@ class News extends TZ_Controller {
         $this->display();
     }
     
-    
+    /**
+     * 公告详情 
+     */
     public function andetail(){
         
         $id = (int)gpc("id","GP",0);

@@ -12,6 +12,7 @@
             <li><a href="{url_path('doc')}">测绘合同</a></li>
             <li><a href="{url_path('inout')}">文件管理</a></li>
             <li><a href="{url_path('kq')}">考勤管理</a></li>
+            <li><a href="{url_path('salary_type')}">薪资结构</a></li>
             <li><a href="{url_path('salary')}">工资变动</a></li>
             <li><a href="{url_path('device')}">仪器设备</a></li>
             <li><a href="{url_path('consum')}">耗材库存</a></li>
