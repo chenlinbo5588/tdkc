@@ -22,72 +22,112 @@ class Salary extends TZ_Admin_Controller {
      */
     public function adjust(){
         $this->assign('action','adjust');
+        $user_id = gpc('user_id','GP',0);
         
         $salaryTypeList = $this->Salary_Type_Model->getList(array(
            'where' => array(
                'status' => '正常'
            ),
-           'order' => 'displayorder DESC'
+           'order' => 'createtime ASC , displayorder DESC'
         ));
         
+        $this->assign('salaryTypeList',$salaryTypeList['data']);
+        
+        /**
+         * 获得用户信息 
+         */
+        $user = $this->User_Model->queryById($user_id);
+        $this->assign('user',$user);
+        
+        if($this->isPostRequest() && !empty($_POST['user_id'])){
+            
+            $gobackUrl = $_POST['gobackUrl'];
+            
+            $d = array();
+            foreach($salaryTypeList['data'] as $type){
+                if(isset($_POST['salary_'.$type['id']])){
+                    $this->form_validation->set_rules('salary_'.$type['id'], $type['name'], 'required|is_numeric');
+                }
+                
+                $d[$type['name']] = !empty($_POST['salary_'.$type['id']]) ? $_POST['salary_'.$type['id']]: 0;
+            }
+            
+            if($this->form_validation->run()){
+                
+                $this->User_Salary_Model->updateByWhere(array(
+                    'status' => 1,
+                    'updator' => $this->_userProfile['name'],
+                    'updatetime' => time()
+                ),array(
+                    'user_id' => $user_id,
+                    'status' => 0
+                ));
+                
+                $_POST['salary'] = json_encode($d);
+                $_POST['creator'] = $this->_userProfile['name'];
+                
+                $this->User_Salary_Model->add($_POST);
+                
+                $this->assign("feedback", "success");
+                $this->assign('feedMessage',"调整成功");
+            }else{
+                $this->assign("feedback", "failed");
+                $this->assign('feedMessage',"调整失败,请核对您输入的信息");
+            }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
+        }
+        
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->assign('userSalary',$this->_getCurrentSalary($user_id));
+        $this->assign('user',$user);
+        $this->assign('userSalaryHistory',$this->_getUserSalaryHistory($user_id));
+        $this->display();
+    }
+    
+    
+    
+    private function _getCurrentSalary($user_id){
         $userSalary = $this->User_Salary_Model->getList(array(
             'where' => array(
-                'user_id' => $this->_userProfile['id'],
+                'user_id' => $user_id,
                 'status' => 0
             )
         ));
         
         if($userSalary['data'][0]){
-            $this->assign('userSalaryList',json_decode($userSalary['data'][0],true));
-        }
-        
-        $this->assign('salaryTypeList',$salaryTypeList['data']);
-        
-        $this->_getUserSalaryHistory();
-        
-        
-        if($this->isPostRequest() && !empty($_POST['id'])){
+            $userSalary['data'][0]['salary'] = json_decode($userSalary['data'][0]['salary'],true);
             
-            $this->_addRules();
-            if($this->form_validation->run()){
-                /*
-                $this->User_Model->update($_POST);
-                $user = $this->User_Model->getById(array('where' => array('id' => $_POST['id'])));
-                */
-                $this->assign("feedback", "success");
-                $this->assign('feedMessage',"修改成功");
-            }else{
-                
-                $user = $_POST;
-                $this->assign("feedback", "failed");
-                $this->assign('feedMessage',"修改失败,请核对您输入的信息");
-            }
+           return $userSalary['data'][0];
         }else{
-            $user = $this->User_Model->getById(array('where' => array('id' => $_GET['id'])));
-            $user['enter_date'] = date("Y-m-d",$user['enter_date']);
-            $user['graduation_date'] = date("Y-m-d",$user['graduation_date']);
-            $user['title_time'] = date("Y-m-d",$user['title_time']);
+            return false;
         }
         
-        $this->assign('user',$user);
-        $this->display();
     }
     
-    
-    private function _getUserSalaryHistory(){
+    private function _getUserSalaryHistory($user_id){
         $userSalary = $this->User_Salary_Model->getList(array(
             'where' => array(
-                'user_id' => $this->_userProfile['id']
+                'user_id' => $user_id
             )
         ));
         
-        $this->assign('userSalaryHistory',$userSalary['data']);
+        $d = array();
+        
+        foreach($userSalary['data'] as $k =>  $v){
+            $tmp = json_decode($v['salary'],true);
+            $tmp2 = array();
+            foreach($tmp as $tk => $tv){
+               $tmp2[] = "<label class=\"salary_ht\"><span>{$tk}</span><strong>{$tv}</strong></label>";
+            }
+            $v['salary_text'] = implode('',$tmp2);
+            $d[] = $v;
+        }
+        
+        return $d;
+        
     }
     
-    private function _addRules(){
-        $this->form_validation->set_rules('name', '姓名', 'required|min_length[1]|max_length[20]|htmlspecialchars');
-    }
-
     public function _getPageData(){
         try {
             

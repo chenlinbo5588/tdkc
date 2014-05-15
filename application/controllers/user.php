@@ -41,6 +41,8 @@ class User extends TZ_Admin_Controller {
         $this->assign('actionUrl',url_path('user','auth'));
         
         if($this->isPostRequest() && !empty($_POST['id'])){
+            $gobackUrl = $_POST['gobackUrl'];
+            
             if($_POST['id'] != 1){
                 $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
                 if($this->form_validation->run()){
@@ -94,8 +96,10 @@ class User extends TZ_Admin_Controller {
             }
             
             $this->assign('redirectUrl',url_path('user','auth','id='.$_POST['id']));
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
         $this->assign('data',$data);
         $this->display('auth','menu');
@@ -155,7 +159,7 @@ class User extends TZ_Admin_Controller {
         
         
         if($this->isPostRequest() && !empty($_POST['id'])){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|is_unique_not_self['.$this->User_Model->_tableName.'.account.id.'.$_POST['id'].'.status.正常]');
             $this->form_validation->set_rules('gh', '工号', 'required|numeric|is_unique_not_self['.$this->User_Model->_tableName.'.gh.id.'.$_POST['id'].'.status.正常]');
             
@@ -181,11 +185,12 @@ class User extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $user = $this->User_Model->getById(array('where' => array('id' => $_GET['id'])));
             $user['enter_date'] = date("Y-m-d",$user['enter_date']);
             $user['graduation_date'] = date("Y-m-d",$user['graduation_date']);
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('user',$user);
         $this->display('add');
     }
@@ -230,7 +235,7 @@ class User extends TZ_Admin_Controller {
         
         if($this->isPostRequest()){
             $this->assign('user',$_POST);
-            
+            $gobackUrl = $_POST['gobackUrl'];
             
             $this->form_validation->set_rules('account', '账号', 'required|min_length[3]|max_length[15]|alpha_dash|is_unique_by_status['.$this->User_Model->_tableName.'.account.status.正常]');
             $this->form_validation->set_rules('gh', '工号', 'required|numeric|is_unique_by_status['.$this->User_Model->_tableName.'.gh.status.正常]' );
@@ -251,8 +256,10 @@ class User extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->display();
 		
 	}

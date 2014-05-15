@@ -1,25 +1,27 @@
 <?php
 
 
-class User_Salary_Model extends TZ_Model {
+class Consume_Model extends TZ_Model {
     
-    public $_tableName = 'tb_user_salary';
+    public $_tableName = 'tb_consume';
     
     public function __construct(){
         parent::__construct();
     }
     
     
-    public function add($info){
+    public function add($param){
         $now = time();
-        
         $data = array(
             'id' => NULL,
-            'user_id' => $info['user_id'],
-            'salary' => $info['salary'],
-            'salary' => $info['salary'],
-            'creator' => $info['creator'],
-            'updator' => $info['creator'],
+            'name' => $param['name'],
+            'type' => $param['type'],
+            'unit_name' => $param['unit_name'],
+            'owner' => $param['owner'],
+            'quantity' => $param['quantity'],
+            'direction' => $param['direction'],
+            'creator' => $param['creator'],
+            'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
@@ -28,10 +30,6 @@ class User_Salary_Model extends TZ_Model {
         return $this->db->insert_id();
     }
     
-    /**
-     * really delete
-     * @param type $user 
-     */
     public function delete($param){
         
     }
@@ -50,21 +48,23 @@ class User_Salary_Model extends TZ_Model {
     }
     
     
-    public function update($info){
-        
+    public function update($param){
         $data = array(
-            'name' => $info['name'],
-            'address' => $info['address'],
-            'updator' => $info['updator'],
+            'name' => $param['name'],
+            'type' => $param['type'],
+            'unit_name' => $param['unit_name'],
+            'owner' => $param['owner'],
+            'quantity' => $param['quantity'],
+            'direction' => $param['direction'],
+            'updator' => $param['updator'],
             'updatetime' => time()
         );
         
         $where = array(
-            'id' => $info['id']
+            'id' => $param['id']
         );
         
         return $this->db->update($this->_tableName, $data, $where);
     }
-    
     
 }

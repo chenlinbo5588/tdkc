@@ -611,8 +611,14 @@ ol.style_decimal , ul.style_decimal {
     float:left;
 }
 /**
- * 
+ * 首页 
  */
 .fm {
     margin:10px 0;
 }
+
+
+.salary_ht {
+    padding: 2px 5px;
+}
+

@@ -1,10 +1,10 @@
 {include file="common/main_header.tpl"}
             <div class="row-fluid">
                 {if $action == 'edit'}
-                <form action="{url_path('dept','edit')}" method="post" name="deptform">
+                <form action="{url_path('dept','edit')}" method="post" name="infoform">
                     <input type="hidden" name="id" value="{$dept['id']}"/>
                 {else}
-                <form action="{url_path('dept','add')}" method="post" name="deptform">
+                <form action="{url_path('dept','add')}" method="post" name="infoform">
                 {/if}
                     <table class="maintain">
                         <tbody>
@@ -24,13 +24,20 @@
                                 </select>
                             </td>
                         </tr>
-                        <tr><td></td><td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></td></tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
+                                <input type="reset" name="rst" class="btn btn-sm btn-default" value="重置"/>
+                                {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
+                            </td>
+                        </tr>
                         {if $action == 'edit'}
                         <tr>
                             <td></td>
                             <td>
                                 <div class="zzjg clearfix" >
-                                    <h3><span>成员列表</span>&nbsp;<a class="goback" href="{url_path('dept')}">【返回】</a></h3>
+                                    <h3><span>成员列表</span></h3>
                                     <div class="datalist">
                                         <ol id="dept_employ_list" class="style_decimal">
                                             {foreach from=$employs['data'] item=item}

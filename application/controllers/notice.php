@@ -63,7 +63,7 @@ class Notice extends TZ_Admin_Controller {
 	{
         if($this->isPostRequest()){
             $this->assign('info',$_POST);
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             
             if($this->form_validation->run()){
@@ -79,8 +79,10 @@ class Notice extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->display();
 		
 	}
@@ -108,7 +110,7 @@ class Notice extends TZ_Admin_Controller {
         $this->assign('action','edit');
         if($this->isPostRequest() && !empty($_POST['id'])){
             $this->form_validation->set_rules('id', '公告编号', 'required|is_natural_no_zero');
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             if($this->form_validation->run()){
                 // add
@@ -125,9 +127,10 @@ class Notice extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $info = $this->Announce_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
         $this->display('add');
     }

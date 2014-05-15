@@ -60,7 +60,7 @@ class Menu extends TZ_Admin_Controller {
         $selfid = (int)gpc('id', "GP",0);
         
         if($this->isPostRequest() && !empty($_POST['id'])){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             $this->form_validation->set_rules('url', '权限名称', 'required|callback_custom_url|is_unique_not_self['.$this->Menu_Model->_tableName.".url.id.".$_POST['id'].".status.正常]");
             if($this->form_validation->run()){
@@ -98,9 +98,10 @@ class Menu extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $menu = $this->Menu_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->Menu_Model->clearMenuTree();
         $data = $this->Menu_Model->getListByTree(0,$selfid);
         $this->assign('menu',$menu);
@@ -142,7 +143,7 @@ class Menu extends TZ_Admin_Controller {
         
         if($this->isPostRequest()){
             $this->assign('menu',$_POST);
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             $this->form_validation->set_rules('url', '权限名称', 'required|callback_custom_url|is_unique_by_status['.$this->Menu_Model->_tableName.".url.status.正常]");
             
@@ -162,7 +163,12 @@ class Menu extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
+            
         }
+        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('data',$data);
         $this->display();
 		

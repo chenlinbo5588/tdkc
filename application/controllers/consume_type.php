@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Salary_Type extends TZ_Admin_Controller {
+class Consume_Type extends TZ_Admin_Controller {
 
 	public function __construct(){
         parent::__construct();
-        $this->load->model('Salary_Type_Model');
+        $this->load->model('Consume_Type_Model');
     }
     
 	public function index()
@@ -17,7 +17,7 @@ class Salary_Type extends TZ_Admin_Controller {
     public function delete()
 	{
         if($this->isPostRequest() && !empty($_POST['id'])){
-            $this->Salary_Type_Model->fake_delete($_POST);
+            $this->Consume_Type_Model->fake_delete($_POST);
             $this->sendFormatJson('success',array('operation' => 'delete','id' => $_POST['id'] , 'text' => '删除成功'));
         }else{
             $this->sendFormatJson('error',array('id' => $_POST['id'] , 'text' => '删除失败'));
@@ -31,14 +31,14 @@ class Salary_Type extends TZ_Admin_Controller {
             $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             
-            $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[50]|callback_checkname[edit-'.$_POST['id'].':]');
+            $this->form_validation->set_rules('name', '耗材名称', 'required|min_length[1]|max_length[50]|callback_checkname[edit-'.$_POST['id'].':]');
             
             if($this->form_validation->run()){
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['displayorder'] = empty($_POST['displayorder']) ? 0 : intval($_POST['displayorder']);
-                $this->Salary_Type_Model->update($_POST);
-                $info = $this->Salary_Type_Model->getById(array('where' => array('id' => $_POST['id'])));
+                $this->Consume_Type_Model->update($_POST);
+                $info = $this->Consume_Type_Model->getById(array('where' => array('id' => $_POST['id'])));
                 
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"修改成功");
@@ -49,7 +49,7 @@ class Salary_Type extends TZ_Admin_Controller {
             }
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
-            $info = $this->Salary_Type_Model->getById(array('where' => array('id' => $_GET['id'])));
+            $info = $this->Consume_Type_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
@@ -57,6 +57,9 @@ class Salary_Type extends TZ_Admin_Controller {
     }
     
     private function _addRules(){
+        $this->form_validation->set_rules('type', '耗材型号', 'required|min_length[1]|max_length[50]');
+        $this->form_validation->set_rules('unit_name', '计算单位', 'required|min_length[1]|max_length[10]');
+        
         if(!empty($_POST['displayorder'])){
             $this->form_validation->set_rules('displayorder', '排序', 'integer');
         }
@@ -68,14 +71,14 @@ class Salary_Type extends TZ_Admin_Controller {
         $action = substr($param,0,strpos($param,':'));
         
         if($action == 'add'){
-            $count = $this->Salary_Type_Model->getCount(array(
+            $count = $this->Consume_Type_Model->getCount(array(
                 'where' => array(
                     'name' => $str,
                     'status' => '正常'
                 )
             ));
         }else{
-            $count = $this->Salary_Type_Model->getCount(array(
+            $count = $this->Consume_Type_Model->getCount(array(
                 'where' => array(
                     'id !=' => str_replace('edit-','',$action),
                     'name' => $str,
@@ -104,12 +107,12 @@ class Salary_Type extends TZ_Admin_Controller {
         if($this->isPostRequest()){
             $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
-            $this->form_validation->set_rules('name', '名称', 'required|min_length[2]|max_length[30]|callback_checkname[add:'.$_POST['name'].':]');
+            $this->form_validation->set_rules('name', '耗材名称', 'required|min_length[1]|max_length[50]|callback_checkname[add:'.$_POST['name'].':]');
             if($this->form_validation->run()){
                 // add
                 $_POST['creator'] = $this->_userProfile['name'];
                 $_POST['displayorder'] = empty($_POST['displayorder']) ? 0 : intval($_POST['displayorder']);
-                $insertid = $this->Salary_Type_Model->add($_POST);
+                $insertid = $this->Consume_Type_Model->add($_POST);
                 
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"创建成功,您需要继续添加吗");
@@ -137,7 +140,7 @@ class Salary_Type extends TZ_Admin_Controller {
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
-                'query_param' => url_path('salary_type','index',array('name' => $_GET['name']))
+                'query_param' => url_path('consume_type','index',array('name' => $_GET['name']))
             );
             
             
@@ -147,7 +150,7 @@ class Salary_Type extends TZ_Admin_Controller {
                 $condition['like'] = array('name' => $_GET['name']);
             }
             
-            $data = $this->Salary_Type_Model->getList($condition);
+            $data = $this->Consume_Type_Model->getList($condition);
             $this->assign('page',$data['pager']);
             $this->assign('data',$data);
             

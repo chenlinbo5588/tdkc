@@ -31,7 +31,7 @@ class Region extends TZ_Admin_Controller {
         $this->assign('action','edit');
         $this->_initSelect();
         if($this->isPostRequest() && !empty($_POST['id'])){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             $this->form_validation->set_rules('code', '代码', 'required|alpha|min_length[1]|max_length[5]|callback_checkcode[edit-'.$_POST['id'].':'.$_POST['code'].':'.$_POST['year'].':'.$_POST['name'].']');
             $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[50]|callback_checkname[edit-'.$_POST['id'].':'.$_POST['code'].':'.$_POST['year'].':'.$_POST['name'].']');
@@ -51,9 +51,10 @@ class Region extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $info = $this->Region_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
         $this->display('add');
     }
@@ -170,6 +171,7 @@ class Region extends TZ_Admin_Controller {
         $this->_initSelect();
         
         if($this->isPostRequest()){
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             
             $_POST['name'] = str_replace(array('[',']',':'),array('','',''),$_POST['name']);
@@ -189,8 +191,10 @@ class Region extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->display();
 		
 	}

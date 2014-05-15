@@ -1,10 +1,10 @@
 {include file="common/main_header.tpl"}
             <div class="row-fluid">
                 {if $action == 'edit'}
-                <form action="{url_path('menu','edit')}" method="post" name="deptform">
+                <form action="{url_path('menu','edit')}" method="post" name="infoform">
                     <input type="hidden" name="id" value="{$menu['id']}"/>
                 {else}
-                <form action="{url_path('menu','add')}" method="post" name="menuform">
+                <form action="{url_path('menu','add')}" method="post" name="infoform">
                 {/if}
                     <table class="maintain">
                         <tbody>
@@ -25,7 +25,14 @@
                                 </select>
                             </td>
                         </tr>
-                        <tr><td></td><td><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></td></tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
+                                <input type="reset" name="rst" class="btn btn-sm btn-default" value="重置"/>
+                                {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
+                            </td>
+                        </tr>
                         </tbody>
                      </table>
                 </form>

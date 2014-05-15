@@ -20,7 +20,9 @@
                             {/foreach}
                         </tbody>
                     </table>
-                    <div><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/></div>
+                    <div>
+                        <input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>
+                    </div>
                 </form>
             </div>
             

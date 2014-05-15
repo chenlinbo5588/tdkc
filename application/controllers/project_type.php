@@ -28,7 +28,7 @@ class Project_Type extends TZ_Admin_Controller {
         $this->assign('action','edit');
         
         if($this->isPostRequest() && !empty($_POST['id'])){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             
             $this->form_validation->set_rules('name', '名称', 'required|min_length[2]|max_length[30]|callback_checkname[edit-'.$_POST['id'].':'.$_POST['type'].']');
@@ -48,9 +48,10 @@ class Project_Type extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $info = $this->Project_Type_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
         $this->display('add');
     }
@@ -107,6 +108,7 @@ class Project_Type extends TZ_Admin_Controller {
         $this->assign('info',$_POST);
         
         if($this->isPostRequest()){
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             $this->form_validation->set_rules('name', '名称', 'required|min_length[2]|max_length[30]|callback_checkname[add:'.$_POST['type'].']');
             if($this->form_validation->run()){
@@ -121,8 +123,10 @@ class Project_Type extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->display();
 		
 	}

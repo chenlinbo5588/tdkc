@@ -87,7 +87,7 @@ class Sendor extends TZ_Admin_Controller {
         
         
         if($this->isPostRequest()){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             if(!empty($_POST['sendor'])){
                 $selectedUser = $this->User_Model->getList(array(
                     'where_in' => array(
@@ -127,10 +127,9 @@ class Sendor extends TZ_Admin_Controller {
             $this->assign("feedback", "success");
             $this->assign('feedMessage',"保存成功,是否继续设置");
         }else{
-            $this->assign("feedback", "failed");
-            $this->assign('feedMessage',"创建失败,请核对您输入的信息");
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->display();
 		
 	}
@@ -140,8 +139,8 @@ class Sendor extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         if($this->isPostRequest() && !empty($_POST['id'])){
-            $this->form_validation->set_rules('id', '通讯录编号', 'required|is_natural_no_zero');
-            
+            $this->form_validation->set_rules('id', '发送人编号', 'required|is_natural_no_zero');
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             if($this->form_validation->run()){
                 // add
@@ -158,9 +157,10 @@ class Sendor extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $info = $this->User_Sendor_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
         $this->display('add');
     }

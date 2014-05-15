@@ -64,7 +64,7 @@ class Dept extends TZ_Admin_Controller {
         
         $selfid = (int)gpc('id', "GP",0);
         if($this->isPostRequest() && !empty($_POST['id'])){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             $this->form_validation->set_rules('pid', '上级部门', 'required|integer');
             if($this->form_validation->run()){
@@ -100,6 +100,7 @@ class Dept extends TZ_Admin_Controller {
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");
             }
         }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
             $dept = $this->Dept_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         
@@ -122,7 +123,7 @@ class Dept extends TZ_Admin_Controller {
                array('key' => 'dept_id ','value' => $ids )
              )
         ));
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('dept',$dept);
         $this->assign('data',$data);
         $this->assign('employs',$employs);
@@ -140,7 +141,7 @@ class Dept extends TZ_Admin_Controller {
         
         if($this->isPostRequest()){
             $this->assign('dept',$_POST);
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             
             
@@ -160,7 +161,11 @@ class Dept extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
+        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->assign('data',$data);
         $this->display();
 		

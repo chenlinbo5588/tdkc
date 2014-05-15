@@ -18,7 +18,7 @@
                 {else}
                 <form action="{url_path('sendor','add')}" method="post" name="infoform">
                 {/if}
-                    <div style="margin:0 0 10px 0;"><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>&nbsp;<input type="button" name="cancel" class="btn btn-sm btn-default" value="取消选择"/></div>
+                    <div style="margin:0 0 10px 0;"><input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>&nbsp;<input type="button" name="cancel" class="btn btn-sm btn-default" value="取消选择"/>{if $gobackUrl }&nbsp;<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}</div>
                     <div class="userlist clearfix">
                         {foreach from=$userList item=item}
                         {if in_array($item['id'],$userSendorList)}

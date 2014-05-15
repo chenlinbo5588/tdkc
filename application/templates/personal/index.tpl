@@ -16,7 +16,7 @@
             <li><a href="{url_path('work_log')}">工作日志</a></li>
             <li><a href="{url_path('sendor')}">发送人设置</a></li>
             <li><a href="{url_path('contacts')}">通讯录</a></li>
-            <li><a href="{url_path('kq')}">考勤统计</a></li>
+            {*<li><a href="{url_path('kq')}">考勤统计</a></li>*}
           </ul>
         </dd>
       </dl>

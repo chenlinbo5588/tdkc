@@ -883,101 +883,13 @@
                                 }
                             });
                         });
-                        {*
-                        var cacheData = [];
-                        
-                        function dataToOption(name,d){
-                            $("select[name=" + name + "]").html('');
-                            $("select[name=" + name + "]").append('<option value="">请选择</option>');
-                            for(var i = 0; i < d.length; i++){
-                                $("select[name=" + name + "]").append('<option value="' + d[i].code + '">' + d[i].name + '</option>');
-                            }
-                        }
-                        
-                        $("#addMjItem").bind("click",function(e){
-                        
-                            var div = $(e.target).closest("div");
-                            if($("#mj_cate1").val() == ''){
-                                $.jBox.tip("请选择土地大类",'提示');
-                                return;
-                            }
-                            
-                            if($("#mj_cate2").val() == ''){
-                                $.jBox.tip("请选择一级分类",'提示');
-                                return;
-                            }
-                            
-                            if($("#mj_cate3").val() == ''){
-                                $.jBox.tip("请选择二级分类",'提示');
-                                return;
-                            }
-                            
-                            if(div.find("input[name=onwer_name]").val() == ''){
-                                $.jBox.tip("请选择村名",'提示');
-                                return;
-                            }
-                            
-                            if(!/^[0-9]+(.[0-9]+)?$/.test(div.find("input[name=mj]").val())){
-                                $.jBox.tip("请选择合法的面积值",'提示');
-                                return;
-                            }
-                            
-                            var row = $($("#mjRowTemplate").html());
-                            
-                            row.find("td:eq(0)").html($("#mj_cate1 option:selected").html());
-                            row.find("td:eq(1)").html('<input type="hidden" name="dl_code1[]" value="' + $("#mj_cate2").val() + '"/>' +  $("#mj_cate2 option:selected").html() + '(' + $("#mj_cate2").val() + ')');
-                            row.find("td:eq(2)").html('<input type="hidden" name="dl_code2[]" value="' + $("#mj_cate3").val() + '"/>' + $("#mj_cate3 option:selected").html() + '(' + $("#mj_cate3").val() + ')');
-                            row.find("td:eq(3)").html('<input type="hidden" name="viliage_name[]" value="' + div.find("input[name=onwer_name]").val() + '"/>' + div.find("input[name=onwer_name]").val());
-                            row.find("td:eq(4)").html('<input type="hidden" name="dl_area[]" value="' + div.find("input[name=mj]").val() + '"/>' + div.find("input[name=mj]").val());
-                            
-                            $("#mjList tbody").append(row);
-                        });
-                        
-                        $("#mjList").delegate(".deleteMj","click",function(e){
-                            $(this).closest("tr").remove();
-                        });
-                        
-                        $(".mj_cate").bind("change",function(e){
-                            var sel = $(e.target);
-                            var selname = sel.prop('name');
-                            var idx = parseInt(selname.replace('mj_cate',''));
-                            var v = sel.val();
-                            
-                            if(!v){
-                                return ;
-                            }
-                            
-                            if(v && cacheData[v]){
-                                dataToOption('mj_cate' + (idx + 1),cacheData[v]);
-                            }else{
-                                
-                                $.ajax({
-                                    type:"GET",
-                                    url:"{url_path('search','getLandCategory')}",
-                                    dataType:"json",
-                                    data:{
-                                        'which' : idx,
-                                        'cate_name1' : $("select[name=mj_cate1]").val(),
-                                        'cate_name2' : $("select[name=mj_cate2]").val(),
-                                        'key' : v
-                                    },
-                                    success:function(data){
-                                        if(v && data.length){
-                                            cacheData[v] = data;
-                                        }
-                                        dataToOption('mj_cate' + (idx + 1),cacheData[v]);
-                                    }
-                                });
-                            }
-                        });
-                        *}
                     });
                 </script>
                 {/if}
                 <script>
                     $(function(){
                         {if $message}
-                            $.jBox.tip('{$message}');
+                            $.jBox.alert('{$message}');
                         {/if}
                             {*
                         $("a.docs").bind("click",function(e){
@@ -1004,13 +916,13 @@
                             
                                 if(cansubmit && $.trim($("textarea[name=reason]").val()).length == 0){
                                     $("textarea[name=reason]").focus();
-                                    $.jBox.tip("请填写退回原因",'提示');
+                                    $.jBox.alert("请填写退回原因",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 {if $info['status'] == '已提交复审'}
                                 if(cansubmit && $("input[name='fault[]']:checked").length == 0){
-                                    $.jBox.tip("请至少勾选一个缺陷",'提示');
+                                    $.jBox.alert("请至少勾选一个缺陷",'提示');
                                     cansubmit = false;
                                 }
                                 
@@ -1018,7 +930,7 @@
                                     var that = $(this);
                                     if(that.prop("checked") && $.trim(that.closest("tr").find("input[type=text]:eq(0)").val()) == ''){
                                         that.closest("tr").find("input[type=text]:eq(0)").focus();
-                                        $.jBox.tip("请填写扣分项目备注",'提示');
+                                        $.jBox.alert("请填写扣分项目备注",'提示');
                                         
                                         cansubmit = false;
                                     }
@@ -1037,13 +949,13 @@
                             if(op == '布置'){
                                 if(cansubmit && ($("#sdate").val() == '' || $("#edate").val() == '')){
                                     $("#sdate").focus();
-                                    $.jBox.tip("请选择时间要求",'提示');
+                                    $.jBox.alert("请选择时间要求",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && $("textarea[name=bz_remark]").val().length == 0){
                                     $("textarea[name=bz_remark]").focus();
-                                    $.jBox.tip("请输入布置备注",'提示');
+                                    $.jBox.alert("请输入布置备注",'提示');
                                     cansubmit = false;
                                 }
                             }
@@ -1051,26 +963,26 @@
                             if(op == '实施'){
                                 if(cansubmit && ($("#sdate").val() == '' || $("#edate").val() == '')){
                                     $("#sdate").focus();
-                                    $.jBox.tip("请选择时间安排",'提示');
+                                    $.jBox.alert("请选择时间安排",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && $("textarea[name=ss_remark]").val().length == 0){
                                     $("textarea[name=ss_remark]").focus();
-                                    $.jBox.tip("请输入实施备注",'提示');
+                                    $.jBox.alert("请输入实施备注",'提示');
                                     cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '已实施' }
                             if(op == '完成'){
                                 if(cansubmit && $("input[name='file_id[]']").length == 0){
-                                    $.jBox.tip("请上传图件文档",'提示');
+                                    $.jBox.alert("请上传图件文档",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 {if $info['type'] == $smarty.const.CH_RCZD}
                                 if(cansubmit && $("input[name='jz_name[]']").length < 4 ){
-                                    $.jBox.tip("请录入界址信息,至少四址",'提示');
+                                    $.jBox.alert("请录入界址信息,至少四址",'提示');
                                     cansubmit = false;
                                 }
                                 if(cansubmit){
@@ -1078,12 +990,12 @@
                                         var tr = $(this);
                                         if($("input[name='jz_name[]']",tr).val() == ''){
                                             $("input[name='jz_name[]']",tr).focus();
-                                            $.jBox.tip("请录入界址线位置",'提示');
+                                            $.jBox.alert("请录入界址线位置",'提示');
                                             cansubmit = false;
                                             return false;
                                         }else if($("input[name='neighbor[]']",tr).val() == ''){
                                             $("input[name='neighbor[]']",tr).focus();
-                                            $.jBox.tip("请录入邻居名称",'提示');
+                                            $.jBox.alert("请录入邻居名称",'提示');
                                             cansubmit = false;
                                             return false;
                                         }
@@ -1096,13 +1008,13 @@
                             if(op == '提交初审'){    
                                 if(cansubmit && $("textarea[name=zc_yj]").val().length == 0){
                                     $("textarea[name=zc_yj]").focus();
-                                    $.jBox.tip("请输入自查意见",'提示');
+                                    $.jBox.alert("请输入自查意见",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && $("textarea[name=zc_remark]").val().length == 0){
                                     $("textarea[name=zc_remark]").focus();
-                                    $.jBox.tip("请输入自查修改和处理意见、说明",'提示');
+                                    $.jBox.alert("请输入自查修改和处理意见、说明",'提示');
                                     cansubmit = false;
                                 }
                             }
@@ -1110,13 +1022,13 @@
                              if(op == '通过初审'){    
                                 if(cansubmit && $("textarea[name=cs_yj]").val().length == 0){
                                     $("textarea[name=cs_yj]").focus();
-                                    $.jBox.tip("请输入初审意见",'提示');
+                                    $.jBox.alert("请输入初审意见",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && $("textarea[name=cs_remark]").val().length == 0){
                                     $("textarea[name=cs_remark]").focus();
-                                    $.jBox.tip("请输入初审修改和处理意见、说明",'提示');
+                                    $.jBox.alert("请输入初审修改和处理意见、说明",'提示');
                                     cansubmit = false;
                                 }
                             }
@@ -1124,13 +1036,13 @@
                              if(op == '通过复审'){    
                                 if(cansubmit && $("textarea[name=fs_yj]").val().length == 0){
                                     $("textarea[name=fs_yj]").focus();
-                                    $.jBox.tip("请输入复审意见",'提示');
+                                    $.jBox.alert("请输入复审意见",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && $("textarea[name=fs_remark]").val().length == 0){
                                     $("textarea[name=fs_remark]").focus();
-                                    $.jBox.tip("请输入复审修改和处理意见、说明",'提示');
+                                    $.jBox.alert("请输入复审修改和处理意见、说明",'提示');
                                     cansubmit = false;
                                 }
                             }
@@ -1138,42 +1050,42 @@
                             if($op == '项目提交'){    
                                 if(cansubmit && $("input[name=title]").val().length == 0){
                                     $("input[name=title]").focus();
-                                    $.jBox.tip("请输入项目成果名称",'提示');
+                                    $.jBox.alert("请输入项目成果名称",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=area]").val())){
                                     $("input[name=area]").focus();
-                                    $.jBox.tip("请输入项目面积",'提示');
+                                    $.jBox.alert("请输入项目面积",'提示');
                                     cansubmit = false;
                                 }
                             }
                             {elseif $info['status'] == '项目已提交' }
                             if(op == '收费'){    
                                 if(cansubmit && $("input[name=get_doc]:checked").length == 0){
-                                    $.jBox.tip("请勾选成果资料资料情况",'提示');
+                                    $.jBox.alert("请勾选成果资料资料情况",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=ys_amount]").val())){
-                                    $.jBox.tip("应收金额非法",'提示');
+                                    $.jBox.alert("应收金额非法",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=ss_amount]").val())){
-                                    $.jBox.tip("实收金额非法",'提示');
+                                    $.jBox.alert("实收金额非法",'提示');
                                     cansubmit = false;
                                 }
                                 
                                 if(cansubmit && $("input[name=fee_type]:checked").length == 0){
-                                    $.jBox.tip("请勾选收费情况",'提示');
+                                    $.jBox.alert("请勾选收费情况",'提示');
                                     cansubmit = false;
                                 }
                             }
                             {/if}
                         
                             if(op != '退回' && cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
-                                $.jBox.tip("请选择发送人",'提示');
+                                $.jBox.alert("请选择发送人",'提示');
                                 cansubmit = false;
                             }
                             

@@ -99,7 +99,7 @@ class Pm extends TZ_Admin_Controller {
 	{
         if($this->isPostRequest()){
             $this->assign('info',$_POST);
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             
             if($this->form_validation->run()){
@@ -115,8 +115,10 @@ class Pm extends TZ_Admin_Controller {
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
             }
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-        
+        $this->assign('gobackUrl',$gobackUrl);
         $this->display();
 		
 	}
