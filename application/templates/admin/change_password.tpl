@@ -12,7 +12,7 @@
                         <td><input type="password" name="new_psw" value="" data-required id="new_psw" style="width:300px;" placeholder="请输入新密码"/>{form_error('new_psw')}</td>
                     </tr>
                     <tr>
-                        <td><label for="new_psw2">新密码</label></td>
+                        <td><label for="new_psw2">新密码确认</label></td>
                         <td><input type="password"  name="new_psw2" value="" data-required id="new_psw2" style="width:300px;" placeholder="请再次输入新密码"/>{form_error('new_psw2')}</td>
                      </tr>
                      <tr>
