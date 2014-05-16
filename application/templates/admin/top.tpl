@@ -151,7 +151,7 @@ a:link,a:visited {
         <tr>
         <td align="right" height="26" style="padding-right:10px;line-height:26px;">
                 您好：<span class="username">{$userProfile['name']}</span>，
-                [<a style="color:#f00;" href="{url_path('pm','receive')}" target="main"><span id="newmsg">新消息({$messageCount})</span></a>]
+                [<a style="color:#f00;" href="{url_path('pm','receive')}" id="newmsglink" target="main"><span id="newmsg">新消息({$messageCount})</span></a>]
                 [<a href="{url_path('admin','change_password')}" target="main">修改密码</a>]
                 [<a href="{url_path('logout')}" target="_top">注销退出</a>]&nbsp;
         </td>
@@ -235,6 +235,13 @@ a:link,a:visited {
     {/if}
 
     $(function(){
+        $("#newmsglink").bind("click",function(e){
+            if(shakTitle){
+                clearInterval(shakTitle);
+            }
+            reqList = [];
+        });
+    
         setInterval(function(){
             checkNewMsg();
         },1000 * 60);

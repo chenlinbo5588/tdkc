@@ -8,7 +8,7 @@
                         <li>
                             <label><strong>设备名称</strong><input type="text" name="name" value="{$smarty.get.name}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            {auth name="device+add"}<a class="addlink" href="{url_path('device','add')}">添加设备</a>{/auth}
+                            {auth name="device+add"}<a class="addlink" href="{url_path('device','add')}">添加仪器设备</a>{/auth}
                         </li>
                      </ul>
                 </form>

@@ -107,7 +107,7 @@ class TZ_Controller extends CI_Controller {
     }
     
     public function setDefaultSEO(){
-        $this->assign('TITLE','慈溪市土地勘测规划设计院协同办公系统');
+        $this->assign('TITLE','慈溪市土地勘测规划设计院有限公司协同办公系统');
         $this->assign('KEYWORDS','');
         $this->assign('DESCRIPTION','');
     }
