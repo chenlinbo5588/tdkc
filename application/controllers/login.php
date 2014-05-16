@@ -16,7 +16,7 @@ class Login extends TZ_Controller {
             $this->assign('remember_account',$session['profile']['account']);
         }
         */
-        $this->setSEO('登录');
+        $this->setTitle('慈溪市土地勘测设计院有限公司办公系统');
         $this->display();
     }
     

@@ -14,7 +14,7 @@
 <div class="fm">
     <table class="table" width="98%" align="center" border="0" cellpadding="3" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px;margin-top:8px;">
         <tr>
-            <td background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'><span><a href="{url_path('pm','receive')}" title="点击查看新消息">新消息({$messageCount})</a></span></td>
+            <td background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'><a href="{url_path('pm','receive')}" title="点击查看新消息">消息({$messageCount})</a> &nbsp; <a href="{url_path('my_event')}" title="点击查看待办事宜">待办事宜({$eventCount})</a></td>
         </tr>
     </table>
 </div>

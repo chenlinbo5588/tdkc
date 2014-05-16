@@ -145,13 +145,13 @@ a:link,a:visited {
     {/if}
     <table width="100%" border="0" cellpadding="0" cellspacing="0" background="/img/frame/topbg.gif">
     <tr>
-        <td width='20%' height="60">{*<img src="/img/frame/logo.gif" />*}<h1 class="logotext">{$TITLE|escape}</h1></td>
+        <td width='20%' height="60">{*<img src="/img/frame/logo.gif" />*}<h1 class="logotext">欢迎使用协同办公系统</h1></td>
         <td width='80%' align="right" valign="bottom">
             <table width="1000" border="0" cellspacing="0" cellpadding="0">
         <tr>
         <td align="right" height="26" style="padding-right:10px;line-height:26px;">
                 您好：<span class="username">{$userProfile['name']}</span>，
-                [<a style="color:#f00;" href="{url_path('pm','receive')}" id="newmsglink" target="main"><span id="newmsg">新消息({$messageCount})</span></a>]
+                [<a style="color:#f00;" href="{url_path('pm','receive')}" id="newmsglink" target="main"><span id="newmsg">消息({$messageCount})</span></a>]
                 [<a href="{url_path('admin','change_password')}" target="main">修改密码</a>]
                 [<a href="{url_path('logout')}" target="_top">注销退出</a>]&nbsp;
         </td>
@@ -193,7 +193,7 @@ a:link,a:visited {
             },
             dataType:"json",
             success:function(sd){
-                $("#newmsg").html("新消息(" + sd.newcount + ")");
+                $("#newmsg").html("消息(" + sd.newcount + ")");
                 if(sd.newcount){
                     if(shakTitle){
                         clearInterval(shakTitle);
@@ -235,13 +235,16 @@ a:link,a:visited {
     {/if}
 
     $(function(){
+    {*
         $("#newmsglink").bind("click",function(e){
             if(shakTitle){
                 clearInterval(shakTitle);
             }
+            
+            top.document.title = "{$TITLE}";
             reqList = [];
         });
-    
+    *}
         setInterval(function(){
             checkNewMsg();
         },1000 * 60);

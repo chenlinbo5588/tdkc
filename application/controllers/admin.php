@@ -81,6 +81,16 @@ class Admin extends TZ_Admin_Controller {
         ));
         
         $this->assign('messageCount',$msgCount);
+        
+        $this->load->model('User_Event_Model');
+        $eventCount = $this->User_Event_Model->getCount(array(
+           'where' => array(
+               'user_id' => $this->_userProfile['id'],
+               'isnew' => 1
+           )
+        ));
+        $this->assign('eventCount',$eventCount);
+        
         $this->display();
     }
     
