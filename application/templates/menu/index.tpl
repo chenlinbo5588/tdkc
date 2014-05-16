@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
             <div class="searchform row-fluid">
-                <a href="{url_path('menu','add')}">添加菜单</a>
+                {auth name="menu+add"}<a href="{url_path('menu','add')}">添加菜单</a>{/auth}
             </div>
             
             <div class="span12">
@@ -28,8 +28,8 @@
                            <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               <a href="{url_path('menu','edit','id=')}{$item['id']}">编辑</a>
-                               <a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('menu','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>
+                               {auth name="menu+add"}<a href="{url_path('menu','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="menu+delete"}<a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('menu','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}
                            </td>
                         </tr>
                         {foreachelse}

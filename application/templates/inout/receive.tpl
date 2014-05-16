@@ -1,7 +1,7 @@
 {include file="common/main_header.tpl"}
         <div class="filebar" >
-            <a href="{url_path('inout','receive')}" class="btn {if $action == 'receive'}active{/if}">收文管理</a>
-            <a href="{url_path('inout','send')}" class="btn {if $action == 'send'}active{/if}">发文管理</a>
+            {auth name="inout+receive"}<a href="{url_path('inout','receive')}" class="btn {if $action == 'receive'}active{/if}">收文管理</a>{/auth}
+            {auth name="inout+send"}<a href="{url_path('inout','send')}" class="btn {if $action == 'send'}active{/if}">发文管理</a>{/auth}
         </div>
         
         <div class="searchform row-fluid">
@@ -14,7 +14,7 @@
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>标题</strong><input type="text" name="title" value="{$smarty.get.title}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('inout','addin')}">添加收文</a>
+                            {auth name="inout+addin"}<a class="addlink" href="{url_path('inout','addin')}">添加收文</a>{/auth}
                             
                         </li>
                      </ul>
@@ -67,8 +67,8 @@
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updator']}</td>
                            <td>
-                               <a href="{url_path('inout','editin','id=')}{$item['id']}">编辑</a>
-                               <a href="javascript:void(0);" class="delete" data-href="{url_path('inout','deletein')}" data-id="{$item['id']}" data-title="{$item['title']|escape}">删除</a>
+                               {auth name="inout+editin"}<a href="{url_path('inout','editin','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="inout+deletein"}<a href="javascript:void(0);" class="delete" data-href="{url_path('inout','deletein')}" data-id="{$item['id']}" data-title="{$item['title']|escape}">删除</a>{/auth}
                            </td>
                         </tr>
                         {/foreach}

@@ -613,12 +613,18 @@ ol.style_decimal , ul.style_decimal {
 /**
  * 首页 
  */
+
+ 
 .fm {
     margin:10px 0;
 }
 
+.more {
+    margin:0 0 0 20px;
+}
 
 .salary_ht {
     padding: 2px 5px;
 }
+
 

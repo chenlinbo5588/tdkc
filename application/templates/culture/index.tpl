@@ -9,7 +9,7 @@
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>标题</strong><input type="text" name="title" value="{$smarty.get.title}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('culture','add')}">添加新闻</a>
+                            {auth name="culture+add"}<a class="addlink" href="{url_path('culture','add')}">添加新闻</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -17,9 +17,9 @@
             <div class="operator">
                 <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                 <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
-                <a href="javascript:publish('id[]');" class="coolbg">发布</a>
-                <a href="javascript:publish('id[]','un');" class="coolbg">取消发布</a>
+                {auth name="culture+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
+                {auth name="culture+publish"}<a href="javascript:publish('id[]');" class="coolbg">发布</a>{/auth}
+                {auth name="culture+unpublish"}<a href="javascript:publish('id[]','un');" class="coolbg">取消发布</a>{/auth}
             </div>
             <div class="span12">
                 {if $data['data']}
@@ -53,7 +53,7 @@
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               <a href="{url_path('culture','edit','id=')}{$item['id']}">编辑</a>
+                               {auth name="culture+edit"}<a href="{url_path('culture','edit','id=')}{$item['id']}">编辑</a>{/auth}
                            </td>
                         </tr>
                         {/foreach}

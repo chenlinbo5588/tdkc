@@ -19,18 +19,18 @@
                             </label>
                             <label><strong>状态</strong>
                                 <select name="status" >
-                                    <option value="">全部</option>
-                                    <option value="新增">新增</option>
-                                    <option value="已发送">已发送</option>
-                                    <option value="已布置">已布置</option>
-                                    <option value="已实施">已实施</option>
-                                    <option value="已完成">已完成</option>
-                                    <option value="已提交初审">已提交初审</option>
-                                    <option value="已提交复审">已提交复审</option>
-                                    <option value="已提交">已提交</option>
-                                    <option value="项目已提交">项目已提交</option>
-                                    <option value="已收费">已收费</option>
-                                    <option value="已归档">已归档</option>
+                                    <option value="" {if $smarty.get.status == ''}selected{/if}>全部</option>
+                                    <option value="新增" {if $smarty.get.status == '新增'}selected{/if}>新增</option>
+                                    <option value="已发送" {if $smarty.get.status == '已发送'}selected{/if}>已发送</option>
+                                    <option value="已布置" {if $smarty.get.status == '已布置'}selected{/if}>已布置</option>
+                                    <option value="已实施" {if $smarty.get.status == '已实施'}selected{/if}>已实施</option>
+                                    <option value="已完成" {if $smarty.get.status == '已完成'}selected{/if}>已完成</option>
+                                    <option value="已提交初审" {if $smarty.get.status == '已提交初审'}selected{/if}>已提交初审</option>
+                                    <option value="已提交复审" {if $smarty.get.status == '已提交复审'}selected{/if}>已提交复审</option>
+                                    <option value="已提交" {if $smarty.get.status == '已提交'}selected{/if}>已提交</option>
+                                    <option value="项目已提交" {if $smarty.get.status == '项目已提交'}selected{/if}>项目已提交</option>
+                                    <option value="已收费" {if $smarty.get.status == '已收费'}selected{/if}>已收费</option>
+                                    <option value="已归档" {if $smarty.get.status == '已归档'}selected{/if}>已归档</option>
                                 </select>
                             </label>
                             {*<label><input type="checkbox" name="view" value="my" {if $smarty.get.view == 'my'}checked{/if}/>我登记的</label>*}
@@ -47,9 +47,8 @@
                 <div class="operator">
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                    <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
-                    <a href="javascript:sendAll('id[]');" class="coolbg">发送</a>
-                    {*<a href="javascript:tuihuiSelAll('id[]');" class="coolbg">退回</a>*}
+                    {auth name="project_ch+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
+                    {auth name="project_ch+sendone"}<a href="javascript:sendAll('id[]');" class="coolbg">发送</a>{/auth}
                 </div>
                 {/if}
                 <form name="listform" action="" method="post">
@@ -91,12 +90,12 @@
                            <td>
                                {if $action == 'send' }
                                 {if $item['status'] == '新增' && $item['user_id'] == $userProfile['id']}
-                                <a href="{url_path('project_ch','edit','id=')}{$item['id']}">编辑</a>
+                                {auth name="project_ch+edit"}<a href="{url_path('project_ch','edit','id=')}{$item['id']}">编辑</a>{/auth}
                                 {/if}
                                {/if}
                                
                                {if $action == 'implement'}
-                               <a class="addlog" href="javascript:void(0);" data-id="{$item['id']}" data-href="{url_path('project_ch','log','id=')}{$item['id']}">添加日志</a>
+                               {auth name="project_ch+log"}<a class="addlog" href="javascript:void(0);" data-id="{$item['id']}" data-href="{url_path('project_ch','log','id=')}{$item['id']}">添加日志</a>{/auth}
                                {/if}
                             </td>
                             

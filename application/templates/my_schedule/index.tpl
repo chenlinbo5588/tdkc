@@ -12,7 +12,7 @@
                             
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
                             
-                            <a class="addlink" href="{url_path('my_schedule','add')}">添加日程</a>
+                            {auth name="my_schedule+add"}<a class="addlink" href="{url_path('my_schedule','add')}">添加日程</a>{/auth}
                         </li>
                      </ul>
                 </form>

@@ -13,7 +13,7 @@
                                 </select>
                             </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a  class="addlink" href="{url_path('role','add')}">添加角色</a>
+                            {auth name="role+add"}<a  class="addlink" href="{url_path('role','add')}">添加角色</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -46,10 +46,10 @@
                            <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               <a href="{url_path('role','auth','id=')}{$item['id']}">设置权限</a>
-                               <a href="{url_path('role','edit','id=')}{$item['id']}">编辑</a>
+                               {auth name="role+auth"}<a href="{url_path('role','auth','id=')}{$item['id']}">设置权限</a>{/auth}
+                               {auth name="role+edit"}<a href="{url_path('role','edit','id=')}{$item['id']}">编辑</a>{/auth}
                                {if $item['status'] != '已删除'}
-                               <a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('role','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>
+                               {auth name="role+delete"}<a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('role','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}
                                {/if}
                            </td>
                         </tr>

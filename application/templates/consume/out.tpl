@@ -12,7 +12,7 @@
                             <label><strong>耗材名称</strong><input type="text" name="name" value="{$smarty.get.name}"/></label>
                             <label><strong>领取人</strong><input type="text" name="owner" value="{$smarty.get.owner}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('consume','addout')}">增加出库</a>    
+                            {auth name="consume+addout"}<a class="addlink" href="{url_path('consume','addout')}">增加出库</a>{/auth}
                         </li>
                      </ul>
                 </form>

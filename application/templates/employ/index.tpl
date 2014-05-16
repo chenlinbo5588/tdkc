@@ -17,7 +17,7 @@
                                 </select>
                             </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('employ','add')}">添加员工</a>
+                            {auth name="employ+add"}<a class="addlink" href="{url_path('employ','add')}">添加员工</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -53,9 +53,9 @@
                            <td>{$item['status']}</td>
                            <td>
                                {if $item['status'] != '已删除'}
-                               <a href="{url_path('employ','edit','id=')}{$item['id']}">编辑</a>
+                               {auth name="employ+edit"}<a href="{url_path('employ','edit','id=')}{$item['id']}">编辑</a>{/auth}
                                {/if}
-                               {if $item['id'] != 1 && $item['status'] != '已删除'}<a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('employ','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/if}
+                               {if $item['id'] != 1 && $item['status'] != '已删除'}{auth name="employ+delete"}<a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('employ','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}{/if}
                             </td>
                         </tr>
                         {foreachelse}

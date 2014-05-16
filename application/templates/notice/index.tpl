@@ -9,7 +9,7 @@
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>标题</strong><input type="text" name="title" value="{$smarty.get.title}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('notice','add')}">添加滚动公告</a>
+                            {auth name="notice+add"}<a class="addlink" href="{url_path('notice','add')}">添加滚动公告</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -42,8 +42,8 @@
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               <a href="{url_path('notice','edit','id=')}{$item['id']}">编辑</a>
-                               <a href="javascript:void(0);" class="delete" data-title="{$item['title']|escape}" data-id="{$item['id']}" data-href="{url_path('notice','delete','id=')}{$item['id']}" data-href="">删除</a>
+                               {auth name="notice+edit"}<a href="{url_path('notice','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="notice+delete"}<a href="javascript:void(0);" class="delete" data-title="{$item['title']|escape}" data-id="{$item['id']}" data-href="{url_path('notice','delete','id=')}{$item['id']}" data-href="">删除</a>{/auth}
                            </td>
                         </tr>
                         {/foreach}

@@ -14,7 +14,7 @@
                                 </select>
                             </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('user','add')}">添加用户</a>
+                            {auth name="user+add"}<a class="addlink" href="{url_path('user','add')}">添加用户</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -53,9 +53,9 @@
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                {if $item['status'] != '已删除'}
-                               <a href="{url_path('user','edit','id=')}{$item['id']}">编辑</a>
+                               {auth name="user+edit"}<a href="{url_path('user','edit','id=')}{$item['id']}">编辑</a>{/auth}
                                {/if}
-                               {if $item['id'] != 1 && $item['status'] != '已删除'}<a href="{url_path('user','auth','id=')}{$item['id']}">设置权限</a> <a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('user','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/if}
+                               {if $item['id'] != 1 && $item['status'] != '已删除'}{auth name="user+auth"}<a href="{url_path('user','auth','id=')}{$item['id']}">设置权限</a>{/auth} {auth name="user+delete"}<a href="javascript:void(0);" data-title="{$item['name']}" data-href="{url_path('user','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}{/if}
                             </td>
                         </tr>
                         {foreachelse}

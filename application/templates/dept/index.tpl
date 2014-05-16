@@ -1,6 +1,6 @@
 {include file="common/main_header.tpl"}
             <div class="searchform row-fluid">
-                <a href="{url_path('dept','add')}">添加部门</a>
+                {auth name="dept+add"}<a href="{url_path('dept','add')}">添加部门</a>{/auth}
             </div>
             
             <div class="span12 clearfix">
@@ -14,10 +14,12 @@
                         {foreach from=$data item=item}
                         <tr id="row_{$item['id']}">
                         {if $item['id'] != 1}
-                            <td><a class="delete" href="javascript:void(0);" data-title="{$item['name']}" data-id="{$item['id']}" data-href="{url_path('dept','delete','id=')}{$item['id']}">【删除】</a>
-                            <a class="tree_item" href="{url_path('dept','edit','id=')}{$item['id']}">{$item['sep']}{$item['name']}</a></td>
+                            <td>
+                                {auth name="dept+delete"}<a class="delete" href="javascript:void(0);" data-title="{$item['name']}" data-id="{$item['id']}" data-href="{url_path('dept','delete','id=')}{$item['id']}">【删除】</a>{/auth}
+                                {auth name="dept+edit"}<a class="tree_item" href="{url_path('dept','edit','id=')}{$item['id']}">{$item['sep']}{$item['name']}</a>{/auth}
+                            </td>
                         {else}
-                            <td><a href="{url_path('dept','edit','id=')}{$item['id']}">{$item['name']}</a></td>
+                            <td>{auth name="dept+edit"}<a href="{url_path('dept','edit','id=')}{$item['id']}">{$item['name']}</a>{/auth}</td>
                          {/if}
                         </div>
                         {foreachelse}

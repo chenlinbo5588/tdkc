@@ -10,7 +10,7 @@
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>耗材名称</strong><input type="text" name="name" value="{$smarty.get.name}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('consume','addin')}">增加入库</a>
+                            {auth name="consume+addin"}<a class="addlink" href="{url_path('consume','addin')}">增加入库</a>{/auth}
                         </li>
                      </ul>
                 </form>

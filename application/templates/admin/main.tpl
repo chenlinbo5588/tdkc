@@ -13,46 +13,67 @@
       
 <div class="fm">
     <table class="table" width="98%" align="center" border="0" cellpadding="3" cellspacing="1" bgcolor="#CBD8AC" style="margin-bottom:8px;margin-top:8px;">
-    <tr>
-        <td background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'><span><a href="{url_path('pm','receive')}">新消息({$messageCount})</a></span></td>
-    </tr>
+        <tr>
+            <td background="/img/frame/wbg.gif" bgcolor="#EEF4EA" class='title'><span><a href="{url_path('pm','receive')}" title="点击查看新消息">新消息({$messageCount})</a></span></td>
+        </tr>
     </table>
 </div>
 <div class="fm">
     <table class="table" width="98%" align="center" border="0" >
-        <tr>
-            <td background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>公告</span></td>
-    </tr>
-    {foreach from=$announceList item=item}
-        <tr>
-            <td><a class="news_item" href="javascript:void(0);" data-href="{url_path('news','andetail','id=')}{$item['id']}">{$item['title']|escape}</a></td>
-        </tr>
-    {/foreach}
+        <colgroup>
+            <col width="80%"/>
+            <col width="20%"/>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td colspan="2" background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>公告</span><a class="more" href="{url_path('pub','anlist')}">更多&gt;&gt;</a></td>
+            </tr>
+        {foreach from=$announceList item=item}
+            <tr>
+                <td><a class="news_item" href="javascript:void(0);" data-href="{url_path('pub','andetail','id=')}{$item['id']}">{$item['title']|escape}</a></td>
+                <td>[{$item['createtime']|date_format:"Y-m-d"}]</td>
+            </tr>
+        {/foreach}
+        </tbody>
     </table>
 </div>
 <div class="fm">
     <table class="table" width="98%" align="center" border="0" >
-        <tr>
-            <td background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>新闻</span></td>
-    </tr>
-    {foreach from=$newsList item=item}
-        <tr>
-            <td><a class="news_item" href="javascript:void(0);" data-href="{url_path('news','detail','id=')}{$item['id']}">{$item['title']|escape}</a></td>
-        </tr>
-    {/foreach}
+        <colgroup>
+            <col width="80%"/>
+            <col width="20%"/>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td colspan="2" background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>新闻</span><a class="more" href="{url_path('pub','newslist')}">更多&gt;&gt;</a></td>
+            </tr>
+        {foreach from=$newsList item=item}
+            <tr>
+                <td><a class="news_item" href="javascript:void(0);" data-href="{url_path('pub','detail','id=')}{$item['id']}">{$item['title']|escape}</a></td>
+                <td>[{$item['createtime']|date_format:"Y-m-d"}]</td>
+            </tr>
+        {/foreach}
+        </tbody>
     </table>
 </div>
 
 <div class="fm">
     <table class="table" width="98%" align="center" border="0" >
-        <tr>
-            <td background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>制度建设</span></td>
-    </tr>
-    {foreach from=$zhiduList item=item}
-        <tr>
-            <td><a href="{url_path('attachment','download','id=')}{$item['id']}" >{$item['title']|escape}</a></td>
-        </tr>
-    {/foreach}
+        <colgroup>
+            <col width="80%"/>
+            <col width="20%"/>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td colspan="2" background="/img/frame/wbg.gif"  bgcolor="#EEF4EA" class='title'><span>制度建设</span><a class="more" href="{url_path('pub','instlist')}">更多&gt;&gt;</a></td>
+            </tr>
+        {foreach from=$zhiduList item=item}
+            <tr>
+                <td><a href="{url_path('attachment','download','id=')}{$item['id']}" >{$item['title']|escape}</a></td>
+                <td>[{$item['createtime']|date_format:"Y-m-d"}]</td>
+            </tr>
+        {/foreach}
+        </tbody>
     </table>
 </div>
 <script>
@@ -62,6 +83,5 @@
             $.jBox("get:" + that.attr("data-href"),{ title:"详情",width:700,height:600 });
         });
     });
-    
 </script>    
 {include file="common/main_footer.tpl"}

@@ -8,7 +8,7 @@
                         <li>
                             <label><strong>设备名称</strong><input type="text" name="name" value="{$smarty.get.name}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('device','add')}">添加设备</a>
+                            {auth name="device+add"}<a class="addlink" href="{url_path('device','add')}">添加设备</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -38,8 +38,8 @@
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                {if $item['status'] != '已删除'}
-                               <a href="{url_path('device','edit','id=')}{$item['id']}">编辑</a>
-                               <a href="javascript:void(0);" data-title="{$item['name']|escape}" data-href="{url_path('device','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>
+                               {auth name="device+edit"}<a href="{url_path('device','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="device+delete"}<a href="javascript:void(0);" data-title="{$item['name']|escape}" data-href="{url_path('device','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}
                                {/if}
                             </td>
                         </tr>

@@ -105,4 +105,15 @@ class TZ_Admin_Controller extends TZ_Controller {
         
     }
     
+    public function getAuthList(){
+        if(self::$_userAuth){
+            return self::$_userAuth;
+        }else{
+            return array();
+        }
+    }
+
+    public function getUserProfile(){
+        return $this->_userProfile;
+    }
 }

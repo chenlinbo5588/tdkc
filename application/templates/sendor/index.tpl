@@ -1,7 +1,7 @@
 {include file="common/main_header.tpl"}
 
         <div class="searchform row-fluid">
-            <a class="addlink" href="{url_path('sendor','add')}">设置发送人</a>
+            {auth name="sendor+add"}<a class="addlink" href="{url_path('sendor','add')}">设置发送人</a>{/auth}
             {*
                 <form action="{url_path('sendor')}" method="get" name="searchform">
                     <input type="hidden" value="sendor" name="{config_item('controller_trigger')}"/>

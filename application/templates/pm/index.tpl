@@ -1,8 +1,8 @@
 {include file="common/main_header.tpl"}
         <div class="filebar" >
-            <a href="{url_path('pm','receive')}" class="btn"><img src="/img/pm/yd.png" align="top"/>收消息</a>
-            <a href="{url_path('pm','send')}" class="btn"><img src="/img/wp/upload_file_icon.gif" align="absmiddle"/>已发消息</a>
-            <a href="{url_path('pm','trash')}"class="btn"><img src="/img/wp/folder.gif" align="absmiddle"/>垃圾箱</a>
+            {auth name="pm+receive"}<a href="{url_path('pm','receive')}" class="btn"><img src="/img/pm/yd.png" align="top"/>收消息</a>{/auth}
+            {auth name="pm+send"}<a href="{url_path('pm','send')}" class="btn"><img src="/img/wp/upload_file_icon.gif" align="absmiddle"/>已发消息</a>{/auth}
+            {auth name="pm+trash"}<a href="{url_path('pm','trash')}"class="btn"><img src="/img/wp/folder.gif" align="absmiddle"/>垃圾箱</a>{/auth}
         </div>
         
         
@@ -17,7 +17,7 @@
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>标题</strong><input type="text" name="title" value="{$smarty.get.title}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('pm','add')}">添加消息</a>
+                            {auth name="pm+add"}<a class="addlink" href="{url_path('pm','add')}">添加消息</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -31,10 +31,10 @@
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
                     {/if}
                     {if $action == 'receive'}
-                    <a href="javascript:readedSelAll('id[]');" class="coolbg">设置已读</a>
+                    {auth name="pm+setread"}<a href="javascript:readedSelAll('id[]');" class="coolbg">设置已读</a>{/auth}
                     {/if}
                     {if $action != 'trash'}
-                    <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
+                    {auth name="pm+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
                     {/if}
                 </div>
                 {if $data['data']}

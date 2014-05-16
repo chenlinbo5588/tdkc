@@ -9,7 +9,7 @@
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>项目名称</strong><input type="text" name="title" value="{$smarty.get.title|escape}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('doc','add')}">添加合同</a>
+                            {auth name="doc+add"}<a class="addlink" href="{url_path('doc','add')}">添加合同</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -17,8 +17,8 @@
             <div class="operator">
                 <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                 <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
-                <a href="javascript:setcomplete('id[]');" class="coolbg">完成</a>
+                {auth name="doc+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
+                {auth name="doc+complete"}<a href="javascript:setcomplete('id[]');" class="coolbg">完成</a>{/auth}
             </div>
             <div class="span12">
                 {if $data['data']}
@@ -65,7 +65,7 @@
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
-                               <a href="{url_path('doc','edit','id=')}{$item['id']}">编辑</a>
+                               {auth name="doc+edit"}<a href="{url_path('doc','edit','id=')}{$item['id']}">编辑</a>{/auth}
                            </td>
                         </tr>
                         {/foreach}

@@ -56,7 +56,7 @@
                                 <td>{$item['salary_text']}</td>
                             </tr>
                             {foreachelse}
-                            <tr><td colspan="3">还没有日志</td></tr>
+                            <tr><td colspan="3">还没有薪资日志</td></tr>
                             {/foreach}
                         </tbody>
                     </table>

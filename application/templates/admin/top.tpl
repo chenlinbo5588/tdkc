@@ -130,18 +130,22 @@ a:link,a:visited {
   padding-left:10px;
   /* background:url(/img/frame/toprightbg.gif) no-repeat; */
 }
+
+.logotext {
+    padding:5px;
+}
 </style>
 </head>
 <body bgColor='#ffffff'>
 <div style="position: relative;">
     {if $notice}
-    <div style="position:absolute;width:400px;top:30px;margin-left:200px;">
+    <div style="position:absolute;width:400px;top:30px;">
         <marquee scrollamount="2" scrolldelay="10" align="top">{$notice['title']|escape}</marquee>
     </div>
     {/if}
     <table width="100%" border="0" cellpadding="0" cellspacing="0" background="/img/frame/topbg.gif">
     <tr>
-        <td width='20%' height="60"><img src="/img/frame/logo.gif" /></td>
+        <td width='20%' height="60">{*<img src="/img/frame/logo.gif" />*}<h1 class="logotext">{$TITLE|escape}</h1></td>
         <td width='80%' align="right" valign="bottom">
             <table width="1000" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -159,12 +163,12 @@ a:link,a:visited {
             <dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(0);"><img vspace="3" src="/img/frame/arrfc.gif" border="0" width="12" height="12" alt="显示/隐藏左框架" title="显示/隐藏左框架" /></a></dd>
             {*<dd class='img' style="margin-right:10px;"><a href="javascript:ChangeMenu(1);"><img vspace="5" src="/img/frame/arrr.gif" border="0" width="5" height="8" alt="增大左框架" title="增大左框架" /></a></dd>*}
             <dd><div class="itemsel" id="item1"><a href="{url_path('admin')}" onclick="changeSel(1)" target="_top">首页</a></div></dd>
-            <dd><div class="item" id="item2"><a href="{url_path('personal')}" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>
-            <dd><div class="item" id="item3"><a href="{url_path('project')}" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>
-            <dd><div class="item" id="item4"><a href="{url_path('project','guihua')}" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>
-            <dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>
-            <dd><div class="item" id="item6"><a href="{url_path('info')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>
-            <dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>
+            {auth name="personal"}<dd><div class="item" id="item2"><a href="{url_path('personal')}" onclick="changeSel(2)" target="menu">个人办公</a></div></dd>{/auth}
+            {auth name="project"}<dd><div class="item" id="item3"><a href="{url_path('project')}" onclick="changeSel(3)" target="menu">测绘项目</a></div></dd>{/auth}
+            {auth name="project+guihua"}<dd><div class="item" id="item4"><a href="{url_path('project','guihua')}" onclick="changeSel(4)" target="menu">规划项目</a></div></dd>{/auth}
+            {auth name="office"}<dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>{/auth}
+            {auth name="info"}<dd><div class="item" id="item6"><a href="{url_path('info')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>{/auth}
+            {auth name="system"}<dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>{/auth}
             </dl>
             </td>
         </tr>

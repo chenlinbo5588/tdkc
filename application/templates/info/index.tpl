@@ -8,10 +8,10 @@
         <dt onClick='showHide("items2_1")'><b>信息中心</b></dt>
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
-            <li><a href="{url_path('announce')}">通知公告</a></li>
-            <li><a href="{url_path('notice')}">滚动公告</a></li>
-            <li><a href="{url_path('inst')}">制度建设</a></li>
-            <li><a href="{url_path('culture')}">企业文化</a></li>
+            {auth name="announce"}<li><a href="{url_path('announce')}">通知公告</a></li>{/auth}
+            {auth name="notice"}<li><a href="{url_path('notice')}">滚动公告</a></li>{/auth}
+            {auth name="inst"}<li><a href="{url_path('inst')}">制度建设</a></li>{/auth}
+            {auth name="culture"}<li><a href="{url_path('culture')}">企业文化</a></li>{/auth}
           </ul>
         </dd>
       </dl>

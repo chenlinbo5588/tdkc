@@ -46,7 +46,7 @@
                            <td>{$item['status']}</td>
                            <td>
                                {if $item['status'] != '已删除'}
-                               <a href="{url_path('salary','adjust','user_id=')}{$item['id']}">调整工资</a>
+                               {auth name="salary+adjust"}<a href="{url_path('salary','adjust','user_id=')}{$item['id']}">调整工资</a>{/auth}
                                {/if}
                             </td>
                         </tr>

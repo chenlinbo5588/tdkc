@@ -24,8 +24,8 @@
             <div class="operator">
                 <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                 <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
-                <a href="javascript:dealAll('id[]');" class="coolbg">设为已处理</a>
+                {auth name="my_event+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
+                {auth name="my_event+deal"}<a href="javascript:dealAll('id[]');" class="coolbg">设为已处理</a>{/auth}
                 {*<a href="javascript:tuihuiSelAll('id[]');" class="coolbg">退回</a>*}
             </div>
             <div class="span12">
