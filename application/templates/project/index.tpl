@@ -18,6 +18,7 @@
             {auth name="project_ch+fee"}<li><a href="{url_path('project_ch','fee')}">项目收费</a></li>{/auth}
             {auth name="project_ch+archive"}<li><a href="{url_path('project_ch','archive')}">项目归档</a></li>{/auth}
             {auth name="project_ch"}<li><a href="{url_path('project_ch')}">项目查询</a></li>{/auth}
+            {auth name="project_ch+statistics"}<li><a href="{url_path('project_ch','statistics')}">项目统计</a></li>{/auth}
           </ul>
         </dd>
       </dl>

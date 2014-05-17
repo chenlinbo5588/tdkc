@@ -119,6 +119,10 @@ class TZ_Model extends CI_Model {
             }
         }
         
+        if($condition['group_by']){
+            $this->db->group_by($condition['group_by']); 
+        }
+        
         if($condition['order']){
             $this->db->order_by($condition['order']);
         }else{

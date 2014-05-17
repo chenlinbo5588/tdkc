@@ -47,6 +47,62 @@ class project_ch extends TZ_Admin_Controller {
 		$this->display();
 	}
     
+    
+    /**
+     * 统计 
+     */
+    public function statistics(){
+        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('projectTypeList',$projectTypeList['data']);
+        
+        
+        $condition = array();
+        
+        $fields = array('COUNT(*) AS cnt', 'year' ,'month','region_name','pm','type','fee_type');
+        
+        if(!empty($_GET['sdate'])){
+            $condition['where']['createtime >='] = strtotime($_GET['sdate']);
+        }
+
+        if(!empty($_GET['edate'])){
+            $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
+        }
+        
+        
+        $condition['group_by'] = array('year','month');
+        
+        if(!empty($_GET['region_name'])){
+            $condition['where']['region_name'] = $_GET['region_name'];
+        }else{
+            array_push($condition['group_by'],'region_name');
+        }
+        
+        if(!empty($_GET['pm'])){
+            $condition['where']['pm'] = $_GET['pm'];
+        }else{
+            array_push($condition['group_by'],'pm');
+        }
+        
+        if(!empty($_GET['type'])){
+            $condition['where']['type'] = $_GET['type'];
+        }else{
+            array_push($condition['group_by'],'type');
+        }
+        
+        if(!empty($_GET['fee_type'])){
+            $condition['where']['fee_type'] = $_GET['fee_type'];
+        }else{
+            array_push($condition['group_by'],'fee_type');
+        }
+        
+        $condition['select'] = implode(',',$fields);
+        $data = $this->Project_Model->getList($condition);
+        
+        $this->assign('data',$data);
+        $this->display();
+    }
+    
+    
     /**
      * 获得上次
      * @param type $project
@@ -1596,6 +1652,14 @@ class project_ch extends TZ_Admin_Controller {
             
             if(!empty($_GET['type'])){
                 $condition['where']['type'] = $_GET['type'];
+            }
+            
+            if(!empty($_GET['sdate'])){
+                $condition['where']['createtime >='] = strtotime($_GET['sdate']);
+            }
+            
+            if(!empty($_GET['edate'])){
+                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
             }
             
             if($_GET['view'] == 'my'){
