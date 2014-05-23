@@ -6,7 +6,7 @@
 
 body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
 	outline-style:none;
-	font-family:"Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-family: "Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 html {
@@ -189,18 +189,31 @@ textarea.noborder {
  * 打印自动分页
  */
 .jzb , .mjb {
-    page-break-before:always;
     page-break-after:always;
-    
+}
+
+
+.jzb , .mjb {
+    width:700px;
+    margin:0 auto;
 }
 
 .jzb .fulltable, .check .fulltable {
     width:100%;
 }
 
+.jzb .title {
+    font-size:30px;
+    font-weight: normal;
+}
+
+.jzb .sepline {
+    font-size: 15px;
+    font-weight: bold;
+}
 
 .jzb th , .jzb td {
-    height:30px;
+    height:35px;
 }
 
 .direction {
@@ -215,6 +228,10 @@ textarea.noborder {
 
 .jzb .borderTop {
     border-top:1px solid black;
+}
+
+.jzb .yj_item {
+    margin-left:20px;
 }
 
 /**
@@ -262,6 +279,12 @@ input.viliage {
 .mjb .bh ,.mjb .word , .mjb .nature  {
     margin: 0 0 0 20px;
 }
+
+.mjb .mjb_title {
+    font-size:26px;
+}
+
+
 
 .mjb .toptitle {
     letter-spacing:20px;

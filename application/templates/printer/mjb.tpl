@@ -5,6 +5,12 @@
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
         <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
+        <style>
+            body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
+                font-family: "隶书","Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+                font-size: 15px;
+            }
+        </style>
         <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" href="/css/ie6.css" />
         <![endif]-->
@@ -34,11 +40,11 @@
                             </tr>
                             <tr>
                                 <td class="center toptitle" colspan="3" >单位名称</td>
-                                <td colspan="4" class="inputarea">{$info['name']|escape}</td>
+                                <td colspan="4" class="inputarea center">{$info['name']|escape}</td>
                             </tr>
                             <tr class="center">
                                 <td colspan="3" class="toptitle">主送部门</td>
-                                <td colspan="4" class="toptitle">市国土资源局</td>
+                                <td colspan="4" class="toptitle">慈溪市国土资源局</td>
                             </tr>
                             <tr class="title_col">
                                 <td colspan="3">
@@ -249,11 +255,11 @@
                         </tr>
                         <tr>
                             <td class="center toptitle" colspan="3" >单位名称</td>
-                            <td colspan="4" class="inputarea">{$info['name']|escape}</td>
+                            <td colspan="4" class="inputarea center">{$info['name']|escape}</td>
                         </tr>
                         <tr class="center">
                             <td colspan="3" class="toptitle">主送部门</td>
-                            <td colspan="4" class="toptitle">市国土资源局</td>
+                            <td colspan="4" class="toptitle">慈溪市国土资源局</td>
                         </tr>
                         <tr class="title_col">
                             <td colspan="3">
@@ -637,8 +643,10 @@
                     if(v != ''){
                         name = $("option:selected",that).html();
                         name = name.substring(0, name.indexOf('('));
+                        
+                        that.siblings(".showtext").html(name + '<br/>(' + v  + ')').show();
                     }
-                    that.siblings(".showtext").html(name + '<br/>(' + v  + ')').show();
+                    
                     that.hide();
                 });
                 

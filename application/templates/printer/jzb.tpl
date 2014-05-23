@@ -11,7 +11,7 @@
         <div class="container">
             {foreach name=pg from=$pageAr item=pageIndex}
             <div class="jzb">
-                <h1 class="center">宗地界址调查表</h1>
+                <h1 class="title center">宗地界址调查表</h1>
                 <div><strong>QR-10-03</strong></div>
                 <table class="fulltable border1" style="table-layout:fixed">
                     <colgroup>
@@ -56,7 +56,7 @@
                                 {/if}
                                 *}
                             </td>
-                            <td class="center">{($pageIndex - 1) * 10 + $key + 1} -- {if $smarty.foreach.pg.last && $smarty.foreach.jz.last}1{else}{($pageIndex - 1) * 10 + $key + 2}{/if}</td>
+                            <td class="center">{($pageIndex - 1) * 10 + $key + 1} <strong class="sepline">--</strong> {if $smarty.foreach.pg.last && $smarty.foreach.jz.last}1{else}{($pageIndex - 1) * 10 + $key + 2}{/if}</td>
                             <td>{$item['name']}</td>
                             <td>{$item['neighbor']}</td>
                             <td></td>
@@ -82,7 +82,7 @@
                         </tr>
                         <tr>
                             <td colspan="4" style="padding:3px;vertical-align: middle;">
-                                <ul>
+                                <ul style="margin-left:10px;">
                                     <li style="width: 50%;float:left;">指界人： </li>
                                     <li style="width: 48%;float:left;">测量者: {$info['pm']}</li>
                                 </ul>
@@ -96,9 +96,9 @@
                                 </ul>
                             </td>
                             <td colspan="4" style="text-align:left;padding:3px;">
-                                <p>该宗地地号：</p>
-                                <p>调查人签名：        (公章)</p>
-                                <ul>
+                                <p class="yj_item">该宗地地号：</p>
+                                <p class="yj_item">调查人签名：        (公章)</p>
+                                <ul class="yj_item">
                                     <li style="width:50%;float:left;">所（分局）领导签字：</li>
                                     <li style="float:left;">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>
                                 </ul>
