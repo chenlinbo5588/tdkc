@@ -5,6 +5,7 @@
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
         <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="/js/jquery.transform2d.js"></script>
         <style>
             body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
                 font-family: "隶书","Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -22,6 +23,7 @@
             <textarea name="mjb" style="display: none;"></textarea>
             <div id="oparea" class="center">
                 <input type="submit" name="submit" value="保存"  class="btn btn-sm btn-orange"/>
+                <input type="button" name="addDjx" value="添加对角线"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addMjb">+增加面积表</a>
                 <div><em>键盘组合建 Alt + Enter 隐藏本区域</em></div>
             </div>
@@ -47,10 +49,18 @@
                                 <td colspan="4" class="toptitle">慈溪市国土资源局</td>
                             </tr>
                             <tr class="title_col">
-                                <td colspan="3">
-                                    <span style="float:right">分村土地面积</span>
-                                    <br/>
-                                    <span>土地分类</span>
+                                <td colspan="3" class="two_title">
+                                    <div class="two_title_wrap">
+                                        <span style="float:right">分村土地面积</span>
+                                        <br/>
+                                        <span>土地分类</span>
+                                        <div class="djline"></div>
+                                        <div class="adjust_area">
+                                            <a href="javascript:void(0);">+增加角度</a>&nbsp;
+                                            <label>步长<input type="text" class="step" name="step" value="0.5"/></label>
+                                            <a href="javascript:void(0);">+减少角度</a>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="center inputarea"></td>
                                 <td class="center inputarea"></td>
@@ -262,10 +272,18 @@
                             <td colspan="4" class="toptitle">慈溪市国土资源局</td>
                         </tr>
                         <tr class="title_col">
-                            <td colspan="3">
-                                <span style="float:right">分村土地面积</span>
-                                <br/>
-                                <span>土地分类</span>
+                            <td colspan="3" class="two_title">
+                                <div class="two_title_wrap">
+                                    <span style="float:right">分村土地面积</span>
+                                    <br/>
+                                    <span>土地分类</span>
+                                    <div class="adjust_area">
+                                        <a href="javascript:void(0);" class="adjust_add">+增加角度</a>&nbsp;
+                                        <label>步长<input type="text" class="step" name="step" value="0.5"/></label>
+                                        <a href="javascript:void(0);" class="adjust_minus">+减少角度</a>
+                                    </div>
+                                    <div class="djline"></div>
+                                </div>
                             </td>
                             <td class="center inputarea"></td>
                             <td class="center inputarea"></td>
@@ -732,6 +750,45 @@
                 {* 提交按钮 *}
                 $("input[name=submit]").bind("click",function(e){
                     $("textarea[name=mjb]").val($(".container").html());
+                });
+                
+                {* 添加对角线按钮 *}
+                
+                $("body").delegate(".two_title_wrap",'mouseenter',function(e){
+                    $(this).find(".adjust_area").show();
+                });
+                
+                $("body").delegate(".two_title_wrap",'mouseleave',function(e){
+                    $(this).find(".adjust_area").hide();
+                });
+                
+                $("body").delegate(".adjust_area a",'click',function(e){
+                    var that = $(this);
+                    
+                    if($(this).hasClass('adjust_add')){
+                        
+                    }else{
+                    
+                    }
+                    
+                    
+                    console.log(that.parent().siblings(".djline").css("transform"));
+                });
+                
+                $("input[name=addDjx]").bind('click',function(e){
+                    $(".two_title_wrap").each(function(){
+                        //var f1 = $(this).offset();
+                        var w = $(this).outerWidth();
+                        var h = $(this).outerHeight();
+                        
+                        var s = Math.sqrt(w * w + h * h);
+                        var deg = (w / s) *360 ;
+                        
+                        $('.djline',$(this).closest("table")).css({
+                            "transform-origin": "left top",
+                             "transform": 'rotate(-' + deg + 'deg)'
+                            }).show();
+                    });
                 });
             });
         

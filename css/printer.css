@@ -288,6 +288,7 @@ input.viliage {
 
 .mjb .toptitle {
     letter-spacing:20px;
+    width:200px;
 }
 
 .mjb .unit {
@@ -321,4 +322,50 @@ input.viliage {
 
 .mjb .mjb_lk {
     position:absolute;right:10px;top:20px;
+}
+
+.mjb .two_title {
+    padding: 0;
+}
+
+.mjb .two_title_wrap {
+    position: relative;
+    overflow: hidden;
+}
+
+.two_title_wrap .djline {
+    position:absolute;
+    border-top:1px solid black;
+    height:1px;
+    left:0;
+    top:0;
+    width: 300px;
+    display:none;
+    -webkit-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -o-transform-origin: left top;
+    -ms-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -o-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0);
+}
+
+.two_title_wrap .adjust_area {
+    position: absolute;
+    top:25%;
+    right: 0;
+    display: none;
+    
+}
+
+.two_title_wrap .adjust_area  .step {
+    width:30px;
+    font-size:14px;
+}
+
+.mjb .tptxt {
+    width: 80%;
 }
