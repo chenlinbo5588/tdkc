@@ -26,7 +26,7 @@
                 <input type="button" name="addDjx" value="添加对角线"  class="btn btn-sm btn-gray"/>
                 <input type="button" name="resetDjx" value="重置对角线"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addMjb">+增加面积表</a>
-                <div><em>键盘组合建 Alt + Enter 隐藏本区域</em></div>
+                <div><em>键盘组合建 Shift + Enter 隐藏本区域</em></div>
             </div>
             <div class="container">
                 {if $mjb}
@@ -577,7 +577,7 @@
                 
                 
                 $("body").bind("keydown",function(e){
-                    if(e.altKey && e.keyCode == 13){
+                    if(e.shiftKey && e.keyCode == 13){
                         $("#oparea").slideToggle();
                     }
                 });
