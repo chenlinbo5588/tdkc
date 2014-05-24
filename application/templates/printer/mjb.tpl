@@ -24,6 +24,7 @@
             <div id="oparea" class="center">
                 <input type="submit" name="submit" value="保存"  class="btn btn-sm btn-orange"/>
                 <input type="button" name="addDjx" value="添加对角线"  class="btn btn-sm btn-gray"/>
+                <input type="button" name="resetDjx" value="重置对角线"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addMjb">+增加面积表</a>
                 <div><em>键盘组合建 Alt + Enter 隐藏本区域</em></div>
             </div>
@@ -56,9 +57,9 @@
                                         <span>土地分类</span>
                                         <div class="djline"></div>
                                         <div class="adjust_area">
-                                            <a href="javascript:void(0);">+增加角度</a>&nbsp;
-                                            <label>步长<input type="text" class="step" name="step" value="0.5"/></label>
-                                            <a href="javascript:void(0);">+减少角度</a>
+                                            <a href="javascript:void(0);" class="adjust_add">+增加角度</a>&nbsp;
+                                            <label>步长<input type="text" class="step" name="step" value="0.01"/></label>
+                                            <a href="javascript:void(0);" class="adjust_minus">-减少角度</a>
                                         </div>
                                     </div>
                                 </td>
@@ -279,8 +280,8 @@
                                     <span>土地分类</span>
                                     <div class="adjust_area">
                                         <a href="javascript:void(0);" class="adjust_add">+增加角度</a>&nbsp;
-                                        <label>步长<input type="text" class="step" name="step" value="0.5"/></label>
-                                        <a href="javascript:void(0);" class="adjust_minus">+减少角度</a>
+                                        <label>步长<input type="text" class="step" name="step" value="0.01"/></label>
+                                        <a href="javascript:void(0);" class="adjust_minus">-减少角度</a>
                                     </div>
                                     <div class="djline"></div>
                                 </div>
@@ -764,29 +765,77 @@
                 
                 $("body").delegate(".adjust_area a",'click',function(e){
                     var that = $(this);
+                    var n = parseFloat($(this).closest('.adjust_area').find('.step').val());
+                    var m ;
+                    if(!$(this).hasClass('adjust_minus')){
+                        n = -n;
+                    }
+                    var line = that.parent().siblings(".djline");
+                    var matrix = '';
+                    var pre = '';
+                    var pre = ['-webkit-transform','-moz-transform','-o-transform','-ms-transform', 'transform'];
                     
-                    if($(this).hasClass('adjust_add')){
-                        
-                    }else{
-                    
+                    for(var i = 0; i < pre.length; i++){
+                        matrix = line.css(pre[i]);
+                        if(/matrix/.test(matrix)){
+                            break;
+                        }
                     }
                     
+                    if(!/matrix/.test(matrix)){
+                        line.css({  "transform": "matrix(1,0,0,1,0,0)" });
+                    }
                     
-                    console.log(that.parent().siblings(".djline").css("transform"));
+                    for(var i = 0; i < pre.length; i++){
+                        matrix = line.css(pre[i]);
+                        if(/matrix/.test(matrix)){
+                            break;
+                        }
+                    }
+                    
+                    if(matrix){
+                        m = matrix.match('matrix\\((.*)\\)');
+                    }
+                    
+                    //console.log(matrix);
+                    if(m){
+                        
+                        var sp = m[1].split(',');
+                        //console.log(sp);
+                        sp[0] = parseFloat(sp[0]) + n;
+                        sp[1] = parseFloat(sp[1]) - n;
+                        sp[2] = -sp[1];
+                        sp[3] = sp[0];
+                        line.css({ 
+                            "transform": "matrix(" + sp.join(',') + ")" ,
+                            "margin-top":0,
+                            "margin-left":0
+                        });
+                    }
+                });
+                
+                $("input[name=resetDjx]").bind('click',function(e){
+                    $('.djline').css({
+                         "transform": "matrix(1,0,0,1,0,0)"
+                    }).hide();
                 });
                 
                 $("input[name=addDjx]").bind('click',function(e){
                     $(".two_title_wrap").each(function(){
-                        //var f1 = $(this).offset();
-                        var w = $(this).outerWidth();
-                        var h = $(this).outerHeight();
-                        
+                        var w = $(this).width();
+                        var h = $(this).height();
                         var s = Math.sqrt(w * w + h * h);
-                        var deg = (w / s) *360 ;
+                        var sina = (h / s) ;
+                        var cosa = (w / s) ;
+                        
+                        //console.log(h);
+                        //console.log(w);
+                        //console.log($('.djline',$(this)).css("transform"));
                         
                         $('.djline',$(this).closest("table")).css({
-                            "transform-origin": "left top",
-                             "transform": 'rotate(-' + deg + 'deg)'
+                             "transform": "matrix(" + cosa + "," + sina + ",-" + sina + "," + cosa + ",0,0)",
+                             "margin-top":0,
+                             "margin-left":0
                             }).show();
                     });
                 });

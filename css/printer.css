@@ -341,16 +341,16 @@ input.viliage {
     top:0;
     width: 300px;
     display:none;
-    -webkit-transform-origin: left top;
-    -moz-transform-origin: left top;
-    -o-transform-origin: left top;
-    -ms-transform-origin: left top;
-    transform-origin: left top;
-    -webkit-transform: rotate(0);
-    -moz-transform: rotate(0);
-    -o-transform: rotate(0);
-    -ms-transform: rotate(0);
-    transform: rotate(0);
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -ms-transform-origin: 0 0 ;
+    transform-origin: 0 0 ;
+    -webkit-transform: matrix(1.000000,0.000000,0.000000,1.000000,0,0);
+    -moz-transform: matrix(1.000000,0.000000,0.000000,1.000000,0,0);
+    -o-transform: matrix(1.000000,0.000000,0.000000,1.000000,0,0);
+    -ms-transform: matrix(1.000000,0.000000,0.000000,1.000000,0,0);
+    transform: matrix(1.000000,0.000000,0.000000,1.000000,0,0);
 }
 
 .two_title_wrap .adjust_area {
