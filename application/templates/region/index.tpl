@@ -39,8 +39,8 @@
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
                            <td>{$item['displayorder']}</td>
-                           <td>{$item['code']|escape}</td>
                            <td>{$item['name']|escape}</td>
+                           <td>{$item['code']|escape}</td>
                            <td>{$item['year']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
