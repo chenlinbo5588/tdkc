@@ -304,7 +304,13 @@ class project_ch extends TZ_Admin_Controller {
                 }elseif($op == '布置'){
                     $this->form_validation->set_rules('start_date', '开始日期', 'required|valid_date');
                     $this->form_validation->set_rules('end_date', '结束日期', 'required|valid_date');
-                    $this->form_validation->set_rules('bz_remark', '布置备注', 'required|min_length[2]|max_length[100]');
+                    
+                    if(!empty($_POST['bz_remark'])){
+                        $this->form_validation->set_rules('bz_remark', '布置备注', 'min_length[2]|max_length[100]');
+                    }else{
+                        $_POST['bz_remark'] = '';
+                    }
+                    
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
                     if(!$this->form_validation->run()){
@@ -317,7 +323,12 @@ class project_ch extends TZ_Admin_Controller {
                 }elseif($op == '实施'){
                     $this->form_validation->set_rules('ny_enddate', '内业完成时间', 'required|valid_date');
                     $this->form_validation->set_rules('wy_enddate', '外业完成时间', 'required|valid_date');
-                    $this->form_validation->set_rules('ss_remark', '实施备注', 'required|min_length[2]|max_length[100]');
+                    
+                    if(!empty($_POST['ss_remark'])){
+                        $this->form_validation->set_rules('ss_remark', '实施备注', 'min_length[2]|max_length[100]');
+                    }else{
+                        $_POST['ss_remark'] = '';
+                    }
                     
                     if(!$this->form_validation->run()){
                         $info['ny_enddate'] = $_POST['ny_enddate'];
@@ -327,12 +338,7 @@ class project_ch extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '完成'){
-                    /*
-                    $this->form_validation->set_rules('doc_zddj', '宗地勘测定界成果报告', 'required');
-                    $this->form_validation->set_rules('doc_zdmj', '土地面积分类表', 'required');
-                    $this->form_validation->set_rules('doc_zdjz', '宗地界址调查表', 'required');
-                    $this->form_validation->set_rules('doc_zdbg', '土地勘测定界成果变更情况表', 'required');
-                     */
+                    
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
@@ -348,8 +354,17 @@ class project_ch extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '提交初审'){
-                    $this->form_validation->set_rules('zc_yj', '自查意见', 'required|max_length[300]');
-                    $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'required|max_length[300]');
+                    if(!empty($_POST['zc_yj'])){
+                        $this->form_validation->set_rules('zc_yj', '自查意见', 'max_length[300]');
+                    }else{
+                        $_POST['zc_yj'] = '合格';
+                    }
+                    if(!empty($_POST['zc_remark'])){
+                        $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['zc_remark'] = '合格';
+                    }
+                    
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
@@ -359,8 +374,18 @@ class project_ch extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '通过初审'){
-                    $this->form_validation->set_rules('cs_yj', '初审意见', 'required|max_length[300]');
-                    $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'required|max_length[300]');
+                    
+                    if(!empty($_POST['cs_yj'])){
+                        $this->form_validation->set_rules('cs_yj', '自查意见', 'max_length[300]');
+                    }else{
+                        $_POST['cs_yj'] = '合格';
+                    }
+                    if(!empty($_POST['cs_remark'])){
+                        $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['cs_remark'] = '合格';
+                    }
+                    
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
                         $info['cs_yj'] = $_POST['cs_yj'];
@@ -375,8 +400,17 @@ class project_ch extends TZ_Admin_Controller {
                         break;
                     }
                 }elseif($op == '通过复审'){
-                    $this->form_validation->set_rules('fs_yj', '复审意见', 'required|max_length[300]');
-                    $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'required|max_length[300]');
+                    if(!empty($_POST['fs_yj'])){
+                        $this->form_validation->set_rules('fs_yj', '复审意见', 'max_length[300]');
+                    }else{
+                        $_POST['fs_yj'] = '合格';
+                    }
+                    if(!empty($_POST['fs_remark'])){
+                        $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['fs_remark'] = '合格';
+                    }
+                    
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
                         $info['fs_yj'] = $_POST['fs_yj'];
@@ -456,7 +490,7 @@ class project_ch extends TZ_Admin_Controller {
         }
         
         
-        if($info['status'] == '已提交复审'){
+        if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
             
             $this->load->model('Fault_Model');
             $sysFaultList = $this->Fault_Model->getList(array(
@@ -481,21 +515,38 @@ class project_ch extends TZ_Admin_Controller {
         
         
         $this->load->model('Project_Fault_Model');
-
-        $userFaultList = $this->Project_Fault_Model->getList(array(
+        
+        //初审错误
+        $userFaultList[] = $this->Project_Fault_Model->getList(array(
             'where' => array(
+                'project_type' => 0,
                 'type' => 0,
                 'project_id' => $info['id'],
                 'status' => 0
             )
         ));
+        //复审错误
+        $userFaultList[] = $this->Project_Fault_Model->getList(array(
+                'where' => array(
+                    'project_type' => 0,
+                    'type' => 1,
+                    'project_id' => $info['id'],
+                    'status' => 0
+                )
+            ));
         
+        /**
+         * @todo 需要计算权重 
+         */
         $info['faultScore'] = 0;
-        foreach($userFaultList['data'] as $value){
-            $info['faultScore'] += $value['score'];
+        foreach($userFaultList as $value){
+            foreach($value['data'] as $v){
+                $info['faultScore'] += $v['score'];
+            }
         }
         
-        $this->assign('userFaultList',$userFaultList['data']);
+        $this->assign('userFaultList0',$userFaultList[0]['data']);
+        $this->assign('userFaultList1',$userFaultList[1]['data']);
         if($info['type'] == CH_RCZD){
             
             /**
@@ -605,12 +656,19 @@ class project_ch extends TZ_Admin_Controller {
             //file_put_contents("debug.txt",print_r($info,true));
             //file_put_contents("debug.txt",print_r($data,true),FILE_APPEND);
 
-            if($info['status'] == '已提交复审'){
+            if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
+                if($info['status'] == '已提交初审'){
+                    $fault_step = 0;
+                }else{
+                    $fault_step = 1;
+                }
+                
                 $this->load->model('Project_Fault_Model');
                 $this->load->model('Fault_Model');
                 $this->Project_Fault_Model->updateByWhere(array('status' => 1),array(
-                    'type' => 0,
+                    'project_type' => 0,
                     'project_id' => $info['id'],
+                    'type' => $fault_step,
                     'status' => 0
                 ));
                 
@@ -625,8 +683,9 @@ class project_ch extends TZ_Admin_Controller {
                 
                 foreach($sysFaultList['data'] as $fkey => $fvalue){
                     $insertData[] = array(
-                        'type' => 0,
+                        'project_type' => 0,
                         'project_id' => $info['id'],
+                        'type' => $fault_step,
                         'fault_code' => $fvalue['code'],
                         'fault_name' => $fvalue['name'],
                         'remark' => !empty($param[strtoupper($fvalue['code']).'_remark']) ? $param[strtoupper($fvalue['code']).'_remark'] : '',

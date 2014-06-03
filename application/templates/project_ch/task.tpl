@@ -118,9 +118,9 @@
                         <td><label class="required"><em></em><strong>当前状态</strong></label></td>
                         <td><b class="hightlight success">{$info['status']}{$info['sub_status']}</b></td>
                     </tr>
-                    <tr>
-                        <td>当前处理人</td>
-                        <td>{$info['sendor']}</td>
+                    <tr class="workflow">
+                        <td><label class="required"><em></em><strong>当前处理人</strong></label></td>
+                        <td><b class="hightlight success">{$info['sendor']}</b></td>
                     </tr>
                     
                     <tr class="tuihui" {if $smarty.post.workflow != '退回'}style="display: none;"{/if}>
@@ -131,10 +131,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>缺陷历史</td>
+                        <td>初审缺陷历史</td>
                         <td>
                             <div class="notice">
-                                {if $userFaultList}
+                                {if $userFaultList0}
                                 <a class="link_btn" href="{url_path('printer','fault','id=')}{$info['id']}" target="_blank">打印缺陷表</a>
                                 {/if}
                                 <table>
@@ -151,11 +151,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {foreach from=$userFaultList item=item}
+                                    {foreach from=$userFaultList0 item=item}
                                         <tr>
                                             <td>{$item['fault_code']}{$item['fault_name']}</td>
                                             <td>{$item['score']}</td>
                                             <td>{$item['remark']|escape}</td>
+                                        </tr>
+                                    {foreachelse}
+                                        <tr>
+                                            <td colspan="3">暂无缺陷</td>
                                         </tr>
                                     {/foreach}
                                     </tbody>
@@ -163,7 +167,41 @@
                             </div>
                         </td>
                     </tr>
-                    {if $info['sendor_id'] == $userProfile['id'] && $info['status'] == '已提交复审'}
+                    <tr>
+                        <td>复审缺陷历史</td>
+                        <td>
+                            <div class="notice">
+                                <table>
+                                    <colgroup>
+                                        <col width="50%"/>
+                                        <col width="10%"/>
+                                        <col width="30%"/>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>缺陷项</th>
+                                            <th>扣分</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {foreach from=$userFaultList1 item=item}
+                                        <tr>
+                                            <td>{$item['fault_code']}{$item['fault_name']}</td>
+                                            <td>{$item['score']}</td>
+                                            <td>{$item['remark']|escape}</td>
+                                        </tr>
+                                    {foreachelse}
+                                        <tr>
+                                            <td colspan="3">暂无缺陷</td>
+                                        </tr>
+                                    {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {if $info['sendor_id'] == $userProfile['id'] && ($info['status'] == '已提交初审' || $info['status'] == '已提交复审')}
                     <tr class="fault" {if $smarty.post.workflow != '退回'}style="display: none;"{/if}>
                         <td>缺陷扣分</td>
                         <td>
@@ -910,7 +948,7 @@
                             if(op == '退回'){
                                 $("#timeReq").hide();
                                 $(".tuihui").show();
-                                {if $info['status'] == '已提交复审'}
+                                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
                                 $(".fault").show();
                                 {/if}
                             
@@ -920,27 +958,30 @@
                                     cansubmit = false;
                                 }
                                 
-                                {if $info['status'] == '已提交复审'}
+                                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
                                 if(cansubmit && $("input[name='fault[]']:checked").length == 0){
                                     $.jBox.alert("请至少勾选一个缺陷",'提示');
                                     cansubmit = false;
                                 }
                                 
-                                $("#faultList input[type=checkbox]").each(function(index){
-                                    var that = $(this);
-                                    if(that.prop("checked") && $.trim(that.closest("tr").find("input[type=text]:eq(0)").val()) == ''){
-                                        that.closest("tr").find("input[type=text]:eq(0)").focus();
-                                        $.jBox.alert("请填写扣分项目备注",'提示');
-                                        
-                                        cansubmit = false;
-                                    }
-                                });
+                                if(cansubmit){
+                                    $("#faultList input[type=checkbox]").each(function(index){
+                                        var that = $(this);
+                                        if(that.prop("checked") && $.trim(that.closest("tr").find("input[type=text]:eq(0)").val()) == ''){
+                                            that.closest("tr").find("input[type=text]:eq(0)").focus();
+                                            $.jBox.alert("请填写扣分项目备注",'提示');
+
+                                            cansubmit = false;
+                                            return false;
+                                        }
+                                    });
+                                 }
                                 
                                 {/if}
                             }else{
                                 $("#timeReq").show();
                                 $(".tuihui").hide();
-                                {if $info['status'] == '已提交复审'}
+                                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
                                 $(".fault").hide();
                                 {/if}
                             }
@@ -952,12 +993,12 @@
                                     $.jBox.alert("请选择时间要求",'提示');
                                     cansubmit = false;
                                 }
-                                
+                                {*
                                 if(cansubmit && $("textarea[name=bz_remark]").val().length == 0){
                                     $("textarea[name=bz_remark]").focus();
                                     $.jBox.alert("请输入布置备注",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已布置' }
                             if(op == '实施'){
@@ -966,12 +1007,12 @@
                                     $.jBox.alert("请选择时间安排",'提示');
                                     cansubmit = false;
                                 }
-                                
+                                {*
                                 if(cansubmit && $("textarea[name=ss_remark]").val().length == 0){
                                     $("textarea[name=ss_remark]").focus();
                                     $.jBox.alert("请输入实施备注",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已实施' }
                             if(op == '完成'){
@@ -981,8 +1022,8 @@
                                 }
                                 
                                 {if $info['type'] == $smarty.const.CH_RCZD}
-                                if(cansubmit && $("input[name='jz_name[]']").length < 4 ){
-                                    $.jBox.alert("请录入界址信息,至少四址",'提示');
+                                if(cansubmit && $("input[name='jz_name[]']").length < 3 ){
+                                    $.jBox.alert("请录入界址信息,至少三址",'提示');
                                     cansubmit = false;
                                 }
                                 if(cansubmit){
@@ -1005,7 +1046,8 @@
                                 {/if}
                             }
                             {elseif $info['status'] == '已完成' }
-                            if(op == '提交初审'){    
+                            if(op == '提交初审'){
+                               {*
                                 if(cansubmit && $("textarea[name=zc_yj]").val().length == 0){
                                     $("textarea[name=zc_yj]").focus();
                                     $.jBox.alert("请输入自查意见",'提示');
@@ -1017,9 +1059,11 @@
                                     $.jBox.alert("请输入自查修改和处理意见、说明",'提示');
                                     cansubmit = false;
                                 }
+                                *}
                             }
                             {elseif $info['status'] == '已提交初审' }
-                             if(op == '通过初审'){    
+                             if(op == '通过初审'){
+                                {*
                                 if(cansubmit && $("textarea[name=cs_yj]").val().length == 0){
                                     $("textarea[name=cs_yj]").focus();
                                     $.jBox.alert("请输入初审意见",'提示');
@@ -1031,9 +1075,11 @@
                                     $.jBox.alert("请输入初审修改和处理意见、说明",'提示');
                                     cansubmit = false;
                                 }
+                                *}
                             }
                             {elseif $info['status'] == '已提交复审' }
-                             if(op == '通过复审'){    
+                             if(op == '通过复审'){
+                                {*
                                 if(cansubmit && $("textarea[name=fs_yj]").val().length == 0){
                                     $("textarea[name=fs_yj]").focus();
                                     $.jBox.alert("请输入复审意见",'提示');
@@ -1045,9 +1091,10 @@
                                     $.jBox.alert("请输入复审修改和处理意见、说明",'提示');
                                     cansubmit = false;
                                 }
+                                *}
                             }
                             {elseif $info['status'] == '已通过复审' }
-                            if($op == '项目提交'){    
+                            if(op == '项目提交'){    
                                 if(cansubmit && $("input[name=title]").val().length == 0){
                                     $("input[name=title]").focus();
                                     $.jBox.alert("请输入项目成果名称",'提示');
