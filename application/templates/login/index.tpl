@@ -27,6 +27,13 @@ body {
     text-align:center;
 }
 
+.site-title {
+    text-align: center;
+    font-family: serif;
+    color: #3A7204;
+    font-weight: bold;
+    font-size: 18px;
+}
 
 -->
 </style></head>
@@ -40,7 +47,7 @@ body {
     <tr>
         <td height="608" background="/img/login/login_03.gif"><table width="862" border="0" align="center" cellpadding="0" cellspacing="0">
         <tr>
-            <td height="266" background="/img/login/login_04.gif">&nbsp;</td>
+            <td height="266" background="/img/login/login_04.gif"><div class="site-title">{$TITLE}</div></td>
         </tr>
         <tr>
             <td height="95"><table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -76,7 +83,7 @@ body {
                 <td height="30"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td width="44%" height="20">&nbsp;</td>
-                    <td width="56%" class="STYLE4">版本 2014 V1.0  </td>
+                    <td width="56%" class="STYLE4">版本 2014 V1.0.1  </td>
                 </tr>
                 </table></td>
                 <td>&nbsp;</td>

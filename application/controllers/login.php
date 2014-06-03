@@ -57,7 +57,6 @@ class Login extends TZ_Controller {
         if($loginSuccess){
             redirect(url_path('admin'));
         }else{
-            $this->setSEO('登录');
             $this->display('index');
         }
     }
