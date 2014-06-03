@@ -1342,8 +1342,13 @@ class project_gh extends TZ_Admin_Controller {
                 'current_page' => $_GET['page'],
                 'query_param' => url_path('project_gh','index')
             );
+            
+            if(!empty($_GET['project_no'])){
+                $condition['like']['project_no'] = $_GET['project_no'];
+            }
+            
             if(!empty($_GET['name'])){
-                $condition['like'] = array('name' => $_GET['name']);
+                $condition['like']['name'] = $_GET['name'];
             }
             $condition['where'] = array(
                 'status !=' => '已删除'
