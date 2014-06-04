@@ -40,7 +40,7 @@ class project_ch extends TZ_Admin_Controller {
         /**
          *项目类型 
          */
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         $this->assign('action','index');
         $this->_getPageData();
@@ -52,13 +52,20 @@ class project_ch extends TZ_Admin_Controller {
      * 统计 
      */
     public function statistics(){
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
+        $typeKeys = array();
+        
+        foreach($projectTypeList['data'] as $v){
+            $typeKeys[$v['id']] = $v['type'].'-'.$v['name'];
+        }
+        
+        $this->assign('typeKeys',$typeKeys);
         
         $condition = array();
         
-        $fields = array('COUNT(*) AS cnt', 'year' ,'month','region_name','pm','type','fee_type');
+        $fields = array('COUNT(*) AS cnt', 'year' ,'month','region_name','pm','type_id','fee_type');
         
         if(!empty($_GET['sdate'])){
             $condition['where']['createtime >='] = strtotime($_GET['sdate']);
@@ -83,10 +90,10 @@ class project_ch extends TZ_Admin_Controller {
             array_push($condition['group_by'],'pm');
         }
         
-        if(!empty($_GET['type'])){
-            $condition['where']['type'] = $_GET['type'];
+        if(!empty($_GET['type_id'])){
+            $condition['where']['type_id'] = $_GET['type_id'];
         }else{
-            array_push($condition['group_by'],'type');
+            array_push($condition['group_by'],'type_id');
         }
         
         if(!empty($_GET['fee_type'])){
@@ -340,7 +347,7 @@ class project_ch extends TZ_Admin_Controller {
                 }elseif($op == '完成'){
                     
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
-                    $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                    //$this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
                     if($info['type'] == CH_RCZD){
                         $this->form_validation->set_rules('jz_name[]', '界址信息', 'required');
@@ -376,7 +383,7 @@ class project_ch extends TZ_Admin_Controller {
                 }elseif($op == '通过初审'){
                     
                     if(!empty($_POST['cs_yj'])){
-                        $this->form_validation->set_rules('cs_yj', '自查意见', 'max_length[300]');
+                        $this->form_validation->set_rules('cs_yj', '初审意见', 'max_length[300]');
                     }else{
                         $_POST['cs_yj'] = '合格';
                     }
@@ -422,6 +429,11 @@ class project_ch extends TZ_Admin_Controller {
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     $this->form_validation->set_rules('title', '项目成功名称', 'required|min_length[3]|max_length[200]');
                     $this->form_validation->set_rules('area', '项目面积', 'required|greater_than[0]|numeric');
+                    
+                    if($info['cate_name'] == CH_JGCL){
+                        $this->form_validation->set_rules('building_cnt', '建筑物幢数', 'required|is_natural_no_zero');
+                    }
+                    
                     if(!$this->form_validation->run()){
                         $info['title'] = $_POST['title'];
                         break;
@@ -696,6 +708,15 @@ class project_ch extends TZ_Admin_Controller {
                         'updatetime' => time()
                     );
                 }
+                
+                if($fault_step == 0){
+                    $data['fault_cnt1'] = count($param['fault']);
+                    $data['total_fault'] = $data['fault_cnt1'] + $info['fault_cnt2'];
+                }else if($fault_step == 1){
+                    $data['fault_cnt2'] = count($param['fault']); 
+                    $data['total_fault'] = $data['fault_cnt2'] + $info['fault_cnt1'];
+                }
+                
                 $this->Project_Fault_Model->batchInsert($insertData);
             }
             
@@ -819,11 +840,13 @@ class project_ch extends TZ_Admin_Controller {
                         
                         $this->Project_Jz_Model->batchInsert($insertData);
                     }
-                    
-                    $sendorInfo = $this->User_Model->queryById($param['sendor']);
+                    /**
+                     * 完成时不需要发送了 
+                     */
+                    //$sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
-                        'sendor_id' => $sendorInfo['id'],
-                        'sendor' => $sendorInfo['name'],
+                        //'sendor_id' => $sendorInfo['id'],
+                        //'sendor' => $sendorInfo['name'],
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
                         'real_enddate' => time(),
@@ -833,7 +856,8 @@ class project_ch extends TZ_Admin_Controller {
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
+                        //$this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);
                         $eventReaded = true;
                         $pm = true;
                     }
@@ -920,6 +944,10 @@ class project_ch extends TZ_Admin_Controller {
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => time()
                     );
+                    
+                    if($info['cate_name'] == CH_JGCL){
+                        $data['building_cnt'] = $param['building_cnt'];
+                    }
                     
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
@@ -1266,7 +1294,7 @@ class project_ch extends TZ_Admin_Controller {
         
         $this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('region_code', '区域', 'required|alpha');
-        $this->form_validation->set_rules('type', '登记类型', 'required' );
+        $this->form_validation->set_rules('type_id', '登记类型', 'required|is_natural_no_zero' );
         $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '登记地址', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
         
@@ -1455,7 +1483,7 @@ class project_ch extends TZ_Admin_Controller {
         /**
          *项目类型 
          */
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
         /**
@@ -1511,6 +1539,14 @@ class project_ch extends TZ_Admin_Controller {
             $_POST['region_name'] = '';
         }
         
+        $project_type = $this->Project_Type_Model->queryById($_POST['type_id']);
+        
+        $_POST['type_id'] = $project_type['id'];
+        $_POST['type'] = $project_type['name'];
+        $_POST['type_name'] = $project_type['type'];
+        $_POST['cate_name'] = $project_type['cate_name'];
+        $_POST['weight'] = $project_type['weight'];
+        
         $insertid = $this->Project_Model->add($_POST);
         //$this->db->trans_complete();
         
@@ -1550,6 +1586,15 @@ class project_ch extends TZ_Admin_Controller {
                     $_POST['master_serial'] = $info['master_serial'];
                     $_POST['region_serial'] = $info['region_serial'];
                     $_POST['updator'] = $this->_userProfile['name'];
+                    
+                    $project_type = $this->Project_Type_Model->queryById($_POST['type_id']);
+        
+                    $_POST['type_id'] = $project_type['id'];
+                    $_POST['type'] = $project_type['name'];
+                    $_POST['type_name'] = $project_type['type'];
+                    $_POST['cate_name'] = $project_type['cate_name'];
+                    $_POST['weight'] = $project_type['weight'];
+                    
                     $this->Project_Model->update($_POST);
                     
                     $this->_addProjectLog('system', $_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$info['project_no']} {$_POST['name']}",$_POST);

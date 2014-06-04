@@ -8,7 +8,7 @@ class project_gh extends TZ_Admin_Controller {
     public function __construct(){
         parent::__construct();
         $this->load->model('Region_Model');
-        $this->load->model('Project_Type_Model');
+        $this->load->model('Project_Gh_Type_Model');
         $this->load->model('Project_Gh_Model');
         $this->load->model('Project_Gh_Mod_Model');
         $this->load->model('User_Event_Model');
@@ -35,7 +35,7 @@ class project_gh extends TZ_Admin_Controller {
     
 	public function index()
 	{
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '规划项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Gh_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         $this->assign('action','index');
         $this->_getPageData();
@@ -47,7 +47,7 @@ class project_gh extends TZ_Admin_Controller {
      * 统计 
      */
     public function statistics(){
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '规划项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Gh_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
         
@@ -240,7 +240,13 @@ class project_gh extends TZ_Admin_Controller {
                 }elseif($op == '布置'){
                     $this->form_validation->set_rules('start_date', '开始日期', 'required|valid_date');
                     $this->form_validation->set_rules('end_date', '结束日期', 'required|valid_date');
-                    $this->form_validation->set_rules('bz_remark', '布置备注', 'required|min_length[2]|max_length[100]');
+                    
+                    if(!empty($_POST['bz_remark'])){
+                        $this->form_validation->set_rules('bz_remark', '布置备注', 'min_length[2]|max_length[100]');
+                    }else{
+                        $_POST['bz_remark'] = '';
+                    }
+                    
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
                     if(!$this->form_validation->run()){
@@ -253,7 +259,11 @@ class project_gh extends TZ_Admin_Controller {
                 }elseif($op == '实施'){
                     $this->form_validation->set_rules('ny_enddate', '内业完成时间', 'required|valid_date');
                     $this->form_validation->set_rules('wy_enddate', '外业完成时间', 'required|valid_date');
-                    $this->form_validation->set_rules('ss_remark', '实施备注', 'required|min_length[2]|max_length[100]');
+                    if(!empty($_POST['ss_remark'])){
+                        $this->form_validation->set_rules('ss_remark', '实施备注', 'min_length[2]|max_length[100]');
+                    }else{
+                        $_POST['ss_remark'] = '';
+                    }
                     
                     if(!$this->form_validation->run()){
                         $info['ny_enddate'] = $_POST['ny_enddate'];
@@ -270,17 +280,34 @@ class project_gh extends TZ_Admin_Controller {
                     }
                     
                 }elseif($op == '提交初审'){
-                    $this->form_validation->set_rules('zc_yj', '自查意见', 'required|max_length[300]');
-                    $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'required|max_length[300]');
+                    
+                    if(!empty($_POST['zc_yj'])){
+                        $this->form_validation->set_rules('zc_yj', '自查意见', 'max_length[300]');
+                    }else{
+                        $_POST['zc_yj'] = '合格';
+                    }
+                    if(!empty($_POST['zc_remark'])){
+                        $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['zc_remark'] = '合格';
+                    }
+                    
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
                         break;
                     }
                     
                 }elseif($op == '通过初审'){
-                    $this->form_validation->set_rules('cs_yj', '初审意见', 'required|max_length[300]');
-                    $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'required|max_length[300]');
-                    
+                    if(!empty($_POST['cs_yj'])){
+                        $this->form_validation->set_rules('cs_yj', '初审意见', 'max_length[300]');
+                    }else{
+                        $_POST['cs_yj'] = '合格';
+                    }
+                    if(!empty($_POST['cs_remark'])){
+                        $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['cs_remark'] = '合格';
+                    }
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
                         break;
@@ -293,8 +320,16 @@ class project_gh extends TZ_Admin_Controller {
                         break;
                     }
                 }elseif($op == '通过复审'){
-                    $this->form_validation->set_rules('fs_yj', '复审意见', 'required|max_length[300]');
-                    $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'required|max_length[300]');
+                    if(!empty($_POST['fs_yj'])){
+                        $this->form_validation->set_rules('fs_yj', '复审意见', 'max_length[300]');
+                    }else{
+                        $_POST['fs_yj'] = '合格';
+                    }
+                    if(!empty($_POST['fs_remark'])){
+                        $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['fs_remark'] = '合格';
+                    }
                     
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
                     if(!$this->form_validation->run()){
@@ -1143,7 +1178,7 @@ class project_gh extends TZ_Admin_Controller {
         /**
          *项目类型 
          */
-        $projectTypeList = $this->Project_Type_Model->getList(array('where' => array('status' => '正常','type' => '规划项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Gh_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
         $this->assign('yearList',yearList());

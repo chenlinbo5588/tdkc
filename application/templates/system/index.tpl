@@ -12,7 +12,8 @@
             {auth name="role"}<li><a href="{url_path('role')}">角色管理</a></li>{/auth}
             {auth name="menu"}<li><a href="{url_path('menu')}">菜单管理</a></li>{/auth}
             {auth name="dept"}<li><a href="{url_path('dept')}">组织机构</a></li>{/auth}
-            {auth name="project_type"}<li><a href="{url_path('project_type')}">项目类型设置</a></li>{/auth}
+            {auth name="project_type"}<li><a href="{url_path('project_type')}">测绘项目类型设置</a></li>{/auth}
+            {auth name="project_gh_type"}<li><a href="{url_path('project_gh_type')}">规划项目类型设置</a></li>{/auth}
             {auth name="region"}<li><a href="{url_path('region')}">镇街设置</a></li>{/auth}
           </ul>
         </dd>

@@ -78,18 +78,25 @@ if ( ! function_exists('force_download'))
 		}
 
 		// Generate the server headers
-		if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") !== FALSE)
-		{
+		if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") !== FALSE){
+            $encoded_filename = urlencode($filename);
+            $encoded_filename = str_replace("+", "%20", $encoded_filename);
+        
 			header('Content-Type: "'.$mime.'"');
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			header('Content-Disposition: attachment; filename="'.$encoded_filename.'"');
 			header('Expires: 0');
 			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 			header("Content-Transfer-Encoding: binary");
 			header('Pragma: public');
 			header("Content-Length: ".strlen($data));
-		}
-		else
-		{
+		}else if(strpos($_SERVER['HTTP_USER_AGENT'], "Firefox") !== FALSE){
+            header('Content-Type: "'.$mime.'"');
+			header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
+			header("Content-Transfer-Encoding: binary");
+			header('Expires: 0');
+			header('Pragma: no-cache');
+			header("Content-Length: ".strlen($data));
+        }else{
 			header('Content-Type: "'.$mime.'"');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 			header("Content-Transfer-Encoding: binary");

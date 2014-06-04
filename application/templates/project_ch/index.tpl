@@ -82,7 +82,7 @@
                            <a href="javascript:void(0);" class="info" data-id="{$item['id']}">{$item['name']|escape}</a>
                            {/if}
                            </td>
-                           <td>{$item['type']}</td>
+                           <td>{$item['type_name']}-{$item['cate_name']}-{$item['type']}</td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>

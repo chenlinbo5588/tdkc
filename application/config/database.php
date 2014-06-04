@@ -67,7 +67,7 @@ if(ENVIRONMENT == 'production'){
     $db['default']['db_debug'] = false;
 }else{
     $db['default']['database'] = 'tdkc';
-    $db['default']['hostname'] = '192.168.1.118';
+    $db['default']['hostname'] = 'localhost';
     $db['default']['username'] = 'tdkc';
     $db['default']['password'] = '123123';
 

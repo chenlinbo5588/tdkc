@@ -60,12 +60,12 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>登记类型</strong></label></td>
                             <td>
-                                <select name="type" style="width:300px">
+                                <select name="type_id" style="width:300px">
                                     {foreach from=$projectTypeList item=item}
-                                    <option value="{$item['name']}" {if $info['type'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                    <option value="{$item['id']}" {if $info['type_id'] == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
                                     {/foreach}
                                 </select>
-                                {form_error('type')}
+                                {form_error('type_id')}
                             </td>
                         </tr>
                         <tr>

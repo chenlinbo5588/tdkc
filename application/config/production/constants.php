@@ -5,3 +5,4 @@
  */
 
 define('CH_RCZD','日常宗地');
+define('CH_JGCL','竣工测量');

@@ -48,7 +48,7 @@
                     </tr>
                     <tr>
                         <td>登记类型</td>
-                        <td>{$info['type']}</td>
+                        <td>{$info['type_name']}-{$info['cate_name']}-{$info['type']}</td>
                     </tr>
                     <tr>
                         <td>性质</td>
@@ -134,9 +134,11 @@
                         <td>初审缺陷历史</td>
                         <td>
                             <div class="notice">
+                                {*
                                 {if $userFaultList0}
                                 <a class="link_btn" href="{url_path('printer','fault','id=')}{$info['id']}" target="_blank">打印缺陷表</a>
                                 {/if}
+                                *}
                                 <table>
                                     <colgroup>
                                         <col width="50%"/>
@@ -402,7 +404,7 @@
                         </td>
                     </tr>
                     {/if}
-                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送', '已实施',  '已完成', '已通过初审','已通过复审','项目已提交'))}
+                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送',  '已完成', '已通过初审','已通过复审','项目已提交'))}
                     <tr>
                         <td>发送给</td>
                         <td>
@@ -648,6 +650,16 @@
                         <td>{if $info['area']}{$info['area']}{/if}</td>
                         {/if}
                     </tr>
+                    {if $info['cate_name'] == $smarty.const.CH_JGCL}
+                    <tr>
+                        <td>建筑幢数</td>
+                        {if $info['status'] == '已通过复审'}
+                        <td><input type="text" name="building_cnt" value="{if $info['building_cnt']}{$info['building_cnt']}{else}1{/if}" placeholder="请填写建筑幢数" style="width:150px;"/>幢{form_error('building_cnt')}</td>
+                        {else}
+                        <td>{if $info['building_cnt']}{$info['building_cnt']}{/if}</td>
+                        {/if}
+                    </tr>
+                    {/if}
                     <tr>
                         <td>是否归档</td>
                         <td>
@@ -1106,6 +1118,15 @@
                                     $.jBox.alert("请输入项目面积",'提示');
                                     cansubmit = false;
                                 }
+                                
+                                {if $info['cate_name'] == $smarty.const.CH_JGCL}
+                                if(cansubmit && !/^[1-9][0-9]*?$/.test($("input[name=building_cnt]").val())){
+                                    $("input[name=building_cnt]").focus();
+                                    $.jBox.alert("请输入建筑幢数",'提示');
+                                    cansubmit = false;
+                                }
+                                {/if}
+                                
                             }
                             {elseif $info['status'] == '项目已提交' }
                             if(op == '收费'){    

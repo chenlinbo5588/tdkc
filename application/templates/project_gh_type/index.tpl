@@ -1,12 +1,12 @@
 {include file="common/main_header.tpl"}
 
         <div class="searchform row-fluid">
-                <form action="{url_path('project_type')}" method="get" name="searchform">
-                    <input type="hidden" value="project_type" name="{config_item('controller_trigger')}"/>
+                <form action="{url_path('project_gh_type')}" method="get" name="searchform">
+                    <input type="hidden" value="project_gh_type" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
-                            <label><strong>名称</strong><input type="text" name="name" style="width: 200px;" value="{$smarty.get.name}"/></label>
+                            <label><strong>名称</strong><input type="text" name="name" value="{$smarty.get.name}"/></label>
                             <label><strong>类型</strong>
                                 <select name="type" >
                                     <option value="" {if $smarty.get.type == ''}selected{/if}>全部</option>
@@ -15,7 +15,7 @@
                                 </select>
                             </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            {auth name="project_type+add"}<a class="addlink" href="{url_path('project_type','add')}">添加测绘项目类型</a>{/auth}
+                            {auth name="project_gh_type+add"}<a class="addlink" href="{url_path('project_gh_type','add')}">添加规划项目类型</a>{/auth}
                         </li>
                      </ul>
                 </form>
@@ -27,9 +27,7 @@
                         <tr>
                             <th>排序</th>
                             <th>类型</th>
-                            <th>类别</th>
                             <th>名称</th>
-                            <th>权重</th>
                             <th>创建时间</th>
                             <th>最后修改时间</th>
                             <th>操作</th>
@@ -40,15 +38,13 @@
                         <tr id="row_{$item['id']}">
                            <td>{$item['displayorder']}</td>
                            <td>{$item['type']|escape}</td>
-                           <td>{$item['cate_name']|escape}</td>
                            <td>{$item['name']|escape}</td>
-                           <td>{$item['weight']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                {if $item['status'] != '已删除'}
-                               {auth name="project_type+edit"}<a href="{url_path('project_type','edit','id=')}{$item['id']}">编辑</a>{/auth}
-                               {auth name="project_type+delete"}<a href="javascript:void(0);" data-title="{$item['name']|escape}" data-href="{url_path('project_type','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}
+                               {auth name="project_gh_type+edit"}<a href="{url_path('project_gh_type','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="project_gh_type+delete"}<a href="javascript:void(0);" data-title="{$item['name']|escape}" data-href="{url_path('project_gh_type','delete','id=')}{$item['id']}" data-id="{$item['id']}" class="delete">删除</a>{/auth}
                                {/if}
                             </td>
                         </tr>

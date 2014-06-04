@@ -1,9 +1,9 @@
 <?php
 
 
-class Project_Type_Model extends TZ_Model {
+class Project_Gh_Type_Model extends TZ_Model {
     
-    public $_tableName = 'tb_project_type';
+    public $_tableName = 'tb_project_gh_type';
     
     public function __construct(){
         parent::__construct();
@@ -14,13 +14,11 @@ class Project_Type_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'type' => $param['type'],
-            'cate_name' => $param['cate_name'],
             'name' => $param['name'],
-            'weight' => $param['weight'],
+            'type' => $param['type'],
             'displayorder' => $param['displayorder'],
             'creator' => $param['creator'],
-            'updator' => $param['creator'],
+            'updator' => $param['updator'],
             'createtime' => $now,
             'updatetime' => $now
         );
@@ -30,7 +28,7 @@ class Project_Type_Model extends TZ_Model {
     }
     
     public function delete($param){
-        return $this->db->delete($this->_tableName,array('id' => $param['id']));
+        return $this->db->delete($this->_tableName, array('id' => $param['id']));
     }
     
     public function fake_delete($param){
@@ -49,11 +47,8 @@ class Project_Type_Model extends TZ_Model {
     
     public function update($param){
         $data = array(
+            'name' => $param['name'],
             'type' => $param['type'],
-            'name' => $param['name'],
-            'cate_name' => $param['cate_name'],
-            'name' => $param['name'],
-            'weight' => $param['weight'],
             'displayorder' => $param['displayorder'],
             'updator' => $param['updator'],
             'updatetime' => time()

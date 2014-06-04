@@ -10,10 +10,10 @@
                             <label><strong>镇乡名称</strong><input type="text" name="region_name" value="{$smarty.get.region_name}" placeholder="请输入镇乡名称"/></label>
                             <label><strong>负责人名称</strong><input type="text" name="pm" value="{$smarty.get.pm}" placeholder="请输入项目负责人"/></label>
                             <label><strong>项目类型</strong>
-                                <select name="type" >
+                                <select name="type_id" >
                                     <option value="">全部</option>
                                     {foreach from=$projectTypeList item=item}
-                                    <option value="{$item['name']}" {if $smarty.get.type == $item['name']}selected{/if}>{$item['name']}</option>
+                                    <option value="{$item['id']}" {if $smarty.get.type_id == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
                                     {/foreach}
                                 </select>
                             </label>
@@ -52,7 +52,7 @@
                            <td>{$item['year']}年-{$item['month']}月</td>
                            <td>{$item['region_name']}</td>
                            <td>{if $item['pm']}{$item['pm']}{else}尚未布置到负责人{/if}</td>
-                           <td>{$item['type']}</td>
+                           <td>{$typeKeys[$item['type_id']]}</td>
                            <td>{if $item['fee_type'] == 1}挂账
                                 {elseif $item['fee_type'] == 2}票开款收
                                 {elseif $item['fee_type'] == 3}票开款未收

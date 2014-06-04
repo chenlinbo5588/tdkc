@@ -576,12 +576,12 @@
                                     $.jBox.alert("请选择时间要求",'提示');
                                     cansubmit = false;
                                 }
-                                
+                                {*
                                 if(cansubmit && $("textarea[name=bz_remark]").val().length == 0){
                                     $("textarea[name=bz_remark]").focus();
                                     $.jBox.alert("请输入布置备注",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已布置' }
                             if(op == '实施'){
@@ -589,12 +589,12 @@
                                     $.jBox.alert("请选择时间安排",'提示');
                                     cansubmit = false;
                                 }
-                                
+                                {*
                                 if(cansubmit && $("textarea[name=ss_remark]").val().length == 0){
                                     $("textarea[name=ss_remark]").focus();
                                     $.jBox.alert("请输入实施备注",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已实施' }
                             if(op == '完成'){
@@ -604,7 +604,8 @@
                                 }
                             }
                             {elseif $info['status'] == '已完成' }
-                            if(op == '提交初审'){    
+                            if(op == '提交初审'){
+                                {*
                                 if(cansubmit && $("textarea[name=zc_yj]").val().length == 0){
                                     $("textarea[name=zc_yj]").focus();
                                     $.jBox.alert("请输入自查意见",'提示');
@@ -616,10 +617,11 @@
                                     $("textarea[name=zc_remark]").focus();
                                     $.jBox.alert("请输入自查修改和处理意见、说明",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已提交初审' }
-                             if(op == '通过初审'){    
+                             if(op == '通过初审'){
+                               {*
                                 if(cansubmit && $("textarea[name=cs_yj]").val().length == 0){
                                     $("textarea[name=cs_yj]").focus();
                                     $.jBox.alert("请输入初审意见",'提示');
@@ -630,10 +632,11 @@
                                     $("textarea[name=cs_remark]").focus();
                                     $.jBox.alert("请输入初审修改和处理意见、说明",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已提交复审' }
-                             if(op == '通过复审'){    
+                             if(op == '通过复审'){
+                                {*
                                 if(cansubmit && $("textarea[name=fs_yj]").val().length == 0){
                                     $("textarea[name=fs_yj]").focus();
                                     $.jBox.alert("请输入复审意见",'提示');
@@ -644,7 +647,7 @@
                                     $("textarea[name=fs_remark]").focus();
                                     $.jBox.alert("请输入复审修改和处理意见、说明",'提示');
                                     cansubmit = false;
-                                }
+                                }*}
                             }
                             {elseif $info['status'] == '已通过复审' }
                             if(op == '项目提交'){    
