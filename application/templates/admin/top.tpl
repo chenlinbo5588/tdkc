@@ -169,6 +169,7 @@ a:link,a:visited {
             {auth name="office"}<dd><div class="item" id="item5"><a href="{url_path('office')}" onclick="changeSel(5)" target="menu">办公室</a></div></dd>{/auth}
             {auth name="info"}<dd><div class="item" id="item6"><a href="{url_path('info')}" onclick="changeSel(6)" target="menu">信息中心</a></div></dd>{/auth}
             {auth name="system"}<dd><div class="item" id="item7"><a href="{url_path('system')}" onclick="changeSel(7)" target="menu">系统管理</a></div></dd>{/auth}
+            {auth name="reports"}<dd><div class="item" id="item8"><a href="{url_path('reports')}" onclick="changeSel(8)" target="menu">数据报表</a></div></dd>{/auth}
             </dl>
             </td>
         </tr>

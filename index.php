@@ -159,6 +159,7 @@ if (defined('ENVIRONMENT'))
  *  Now that we know the path, set the main path constants
  * -------------------------------------------------------------------
  */
+    define('ROOT_DIR',$_SERVER['DOCUMENT_ROOT']);
 	// The name of THIS file
 	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 

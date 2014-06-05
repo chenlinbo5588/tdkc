@@ -40,6 +40,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 define('TZ_SMATY_VERSION','3.1.12');
 define('TZ_TPL_PATH',APPPATH.'templates/');
+define('PHPExcel_PATH',dirname(APPPATH).'/Classes/');
 
 
 /* End of file constants.php */

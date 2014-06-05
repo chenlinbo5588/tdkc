@@ -107,7 +107,7 @@
                     {if in_array($info['status'],array('已通过复审','项目已提交','已收费','已归档'))}
                     <tr>
                         <td>得分</td>
-                        <td>{$info['score'] - $info['faultScore']}</td>
+                        <td>{$info['score']}</td>
                     </tr>
                     {/if}
                     <tr>

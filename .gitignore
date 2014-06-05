@@ -15,3 +15,5 @@ Guardfile
 /img/Files/20*
 /filestore/20*
 /tmp/
+/temp/PHPExcel.*.cache
+/temp/*.xls
