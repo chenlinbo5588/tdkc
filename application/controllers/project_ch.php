@@ -927,6 +927,17 @@ class project_ch extends TZ_Admin_Controller {
                         'fs_yj' => $param['fs_yj'],
                         'fs_remark' => $param['fs_remark'],
                     );
+                    
+                    if($info['total_fault'] == 1){
+                        $data['score'] = $info['weight'] * 0.3;
+                    }elseif($info['total_fault'] == 2){
+                        $data['score'] = $info['weight'] * 0.6;
+                    }else{
+                        if($info['total_fault'] != 0){
+                            $data['score'] = 0;
+                        }
+                    }
+                    
                     $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);

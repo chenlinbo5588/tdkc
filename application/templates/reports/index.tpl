@@ -9,7 +9,7 @@
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
             {auth name="reports_fault"}<li><a href="{url_path('reports_fault')}">缺陷统计报表</a></li>{/auth}
-            {auth name="reports_monthly"}<li><a href="{url_path('reports_monthly')}">项目月统计报表</a></li>{/auth}
+            {auth name="reports_monthly"}<li><a href="{url_path('reports_monthly')}">项目统计报表</a></li>{/auth}
           </ul>
         </dd>
       </dl>

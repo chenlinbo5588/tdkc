@@ -28,6 +28,7 @@ class Project_Model extends TZ_Model {
             'type_name' => $param['type_name'],
             'cate_name' => $param['cate_name'],
             'weight' => $param['weight'],
+            'score' => $param['weight'],
             'nature' => $param['nature'],
             'village' => $param['village'],
             'union_name' => $param['union_name'],

@@ -116,7 +116,7 @@ class reports_monthly extends TZ_Admin_Controller {
                 }
                 
                 $levelRate[$levelText]++;
-                $totalWeight += $p['weight'];
+                $totalWeight += $p['score'];
                 
                 $current_row = $i + $row_start;
 
