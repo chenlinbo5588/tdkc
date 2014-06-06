@@ -24,8 +24,13 @@ class reports_fault extends TZ_Admin_Controller {
             'where' => array(
                 'fault_cnt1 > ' => 0 ,
                 'createtime >= ' => strtotime($_POST['sdate']),
-                'createtime <= ' => strtotime($_POST['edate']) + 86400
-             )
+                'createtime < ' => strtotime($_POST['edate']) + 86400
+             ),
+            'where_in' => array(
+                array(
+                    'key' => 'status','value' => array('已收费','已归档')
+                )
+            )
         ));
         
         
@@ -64,8 +69,13 @@ class reports_fault extends TZ_Admin_Controller {
             'where' => array(
                 'fault_cnt2 > ' => 0 ,
                 'createtime >= ' => strtotime($_POST['sdate']),
-                'createtime <= ' => strtotime($_POST['edate']) + 86400
-             )
+                'createtime < ' => strtotime($_POST['edate']) + 86400
+             ),
+            'where_in' => array(
+                array(
+                    'key' => 'status','value' => array('已收费','已归档')
+                )
+            )
         ));
         
         if($faultList2['data']){

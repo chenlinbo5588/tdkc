@@ -135,6 +135,7 @@ class Attachment extends TZ_Controller {
             $this->sendJson($retAry);
         }else{
             header('Content-type: text/html; charset=UTF-8');
+            header('P3P: CP="CAO COR CURa ADMa DEVa OUR IND ONL COM DEM PRE"');
             echo json_encode(array('error' => 0,'id' => $fileId, 'url' => $urlPath.$newFilePath,'title' => htmlspecialchars($attachment['filename']) ));
         }
     }

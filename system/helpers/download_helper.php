@@ -76,7 +76,8 @@ if ( ! function_exists('force_download'))
 		{
 			$mime = (is_array($mimes[$extension])) ? $mimes[$extension][0] : $mimes[$extension];
 		}
-
+        
+        header('P3P: CP="CAO COR CURa ADMa DEVa OUR IND ONL COM DEM PRE"');
 		// Generate the server headers
 		if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") !== FALSE){
             $encoded_filename = urlencode($filename);

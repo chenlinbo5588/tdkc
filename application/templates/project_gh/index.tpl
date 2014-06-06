@@ -6,7 +6,7 @@
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
-                            <label><strong>流水号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入流水号"/></label>
+                            {*<label><strong>流水号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入流水号"/></label>*}
                             <label><strong>登记名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
                             <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
                             <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
@@ -59,6 +59,8 @@
                             {if $action == 'send' }<th></th>{/if}
                             <th>登记名称</th>
                             <th>类型</th>
+                            <th>负责人</th>
+                            <th>当前操作人</th>
                             <th>状态</th>
                             <th>创建人</th>
                             <th>创建时间</th>
@@ -81,6 +83,8 @@
                            {/if}
                            </td>
                            <td>{$item['type']}</td>
+                           <td>{$item['pm']}</td>
+                           <td>{$item['sendor']}</td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>

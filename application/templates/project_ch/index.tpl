@@ -60,6 +60,8 @@
                             <th>流水号</th>
                             <th>登记名称</th>
                             <th>类型</th>
+                            <th>负责人</th>
+                            <th>当前操作人</th>
                             <th>状态</th>
                             <th>创建人</th>
                             <th>创建时间</th>
@@ -83,6 +85,8 @@
                            {/if}
                            </td>
                            <td>{$item['type_name']}-{$item['cate_name']}-{$item['type']}</td>
+                           <td>{$item['pm']}</td>
+                           <td>{$item['sendor']}</td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
