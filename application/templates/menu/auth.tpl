@@ -3,7 +3,7 @@
                 {form_error('auth_key[]')}
                 <form name="authForm" action="{$actionUrl}" method="post">
                     <input type="hidden" name="id" value="{$info['id']}"/>
-
+                    <div><b>修改权限 {$info['name']|escape}</b></div>    
                     <table class="table">
                         <thead>
                             <tr>

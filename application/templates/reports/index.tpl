@@ -5,7 +5,7 @@
 	{include file="common/user_favor.tpl"}
       <!-- Item 2 Strat -->
       <dl class='bitem'>
-        <dt onClick='showHide("items2_1")'><b>测绘项目</b></dt>
+        <dt onClick='showHide("items2_1")'><b>测绘项目数据报表</b></dt>
         <dd style='display:block' class='sitem' id='items2_1'>
           <ul class='sitemu'>
             {auth name="reports_fault"}<li><a href="{url_path('reports_fault')}">缺陷统计报表</a></li>{/auth}

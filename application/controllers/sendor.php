@@ -62,7 +62,6 @@ class Sendor extends TZ_Admin_Controller {
             'where' => array(
                 'status' => '正常',
                 'id !=  ' => 1,
-                'id != ' => $this->_userProfile['id']
             )
         ));
         
