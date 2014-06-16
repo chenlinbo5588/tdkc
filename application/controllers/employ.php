@@ -58,6 +58,21 @@ class Employ extends TZ_Admin_Controller {
                 
                 $user = $this->User_Model->getById(array('where' => array('id' => $_POST['id'])));
                 
+                /**
+                 * 同步更新通讯录 
+                 */
+                $this->load->model('Contacts_Model');
+                $this->Contacts_Model->updateByWhere(array(
+                    'mobile' => $user['mobile'],
+                    'tel' => $user['tel'],
+                    'virtual_no' => $user['virtual_no']
+                   ),
+                   array(
+                       'name' => $user['name'],
+                       'type' => 0
+                   )
+                );
+                
                 $user['enter_date'] = date("Y-m-d",$user['enter_date']);
                 $user['graduation_date'] = date("Y-m-d",$user['graduation_date']);
                 $user['title_time'] = date("Y-m-d",$user['title_time']);

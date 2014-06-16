@@ -28,10 +28,13 @@
                                 <td><label class="optional"><em></em><strong>固定电话</strong></label></td><td><input type="text" style="width:200px" name="tel" value="{$info['tel']}" placeholder="请输入固定电话"/>{form_error('tel')}</td>
                             </tr>
                             <tr>
+                                <td><label class="optional"><em></em><strong>虚拟网号码</strong></label></td><td><input type="text" style="width:200px" name="virtual_no" value="{$info['virtual_no']}" placeholder="请输入虚拟网号码"/>{form_error('virtual_no')}</td>
+                            </tr>
+                            <tr>
                                 <td><label class="optional"><em></em><strong>传真号码</strong></label></td><td><input type="text" style="width:200px" name="fax" value="{$info['fax']}" placeholder="请输入传真号码"/>{form_error('fax')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>地址</strong></label></td><td><input type="text" style="width:400px" name="address" value="{$info['address']}" placeholder="请输入地址"/>{form_error('address')}</td>
+                                <td><label class="optional"><em></em><strong>地址</strong></label></td><td><input type="text" style="width:400px" name="address" value="{$info['address']}" placeholder="请输入地址"/>{form_error('address')}</td>
                             </tr>
                             <tr>
                                 <td></td>

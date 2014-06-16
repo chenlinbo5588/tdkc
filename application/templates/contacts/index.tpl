@@ -39,6 +39,7 @@
                             <th>名称</th>
                             <th>手机号码</th>
                             <th>固定电话</th>
+                            <th>虚拟网号码</th>
                             <th>传真号码</th>
                             <th>地址</th>
                             <th>状态</th>
@@ -57,6 +58,7 @@
                            <td>{$item['name']|escape}</td>
                            <td>{$item['mobile']}</td>
                            <td>{$item['tel']}</td>
+                           <td>{$item['virtual_no']}</td>
                            <td>{$item['fax']}</td>
                            <td>{$item['address']|escape}</td>
                            <td>{$item['status']}</td>
@@ -72,7 +74,7 @@
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">找不到数据</td></tr>
+                            <tr><td colspan="14">找不到数据</td></tr>
                         {/foreach}
                     </tbody>
                 </table>
