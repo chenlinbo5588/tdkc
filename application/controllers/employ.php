@@ -95,7 +95,11 @@ class Employ extends TZ_Admin_Controller {
         if(!empty($_POST['id_card'])){
             //$this->form_validation->set_rules('id_card', '身份证号码', 'callback_id_check');
         }
-
+        
+        if(!empty($_POST['huji'])){
+            $this->form_validation->set_rules('huji', '户籍所在地', 'max_length[30]');
+        }
+        
         if(!empty($_POST['email'])){
             $this->form_validation->set_rules('email', '邮箱', 'required|valid_email|max_length[40]');
         }

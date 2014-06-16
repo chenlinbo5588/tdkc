@@ -18,9 +18,17 @@
                                 <td><label class="required"><em>*</em><strong>购买日期</strong></label></td><td><input type="text"  name="buy_time" class="Wdate" readonly onclick="WdatePicker()" value="{$info['buy_time']|date_format:"Y-m-d"}" placeholder="请输入购买日期"/>{form_error('buy_time')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>购买价格</strong></label></td><td><input type="text"  name="pay_amout" value="{$info['pay_amout']}" placeholder="请输入购买价格"/>{form_error('pay_amout')}</td>
+                                <td><label class="required"><em>*</em><strong>购买价格</strong></label></td><td><input type="text"  name="pay_amout" value="{$info['pay_amout']}" placeholder="请输入购买价格"/>元{form_error('pay_amout')}</td>
                             </tr>
-                            
+                            <tr>
+                                <td><label class="required"><em>*</em><strong>使用者</strong></label></td><td><input type="text" name="user" value="{$info['user']}" placeholder="请输入使用者"/>{form_error('user')}</td>
+                            </tr>
+                            <tr>
+                                <td><label class="required"><em>*</em><strong>质检有效期开始</strong></label></td><td><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="check_sdate" value="{$info['check_sdate']}" placeholder="请输入质检有效期开始"/>{form_error('check_sdate')}</td>
+                            </tr>
+                            <tr>
+                                <td><label class="required"><em>*</em><strong>质检有效期结束</strong></label></td><td><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="check_edate" value="{$info['check_sdate']}" placeholder="请输入质检有效期开始"/>{form_error('check_edate')}</td>
+                            </tr>
                             <tr>
                                 <td></td>
                                 <td>

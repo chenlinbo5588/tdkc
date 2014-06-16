@@ -42,6 +42,9 @@
                         </tr>
                         {/if}
                         <tr>
+                            <td><label class="optional"><em></em><strong>户籍所在地</strong></label></td><td><input type="text" class="txt" name="huji" value="{$user['huji']}" placeholder="请输入户籍所在地"/><span class="tip">{form_error('huji')}</span></td>
+                        </tr>
+                        <tr>
                             <td><label class="optional"><em></em><strong>身份证号码</strong></label></td><td><input type="text" class="txt" name="id_card" value="{$user['id_card']}" placeholder="请输入身份证号码"/><span class="tip">{form_error('id_card')}</span></td>
                         </tr>
                         <tr>
@@ -72,6 +75,9 @@
                             <td><label class="optional"><em></em><strong>毕业时间</strong></label></td><td><input type="text" class="txt" name="graduation_date" class="Wdate" readonly onclick="WdatePicker()" value="{$user['graduation_date']}" placeholder="请输入毕业时间"/><span class="tip">{form_error('graduation_date')}</span></td>
                         </tr>
                         <tr>
+                            <td><label class="optional"><em></em><strong>学历</strong></label></td><td><input type="text" class="txt" name="edu" value="{$user['edu']}" placeholder="请输入学历，如本科"/><span class="tip">{form_error('edu')}</span></td>
+                        </tr>
+                        <tr>
                             <td><label class="optional"><em></em><strong>职称名称</strong></label></td><td><input type="text" class="txt" name="job_title" value="{$user['job_title']}" placeholder="请输入职称名称"/><span class="tip">{form_error('job_title')}</span></td>
                         </tr>
                         <tr>
@@ -82,6 +88,12 @@
                         </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>合同年限</strong></label></td><td><input type="text" class="txt" name="contract_year" value="{$user['contract_year']}" placeholder="请输入合同年限"/><span class="tip">{form_error('contract_year')}</span></td>
+                        </tr>
+                        <tr>
+                            <td><label class="optional"><em></em><strong>合同开始日期</strong></label></td><td><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="contract_start" value="{$user['contract_start']}" placeholder="请输入合同开始日期"/><span class="tip">{form_error('contract_start')}</span></td>
+                        </tr>
+                        <tr>
+                            <td><label class="optional"><em></em><strong>合同结束日期</strong></label></td><td><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="contract_end" value="{$user['contract_end']}" placeholder="请输入合同结束日期"/><span class="tip">{form_error('contract_end')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>入院年月</strong></label></td><td><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="enter_date" value="{$user['enter_date']}" placeholder="请输入当前入院年月"/><span class="tip">{form_error('enter_date')}</span></td>

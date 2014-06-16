@@ -22,6 +22,9 @@
                             <th>设备型号</th>
                             <th>购买日期</th>
                             <th>购买价格</th>
+                            <th>使用者</th>
+                            <th>质检有效期开始</th>
+                            <th>质检有效期结束</th>
                             <th>创建时间</th>
                             <th>最后修改时间</th>
                             <th>操作</th>
@@ -34,6 +37,9 @@
                            <td>{$item['type']|escape}</td>
                            <td>{$item['buy_time']|date_format:"Y-m-d"}</td>
                            <td>{$item['pay_amout']}</td>
+                           <td>{$item['user']|escape}</td>
+                           <td>{$item['check_sdate']}</td>
+                           <td>{$item['check_edate']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
@@ -44,7 +50,7 @@
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="9">找不到数据</td></tr>
+                            <tr><td colspan="10">找不到数据</td></tr>
                         {/foreach}
                     </tbody>
                 </table>

@@ -68,6 +68,22 @@ class User_Model extends TZ_Model {
             }
         }
         
+        if(!empty($user['huji'])){
+            $data['huji'] = $user['huji'];
+        }
+        
+        if(!empty($user['edu'])){
+            $data['edu'] = $user['edu'];
+        }
+        
+        if(!empty($user['contract_start'])){
+            $data['contract_start'] = $user['contract_start'];
+        }
+        
+        if(!empty($user['contract_end'])){
+            $data['contract_end'] = $user['contract_end'];
+        }
+        
         if(!empty($user['title_time'])){
             $data['title_time'] = $user['title_time'];
         }
@@ -138,6 +154,22 @@ class User_Model extends TZ_Model {
             if($age > 0){
                 $data['age'] = $age;
             }
+        }
+        
+        if(!empty($user['huji'])){
+            $data['huji'] = $user['huji'];
+        }
+        
+        if(!empty($user['edu'])){
+            $data['edu'] = $user['edu'];
+        }
+        
+        if(!empty($user['contract_start'])){
+            $data['contract_start'] = $user['contract_start'];
+        }
+        
+        if(!empty($user['contract_end'])){
+            $data['contract_end'] = $user['contract_end'];
         }
         
         if(!empty($user['title_time'])){
