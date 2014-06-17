@@ -30,6 +30,14 @@
                                 <td><label class="required"><em>*</em><strong>质检有效期结束</strong></label></td><td><input type="text" class="Wdate" readonly onclick="WdatePicker()" name="check_edate" value="{$info['check_sdate']}" placeholder="请输入质检有效期开始"/>{form_error('check_edate')}</td>
                             </tr>
                             <tr>
+                                <td><label class="required"><em>*</em><strong>是否报废</strong></label></td>
+                                <td>
+                                    <label>否<input type="radio" name="is_off" value="0" {if $info['is_off'] == 0}checked{/if}/></label>
+                                    <label>是<input type="radio" name="is_off" value="1" {if $info['is_off'] == 1}checked{/if}/></label>
+                                    {form_error('is_off')}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td></td>
                                 <td>
                                     <input type="submit" name="submit" class="btn btn-sm btn-primary" value="保存"/>

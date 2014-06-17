@@ -21,6 +21,7 @@ class Device_Model extends TZ_Model {
             'user' => $param['user'],
             'check_sdate' => $param['check_sdate'],
             'check_edate' => $param['check_edate'],
+            'is_off' => $param['is_off'],
             'displayorder' => $param['displayorder'],
             'creator' => $param['creator'],
             'updator' => $param['creator'],
@@ -59,6 +60,7 @@ class Device_Model extends TZ_Model {
             'user' => $param['user'],
             'check_sdate' => $param['check_sdate'],
             'check_edate' => $param['check_edate'],
+            'is_off' => $param['is_off'],
             'displayorder' => $param['displayorder'],
             'updator' => $param['updator'],
             'updatetime' => time()

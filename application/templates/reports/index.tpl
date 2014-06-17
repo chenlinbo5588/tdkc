@@ -14,6 +14,20 @@
         </dd>
       </dl>
       <!-- Item 2 End -->
+      
+      <!-- Item 3 Strat -->
+      <dl class='bitem'>
+        <dt onClick='showHide("items2_2")'><b>办公室数据报表</b></dt>
+        <dd style='display:block' class='sitem' id='items2_2'>
+          <ul class='sitemu'>
+            {auth name="reports_device"}<li><a href="{url_path('reports_device')}">仪器清单报表</a></li>{/auth}
+            {auth name="reports_employ"}<li><a href="{url_path('reports_employ')}">人事报表</a></li>{/auth}
+            {auth name="reports_salary"}<li><a href="{url_path('reports_salary')}">薪资变动报表</a></li>{/auth}
+          </ul>
+        </dd>
+      </dl>
+      <!-- Item 3 End -->
+      
 	  </td>
   </tr>
 </table>

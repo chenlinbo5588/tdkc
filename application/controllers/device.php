@@ -64,6 +64,7 @@ class Device extends TZ_Admin_Controller {
         $this->form_validation->set_rules('user', '使用者', 'required|max_length[30]');
         $this->form_validation->set_rules('check_sdate', '质检有效期开始', 'required|valid_date');
         $this->form_validation->set_rules('check_edate', '质检有效期结束', 'required|valid_date');
+        $this->form_validation->set_rules('is_off', '是否报废', 'required|is_natural|less_than[2]');
         
         if(!empty($_POST['displayorder'])){
             $this->form_validation->set_rules('displayorder', '排序', 'integer');
