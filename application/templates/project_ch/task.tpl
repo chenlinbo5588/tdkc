@@ -104,12 +104,10 @@
                        <col width="800"/>
                    </colgroup>
                   <tbody>
-                    {if in_array($info['status'],array('已通过复审','项目已提交','已收费','已归档'))}
                     <tr>
-                        <td>得分</td>
-                        <td>{$info['score']}</td>
+                        <td>合计扣分</td>
+                        <td>{$info['faultScore']}</td>
                     </tr>
-                    {/if}
                     <tr>
                         <td>测绘项目负责人</td>
                         <td>{$info['pm']}</td>
@@ -962,15 +960,6 @@
                                 $(".tuihui").show();
                                 {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
                                 $(".fault").show();
-                                {/if}
-                            
-                                if(cansubmit && $.trim($("textarea[name=reason]").val()).length == 0){
-                                    $("textarea[name=reason]").focus();
-                                    $.jBox.alert("请填写退回原因",'提示');
-                                    cansubmit = false;
-                                }
-                                
-                                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
                                 if(cansubmit && $("input[name='fault[]']:checked").length == 0){
                                     $.jBox.alert("请至少勾选一个缺陷",'提示');
                                     cansubmit = false;
@@ -990,6 +979,13 @@
                                  }
                                 
                                 {/if}
+                        
+                                if(cansubmit && $.trim($("textarea[name=reason]").val()).length == 0){
+                                    $("textarea[name=reason]").focus();
+                                    $.jBox.alert("请填写退回原因",'提示');
+                                    cansubmit = false;
+                                }
+                                
                             }else{
                                 $("#timeReq").show();
                                 $(".tuihui").hide();

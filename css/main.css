@@ -86,6 +86,10 @@
     cursor: pointer;
 }
 
+.tip {
+    color:#3805D6;
+    font-style: italic;
+}
 
 .upload-button {
     display: inline-block;

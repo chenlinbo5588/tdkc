@@ -43,6 +43,10 @@ class Contacts extends TZ_Admin_Controller {
                 $condition['like']['tel'] = $_GET['tel'];
             }
             
+            if(!empty($_GET['type'])){
+                $condition['where']['type'] = $_GET['type'];
+            }
+            
             if($_GET['inc_del'] != '是'){
                 $condition['where']['status'] = '正常';
             }
@@ -60,10 +64,20 @@ class Contacts extends TZ_Admin_Controller {
     
     
     private function _addRules(){
-        $this->form_validation->set_rules('name', '名称', 'required|min_length[3]|max_length[100]|htmlspecialchars');
-        $this->form_validation->set_rules('type', '类型', 'required|numeric');
-        $this->form_validation->set_rules('mobile', '手机号码', 'required|numeric|exact_length[11]');
-        $this->form_validation->set_rules('tel', '固定电话', 'numeric_dash|min_length[5]|max_length[20]');
+        
+        
+        $this->form_validation->set_rules('type', '类型', 'required|is_natural|less_than[2]');
+        
+        if($_POST['type'] == 1){
+            $this->form_validation->set_rules('company_name', '单位名称', 'required|min_length[1]|max_length[100]|htmlspecialchars');
+        }
+        
+        $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[100]|htmlspecialchars');
+        if(!empty($_POST['mobile'])){
+            $this->form_validation->set_rules('mobile', '手机号码', 'trim|valid_mobile');
+        }
+        
+        $this->form_validation->set_rules('tel', '固定电话', 'valid_telephone');
         $this->form_validation->set_rules('virtual_no', '虚拟号码', 'numeric_dash|max_length[10]');
         $this->form_validation->set_rules('fax', '传真', 'numeric_dash|min_length[3]|max_length[15]');
         $this->form_validation->set_rules('address', '地址', 'max_length[150]|htmlspecialchars');
@@ -81,6 +95,10 @@ class Contacts extends TZ_Admin_Controller {
                 // add
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['user_id'] = $this->_userProfile['id'];
+                
+                if($_POST['type'] == 0){
+                    $_POST['company_name'] = OUR_COMPANY_NAME;
+                }
                 
                 $insertid = $this->Contacts_Model->add($_POST);
                 

@@ -59,9 +59,9 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>登记类型</strong></label></td>
                             <td>
-                                <select name="type" style="width:300px">
+                                <select name="type_id" style="width:300px">
                                     {foreach from=$projectTypeList item=item}
-                                    <option value="{$item['name']}" {if $info['type'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                    <option value="{$item['id']}" {if $info['type_id'] == $item['id']}selected{/if}>{$item['name']}</option>
                                     {/foreach}
                                 </select>
                                 {form_error('type')}
@@ -71,7 +71,7 @@
                             <td><label class="required"><em>*</em><strong>登记名称</strong></label></td><td><input type="text" style="width:600px" name="name" value="{$info['name']}" placeholder="请输入登记名称"/><span class="tip">{form_error('name')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>地址</strong></label></td><td><input type="text" style="width:600px" name="address" value="{$info['address']}" placeholder="请输入地址"/><span class="tip">{form_error('address')}</span></td>
+                            <td><label class="optional"><em></em><strong>地址</strong></label></td><td><input type="text" style="width:600px" name="address" value="{$info['address']}" placeholder="请输入地址"/><span class="tip">{form_error('address')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="optional"><em></em><strong>村名</strong></label></td><td><input type="text" style="width:300px" name="village" value="{$info['village']}" placeholder="请输入村名"/><span class="tip">{form_error('village')}</span></td>

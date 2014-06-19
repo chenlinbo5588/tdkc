@@ -98,6 +98,10 @@
                     </colgroup>
                     <tbody>
                     <tr>
+                        <td>合计扣分</td>
+                        <td>{$info['faultScore']}</td>
+                    </tr>
+                    <tr>
                         <td>测绘项目负责人</td>
                         <td>{$info['pm']}</td>
                     </tr>
@@ -116,6 +120,124 @@
                             <div>{form_error('reason')}</div>
                         </td>
                     </tr>
+                    <tr>
+                        <td>初审缺陷历史</td>
+                        <td>
+                            <div class="notice">
+                                <table>
+                                    <colgroup>
+                                        <col width="50%"/>
+                                        <col width="10%"/>
+                                        <col width="30%"/>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>缺陷项</th>
+                                            <th>扣分</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {foreach from=$userFaultList0 item=item}
+                                        <tr>
+                                            <td>{$item['fault_code']}{$item['fault_name']}</td>
+                                            <td>{$item['score']}</td>
+                                            <td>{$item['remark']|escape}</td>
+                                        </tr>
+                                    {foreachelse}
+                                        <tr>
+                                            <td colspan="3">暂无缺陷</td>
+                                        </tr>
+                                    {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>复审缺陷历史</td>
+                        <td>
+                            <div class="notice">
+                                <table>
+                                    <colgroup>
+                                        <col width="50%"/>
+                                        <col width="10%"/>
+                                        <col width="30%"/>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>缺陷项</th>
+                                            <th>扣分</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {foreach from=$userFaultList1 item=item}
+                                        <tr>
+                                            <td>{$item['fault_code']}{$item['fault_name']}</td>
+                                            <td>{$item['score']}</td>
+                                            <td>{$item['remark']|escape}</td>
+                                        </tr>
+                                    {foreachelse}
+                                        <tr>
+                                            <td colspan="3">暂无缺陷</td>
+                                        </tr>
+                                    {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {if $info['sendor_id'] == $userProfile['id'] && ($info['status'] == '已提交初审' || $info['status'] == '已提交复审')}
+                    <tr class="fault" {if $smarty.post.workflow != '退回'}style="display: none;"{/if}>
+                        <td>缺陷扣分</td>
+                        <td>
+                            <div>{form_error('fault[]')}</div>
+                            <div class="fault_wrapper">
+                                <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#faultList" }' >-收起</a>
+                                <div id="faultList">
+                                    <table>
+                                        <colgroup>
+                                            <col width="50%"/>
+                                            <col width="10%"/>
+                                            <col width="30%"/>
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>缺陷项</th>
+                                                <th>扣分</th>
+                                                <th>备注</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <table class="fault_list">
+                                            <caption>{$item['title']}</caption>
+                                            <colgroup>
+                                                <col width="50%"/>
+                                                <col width="10%"/>
+                                                <col width="30%"/>
+                                            </colgroup>
+                                            <tbody>
+                                        {foreach from=$sysFaultList key=key item=item}
+                                            {if $key == $info['type_id']}
+                                            {foreach name="fautlItem" from=$item['list'] item=list}
+                                                <tr>
+                                                {if trim($list['name']) != ''}
+                                                <td><div><label><input type="checkbox" name="fault[]" value="{$list['code']}"/>{$list['code']}  {$list['name']}</label></div></td>
+                                                <td>{$list['score']}</td>
+                                                <td><input type="text" name="{$list['code']}_remark" style="width:280px;" value="" placeholder="请填写详情"/></td>
+                                                {/if}
+                                                </tr>
+                                            {/foreach}
+                                            {/if}
+                                        {/foreach}  
+                                        </tbody>
+                                   </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {/if}
                     {if $info['status'] == '已发送'}
                     <tr id="timeReq">
                         <td>时间要求</td>
@@ -558,8 +680,28 @@
                             if(op == '退回'){
                                 $("#timeReq").hide();
                                 $(".tuihui").show();
-                                $("textarea[name=reason]").focus();
                                 
+                                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
+                                $(".fault").show();
+                                if(cansubmit && $("input[name='fault[]']:checked").length == 0){
+                                    $.jBox.alert("请至少勾选一个缺陷",'提示');
+                                    cansubmit = false;
+                                }
+                                
+                                if(cansubmit){
+                                    $("#faultList input[type=checkbox]").each(function(index){
+                                        var that = $(this);
+                                        if(that.prop("checked") && $.trim(that.closest("tr").find("input[type=text]:eq(0)").val()) == ''){
+                                            that.closest("tr").find("input[type=text]:eq(0)").focus();
+                                            $.jBox.alert("请填写扣分项目备注",'提示');
+
+                                            cansubmit = false;
+                                            return false;
+                                        }
+                                    });
+                                 }
+                                
+                                {/if}
                                 if(cansubmit && $.trim($("textarea[name=reason]").val()).length == 0){
                                     $("textarea[name=reason]").focus();
                                     $.jBox.alert("请填写退回原因",'提示');
@@ -687,7 +829,7 @@
                             }
                             {/if}
                         
-                            if(cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
+                            if(op != '退回' && cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
                                 $.jBox.alert("请选择发送人",'提示');
                                 cansubmit = false;
                             }

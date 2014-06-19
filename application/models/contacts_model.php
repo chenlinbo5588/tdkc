@@ -15,6 +15,7 @@ class Contacts_Model extends TZ_Model {
         
         $data = array(
             'id' => NULL,
+            'company_name' => $info['company_name'],
             'name' => $info['name'],
             'type' => $info['type'],
             'mobile' => $info['mobile'],
@@ -57,6 +58,7 @@ class Contacts_Model extends TZ_Model {
     public function update($info){
         
         $data = array(
+            'company_name' => $info['company_name'],
             'name' => $info['name'],
             'type' => $info['type'],
             'mobile' => $info['mobile'],

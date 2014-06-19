@@ -19,10 +19,13 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td><label class="required"><em>*</em><strong>单位名称</strong></label></td><td><input type="text" style="width:400px" name="company_name" value="{$info['company_name']}" placeholder="请输入单位名称"/>{form_error('company_name')}<span class="tip">内部通讯路可以不需要输入单位名称</td>
+                            </tr>
+                            <tr>
                                 <td><label class="required"><em>*</em><strong>名称</strong></label></td><td><input type="text" style="width:200px" name="name" value="{$info['name']}" placeholder="请输入名称"/>{form_error('name')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>手机号码</strong></label></td><td><input type="text" style="width:200px" name="mobile" value="{$info['mobile']}" placeholder="请输入手机号码"/>{form_error('mobile')}</td>
+                                <td><label class="optional"><em></em><strong>手机号码</strong></label></td><td><input type="text" style="width:200px" name="mobile" value="{$info['mobile']}" placeholder="请输入手机号码"/>{form_error('mobile')}</td>
                             </tr>
                             <tr>
                                 <td><label class="optional"><em></em><strong>固定电话</strong></label></td><td><input type="text" style="width:200px" name="tel" value="{$info['tel']}" placeholder="请输入固定电话"/>{form_error('tel')}</td>

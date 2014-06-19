@@ -411,6 +411,63 @@ class project_gh extends TZ_Admin_Controller {
         
         $this->assign('statusHtml',$statusHtml);
         
+        if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
+            $this->load->model('Gh_Fault_Model');
+            $sysFaultList = $this->Gh_Fault_Model->getList(array(
+                'order' => 'type ASC,level DESC'
+            ));
+            
+            $tmpFaultList = array();
+            foreach($sysFaultList['data'] as $v){
+                if(!isset($tmpFaultList[$v['type']])){
+                    $tmpFaultList[$v['type']] = array(
+                        'title' => $v['typename'],
+                        'list' => array()
+                    );
+                    $tmpFaultList[$v['type']]['list'][] = $v;
+                }else{
+                    $tmpFaultList[$v['type']]['list'][] = $v;
+                }
+            }
+            
+            $this->assign('sysFaultList',$tmpFaultList);
+        }
+        
+        
+        $this->load->model('Project_Fault_Model');
+        
+        //初审错误
+        $userFaultList[] = $this->Project_Fault_Model->getList(array(
+            'where' => array(
+                'project_type' => 1,
+                'type' => 0,
+                'project_id' => $info['id'],
+                'status' => 0
+            )
+        ));
+        //复审错误
+        $userFaultList[] = $this->Project_Fault_Model->getList(array(
+                'where' => array(
+                    'project_type' => 1,
+                    'type' => 1,
+                    'project_id' => $info['id'],
+                    'status' => 0
+                )
+            ));
+        
+        /**
+         * @todo 需要计算权重 
+         */
+        $info['faultScore'] = 0;
+        foreach($userFaultList as $value){
+            foreach($value['data'] as $v){
+                $info['faultScore'] += $v['score'];
+            }
+        }
+        
+        $this->assign('userFaultList0',$userFaultList[0]['data']);
+        $this->assign('userFaultList1',$userFaultList[1]['data']);
+        
         $info['event_id'] = $event_id;
         $this->assign('message',$message);
         $this->assign('info',$info);
@@ -456,7 +513,59 @@ class project_gh extends TZ_Admin_Controller {
                 'updator' => $this->_userProfile['name'],
                 'updatetime' => time()
             );
-
+            
+            if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
+                if($info['status'] == '已提交初审'){
+                    $fault_step = 0;
+                }else{
+                    $fault_step = 1;
+                }
+                
+                $this->load->model('Project_Fault_Model');
+                $this->load->model('Gh_Fault_Model');
+                $this->Project_Fault_Model->updateByWhere(array('status' => 1),array(
+                    'project_type' => 1,
+                    'project_id' => $info['id'],
+                    'type' => $fault_step,
+                    'status' => 0
+                ));
+                
+                //print_r($param);
+                
+                $sysFaultList = $this->Gh_Fault_Model->getList(array(
+                    'where_in' => array(
+                        array('key' => 'code','value' => $param['fault'])
+                    )
+                ));
+                $insertData = array();
+                
+                foreach($sysFaultList['data'] as $fkey => $fvalue){
+                    $insertData[] = array(
+                        'project_type' => 1,
+                        'project_id' => $info['id'],
+                        'type' => $fault_step,
+                        'fault_code' => $fvalue['code'],
+                        'fault_name' => $fvalue['name'],
+                        'remark' => !empty($param[strtoupper($fvalue['code']).'_remark']) ? $param[strtoupper($fvalue['code']).'_remark'] : '',
+                        'score' => (double)$fvalue['score'],
+                        'creator' => $this->_userProfile['name'],
+                        'updator' => $this->_userProfile['name'],
+                        'createtime' => time(),
+                        'updatetime' => time()
+                    );
+                }
+                
+                if($fault_step == 0){
+                    $data['fault_cnt1'] = count($param['fault']);
+                    $data['total_fault'] = $data['fault_cnt1'] + $info['fault_cnt2'];
+                }else if($fault_step == 1){
+                    $data['fault_cnt2'] = count($param['fault']); 
+                    $data['total_fault'] = $data['fault_cnt2'] + $info['fault_cnt1'];
+                }
+                
+                $this->Project_Fault_Model->batchInsert($insertData);
+            }
+            
             //file_put_contents("debug.txt",print_r($info,true));
             //file_put_contents("debug.txt",print_r($data,true),FILE_APPEND);
 
@@ -1001,9 +1110,9 @@ class project_gh extends TZ_Admin_Controller {
         $this->form_validation->set_rules('input_type', '录入类型', 'required|is_natural');
         $this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('region_code', '区域', 'required|alpha');
-        $this->form_validation->set_rules('type', '登记类型', 'required' );
+        $this->form_validation->set_rules('type_id', '登记类型', 'required|is_natural_no_zero' );
         $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
-        $this->form_validation->set_rules('address', '登记地址', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('address', '登记地址', 'trim|max_length[200]|htmlspecialchars');
         
         if(!empty($_POST['village'])){
             $this->form_validation->set_rules('village', '村名', 'trim|max_length[100]|htmlspecialchars');
@@ -1012,7 +1121,7 @@ class project_gh extends TZ_Admin_Controller {
         }
         
         if(!empty($_POST['union_name'])){
-            $this->form_validation->set_rules('union_name', '联系单位名称', 'trim|max_length[200]|htmlspecialchars');
+            $this->form_validation->set_rules('union_name', '联系单位名称', 'trim|max_length[100]|htmlspecialchars');
         }else{
             $_POST['union_name'] = trim($_POST['union_name']);
         }
@@ -1207,6 +1316,10 @@ class project_gh extends TZ_Admin_Controller {
             $_POST['region_name'] = '';
         }
         
+        $project_type = $this->Project_Gh_Type_Model->queryById($_POST['type_id']);
+        
+        $_POST['type_id'] = $project_type['id'];
+        $_POST['type'] = $project_type['name'];
         
         $insertid = $this->Project_Gh_Model->add($_POST);
         
@@ -1381,6 +1494,11 @@ class project_gh extends TZ_Admin_Controller {
             if(!empty($_GET['name'])){
                 $condition['like']['name'] = $_GET['name'];
             }
+            
+            if(!empty($_GET['union_name'])){
+                $condition['like']['union_name'] = $_GET['union_name'];
+            }
+            
             $condition['where'] = array(
                 'status !=' => '已删除'
             );

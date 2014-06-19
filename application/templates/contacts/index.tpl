@@ -12,8 +12,8 @@
                             <label><strong>范围</strong>
                                 <select name="type" >
                                     <option value="">全部</option>
-                                    <option value="0" {if $smarty.get.inc_del === '0'}selected{/if}>内部通讯录</option>
-                                    <option value="1" {if $smarty.get.inc_del == '1'}selected{/if}>外部通讯录</option>
+                                    <option value="0" {if $smarty.get.type === '0'}selected{/if}>内部通讯录</option>
+                                    <option value="1" {if $smarty.get.type == '1'}selected{/if}>外部通讯录</option>
                                 </select>
                             </label>
                             <label><strong>是否包含已删除</strong>
@@ -36,6 +36,7 @@
                         <tr>
                             <th>序号</th>
                             <th>类型</th>
+                            <th>单位名称</th>
                             <th>名称</th>
                             <th>手机号码</th>
                             <th>固定电话</th>
@@ -55,6 +56,7 @@
                         <tr id="row_{$item['id']}">
                            <td>{$item['id']}</td>
                            <td>{if $item['type']}外部{else}内部{/if}通讯录</td>
+                           <td>{$item['company_name']|escape}</td>
                            <td>{$item['name']|escape}</td>
                            <td>{$item['mobile']}</td>
                            <td>{$item['tel']}</td>
@@ -74,7 +76,7 @@
                             </td>
                         </tr>
                         {foreachelse}
-                            <tr><td colspan="14">找不到数据</td></tr>
+                            <tr><td colspan="15">找不到数据</td></tr>
                         {/foreach}
                     </tbody>
                 </table>
