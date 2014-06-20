@@ -31,6 +31,44 @@ class Search extends TZ_Controller {
     
     
     
+    public function getContactsList(){
+        
+        $q = strtolower($_GET["term"]);
+        
+        if(!$q){
+            $this->sendJson(array());
+        }
+        
+        $this->load->model('Contacts_Model');
+        
+        $data = $this->Contacts_Model->getList(
+            array(
+                'select' => 'id,company_name,name,virtual_no,mobile,tel',
+                'where' => array('status' => '正常'),
+                'like' => array('name' => $q)
+            )
+        );
+        
+        //header("Content-Type: text/html;charset=utf-8");
+        
+        $result = array();
+        foreach ($data['data'] as $key => $value) {
+            array_push($result, array(
+                "id"=>$value['id'], 
+                "label"=> $value['name'],
+                'c' => $value['company_name'],
+                'v' => empty($value['virtual_no']) == true ? '' : $value['virtual_no'], 
+                'm' => empty($value['mobile']) == true ? '' : $value['mobile'] ,
+                't' => empty($value['tel']) == true ? '' : $value['tel'])
+            );
+        }
+
+        // json_encode is available in PHP 5.2 and above, or you can install a PECL module in earlier versions
+        
+        $this->sendJson($result);
+    }
+    
+    
     public function getRegionList(){
         $year = (int)gpc("year","GP",date("Y"));
         $this->load->model("Region_Model");

@@ -1107,7 +1107,6 @@ class project_gh extends TZ_Admin_Controller {
     
     
     private function _addRules(){
-        $this->form_validation->set_rules('input_type', '录入类型', 'required|is_natural');
         $this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('region_code', '区域', 'required|alpha');
         $this->form_validation->set_rules('type_id', '登记类型', 'required|is_natural_no_zero' );
@@ -1132,9 +1131,12 @@ class project_gh extends TZ_Admin_Controller {
             $_POST['source'] = trim($_POST['source']);
         }
         
+        if(!empty($_POST['end_date'])){
+            $this->form_validation->set_rules('end_date', '要求完成时间', 'trim|valide_date');
+        }
         
         $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|required|valid_mobile');
+        $this->form_validation->set_rules('contacter_mobile', '联系人号码', 'trim|numeric|min_length[4]|max_length[15]');
         
         if(!empty($_POST['contacter_tel'])){
             $this->form_validation->set_rules('contacter_tel', '联系人固定电话', 'trim|valid_telephone');
@@ -1143,7 +1145,7 @@ class project_gh extends TZ_Admin_Controller {
         }
         
         $this->form_validation->set_rules('manager', '接洽人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        $this->form_validation->set_rules('manager_mobile', '接洽人手机', 'trim|required|valid_mobile');
+        $this->form_validation->set_rules('manager_mobile', '接洽人号码', 'trim|numeric|min_length[4]|max_length[15]');
         
         if(!empty($_POST['manager_tel'])){
             $this->form_validation->set_rules('manager_tel', '接洽人固定电话', 'trim|valid_telephone');
@@ -1250,6 +1252,7 @@ class project_gh extends TZ_Admin_Controller {
         
         if($this->isPostRequest()){
             $this->assign('info',$_POST);
+            $this->form_validation->set_rules('input_type', '录入类型', 'required|is_natural|less_than[2]');
             $this->_addRules();
             
             if($this->form_validation->run()){
@@ -1321,6 +1324,11 @@ class project_gh extends TZ_Admin_Controller {
         $_POST['type_id'] = $project_type['id'];
         $_POST['type'] = $project_type['name'];
         
+        if(!empty($_POST['end_date'])){
+            $_POST['start_date'] = time();
+            $_POST['end_date'] = strtotime($_POST['end_date']);
+        }
+        
         $insertid = $this->Project_Gh_Model->add($_POST);
         
         $this->_addProjectLog('workflow', $insertid,'新增',"{$this->_userProfile['name']} 新增",$_POST);
@@ -1342,6 +1350,15 @@ class project_gh extends TZ_Admin_Controller {
                 $info = $this->Project_Gh_Model->getById(array('where' => array('id' => $_POST['id'])));
                 
                 $_POST['updator'] = $this->_userProfile['name'];
+                
+                if(!empty($_POST['end_date'])){
+                    $_POST['end_date'] = strtotime($_POST['end_date']);
+                }
+                
+                $project_type = $this->Project_Gh_Type_Model->queryById($_POST['type_id']);
+                $_POST['type_id'] = $project_type['id'];
+                $_POST['type'] = $project_type['name'];
+                
                 $this->Project_Gh_Model->update($_POST);
 
                 $this->_addProjectLog('system', $_POST['id'],'修改',"{$this->_userProfile['name']} 修改了 {$info['project_no']} {$_POST['name']}",$_POST);
@@ -1351,6 +1368,7 @@ class project_gh extends TZ_Admin_Controller {
                 $this->assign("feedback", "success");
                 $this->assign('feedMessage',"修改成功");
             }else{
+                $_POST['end_date'] = strtotime($_POST['end_date']);
                 $info = $_POST;
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"修改失败,请核对您输入的信息");

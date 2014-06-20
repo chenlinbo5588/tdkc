@@ -42,6 +42,14 @@ class Project_Gh_Model extends TZ_Model {
             'updatetime' => $now
         );
         
+        if($param['start_date']){
+            $data['start_date'] = $param['start_date'];
+        }
+        
+        if($param['end_date']){
+            $data['end_date'] = $param['end_date'];
+        }
+        
         $this->db->insert($this->_tableName, $data);
         return $this->db->insert_id();
     }
@@ -87,6 +95,10 @@ class Project_Gh_Model extends TZ_Model {
             'updator' => $param['updator'],
             'updatetime' => time()
         );
+        
+        if($param['end_date']){
+            $data['end_date'] = $param['end_date'];
+        }
         
         $where = array(
             'id' => $param['id']

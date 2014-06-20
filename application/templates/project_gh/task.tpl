@@ -69,11 +69,11 @@
                     </tr>
                     <tr>
                         <td>联系人信息</td>
-                        <td>姓名:{$info['contacter']|escape} 手机号码:{$info['contacter_mobile']} 固定电话:{$info['contacter_tel']}</td>
+                        <td>姓名:{$info['contacter']|escape} 联系号码:{$info['contacter_mobile']} 固定电话:{$info['contacter_tel']}</td>
                     </tr>
                     <tr>
                         <td>接洽人信息</td>
-                        <td>姓名:{$info['manager']|escape} 手机号码:{$info['manager_mobile']} 固定电话:{$info['manager_tel']}</td>
+                        <td>姓名:{$info['manager']|escape} 联系号码:{$info['manager_mobile']} 固定电话:{$info['manager_tel']}</td>
                     </tr>
                     <tr>
                         <td>备注</td>

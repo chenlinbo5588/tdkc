@@ -1329,7 +1329,7 @@ class project_ch extends TZ_Admin_Controller {
         
         
         $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|required|valid_mobile');
+        $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|numeric|min_length[4]|max_length[15]');
         
         if(!empty($_POST['contacter_tel'])){
             $this->form_validation->set_rules('contacter_tel', '联系人固定电话', 'trim|valid_telephone');
@@ -1338,7 +1338,7 @@ class project_ch extends TZ_Admin_Controller {
         }
         
         $this->form_validation->set_rules('manager', '接洽人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        $this->form_validation->set_rules('manager_mobile', '接洽人手机', 'trim|required|valid_mobile');
+        $this->form_validation->set_rules('manager_mobile', '接洽人手机', 'trim|numeric|min_length[4]|max_length[15]');
         
         if(!empty($_POST['manager_tel'])){
             $this->form_validation->set_rules('manager_tel', '接洽人固定电话', 'trim|valid_telephone');

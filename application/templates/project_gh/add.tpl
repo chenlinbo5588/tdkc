@@ -77,25 +77,28 @@
                             <td><label class="optional"><em></em><strong>村名</strong></label></td><td><input type="text" style="width:300px" name="village" value="{$info['village']}" placeholder="请输入村名"/><span class="tip">{form_error('village')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>联系单位</strong></label></td><td><input type="text" style="width:600px" name="union_name" value="{$info['union_name']}" placeholder="请输入联系单位名称"/><span class="tip">{form_error('union_name')}</span></td>
-                        </tr>
-                        <tr>
                             <td><label class="optional"><em></em><strong>项目来源</strong></label></td><td><input type="text" style="width:300px" name="source" value="{$info['source']}" placeholder="请输入项目来源"/><span class="tip">{form_error('source')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>联系人名称</strong></label></td><td><input type="text" style="width:300px" name="contacter" value="{$info['contacter']}" placeholder="请输入联系人名称"/><span class="tip">{form_error('contacter')}</span></td>
+                            <td><label class="optional"><em></em><strong>要求完成时间</strong></label></td><td><input type="text" name="end_date" class="Wdate" readonly onclick="WdatePicker()" value="{if $info['end_date']}{$info['end_date']|date_format:"Y-m-d"}{/if}" /><span class="tip">{form_error('end_date')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>联系人手机号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_mobile" value="{$info['contacter_mobile']}" placeholder="请输入联系人手机号码"/><span class="tip">{form_error('contacter_mobile')}</span></td>
+                            <td><label class="required"><em>*</em><strong>联系人名称</strong></label></td><td><input type="text" style="width:300px" name="contacter" id="contacter" value="{$info['contacter']}" placeholder="请输入联系人名称"/><span class="tip">{form_error('contacter')} 输入名称将自动从通讯录匹配</span></td>
                         </tr>
-                         <tr>
+                        <tr>
+                            <td><label class="optional"><em></em><strong>联系人号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_mobile" value="{$info['contacter_mobile']}" placeholder="请输入联系人号码"/><span class="tip">{form_error('contacter_mobile')}</span></td>
+                        </tr>
+                        <tr>
                             <td><label class="optional"><em></em><strong>联系人固定电话</strong></label></td><td><input type="text" style="width:300px" name="contacter_tel" value="{$info['contacter_tel']}" placeholder="请输入联系人固定电话"/><span class="tip">{form_error('contacter_tel')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>接洽人名称</strong></label></td><td><input type="text" style="width:300px" name="manager" value="{$info['manager']}" placeholder="请输入接洽人名称"/><span class="tip">{form_error('manager')}</span></td>
+                            <td><label class="optional"><em></em><strong>联系单位</strong></label></td><td><input type="text" style="width:600px" name="union_name" value="{$info['union_name']}" placeholder="请输入联系单位名称"/><span class="tip">{form_error('union_name')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="required"><em>*</em><strong>接洽人手机号码</strong></label></td><td><input type="text" style="width:300px" name="manager_mobile" value="{$info['manager_mobile']}" placeholder="请输入接洽人手机号码"/><span class="tip">{form_error('manager_mobile')}</span></td>
+                            <td><label class="required"><em>*</em><strong>接洽人名称</strong></label></td><td><input type="text" style="width:300px" name="manager" id="manager" value="{$info['manager']}" placeholder="请输入接洽人名称"/><span class="tip">{form_error('manager')} 输入名称将自动从通讯录匹配</span></td>
+                        </tr>
+                        <tr>
+                            <td><label class="optional"><em></em><strong>接洽人号码</strong></label></td><td><input type="text" style="width:300px" name="manager_mobile" value="{$info['manager_mobile']}" placeholder="请输入接洽人号码"/><span class="tip">{form_error('manager_mobile')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="optional"><em></em><strong>接洽人固定电话</strong></label></td><td><input type="text" style="width:300px" name="manager_tel" value="{$info['manager_tel']}" placeholder="请输入接洽人固定电话"/><span class="tip">{form_error('manager_tel')}</span></td>
@@ -152,6 +155,57 @@
                             });
                         });
                         
+                        $("#contacter").autocomplete({
+                            source: "{url_path('search','getContactsList')}",
+                            minLength: 1,
+                            width: 220,
+                            focus: function(event, ui) {
+                                $("#contacter").val(ui.item.label );
+                            },
+                            select: function( event, ui ) {
+                                $("input[name=union_name]").val(ui.item.c);
+                                
+                                if(ui.item.v){
+                                    $( "input[name=contacter_mobile]" ).val( ui.item.v );
+                                }else{
+                                    $( "input[name=contacter_mobile]" ).val( ui.item.m );
+                                }
+                                
+                                $( "input[name=contacter_tel]" ).val( ui.item.t );
+                            }
+                        })
+                        .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                            return $( "<li>" )
+                            .append( "<a>" + item.label + "@" + item.c + "</a>" )
+                            .appendTo( ul );
+                        };
+                        
+                        
+                        $("#manager").autocomplete({
+                            source: "{url_path('search','getContactsList')}",
+                            minLength: 1,
+                            width: 220,
+                            focus: function(event, ui) {
+                                $("#manager").val( ui.item.label );
+                            },
+                            select: function( event, ui ) {
+                                $( "#manager" ).val( ui.item.v );
+                            
+                                if(ui.item.v){
+                                    $( "input[name=manager_mobile]" ).val( ui.item.v );
+                                }else{
+                                    $( "input[name=manager_mobile]" ).val( ui.item.m );
+                                }
+                                
+                                $( "input[name=manager_tel]" ).val( ui.item.t );
+                            }
+                        })
+                        .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                            return $( "<li>" )
+                            .append( "<a>" + item.label + "@" + item.c + "</a>" )
+                            .appendTo( ul );
+                        };
+                        
                     {if $feedback == 'success' && $action != 'edit'}
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('project_gh','add')}";
@@ -166,4 +220,5 @@
                     });
                 </script>
             </div>
+            {include file="common/calendar.tpl"}
 {include file="common/main_footer.tpl"}
