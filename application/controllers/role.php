@@ -47,12 +47,17 @@ class Role extends TZ_Admin_Controller {
                 $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
 
                 if($this->form_validation->run()){
+                    $deleteCount = $this->Role_Menu_Model->deleteByWhere(
+                        array('role_id' => $_POST['id'])
+                    );
                     
+                    /*
                     $updateCount = $this->Role_Menu_Model->updateByWhere(
                             array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
                             array('role_id' => $_POST['id'])
                             );
-
+                    */
+                    
                     if(!empty($_POST['auth_key'])){
                         $this->load->model('Menu_Model');
                         /**

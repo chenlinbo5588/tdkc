@@ -33,8 +33,7 @@ class Region extends TZ_Admin_Controller {
         if($this->isPostRequest() && !empty($_POST['id'])){
             $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
-            $this->form_validation->set_rules('code', '代码', 'required|alpha|min_length[1]|max_length[5]|callback_checkcode[edit-'.$_POST['id'].':'.$_POST['code'].':'.$_POST['year'].':'.$_POST['name'].']');
-            $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[50]|callback_checkname[edit-'.$_POST['id'].':'.$_POST['code'].':'.$_POST['year'].':'.$_POST['name'].']');
+            $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[50]|callback_checkname[edit-'.$_POST['id'].':'.$_POST['year'].':'.$_POST['name'].']');
             
             if($this->form_validation->run()){
                 // add
@@ -61,7 +60,7 @@ class Region extends TZ_Admin_Controller {
     
     private function _addRules(){
         $this->form_validation->set_rules('year', '年份', 'is_natural_no_zero');
-        
+        $this->form_validation->set_rules('code', '代码', 'required|alpha|min_length[1]|max_length[5]');
         if(!empty($_POST['displayorder'])){
             $this->form_validation->set_rules('displayorder', '排序', 'integer');
         }
@@ -111,8 +110,8 @@ class Region extends TZ_Admin_Controller {
         if($info[0] == 'add'){
             $count = $this->Region_Model->getCount(array(
                 'where' => array(
-                    'name' => $info[3],
-                    'year' => $info[2],
+                    'name' => $info[2],
+                    'year' => $info[1],
                     'status' => '正常'
                 )
             ));
@@ -120,8 +119,8 @@ class Region extends TZ_Admin_Controller {
             $count = $this->Region_Model->getCount(array(
                 'where' => array(
                     'id !=' => str_replace('edit-','',$info[0]),
-                    'name' => $info[3],
-                    'year' => $info[2],
+                    'name' => $info[2],
+                    'year' => $info[1],
                     'status' => '正常'
                 )
             ));
@@ -129,7 +128,7 @@ class Region extends TZ_Admin_Controller {
         
         if ($count)
         {
-            $this->form_validation->set_message('checkname', '%s '.htmlspecialchars($info[3]).'在年份'.$info[2].'度已经存在');
+            $this->form_validation->set_message('checkname', '%s '.htmlspecialchars($info[2]).'在年份'.$info[1].'度已经存在');
             return FALSE;
         }
         else
@@ -176,8 +175,7 @@ class Region extends TZ_Admin_Controller {
             
             $_POST['name'] = str_replace(array('[',']',':'),array('','',''),$_POST['name']);
             
-            $this->form_validation->set_rules('code', '代码', 'required|alpha|min_length[1]|max_length[5]|callback_checkcode[add:'.$_POST['code'].':'.$_POST['year'].':'.$_POST['name'].']');
-            $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[50]|callback_checkname[add:'.$_POST['code'].':'.$_POST['year'].':'.$_POST['name'].']');
+            $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[50]|callback_checkname[add:'.$_POST['year'].':'.$_POST['name'].']');
             
             if($this->form_validation->run()){
                 // add

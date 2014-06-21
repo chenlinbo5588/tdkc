@@ -107,30 +107,28 @@ class Admin extends TZ_Admin_Controller {
             
             if($this->form_validation->run()){
                 $session = $this->session->all_userdata();
-                $query = $this->db->get($this->User_Model->_tableName,array(
-                    'account' => $session['profile']['account']
-                ));
-                $user = $query->result_array();
-
+                
+                $this->load->model('User_Model');
+                $user = $this->User_Model->queryById($session['profile']['id']);
                 /**
                 * 验证原密码 
                 */
-                if($user && md5(config_item('encryption_key').$_POST['old_psw']) == $user[0]['psw']){
+                if($user && md5(config_item('encryption_key').$_POST['old_psw']) == $user['psw']){
 
                     /**
                     * 更新数据库 
                     */
                     $this->db->set('updatetime',time());
                     $this->db->where(array(
-                        'account' => $session['profile']['account']
+                        'id' => $user['id']
                     ));
                     $this->db->set('psw',md5(config_item('encryption_key').$_POST['new_psw']));
                     $this->db->update($this->User_Model->_tableName);
 
                     $this->load->library('encrypt');
-                    $user[0]['psw'] = $_POST['new_psw'];
-                    $user[0]['psw'] = $this->encrypt->encode($user[0]['psw']);
-                    $profile['profile'] = $user[0];
+                    unset($user['psw']);
+                    
+                    $profile['profile'] = $user;
 
                     $this->session->set_userdata($profile);
                     $this->assign("feedback", "success");

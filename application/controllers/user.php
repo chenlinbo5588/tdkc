@@ -46,12 +46,19 @@ class User extends TZ_Admin_Controller {
             if($_POST['id'] != 1){
                 $this->form_validation->set_rules('auth_key[]', '权限ID', 'exact_length[32]|alpha_numeric');
                 if($this->form_validation->run()){
-
+                    
+                     $deleteCount = $this->User_Menu_Model->deleteByWhere(
+                        array('user_id' => $_POST['id'])
+                    );
+                     
+                    /*
                     $updateCount = $this->User_Menu_Model->updateByWhere(
                             array('status' => 1,'updator' => $this->_userProfile['name'],'updatetime' => time()),
                             array('user_id' => $_POST['id'],'status' => 0)
                             );
-
+                     */
+                     
+                     
                     if(!empty($_POST['auth_key'])){
                         $this->load->model('Menu_Model');
                         /**
