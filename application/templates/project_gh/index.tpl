@@ -29,7 +29,6 @@
                                     <option value="已完成" {if $smarty.get.status == '已完成'}selected{/if}>已完成</option>
                                     <option value="已提交初审" {if $smarty.get.status == '已提交初审'}selected{/if}>已提交初审</option>
                                     <option value="已提交复审" {if $smarty.get.status == '已提交复审'}selected{/if}>已提交复审</option>
-                                    <option value="已提交" {if $smarty.get.status == '已提交'}selected{/if}>已提交</option>
                                     <option value="项目已提交" {if $smarty.get.status == '项目已提交'}selected{/if}>项目已提交</option>
                                     <option value="已收费" {if $smarty.get.status == '已收费'}selected{/if}>已收费</option>
                                     <option value="已归档" {if $smarty.get.status == '已归档'}selected{/if}>已归档</option>
@@ -58,14 +57,17 @@
                     <thead>
                         <tr>
                             {if $action == 'send' }<th></th>{/if}
+                            <th>登记日期</th>
+                            <th>登记人</th>
                             <th>登记名称</th>
                             <th>类型</th>
+                            <th>乡镇街道</th>
                             <th>联系单位</th>
-                            <th>负责人</th>
+                            <th>联系人</th>
+                            <th>联系人电话</th>
+                            <th>项目负责人</th>
                             <th>当前操作人</th>
                             <th>状态</th>
-                            <th>创建人</th>
-                            <th>创建时间</th>
                             <th>最后修改人</th>
                             <th>最后修改时间</th>
                             <th>操作</th>
@@ -77,34 +79,31 @@
                            {if $action == 'send' }
                            <td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>
                            {/if}
-                           <td>
-                           {if $action}
-                           <a href="{url_path('project_gh','task','id=')}{$item['id']}">{$item['name']|escape}</a>
-                           {else}
-                           <a href="javascript:void(0);" class="info" data-id="{$item['id']}">{$item['name']|escape}</a>
-                           {/if}
-                           </td>
+                           
+                           <td>{$item['createtime']|date_format:"Y-m-d"}</td>
+                           <td>{$item['creator']}</td>
+                           <td><a href="{url_path('project_gh','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
                            <td>{$item['type']}</td>
+                           <td>{$item['region_name']}</td>
                            <td>{$item['union_name']|escape}</td>
+                           <td>{$item['contacter']}</td>
+                           <td>{$item['contacter_mobile']}</td>
                            <td>{$item['pm']}</td>
                            <td>{$item['sendor']}</td>
                            <td>{$item['status']}</td>
-                           <td>{$item['creator']}</td>
-                           <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
+                           
                            <td>{$item['updator']}</td>
-                           <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
+                           <td>{$item['updatetime']|date_format:"Y-m-d H:i"}</td>
                            <td>
                                {if $action == 'send' }
                                 {if $item['status'] == '新增' && $item['user_id'] == $userProfile['id']}
                                 {auth name="project_gh+edit"}<a href="{url_path('project_gh','edit','id=')}{$item['id']}">编辑</a>{/auth}
                                 {/if}
                                {/if}
-                               
                                {if $action == 'implement'}
                                {auth name="project_gh+log"}<a class="addlog" href="javascript:void(0);" data-id="{$item['id']}" data-href="{url_path('project_gh','log','id=')}{$item['id']}">添加日志</a>{/auth}
                                {/if}
                             </td>
-                            
                         </tr>
                         {/foreach}
                     </tbody>
@@ -170,11 +169,6 @@
                 $(function(){
                     $("a.addlog").bind("click",function(e){
                         $.jBox("get:{url_path('project_gh','log','id=')}" + $(e.target).attr("data-id"),{ title:"添加项目日志",width:600,height:600});
-                    });
-                    
-                    
-                    $("a.info").bind("click",function(e){
-                        $.jBox("get:{url_path('project_gh','detail','id=')}" + $(e.target).attr("data-id"),{ title:"规划项目详情",width:800,height:600});
                     });
                 });
                 

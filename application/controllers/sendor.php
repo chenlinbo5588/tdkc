@@ -124,7 +124,7 @@ class Sendor extends TZ_Admin_Controller {
             }
             
             $this->assign("feedback", "success");
-            $this->assign('feedMessage',"保存成功,是否继续设置");
+            $this->assign('feedMessage',"保存成功");
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
@@ -138,30 +138,53 @@ class Sendor extends TZ_Admin_Controller {
     public function edit(){
         $this->assign('action','edit');
         if($this->isPostRequest() && !empty($_POST['id'])){
-            $this->form_validation->set_rules('id', '发送人编号', 'required|is_natural_no_zero');
-            $gobackUrl = $_POST['gobackUrl'];
-            $this->_addRules();
-            if($this->form_validation->run()){
-                // add
-                $_POST['updator'] = $this->_userProfile['name'];
+            foreach($_POST['id'] as $val){
+                $update = array();
+                $ch = $_POST['ch_'.$val];
                 
-                $this->User_Sendor_Model->update($_POST);
-                $info = $this->User_Sendor_Model->getById(array('where' => array('id' => $_POST['id'])));
+                if(!empty($ch)){
+                    $update['ch_workflow'] = in_array('workflow',$ch) == true ? 'y' : 'n';
+                    $update['ch_cs'] = in_array('cs',$ch) == true ? 'y' : 'n';
+                    $update['ch_fs'] = in_array('fs',$ch) == true ? 'y' : 'n';
+                    $update['ch_fee'] = in_array('fee',$ch) == true ? 'y' : 'n';
+                    $update['ch_archive'] = in_array('archive',$ch) == true ? 'y' : 'n';
+                }else{
+                    $update['ch_workflow'] = 'n';
+                    $update['ch_cs'] = 'n';
+                    $update['ch_fs'] = 'n';
+                    $update['ch_fee'] = 'n';
+                    $update['ch_archive'] = 'n';
+                }
                 
-                $this->assign("feedback", "success");
-                $this->assign('feedMessage',"修改成功");
-            }else{
-                $info = $_POST;
-                $this->assign("feedback", "failed");
-                $this->assign('feedMessage',"修改失败,请核对您输入的信息");
+                $ch2 = $_POST['gh_'.$val];
+                if(!empty($ch2)){
+                    $update['gh_workflow'] = in_array('workflow',$ch2) == true ? 'y' : 'n';
+                    $update['gh_cs'] = in_array('cs',$ch2) == true ? 'y' : 'n';
+                    $update['gh_fs'] = in_array('fs',$ch2) == true ? 'y' : 'n';
+                    $update['gh_fee'] = in_array('fee',$ch2) == true ? 'y' : 'n';
+                    $update['gh_archive'] = in_array('archive',$ch2) == true ? 'y' : 'n';
+                }else{
+                    $update['gh_workflow'] = 'n';
+                    $update['gh_cs'] = 'n';
+                    $update['gh_fs'] = 'n';
+                    $update['gh_fee'] = 'n';
+                    $update['gh_archive'] = 'n';
+                }
+                
+                $update['displayorder'] = (int)$_POST['displayorder_'.$val];
+                
+                $this->User_Sendor_Model->updateByWhere($update,array('id' => $val,'user_id' => $this->_userProfile['id']));
             }
+            
+            $message = '<p class="success">修改成功</p>';
+            $gobackUrl = $_POST['gobackUrl'];
+                
         }else{
+            $message = '<p class="failed">参数错误，修改失败</p>';
             $gobackUrl = $_SERVER['HTTP_REFERER'];
-            $info = $this->User_Sendor_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
-        $this->assign('gobackUrl',$gobackUrl);
-        $this->assign('info',$info);
-        $this->display('add');
+        $this->assign('message','<div class="pd20">'.$message.'</div>');
+        $this->display('showmessage','common');
     }
     
     /**

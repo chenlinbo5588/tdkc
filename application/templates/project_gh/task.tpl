@@ -327,22 +327,6 @@
                         <td>{if $info['real_enddate']}{$info['real_enddate']|date_format:"Y-m-d H:i:s"}{/if}</td>
                     </tr>
                     {/if}
-                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送', '已实施',  '已完成', '已通过初审','已通过复审','项目已提交'))}
-                    <tr>
-                        <td>发送给</td>
-                        <td>
-                            {if $userSendorList}
-                            <div class="userlist clearfix">
-                                {foreach  from=$userSendorList item=item}
-                                <label class="item{if $smarty.post.sendor == $item['sendor_id']} selected{/if}"><input type="radio" name="sendor" value="{$item['sendor_id']}" {if $smarty.post.sendor == $item['sendor_id']}checked{/if} >{$item['sendor']}</label>
-                                {/foreach}
-                            </div>
-                            {/if}
-                            <div>没有找到你要发送的人？，请点击<a class="notice" href="{url_path('sendor','add')}">这里</a>进行添加</a></div>
-                            <div>{form_error('sendor')}</div>
-                        </td>
-                    </tr>
-                    {/if}
                     
                     {if in_array($info['status'],array('已实施', '已完成','已提交初审',  '已通过初审', '已提交复审', '已通过复审','项目已提交'))}
                     {include file="common/upload.tpl"}
@@ -626,8 +610,22 @@
                 </table>
                 <a name="anchor_log" id="anchor_log"></a>
                 {include file="project_ch/log_list.tpl"}   
-                <div style="margin-bottom: 20px;">&nbsp;</div>    
+                <div style="margin-bottom: 50px;">&nbsp;</div>
                 <div class="fixbottom">
+                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送',  '已完成', '已通过初审','已通过复审','项目已提交'))}
+                    <div class="userlist_wrap">
+                        {if $userSendorList}
+                        <div class="userlist clearfix">
+                            {foreach  from=$userSendorList item=item}
+                            <label class="item{if $smarty.post.sendor == $item['sendor_id']} selected{/if}"><input type="radio" name="sendor" value="{$item['sendor_id']}" {if $smarty.post.sendor == $item['sendor_id']}checked{/if} >{$item['sendor']}</label>
+                            {/foreach}
+                        </div>
+                        {/if}
+                        <div>没有找到你要发送的人？，请点击<a class="notice" href="{url_path('sendor','add')}">这里</a>进行添加</a></div>
+                        <div>{form_error('sendor')}</div>
+                    </div>
+                    {/if}
+                    
                     <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                     <input type="hidden" name="workflow" value=""/>
                     {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已归档'}

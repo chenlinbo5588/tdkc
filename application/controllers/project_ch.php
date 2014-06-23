@@ -175,6 +175,51 @@ class project_ch extends TZ_Admin_Controller {
         $this->display();
     }
     
+    public function savejzb(){
+        $project_id = (int)gpc("id",'GP',0);
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            $info = $this->Project_Model->queryById($project_id);
+            if(empty($info)){
+                $this->sendFormatJson('failed', array('text' => '参数错误，项目不存在'));
+            }
+            
+            $param = $_POST;
+            if($info['type'] == CH_RCZD){
+                $this->load->model('Project_Jz_Model');
+                $this->Project_Jz_Model->deleteByWhere(array(
+                    'project_id' => $info['id']
+                ));
+
+                $insertData = array();
+
+                if(!empty($param['direction'])){
+                    foreach($param['direction'] as $key => $val){
+                        $insertTime = time();
+
+                        $insertData[] = array(
+                            'project_id' => $info['id'],
+                            'direction' => $val,
+                            'name' => !empty($param['jz_name'][$key]) ? $param['jz_name'][$key] : '',
+                            'neighbor' => !empty($param['neighbor'][$key]) ? $param['neighbor'][$key] : '',
+                            'creator' => $this->_userProfile['name'],
+                            'updator' => $this->_userProfile['name'],
+                            'createtime' => $insertTime,
+                            'updatetime' => $insertTime
+                        );
+                    }
+
+                    $this->Project_Jz_Model->batchInsert($insertData);
+                }
+            }
+
+            $this->sendFormatJson('success', array('text' => '保存成功'));
+        }else{
+            $this->sendFormatJson('failed', array('text' => '参数错误,请重新请求'));
+        }
+        
+    }
+    
     /**
      * 保存面积表 
      */
@@ -236,7 +281,7 @@ class project_ch extends TZ_Admin_Controller {
             die("参数错误,请重新请求");
         }
         
-        $this->_getSendorList();
+        
         $this->load->model('Attachment_Model');
         if($this->isPostRequest() && !empty($_POST['id'])){
             $info = $this->Project_Model->queryById($project_id);
@@ -350,7 +395,8 @@ class project_ch extends TZ_Admin_Controller {
                     //$this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
                     if($info['type'] == CH_RCZD){
-                        $this->form_validation->set_rules('jz_name[]', '界址信息', 'required');
+                        //界址可选， 因为有人打字速度慢
+                        //$this->form_validation->set_rules('jz_name[]', '界址信息', 'required');
                     }
                     
                     if(!$this->form_validation->run()){
@@ -474,6 +520,21 @@ class project_ch extends TZ_Admin_Controller {
         if(empty($message)){
             $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
         }
+        
+        $sendorWhere = array();
+        if($info['status'] == '已完成'){
+            $sendorWhere['ch_cs'] = 'y';
+        }elseif($info['status'] == '已通过初审'){
+            $sendorWhere['ch_fs'] = 'y';
+        }elseif($info['status'] == '已通过复审'){
+            $sendorWhere['ch_fee'] = 'y';
+        }elseif($info['status'] == '项目已提交'){
+            $sendorWhere['ch_archive'] = 'y';
+        }else{
+            $sendorWhere['ch_workflow'] = 'y';
+        }
+        
+        $this->_getSendorList($sendorWhere);
         
         $status = array(
             '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '项目提交','收费','归档'
@@ -823,22 +884,26 @@ class project_ch extends TZ_Admin_Controller {
                         ));
                         
                         $insertData = array();
-                        foreach($param['direction'] as $key => $val){
-                            $insertTime = time();
-                            
-                            $insertData[] = array(
-                                'project_id' => $info['id'],
-                                'direction' => $val,
-                                'name' => !empty($param['jz_name'][$key]) ? $param['jz_name'][$key] : '',
-                                'neighbor' => !empty($param['neighbor'][$key]) ? $param['neighbor'][$key] : '',
-                                'creator' => $this->_userProfile['name'],
-                                'updator' => $this->_userProfile['name'],
-                                'createtime' => $insertTime,
-                                'updatetime' => $insertTime
-                            );
-                        }
                         
-                        $this->Project_Jz_Model->batchInsert($insertData);
+                        if(!empty($param['direction'])){
+                            foreach($param['direction'] as $key => $val){
+                                $insertTime = time();
+
+                                $insertData[] = array(
+                                    'project_id' => $info['id'],
+                                    'direction' => $val,
+                                    'name' => !empty($param['jz_name'][$key]) ? $param['jz_name'][$key] : '',
+                                    'neighbor' => !empty($param['neighbor'][$key]) ? $param['neighbor'][$key] : '',
+                                    'creator' => $this->_userProfile['name'],
+                                    'updator' => $this->_userProfile['name'],
+                                    'createtime' => $insertTime,
+                                    'updatetime' => $insertTime
+                                );
+                            }
+
+                            $this->Project_Jz_Model->batchInsert($insertData);
+                        
+                        }
                     }
                     /**
                      * 完成时不需要发送了 
@@ -1020,7 +1085,17 @@ class project_ch extends TZ_Admin_Controller {
 
         
         if($pm && $sendorInfo['id']){
+            
+            $this->User_Event_Model->deleteByWhere(
+                array(
+                    'user_id' => $sendorInfo['id'],
+                    'project_type' => 0,
+                    'project_id' => $info['id']
+                )
+            );
+            
             $this->User_Event_Model->add(array(
+                'project_type' => 0,
                 'project_id' => $info['id'],
                 'user_id' => $sendorInfo['id'],
                 'title' => cut($info['name'],100),
@@ -1463,7 +1538,7 @@ class project_ch extends TZ_Admin_Controller {
                 $this->_add($addYear);
                 
                 $this->assign("feedback", "success");
-                $this->assign('feedMessage',"创建成功,您需要继续添加吗");
+                $this->assign('feedMessage',"创建成功");
             }else{
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
@@ -1527,7 +1602,20 @@ class project_ch extends TZ_Admin_Controller {
             ));
 
             $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
+            
+            $totalOffset = config_item('total_offset');
+            if(!empty($totalOffset)){
+                $_POST['master_serial'] += (int)$totalOffset[date("Y")];
+            }
+            
             $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
+            
+            $regionOffset = config_item('region_offset_'.date("Y"));
+            
+            if(!empty($regionOffset)){
+                $_POST['region_serial'] += (int)$regionOffset[$_POST['region_code']];
+            }
+            
             $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
         }else{
             $_POST['master_serial'] = 0;
@@ -1724,18 +1812,19 @@ class project_ch extends TZ_Admin_Controller {
             
         }else{
             
-            $this->_getSendorList();
+            $this->_getSendorList(array(
+                'ch_workflow' => 'y'
+            ));
             $this->display();
         }
     }
     
-    private function _getSendorList(){
+    private function _getSendorList($where = array()){
+        $where = array_merge(array('user_id' => $this->_userProfile['id']),$where);
         $userSendorList = $this->User_Sendor_Model->getList(array(
-            'where' => array(
-                'user_id' => $this->_userProfile['id']
-                )
-            )
-        );
+            'where' => $where,
+            'order' => 'createtime ASC ,displayorder DESC'
+        ));
         $this->assign('userSendorList',$userSendorList['data']);
     }
     

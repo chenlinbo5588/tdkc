@@ -117,7 +117,7 @@
                         <tr>
                             <td><label class="optional"><em></em><strong>优先级</strong></label></td><td>
                                 <input type="text" name="displayorder" value="{$info['displayorder']}" placeholder="优先级"/>
-                                <span class="tip">{form_error('displayorder')} 默认空表示普通优先级 数字越大优先级越高</span></td>
+                                <span class="tip">{form_error('displayorder')} 默认空表示普通优先级 数字越大优先级越高 范围(0-9)</span></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -207,11 +207,8 @@
                         };
                         
                     {if $feedback == 'success' && $action != 'edit'}
-                        if(confirm('{$feedMessage}')){
-                            location.href = "{url_path('project_gh','add')}";
-                        }else{
-                            location.href = "{url_path('project_gh','send')}";
-                        }
+                        alert('{$feedMessage}');
+                        location.href = "{url_path('project_gh','send')}";
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}

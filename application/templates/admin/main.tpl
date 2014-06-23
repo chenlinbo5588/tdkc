@@ -18,6 +18,58 @@
         </tr>
     </table>
 </div>
+        
+<div class="fm">
+    <h2>最近项目列表</h2>
+    <table class="table" style="width:auto" align="center" border="0" >
+        <thead>
+            <tr>
+                <th>登记日期</th>
+                <th>联系人</th>
+                <th>联系人号码</th>
+                <th>接洽人</th>
+                <th>项目名称</th>
+                <th>负责人</th>
+                <th>当前处理人</th>
+                <th>当前状态</th>
+                <th>要求完成时间</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$userProjectList item=item}
+            <tr>
+                <td>{$item['createtime']|date_format:"Y-m-d"}</td>
+                <td>{$item['contacter']}</td>
+                <td>{$item['contacter_mobile']}</td>
+                <td>{$item['manager']}</td>
+                <td><a href="{url_path('project_ch','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
+                <td>{$item['pm']}</td>
+                <td>{$item['sendor']}</td>
+                <td>{$item['status']}</td>
+                <td>{if $item['start_date']}{$item['start_date']|date_format:"Y-m-d"}{/if}</td>
+                <td>{$item['descripton']|escape}</td>
+            </tr>
+            {/foreach}
+            {foreach from=$userProjectList2 item=item}
+            <tr>
+                <td>{$item['createtime']|date_format:"Y-m-d"}</td>
+                <td>{$item['contacter']}</td>
+                <td>{$item['contacter_mobile']}</td>
+                <td>{$item['manager']}</td>
+                <td><a href="{url_path('project_gh','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
+                <td>{$item['pm']}</td>
+                <td>{$item['sendor']}</td>
+                <td>{$item['status']}</td>
+                <td>{if $item['start_date']}{$item['start_date']|date_format:"Y-m-d"}{/if}</td>
+                <td>{$item['descripton']|escape}</td>
+            </tr>
+            {/foreach}
+            
+        </tbody>
+    </table>
+    
+</div>
 <div class="fm">
     <table class="table" width="98%" align="center" border="0" >
         <colgroup>

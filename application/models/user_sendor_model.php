@@ -54,7 +54,6 @@ class User_Sendor_Model extends TZ_Model {
         
         $data = array(
             'name' => $info['name'],
-            'address' => $info['address'],
             'updator' => $info['updator'],
             'updatetime' => time()
         );

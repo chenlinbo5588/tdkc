@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td>录入类型</td>
-                        <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}补录登记{/if}</td>
+                        <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}意向登记{/if}</td>
                     </tr>
                     <tr>
                         <td>登记年月</td>
@@ -402,22 +402,7 @@
                         </td>
                     </tr>
                     {/if}
-                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送',  '已完成', '已通过初审','已通过复审','项目已提交'))}
-                    <tr>
-                        <td>发送给</td>
-                        <td>
-                            {if $userSendorList}
-                            <div class="userlist clearfix">
-                                {foreach  from=$userSendorList item=item}
-                                <label class="item{if $smarty.post.sendor == $item['sendor_id']} selected{/if}"><input type="radio" name="sendor" value="{$item['sendor_id']}" {if $smarty.post.sendor == $item['sendor_id']}checked{/if} >{$item['sendor']}</label>
-                                {/foreach}
-                            </div>
-                            {/if}
-                            <div>没有找到你要发送的人？，请点击<a class="notice" href="{url_path('sendor','add')}">这里</a>进行添加</a></div>
-                            <div>{form_error('sendor')}</div>
-                        </td>
-                    </tr>
-                    {/if}
+                    
                     {if $info['type'] == $smarty.const.CH_RCZD}
                     <tr>
                         <td>宗地勘测定界报告</td>
@@ -435,7 +420,9 @@
                                 <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
                                 <label>请输入原流水号(不区分大小写)<input type="text" name="source_id" value="" placeholder="请输入原流水号"/></label>
                                 <input type="button" name="readJzFrom" id="readJzFrom" value="从已有界址读入"/>
+                                <input type="button" name="saveJz" id="saveJz" value="保存界址表"/>
                                 {/if}
+                                
                                 <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
                             </div>
                             <div id="jz_list" style="margin:10px 0;">
@@ -469,7 +456,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <span class="point_start">{$smarty.foreach.jzList.index}</span> - <span class="point_end">{$smarty.foreach.jzList.index + 1}</span>
+                                                <span class="point_start">{$smarty.foreach.jzList.index + 1}</span> - <span class="point_end">{if $smarty.foreach.jzList.last}1{else}{$smarty.foreach.jzList.index + 1}{/if}</span>
                                             </td>
                                             <td>
                                                 <input name="jz_name[]" type="text" style="width:100%" value="{$item['name']|escape}" placeholder="请输入界址线位置"/>
@@ -536,7 +523,7 @@
                             <td>自查主要意见</td>
                             <td>
                                 {if $info['status'] == '已完成' && $info['sendor_id'] == $userProfile['id']}
-                                <textarea style="width: 500px; height: 100px;" name="zc_yj">{$info['zc_yj']|escape}</textarea>
+                                <textarea style="width: 500px; height: 100px;" name="zc_yj">{if $info['zc_yj']}{$info['zc_yj']|escape}{else}外业数据正确。{/if}</textarea>
                                 <div>{form_error('zc_yj')}</div>
                                 {else}
                                     {$info['zc_yj']|escape}
@@ -566,7 +553,7 @@
                             <td>初审意见</td>
                             <td>
                                 {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
-                                <textarea style="width: 500px; height: 100px;" name="cs_yj">{$info['cs_yj']|escape}</textarea>
+                                <textarea style="width: 500px; height: 100px;" name="cs_yj">{if $info['cs_yj']}{$info['cs_yj']|escape}{else}按规范要求测量，报告符合要求。{/if}</textarea>
                                 <div>{form_error('cs_yj')}</div>
                                 {else}
                                 {$info['cs_yj']|escape} 
@@ -596,7 +583,7 @@
                             <td>复审意见</td>
                             <td>
                                 {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
-                                <textarea style="width: 500px; height: 100px;" name="fs_yj">{$info['fs_yj']|escape}</textarea>
+                                <textarea style="width: 500px; height: 100px;" name="fs_yj">{if $info['fs_yj']}{$info['fs_yj']|escape}{else}经查资料齐全，合格。{/if}</textarea>
                                 <div>{form_error('fs_yj')}</div>
                                 {else}
                                     {$info['fs_yj']|escape} 
@@ -748,8 +735,22 @@
                 </table>
                 <a name="anchor_log" id="anchor_log"></a>
                 {include file="project_ch/log_list.tpl"}
-                <div style="margin-bottom: 20px;">&nbsp;</div>    
+                <div style="margin-bottom: 50px;">&nbsp;</div>
                 <div class="fixbottom">
+                    
+                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送',  '已完成', '已通过初审','已通过复审','项目已提交'))}
+                    <div class="userlist_wrap">
+                        {if $userSendorList}
+                        <div class="userlist clearfix">
+                            {foreach  from=$userSendorList item=item}
+                            <label class="item{if $smarty.post.sendor == $item['sendor_id']} selected{/if}"><input type="radio" name="sendor" value="{$item['sendor_id']}" {if $smarty.post.sendor == $item['sendor_id']}checked{/if} >{$item['sendor']}</label>
+                            {/foreach}
+                        </div>
+                        {/if}
+                        <div>没有找到你要发送的人？，请点击<a class="notice" href="{url_path('sendor','add')}">这里</a>进行添加</a></div>
+                        <div>{form_error('sendor')}</div>
+                    </div>
+                    {/if}
                     <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                     <input type="hidden" name="workflow" value=""/>
                 {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已归档'}
@@ -824,6 +825,54 @@
                 </script>
                 <script>
                     $(function(){
+                    
+                        $("#saveJz").bind("click",function(e){
+                            var that = $(e.target);
+                            var cansubmit = true;
+                            
+                            if($("#jzTable tbody tr").size() == 0){
+                                cansubmit = false;
+                                $.jBox.alert("请录入界址信息",'提示');
+                            }
+                            
+                            if(cansubmit){
+                                $("#jzTable tbody tr").each(function(idx){
+                                    var tr = $(this);
+                                    if($("input[name='jz_name[]']",tr).val() == ''){
+                                        $("input[name='jz_name[]']",tr).focus();
+                                        $.jBox.alert("请录入界址线位置",'提示');
+                                        cansubmit = false;
+                                        return false;
+                                    }else if($("input[name='neighbor[]']",tr).val() == ''){
+                                        $("input[name='neighbor[]']",tr).focus();
+                                        $.jBox.alert("请录入邻居名称",'提示');
+                                        cansubmit = false;
+                                        return false;
+                                    }
+                                });
+                            }
+                            
+                            if(cansubmit){
+                                that.prop("disabled",true);
+                                $.ajax({
+                                    url:"{url_path('project_ch','savejzb')}",
+                                    type:"POST",
+                                    data: $("form[name=saveForm]").serialize() + '&isajax=1',
+                                    dataType:"json",
+                                    success:function(resp){
+                                        that.prop("disabled",false);
+                                        alert(resp.body.text);
+                                    },
+                                    complete:function(){
+                                        that.prop("disabled",false);
+                                    },
+                                    error:function(){
+                                        that.prop("disabled",false);
+                                    }
+                                });
+                            }
+                        });
+                    
                         $("#addJz").bind("click",function(e){
                             var rowcnt = $("#jzTable").find("tbody tr").size();
                             var row = $($("#jzRowTemplate").html());
@@ -1030,10 +1079,12 @@
                                 }
                                 
                                 {if $info['type'] == $smarty.const.CH_RCZD}
+                                {* 界址可选
                                 if(cansubmit && $("input[name='jz_name[]']").length < 3 ){
                                     $.jBox.alert("请录入界址信息,至少三址",'提示');
                                     cansubmit = false;
                                 }
+                                *}
                                 if(cansubmit){
                                     $("#jzTable tbody tr").each(function(idx){
                                         var tr = $(this);

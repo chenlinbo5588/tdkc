@@ -3,7 +3,7 @@
                    {if $item['pid'] != 0}
                    <a href="/index.php?{$item['url']}">{$item['name']}</a>&nbsp;
                    {else}
-                   <a href="/index.php?{$item['url']}" target="menu">{$item['name']}</a>&nbsp;
+                   {$item['name']}&nbsp;
                    {/if}
                    {if !$smarty.foreach.breadcrumb.last }&gt;{/if}
                {/foreach}

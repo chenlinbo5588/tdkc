@@ -40,6 +40,32 @@ class Admin extends TZ_Admin_Controller {
         $this->display();
     }
     public function main(){
+        
+        $this->load->model('Project_Model');
+        $projectList = $this->Project_Model->getList(array(
+            'where' => array(
+                'user_id' => $this->_userProfile['id'],
+                'status != ' => '已归档',
+                'status != ' => '已删除'
+            ),
+            'order' => 'createtime DESC'
+        ));
+        
+        $this->assign('userProjectList',$projectList['data']);
+        
+        $this->load->model('Project_Gh_Model');
+        $projectList = $this->Project_Gh_Model->getList(array(
+            'where' => array(
+                'user_id' => $this->_userProfile['id'],
+                'status != ' => '已归档',
+                'status != ' => '已删除'
+            ),
+            'order' => 'createtime DESC'
+        ));
+        
+        $this->assign('userProjectList2',$projectList['data']);
+        
+        
         $this->load->model('Inst_Model');
         $zhiduList = $this->Inst_Model->getList(array(
            'where' => array(

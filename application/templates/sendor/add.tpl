@@ -61,11 +61,7 @@
 
                         
                     {if $feedback == 'success' && $action != 'edit'}
-                        if(confirm('{$feedMessage}')){
-                            location.href = "{url_path('sendor','add')}";
-                        }else{
-                            location.href = "{url_path('sendor','index')}";
-                        }
+                        alert('{$feedMessage}');
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}

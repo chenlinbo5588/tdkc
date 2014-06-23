@@ -19,9 +19,9 @@
             {/foreach}
         </ul>
         <input type="submit" style="margin:10px;" name="submit" class="btn btn-sm btn-primary" value="发送"/>
-        {else}
-        <div>还没有设置发送人，请点击<a class="notice" href="{url_path('sendor','add')}">这里</a>进行添加</a></div>
         {/if}
+        <div>还没有设置发送人或者找不到你要发送的人？，请点击<a class="notice" href="{url_path('sendor','add')}">这里</a>进行添加</a></div>
+        
      </form>
      
 </div>

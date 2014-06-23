@@ -126,16 +126,16 @@
                         <tr>
                             <td><label class="optional"><em></em><strong>优先级</strong></label></td><td>
                                 <input type="text" name="displayorder" value="{$info['displayorder']}" placeholder="优先级"/>
-                                <span class="tip">{form_error('displayorder')} 默认空表示普通优先级 数字越大优先级越高</span></td>
+                                <span class="tip">{form_error('displayorder')} 默认空表示普通优先级 数字越大优先级越高 范围(0-9)</span></td>
                         </tr>
                         {if $action == 'add'}
                         <tr  id="gen_serial">
-                            <td><label class="required"><em>*</em><strong>是否生成流水号</strong></label></td>
+                            <td><label class="required"><em>*</em><strong>是否生成正式流水号</strong></label></td>
                             <td>
                                 <label><input type="radio" name="gen_serial" value="1" checked/>是</label>
                                 &nbsp;&nbsp;
                                 <label><input type="radio" name="gen_serial" value="0" />否</label>
-                                <span class="tip">{form_error('gen_serial')}</span>
+                                <span class="tip">选择是:将按照原台账方式编号 选择否：将生成纯数字流水号 {form_error('gen_serial')}</span>
                             </td>
                         </tr>
                         {/if}
@@ -228,11 +228,8 @@
                         };
                         
                     {if $feedback == 'success' && $action != 'edit'}
-                        if(confirm('{$feedMessage}')){
-                            location.href = "{url_path('project_ch','add')}";
-                        }else{
-                            location.href = "{url_path('project_ch','send')}";
-                        }
+                        alert('{$feedMessage}');
+                        location.href = "{url_path('project_ch','send')}";
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}

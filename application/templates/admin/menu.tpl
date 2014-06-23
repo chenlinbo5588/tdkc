@@ -17,7 +17,7 @@
       </dl>
       <!-- Item 2 End -->
       *}
-      
+      {auth name="system"}
       <dl class='bitem'>
         <dt onClick='showHide("system")'><b>系统管理</b></dt>
         <dd style='display:block' class='sitem' id='system'>
@@ -32,7 +32,9 @@
           </ul>
         </dd>
       </dl>
+      {/auth}
       
+      {auth name="personal"}
       <dl class='bitem'>
         <dt onClick='showHide("personal")'><b>个人办公</b></dt>
         <dd style='display:block' class='sitem' id="personal">
@@ -49,7 +51,8 @@
           </ul>
         </dd>
       </dl>
-      
+      {/auth}
+      {auth name="project"}
       <dl class='bitem'>
         <dt onClick='showHide("project_ch")'><b>测绘项目</b></dt>
         <dd style='display:block' class='sitem' id='project_ch'>
@@ -68,7 +71,9 @@
           </ul>
         </dd>
       </dl>
+      {/auth}
       
+      {auth name="project+guihua"}
       <dl class='bitem'>
         <dt onClick='showHide("project_gh")'><b>规划项目</b></dt>
         <dd style='display:block' class='sitem' id='project_gh'>
@@ -87,7 +92,9 @@
           </ul>
         </dd>
       </dl>
+      {/auth}
       
+      {auth name="office"}
       <dl class='bitem'>
         <dt onClick='showHide("office")'><b>办公室</b></dt>
         <dd style='display:block' class='sitem' id='office'>
@@ -104,7 +111,9 @@
           </ul>
         </dd>
       </dl>
+      {/auth}
       
+      {auth name="info"}
       <dl class='bitem'>
         <dt onClick='showHide("info")'><b>信息中心</b></dt>
         <dd style='display:block' class='sitem' id='info'>
@@ -116,7 +125,9 @@
           </ul>
         </dd>
       </dl>
-          
+      {/auth}
+      
+      {auth name="reports"}
       <dl class='bitem'>
         <dt onClick='showHide("reports")'><b>数据报表</b></dt>
         <dd style='display:block' class='sitem' id='reports'>
@@ -129,7 +140,7 @@
           </ul>
         </dd>
       </dl>
-      
+      {/auth}
 	  </td>
   </tr>
 </table>

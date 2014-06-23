@@ -174,7 +174,7 @@ class project_gh extends TZ_Admin_Controller {
             die("参数错误,请重新请求");
         }
         
-        $this->_getSendorList();
+        
         $this->load->model('Attachment_Model');
         if($this->isPostRequest() && !empty($_POST['id'])){
             $info = $this->Project_Gh_Model->queryById($project_id);
@@ -274,7 +274,7 @@ class project_gh extends TZ_Admin_Controller {
                     
                 }elseif($op == '完成'){
                     $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
-                    $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                    //$this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
                         break;
                     }
@@ -381,6 +381,20 @@ class project_gh extends TZ_Admin_Controller {
             $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
         }
         
+        $sendorWhere = array();
+        if($info['status'] == '已完成'){
+            $sendorWhere['gh_cs'] = 'y';
+        }elseif($info['status'] == '已通过初审'){
+            $sendorWhere['gh_fs'] = 'y';
+        }elseif($info['status'] == '已通过复审'){
+            $sendorWhere['gh_fee'] = 'y';
+        }elseif($info['status'] == '项目已提交'){
+            $sendorWhere['gh_archive'] = 'y';
+        }else{
+            $sendorWhere['gh_workflow'] = 'y';
+        }
+        
+        $this->_getSendorList($sendorWhere);
         
         $status = array(
             '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '项目提交','收费','归档'
@@ -665,10 +679,10 @@ class project_gh extends TZ_Admin_Controller {
                     
                     break;
                 case '完成':
-                    $sendorInfo = $this->User_Model->queryById($param['sendor']);
+                    //$sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
-                        'sendor_id' => $sendorInfo['id'],
-                        'sendor' => $sendorInfo['name'],
+                        //'sendor_id' => $sendorInfo['id'],
+                        //'sendor' => $sendorInfo['name'],
                         'status' => '已'.$op,
                         'updator' => $this->_userProfile['name'],
                         'real_enddate' => time(),
@@ -678,7 +692,7 @@ class project_gh extends TZ_Admin_Controller {
                     
                     $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                     if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
+                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op}",$data);
                         $eventReaded = true;
                         $pm = true;
                     }
@@ -826,7 +840,16 @@ class project_gh extends TZ_Admin_Controller {
 
         
         if($pm && $sendorInfo['id']){
+            $this->User_Event_Model->deleteByWhere(
+                array(
+                    'user_id' => $sendorInfo['id'],
+                    'project_type' => 1,
+                    'project_id' => $info['id']
+                )
+            );
+            
             $this->User_Event_Model->add(array(
+                'project_type' => 1,
                 'project_id' => $info['id'],
                 'user_id' => $sendorInfo['id'],
                 'title' => cut($info['name'],100),
@@ -1259,7 +1282,7 @@ class project_gh extends TZ_Admin_Controller {
                 $this->_add($addYear);
                 
                 $this->assign("feedback", "success");
-                $this->assign('feedMessage',"创建成功,您需要继续添加吗");
+                $this->assign('feedMessage',"创建成功");
             }else{
                 $this->assign("feedback", "failed");
                 $this->assign('feedMessage',"创建失败,请核对您输入的信息");
@@ -1483,13 +1506,12 @@ class project_gh extends TZ_Admin_Controller {
         }
     }
     
-    private function _getSendorList(){
+    private function _getSendorList($where){
+        $where = array_merge(array('user_id' => $this->_userProfile['id']),$where);
         $userSendorList = $this->User_Sendor_Model->getList(array(
-            'where' => array(
-                'user_id' => $this->_userProfile['id']
-                )
-            )
-        );
+            'where' => $where,
+            'order' => 'createtime ASC ,displayorder DESC'
+        ));
         $this->assign('userSendorList',$userSendorList['data']);
     }
     
