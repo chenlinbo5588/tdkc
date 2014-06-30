@@ -1501,7 +1501,9 @@ class project_gh extends TZ_Admin_Controller {
             
         }else{
             
-            $this->_getSendorList();
+            $this->_getSendorList(array(
+                'gh_workflow' => 'y'
+            ));
             $this->display();
         }
     }

@@ -77,9 +77,10 @@ class Contacts extends TZ_Admin_Controller {
             $this->form_validation->set_rules('mobile', '手机号码', 'trim|valid_mobile');
         }
         
-        $this->form_validation->set_rules('tel', '固定电话', 'valid_telephone');
+        //$this->form_validation->set_rules('tel', '固定电话', 'valid_telephone');
+        $this->form_validation->set_rules('tel', '固定电话', 'numeric_dash|min_length[6]|max_length[15]');
         $this->form_validation->set_rules('virtual_no', '虚拟号码', 'numeric_dash|max_length[10]');
-        $this->form_validation->set_rules('fax', '传真', 'numeric_dash|min_length[3]|max_length[15]');
+        $this->form_validation->set_rules('fax', '传真', 'numeric_dash|min_length[6]|max_length[15]');
         $this->form_validation->set_rules('address', '地址', 'max_length[150]|htmlspecialchars');
     }
     

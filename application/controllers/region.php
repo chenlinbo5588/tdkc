@@ -212,14 +212,14 @@ class Region extends TZ_Admin_Controller {
                 'query_param' => url_path('region','index',array('name' => $_GET['name'],'type' => $_GET['type']))
             );
             
+            $condition['where']['status'] = '正常';
+            
             if(!empty($_GET['name'])){
                 $condition['like'] = array('name' => $_GET['name']);
             }
             
             if(!empty($_GET['year'])){
-                $condition['where'] = array(
-                    'year' => $_GET['year']
-                );
+                $condition['where']['year'] = $_GET['year'];
             }
             
             $data = $this->Region_Model->getList($condition);
