@@ -85,6 +85,7 @@ class Menu extends TZ_Admin_Controller {
                 }else{
                     // add
                     $_POST['updator'] = $this->_userProfile['name'];
+                    $_POST['auth_key'] = md5($_POST['url']);
                     $this->Menu_Model->update($_POST);
                     $this->assign("feedback", "success");
                     $this->assign('feedMessage',"修改成功");
@@ -154,7 +155,7 @@ class Menu extends TZ_Admin_Controller {
                 if(empty($_POST['pid'])){
                     $_POST['pid'] = 0;
                 }
-                
+                $_POST['auth_key'] = md5($_POST['url']);
                 $insertid = $this->Menu_Model->add($_POST);
                 
                 $this->assign("feedback", "success");

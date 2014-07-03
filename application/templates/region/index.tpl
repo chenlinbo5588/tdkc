@@ -30,7 +30,9 @@
                             <th>名称</th>
                             <th>代码</th>
                             <th>编码年份</th>
+                            <th>创建人</th>
                             <th>创建时间</th>
+                            <th>最后修改人</th>
                             <th>最后修改时间</th>
                             <th>操作</th>
                         </tr>
@@ -42,7 +44,9 @@
                            <td>{$item['name']|escape}</td>
                            <td>{$item['code']|escape}</td>
                            <td>{$item['year']}</td>
+                           <td>{$item['creator']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
+                           <td>{$item['updator']}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>
                                {if $item['status'] != '已删除'}

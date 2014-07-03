@@ -367,10 +367,11 @@
                             });
                         });
                     </script>
+                    {/if}
                     <tr>
                         <td>图件文档</td>
                         <td>
-                            {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '项目已提交'}
+                            {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('已实施', '已完成'))}
                             <div>
                                 <span class="uploader"></span>
                                 <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
@@ -390,7 +391,6 @@
                             </ul>
                         </td>
                     </tr>
-                    {/if}
                     
                     </tbody>
                 </table>

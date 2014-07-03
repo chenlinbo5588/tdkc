@@ -28,7 +28,9 @@
                                     <option value="已实施" {if $smarty.get.status == '已实施'}selected{/if}>已实施</option>
                                     <option value="已完成" {if $smarty.get.status == '已完成'}selected{/if}>已完成</option>
                                     <option value="已提交初审" {if $smarty.get.status == '已提交初审'}selected{/if}>已提交初审</option>
+                                    <option value="已通过初审" {if $smarty.get.status == '已通过初审'}selected{/if}>已通过初审</option>
                                     <option value="已提交复审" {if $smarty.get.status == '已提交复审'}selected{/if}>已提交复审</option>
+                                    <option value="已通过复审" {if $smarty.get.status == '已通过复审'}selected{/if}>已通过复审</option>
                                     <option value="项目已提交" {if $smarty.get.status == '项目已提交'}selected{/if}>项目已提交</option>
                                     <option value="已收费" {if $smarty.get.status == '已收费'}selected{/if}>已收费</option>
                                     <option value="已归档" {if $smarty.get.status == '已归档'}selected{/if}>已归档</option>
@@ -36,6 +38,7 @@
                             </label>
                             {*<label><input type="checkbox" name="view" value="my" {if $smarty.get.view == 'my'}checked{/if}/>我登记的</label>*}
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                            <input type="button" name="refresh" class="btn btn-primary" value="刷新" onclick="javascript:location.reload();"/>
                         </li>
                         
                      </ul>
@@ -43,20 +46,17 @@
             </div>
             {/if}                
             <div class="span12">
-                
-                {if $action == 'send' }
                 <div class="operator">
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
                     {auth name="project_gh+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
                     {auth name="project_gh+sendone"}<a href="javascript:sendAll('id[]');" class="coolbg">发送</a>{/auth}
                 </div>
-                {/if}
                 <form name="listform" action="" method="post">
                 <table class="table">
                     <thead>
                         <tr>
-                            {if $action == 'send' }<th></th>{/if}
+                            {auth name="project_gh+delete"}<th></th>{/auth}
                             <th>登记日期</th>
                             <th>登记人</th>
                             <th>登记名称</th>
@@ -68,18 +68,15 @@
                             <th>项目负责人</th>
                             <th>当前操作人</th>
                             <th>状态</th>
-                            <th>最后修改人</th>
-                            <th>最后修改时间</th>
+                            <th>要求完成时间</th>
+                            <th>备注</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           {if $action == 'send' }
-                           <td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>
-                           {/if}
-                           
+                           {auth name="project_gh+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td>{$item['creator']}</td>
                            <td><a href="{url_path('project_gh','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
@@ -91,19 +88,74 @@
                            <td>{$item['pm']}</td>
                            <td>{$item['sendor']}</td>
                            <td>{$item['status']}</td>
-                           
-                           <td>{$item['updator']}</td>
-                           <td>{$item['updatetime']|date_format:"Y-m-d H:i"}</td>
+                           <td>{if $item['end_date']}{$item['end_date']|date_format:"Y-m-d"}{/if}</td>
+                           <td>{$item['descripton']}</td>
                            <td>
-                               {if $action == 'send' }
-                                {if $item['status'] == '新增' && $item['user_id'] == $userProfile['id']}
-                                {auth name="project_gh+edit"}<a href="{url_path('project_gh','edit','id=')}{$item['id']}">编辑</a>{/auth}
-                                {/if}
+                               <div class="loading" style="display:none;"></div>
+                               {auth name="project_gh+edit"}<a href="{url_path('project_gh','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="project_gh+dispatch"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已发送'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','dispatch','id=')}{$item['id']}" data-title="项目布置" class="popwin">布置</a>
                                {/if}
-                               {if $action == 'implement'}
-                               {auth name="project_gh+log"}<a class="addlog" href="javascript:void(0);" data-id="{$item['id']}" data-href="{url_path('project_gh','log','id=')}{$item['id']}">添加日志</a>{/auth}
+                               {/auth}
+                               
+                               {auth name="project_gh+implement"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已布置'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','implement','id=')}{$item['id']}" data-title="项目实施" class="popwin">实施</a>
                                {/if}
-                            </td>
+                               {/auth}
+                               
+                               {auth name="project_gh+complete"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已实施'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','complete','id=')}{$item['id']}" data-title="完成作业" class="popwin">完成作业</a>
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+check"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已完成'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','check','id=')}{$item['id']}" data-title="提交初审" class="popwin">提交初审</a>
+                               {else if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已通过初审'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','check','id=')}{$item['id']}" data-title="提交复审" class="popwin">提交复审</a>    
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+first_sh"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已提交初审'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','first_sh','id=')}{$item['id']}" data-title="初审" class="popwin">初审</a>
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+second_sh"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已提交复审'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','second_sh','id=')}{$item['id']}" data-title="复审" class="popwin">复审</a>
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+second_sh"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已通过复审'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','handle','id=')}{$item['id']}" data-title="项目提交" class="popwin">项目提交</a>
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+fee"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '项目已提交'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','fee','id=')}{$item['id']}" data-title="收费" class="popwin">收费</a>
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+archive"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已收费'}
+                               <a href="javascript:void(0);" data-href="{url_path('project_gh','archive','id=')}{$item['id']}" data-title="归档" class="popwin">归档</a>
+                               {/if}
+                               {/auth}
+                               
+                               {auth name="project_gh+tuihui"}
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] != '新增'}
+                                    <a href="javascript:void(0);" data-href="{url_path('project_gh','tuihui','id=')}{$item['id']}" data-title="项目退回" class="popwin">退回</a>
+                               {/if}
+                               {/auth}
+                               {auth name="project_gh+log"}<a class="popwin" href="javascript:void(0);" data-id="{$item['id']}" data-title="项目日志"  data-href="{url_path('project_gh','log','id=')}{$item['id']}">添加日志</a>{/auth}
+                           </td>
                         </tr>
                         {/foreach}
                     </tbody>
@@ -118,7 +170,6 @@
                 <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
              </div>
              <script>
-                {if $action == 'send' }
                  function deleteSelAll(name){
                     var checked = false;
                     $("input[name='" +  name + "']").each(function(){
@@ -164,11 +215,11 @@
                         $.jBox("get:{url_path('project_gh','sendone')}" + '&' + param,{ title:"发送",width:300,buttons:{ } });
                     }
                 }
-                {/if}
                 
                 $(function(){
-                    $("a.addlog").bind("click",function(e){
-                        $.jBox("get:{url_path('project_gh','log','id=')}" + $(e.target).attr("data-id"),{ title:"添加项目日志",width:600,height:600});
+                    $("a.popwin").bind("click",function(e){
+                        var url = $(e.target).attr("data-href");
+                        $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:600});
                     });
                 });
                 

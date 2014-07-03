@@ -208,7 +208,7 @@
                         
                     {if $feedback == 'success' && $action != 'edit'}
                         alert('{$feedMessage}');
-                        location.href = "{url_path('project_gh','send')}";
+                        location.href = "{url_path('project_gh','index')}";
                     {/if}
                     
                     {if $action == 'edit' && $feedMessage}

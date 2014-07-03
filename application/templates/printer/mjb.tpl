@@ -39,7 +39,7 @@
                         <thead>
                             <tr>
                                 <td class="center toptitle" colspan="3">编号</td>
-                                <td colspan="4"><span class="bh" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{$info['nature']}</span></span></td>
+                                <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
                             </tr>
                             <tr>
                                 <td class="center toptitle" colspan="3" >单位名称</td>
@@ -262,7 +262,7 @@
                     <thead>
                         <tr>
                             <td class="center toptitle" colspan="3">编号</td>
-                            <td colspan="4"><span class="bh" >NO( {$info['project_no']} )</span><span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{$info['nature']}</span></span></td>
+                            <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
                         </tr>
                         <tr>
                             <td class="center toptitle" colspan="3" >单位名称</td>

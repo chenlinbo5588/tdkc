@@ -18,15 +18,6 @@
                                 </select>
                             </label>
                             
-                            <label><strong>收费情况</strong>
-                                <select name="fee_type" >
-                                    <option value="">全部</option>
-                                    <option value="1" {if $smarty.get.fee_type == 1}selected{/if}>挂账</option>
-                                    <option value="2" {if $smarty.get.fee_type == 2}selected{/if}>票开款收</option>
-                                    <option value="3" {if $smarty.get.fee_type == 3}selected{/if}>票开款未收</option>
-                                    <option value="4" {if $smarty.get.fee_type == 4}selected{/if}>票未开款收</option>
-                                </select>
-                            </label>
                             <input type="submit" name="submit" class="btn btn-primary" value="统计"/>
                         </li>
                         
@@ -42,7 +33,6 @@
                             <th>镇街名称</th>
                             <th>负责人</th>
                             <th>类型</th>
-                            <th>收费类型</th>
                             <th>数量</th>
                         </tr>
                     </thead>
@@ -53,14 +43,6 @@
                            <td>{$item['region_name']}</td>
                            <td>{if $item['pm']}{$item['pm']}{else}尚未布置到负责人{/if}</td>
                            <td>{$typeKeys[$item['type_id']]}</td>
-                           <td>{if $item['fee_type'] == 1}挂账
-                                {elseif $item['fee_type'] == 2}票开款收
-                                {elseif $item['fee_type'] == 3}票开款未收
-                                {elseif $item['fee_type'] == 4}票未开款收
-                                {else}
-                                    尚未到收费阶段
-                                {/if}
-                           </td>
                            <td>{$item['cnt']}</td>
                         </tr>
                         {/foreach}

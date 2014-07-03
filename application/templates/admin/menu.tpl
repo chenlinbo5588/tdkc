@@ -57,7 +57,8 @@
         <dt onClick='showHide("project_ch")'><b>测绘项目</b></dt>
         <dd style='display:block' class='sitem' id='project_ch'>
           <ul class='sitemu'>
-            {auth name="project_ch+add"}<li><a href="{url_path('project_ch','add')}">项目登记</a></li>{/auth}
+            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">项目台账</a></li>{/auth}
+            {*
             {auth name="project_ch+send"}<li><a href="{url_path('project_ch','send')}">项目发送</a></li>{/auth}
             {auth name="project_ch+dispatch"}<li><a href="{url_path('project_ch','dispatch')}">项目布置</a></li>{/auth}
             {auth name="project_ch+implement"}<li><a href="{url_path('project_ch','implement')}">项目实施</a></li>{/auth}
@@ -66,6 +67,7 @@
             {auth name="project_ch+second_sh"}<li><a href="{url_path('project_ch','second_sh')}">项目复审</a></li>{/auth}
             {auth name="project_ch+fee"}<li><a href="{url_path('project_ch','fee')}">项目收费</a></li>{/auth}
             {auth name="project_ch+archive"}<li><a href="{url_path('project_ch','archive')}">项目归档</a></li>{/auth}
+            *}
             {auth name="project_ch"}<li><a href="{url_path('project_ch')}">项目查询</a></li>{/auth}
             {auth name="project_ch+statistics"}<li><a href="{url_path('project_ch','statistics')}">项目统计</a></li>{/auth}
           </ul>
@@ -79,6 +81,7 @@
         <dd style='display:block' class='sitem' id='project_gh'>
           <ul class='sitemu'>
             {auth name="project_gh+add"}<li><a href="{url_path('project_gh','add')}">项目登记</a></li>{/auth}
+            {*
             {auth name="project_gh+send"}<li><a href="{url_path('project_gh','send')}">项目发送</a></li>{/auth}
             {auth name="project_gh+dispatch"}<li><a href="{url_path('project_gh','dispatch')}">项目布置</a></li>{/auth}
             {auth name="project_gh+implement"}<li><a href="{url_path('project_gh','implement')}">项目实施</a></li>{/auth}
@@ -87,6 +90,7 @@
             {auth name="project_gh+second_sh"}<li><a href="{url_path('project_gh','second_sh')}">项目复审</a></li>{/auth}
             {auth name="project_gh+fee"}<li><a href="{url_path('project_gh','fee')}">项目收费</a></li>{/auth}
             {auth name="project_gh+archive"}<li><a href="{url_path('project_gh','archive')}">项目归档</a></li>{/auth}
+            *}
             {auth name="project_gh"}<li><a href="{url_path('project_gh')}">项目查询</a></li>{/auth}
             {auth name="project_gh+statistics"}<li><a href="{url_path('project_gh','statistics')}">项目统计</a></li>{/auth}
           </ul>

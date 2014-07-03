@@ -91,7 +91,7 @@ class Menu_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
-            'auth_key' => md5($param['url']),
+            'auth_key' => $param['auth_key'],
             'url' => $param['url'],
             'name' => $param['name'],
             'pid' => $param['pid'],
@@ -139,7 +139,8 @@ class Menu_Model extends TZ_Model {
     public function update($param){
         $data = array(
             'name' => $param['name'],
-            'auth_key' => md5($param['url']),
+            'url' => $param['url'],
+            'auth_key' => $param['auth_key'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );

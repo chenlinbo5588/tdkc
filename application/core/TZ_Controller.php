@@ -166,22 +166,29 @@ class TZ_Controller extends CI_Controller {
      */
     public function display($pageTplName = '',$dir = ''){
         
+        $pageTplName = strtolower($pageTplName);
+        
         if(!$dir){
-            $file = TZ_TPL_PATH.trim($this->tplDir,'/').'/';
+            $path = TZ_TPL_PATH.trim($this->tplDir,'/').'/';
         }else{
-            $file = TZ_TPL_PATH.trim($dir,'/').'/';
+            $path = TZ_TPL_PATH.trim($dir,'/').'/';
         }
+        
+        $ajaxFile = '';
         
         if(!$pageTplName){
-            $file .= $this->tplName .'.tpl';
+            $ajaxFile = 'ajax_'.$this->tplName .'.tpl';
+            $file = $this->tplName .'.tpl';
         }else{
-            $file .= $pageTplName.'.tpl';
+            $ajaxFile = 'ajax_'.$pageTplName.'.tpl';
+            $file = $pageTplName.'.tpl';
         }
         
-        if(file_exists($file)){
-            
-            header('P3P:CP=CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR")');
-            $this->_smarty->display($file);
+        header('P3P:CP=CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR")');
+        if($this->isAjax && file_exists($path.$ajaxFile)){
+            $this->_smarty->display($path.$ajaxFile);
+        }elseif(file_exists($path.$file)){
+            $this->_smarty->display($path.$file);
         }else{
             echo "$file not found";
         }

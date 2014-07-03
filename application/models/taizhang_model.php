@@ -1,9 +1,9 @@
 <?php
 
 
-class Project_Model extends TZ_Model {
+class Taizhang_Model extends TZ_Model {
     
-    public $_tableName = 'tb_project';
+    public $_tableName = 'tb_taizhang';
     
     public function __construct(){
         parent::__construct();
@@ -22,42 +22,23 @@ class Project_Model extends TZ_Model {
             'master_serial' => $param['master_serial'],
             'region_serial' => $param['region_serial'],
             'name' => $param['name'],
-            'input_type' => $param['input_type'],
-            'type_id' => $param['type_id'],
-            'type' => $param['type'],
-            'type_name' => $param['type_name'],
-            'cate_name' => $param['cate_name'],
-            'weight' => $param['weight'],
-            'score' => $param['weight'],
             'nature' => $param['nature'],
-            'village' => $param['village'],
-            'union_name' => $param['union_name'],
-            'source' => $param['source'],
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
             'contacter_tel' => $param['contacter_tel'],
-            'manager' => $param['manager'],
-            'manager_mobile' => $param['manager_mobile'],
-            'manager_tel' => $param['manager_tel'],
             'address' => $param['address'],
+            'pm' => $param['pm'],
             'descripton' => $param['descripton'],
+            'total_area' => $param['total_area'],
+            'churan_area' => $param['churan_area'],
+            'fee_type' => $param['fee_type'],
             'has_doc' => $param['has_doc'],
-            'displayorder' => $param['displayorder'],
-            'sendor_id' => $param['user_id'],
-            'sendor' => $param['creator'],
-            'user_id' => $param['user_id'],
             'creator' => $param['creator'],
             'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
-        if($param['start_date']){
-            $data['start_date'] = $param['start_date'];
-        }
-        
-        if($param['end_date']){
-            $data['end_date'] = $param['end_date'];
-        }
+       
         $this->db->insert($this->_tableName, $data);
         return $this->db->insert_id();
     }
@@ -86,40 +67,23 @@ class Project_Model extends TZ_Model {
         $data = array(
             'region_code' => strtoupper($param['region_code']),
             'region_name' => $param['region_name'],
+            'master_serial' => $param['master_serial'],
+            'region_serial' => $param['region_serial'],
             'name' => $param['name'],
-            'type_id' => $param['type_id'],
-            'type' => $param['type'],
-            'type_name' => $param['type_name'],
-            'cate_name' => $param['cate_name'],
-            'weight' => $param['weight'],
-            'village' => $param['village'],
-            'union_name' => $param['union_name'],
-            'source' => $param['source'],
+            'nature' => $param['nature'],
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
-            'contacter_tel' => $param['contacter_tel'],
-            'manager' => $param['manager'],
-            'manager_mobile' => $param['manager_mobile'],
-            'manager_tel' => $param['manager_tel'],
             'address' => $param['address'],
             'descripton' => $param['descripton'],
+            'pm' => $param['pm'],
+            'descripton' => $param['descripton'],
+            'total_area' => $param['total_area'],
+            'churan_area' => $param['churan_area'],
+            'fee_type' => $param['fee_type'],
             'has_doc' => $param['has_doc'],
-            'displayorder' => $param['displayorder'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
-        if($param['end_date']){
-            $data['end_date'] = $param['end_date'];
-        }
-        
-        if($param['pm_id']){
-            $data['pm_id'] = $param['pm_id'];
-        }
-        if($param['pm']){
-            $data['pm'] = $param['pm'];
-        }
-        
-        
         
         $where = array(
             'id' => $param['id']

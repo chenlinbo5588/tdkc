@@ -4,12 +4,12 @@
                 <table class="maintain">
                     <tbody>
                     <tr>
-                        <td><label class="required"><em></em><strong>项目编号</strong></label></td>
-                        <td>{$info['project_no']}</td>
+                        <td><label class="required"><em></em><strong>项目名称</strong></label></td>
+                        <td>{$info['name']}</td>
                     </tr>
                     <tr>
-                        <td><label class="required"><em></em><strong>项目名称</strong></label></td>
-                        <td>{$info['name']|escape}</td>
+                        <td><label class="required"><em></em><strong>项目负责人</strong></label></td>
+                        <td>{$info['pm']|escape}</td>
                     </tr>
                     <tr>
                         <td><label class="required"><em></em><strong>日志</strong></label></td>
@@ -27,18 +27,31 @@
                 </table>
                 </form>
                     
-                <div>
-                    <li>
+                <table class="table">
+                    <colgroup>
+                        <col width="20%"/>
+                        <col width="20%"/>
+                        <col width="60%"/>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>填写人</th>
+                            <th>内容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {foreach from=$worklog item=item}
-                        <div>
-                            <h3>{$item['createtime']|date_format:"Y-m-d"} {$item['creator']}</h3>
-                            <p>{$item['content']|escape}</p>
-                        </div>
+                        <tr>
+                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
+                            <td>{$item['creator']}</td>
+                            <td>{$item['content']|escape}</td>
+                        </tr>
                     {foreachelse}
-                        还没有日志
+                        <tr><td colspan="3">还没有日志</td></tr>
                     {/foreach}
-                    </li>
-                </div>    
+                    </tbody>
+                </table>
                     
                 <script>
                     $(function(){

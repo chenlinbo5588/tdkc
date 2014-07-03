@@ -15,8 +15,8 @@
                 <li class="first"><a href="#anchor_base">基本信息</a></li>
                 <li><a href="#anchor_work">作业信息</a></li>
                 <li><a href="#anchor_check">审核信息</a></li>
-                <li><a href="#anchor_doc">成果信息</a></li>
-                <li><a href="#anchor_fee">收费信息</a></li>
+                {*<li><a href="#anchor_doc">成果信息</a></li>
+                <li><a href="#anchor_fee">收费信息</a></li>*}
                 <li><a href="#anchor_log">项目日志</a></li>
             </ul>
             <form name="saveForm" action="{url_path('project_ch','task')}" method="post">
@@ -32,7 +32,7 @@
                     <tbody>
                     <tr>
                         <td>流水号</td>
-                        <td>{$info['project_no']}</td>
+                        <td>{$info['id']}</td>
                     </tr>
                     <tr>
                         <td>录入类型</td>
@@ -339,7 +339,7 @@
                     </tr>
                     {/if}
                     
-                    {if in_array($info['status'],array('已实施', '已完成','已提交初审',  '已通过初审', '已提交复审', '已通过复审','项目已提交'))}
+                    {if in_array($info['status'],array('已实施', '已完成'))}
                     {include file="common/upload.tpl"}
                     <script>
                         $(function(){
@@ -378,10 +378,11 @@
                             });
                         });
                     </script>
+                    {/if}
                     <tr>
                         <td>图件文档</td>
                         <td>
-                            {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '项目已提交'}
+                            {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('已实施', '已完成'))}
                             <div>
                                 <span class="uploader"></span>
                                 <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
@@ -401,7 +402,7 @@
                             </ul>
                         </td>
                     </tr>
-                    {/if}
+                    
                     
                     {if $info['type'] == $smarty.const.CH_RCZD}
                     <tr>
@@ -611,6 +612,7 @@
                         </tr>
                     </tbody>
                 </table>
+                {*
                 <a name="anchor_doc" id="anchor_doc"></a>
                 <table class="maintain border1">
                    <caption>成果信息</caption>
@@ -733,12 +735,12 @@
                         </tr>
                     </tbody>
                 </table>
+                *}
                 <a name="anchor_log" id="anchor_log"></a>
                 {include file="project_ch/log_list.tpl"}
                 <div style="margin-bottom: 50px;">&nbsp;</div>
                 <div class="fixbottom">
-                    
-                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送',  '已完成', '已通过初审','已通过复审','项目已提交'))}
+                    {if $info['sendor_id'] == $userProfile['id'] && in_array($info['status'],array('新增', '已发送',  '已完成', '已通过初审'))}
                     <div class="userlist_wrap">
                         {if $userSendorList}
                         <div class="userlist clearfix">
@@ -771,11 +773,11 @@
                     {elseif $info['status'] == '已提交复审'}
                         <input type="submit" name="submit" class="btn btn-orange" value="通过复审"/>
                     {elseif $info['status'] == '已通过复审'}
-                        <input type="submit" name="submit" class="btn btn-orange" value="项目提交"/>
+                        {*<input type="submit" name="submit" class="btn btn-orange" value="项目提交"/>*}
                     {elseif $info['status'] == '项目已提交'}
-                        <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
+                        {*<input type="submit" name="submit" class="btn btn-orange" value="收费"/>*}
                     {elseif $info['status'] == '已收费'}
-                        <input type="submit" name="submit" class="btn btn-orange" value="归档"/>
+                        {*<input type="submit" name="submit" class="btn btn-orange" value="归档"/>*}
                     {/if}
                     {if !in_array($info['status'],array('新增','项目已提交','已收费','已归档'))}
                         <input type="submit" name="submit" class="btn btn-sm btn-gray" value="退回"/>

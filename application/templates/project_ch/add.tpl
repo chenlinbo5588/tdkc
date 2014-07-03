@@ -73,10 +73,10 @@
                             <td>
                                 <select name="nature" style="width:300px">
                                     {foreach from=$natureList item=item}
-                                    <option value="{$item['name']}" {if $info['type'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                    <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
                                     {/foreach}
                                 </select>
-                                {form_error('type')}
+                                {form_error('nature')}
                             </td>
                         </tr>
                         <tr>
@@ -187,12 +187,12 @@
                                 $("input[name=union_name]").val(ui.item.c);
                                 
                                 if(ui.item.v){
-                                    $( "input[name=contacter_mobile]" ).val( ui.item.v );
+                                    $("input[name=contacter_mobile]" ).val( ui.item.v );
                                 }else{
-                                    $( "input[name=contacter_mobile]" ).val( ui.item.m );
+                                    $("input[name=contacter_mobile]" ).val( ui.item.m );
                                 }
                                 
-                                $( "input[name=contacter_tel]" ).val( ui.item.t );
+                                $("input[name=contacter_tel]" ).val( ui.item.t );
                             }
                         })
                         .data( "ui-autocomplete" )._renderItem = function( ul, item ) {

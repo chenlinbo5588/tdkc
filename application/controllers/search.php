@@ -17,13 +17,12 @@ class Search extends TZ_Controller {
         
         $condition['limit'] = $limit;
         $condition['where']['project_id'] = $project_id;
-        $condition['where']['type'] = 'user';
+        $condition['where']['type'] = 'workflow';
         if($user_id){
             $condition['where']['user_id'] = $project_id;
         }
-        
+        $condition['order'] = 'id DESC';
         $data = $this->Project_Mod_Model->getList($condition);
-        
         $this->assign('list',$data['data']);
         
         $this->display();

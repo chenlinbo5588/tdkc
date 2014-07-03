@@ -1,5 +1,5 @@
 <div id="proj_modpanel">
-    <h1 class="panel_title">历史操作 流水号 {$info['project_no']}</h1>
+    <h1 class="panel_title">历史操作</h1>
     <a href="javascript:void(0);" id="modlist_close" style="position:absolute;right:10px;top:5px;" >-收起</a>
     <div class="panel_list">
     {foreach from=$modList item=item}

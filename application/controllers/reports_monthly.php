@@ -21,7 +21,7 @@ class reports_monthly extends TZ_Admin_Controller {
              ),
             'where_in' => array(
                 array(
-                    'key' => 'status','value' => array('已收费','已归档')
+                    'key' => 'status','value' => array('已通过复审')
                 )
             )
         ));
