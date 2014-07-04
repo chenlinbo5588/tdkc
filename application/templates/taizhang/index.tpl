@@ -91,63 +91,7 @@
                  <tr class="newrow">
                      <td></td>
                      <td></td>
-                     <td>
-                         <input type="text" name="master_serial" value="" placeholder="请输入总编号"/>
-                     </td>
-                     <td>
-                         <select name="region_code">
-                            {foreach from=$regionList item=item}
-                            <option value="{$item['code']}" {if $info['region_code'] == $item['code']}selected{/if}>{$item['name']}</option>
-                            {/foreach}
-                        </select>
-                         <input type="text" name="region_serial" value="" placeholder="请输入分编号"/>
-                     </td>
-                     <td>
-                         <input type="text" name="name" value="" placeholder="请输入单位名称"/>
-                     </td>
-                     <td>
-                        <input type="text" name="address" value="" placeholder="请输入土地坐落"/>
-                    </td>
-                    <td>
-                        <input type="text" name="total_area" value="" placeholder="请输入总面积"/>
-                    </td>
-                    <td>
-                        <input type="text" name="churan_area" value="0" placeholder="请输入出让面积"/>
-                    </td>
-                     <td>
-                        <select name="nature">
-                            {foreach from=$natureList item=item}
-                            <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
-                            {/foreach}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" name="contacter" value="" placeholder="请输入联系人名称"/>
-                    </td>
-                    <td>
-                        <input type="text" name="contacter_mobile" value="" placeholder="请输入联系人号码"/></span>
-                    </td>
-                    <td>
-                        <input type="text" name="pm" value="" placeholder="作业组负责人"/>
-                    </td>
-                    
-                    <td>
-                        <select  name="fee_type">
-                            <option value="1">挂账</option>
-                            <option value="2">票开款收</option>
-                            <option value="3">票开款未收</option>
-                            <option value="4">票未开款收</option>
-                        </select>    
-                    </td>
-                    <td>
-                        <select  name="has_doc">
-                            <option value="0">未形成</option>
-                            <option value="1">已形成</option>
-                        </select>    
-                    </td>
-                    <td>
-                        <input type="text" name="descripton" placeholder="请输入备注" value=""/>
-                    </td>
+                     {include file="taizhang/fields_list.tpl"}
                     <td>
                         {* 操作 *}
                         <div class="loading" style="display:none;"></div>
@@ -329,7 +273,10 @@
                             url: that.attr("data-href") + '&isajax=1',
                             success:function(resp){
                                 $("#row_" + edit_id).hide();
-                                $(resp).insertAfter("#row_" + edit_id);
+                                $("#listtable tbody").prepend($(resp));
+                                
+                                $("input[name=master_serial]").focus();
+                                //$(resp).insertAfter("#row_" + edit_id);
                             },
                             complete:function(){
                                 that.show();

@@ -341,6 +341,8 @@
                             success:function(resp){
                                 $("#row_" + edit_id).hide();
                                 $("#listtable tbody").prepend($(resp));
+                                
+                                $("#editrow_" + edit_id + " input[name=name]").focus();
                                 //$(resp).insertAfter("#row_" + edit_id);
                             },
                             complete:function(){
