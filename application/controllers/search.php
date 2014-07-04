@@ -7,7 +7,7 @@ class Search extends TZ_Controller {
 		die(0);
 	}
     
-    public function getProjectModList(){
+    public function getmods(){
         
         $limit = (int)gpc('limit','GP',20);
         $project_id = (int)gpc('project_id','GP',0);
@@ -28,6 +28,27 @@ class Search extends TZ_Controller {
         $this->display();
     }
     
+    
+    public function getghmods(){
+        
+        $limit = (int)gpc('limit','GP',20);
+        $project_id = (int)gpc('project_id','GP',0);
+        $user_id = (int)gpc('user_id','GP',0);
+        
+        $this->load->model('Project_Gh_Mod_Model');
+        
+        $condition['limit'] = $limit;
+        $condition['where']['project_id'] = $project_id;
+        $condition['where']['type'] = 'workflow';
+        if($user_id){
+            $condition['where']['user_id'] = $project_id;
+        }
+        $condition['order'] = 'id DESC';
+        $data = $this->Project_Gh_Mod_Model->getList($condition);
+        $this->assign('list',$data['data']);
+        
+        $this->display();
+    }
     
     
     public function getContactsList(){
@@ -126,15 +147,8 @@ class Search extends TZ_Controller {
      * 根据项目流水号获得界址列表 
      */
     public function getJzListByProjectNO(){
-        $project_no = gpc('project_no','GP','');
-        if(empty($project_no)){
-            $this->sendJson(array());
-        }
-        
-        $this->load->model('Project_Model');
-        $info = $this->Project_Model->queryById(strtoupper($project_no),'project_no');
-        
-        if(!$info){
+        $id = gpc('id','GP','');
+        if(empty($id)){
             $this->sendJson(array());
         }
         
@@ -142,7 +156,7 @@ class Search extends TZ_Controller {
             
         $jzList = $this->Project_Jz_Model->getList(array(
             'where' => array(
-                'project_id' => $info['id']
+                'project_id' => $id
             ),
             'order' => 'direction ASC'
         ));

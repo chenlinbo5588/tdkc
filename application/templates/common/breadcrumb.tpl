@@ -1,6 +1,6 @@
            <div class="breadcrumb">
                {foreach name=breadcrumb from=$breadcrumb item=item}
-                   {if $item['pid'] != 0}
+                   {if $item['pid'] != 0 && !$smarty.foreach.breadcrumb.last }
                    <a href="/index.php?{$item['url']}">{$item['name']}</a>&nbsp;
                    {else}
                    {$item['name']}&nbsp;

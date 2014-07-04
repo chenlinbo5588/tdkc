@@ -17,7 +17,7 @@ class User_Salary_Model extends TZ_Model {
             'id' => NULL,
             'user_id' => $info['user_id'],
             'salary' => $info['salary'],
-            'salary' => $info['salary'],
+            'reason' => $info['reason'],
             'creator' => $info['creator'],
             'updator' => $info['creator'],
             'createtime' => $now,

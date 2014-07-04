@@ -7,10 +7,10 @@
                     <ul>
                         <li>
                             {*<label><strong>流水号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入流水号"/></label>*}
-                            <label><strong>登记名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
-                            <label><strong>联系单位名称</strong><input type="text" name="union_name" style="width:200px;" value="{$smarty.get.union_name}" placeholder="请输入联系单位名称"/></label>
-                            <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
-                            <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
+                            <label><strong>登记名称</strong><input type="text" name="name" style="width:100px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
+                            <label><strong>联系单位</strong><input type="text" name="union_name" style="width:100px;" value="{$smarty.get.union_name}" placeholder="请输入联系单位名称"/></label>
+                            <label><strong>登记日期开始</strong><input type="text" name="sdate" style="width:90px;" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
+                            <label><strong>登记日期结束</strong><input type="text" name="edate" style="width:90px;" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>项目类型</strong>
                                 <select name="type" >
                                     <option value="">全部</option>
@@ -87,7 +87,7 @@
                            <td>{$item['contacter_mobile']}</td>
                            <td>{$item['pm']}</td>
                            <td>{$item['sendor']}</td>
-                           <td>{$item['status']}</td>
+                           <td><a href="javascript:void(0);" class="popwin"  data-title="项目流转历史" data-href="{url_path('search','getghmods','project_id=')}{$item['id']}">{$item['status']}</a></td>
                            <td>{if $item['end_date']}{$item['end_date']|date_format:"Y-m-d"}{/if}</td>
                            <td>{$item['descripton']}</td>
                            <td>
@@ -219,7 +219,7 @@
                 $(function(){
                     $("a.popwin").bind("click",function(e){
                         var url = $(e.target).attr("data-href");
-                        $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:600});
+                        $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:600,buttons:{ "关闭" : 1}});
                     });
                 });
                 

@@ -32,7 +32,7 @@ class Consume_Type extends TZ_Admin_Controller {
             $this->_addRules();
             
             $this->form_validation->set_rules('name', '耗材名称', 'required|min_length[1]|max_length[50]|callback_checkname[edit-'.$_POST['id'].':]');
-            
+            $this->form_validation->set_rules('quantity', '数量', 'required|is_natural_no_zero');
             if($this->form_validation->run()){
                 // add
                 $_POST['updator'] = $this->_userProfile['name'];
@@ -57,8 +57,9 @@ class Consume_Type extends TZ_Admin_Controller {
     }
     
     private function _addRules(){
-        $this->form_validation->set_rules('type', '耗材型号', 'required|min_length[1]|max_length[50]');
-        $this->form_validation->set_rules('unit_name', '计算单位', 'required|min_length[1]|max_length[10]');
+        $this->form_validation->set_rules('type', '耗材型号', 'min_length[1]|max_length[50]|htmlspecialchars');
+        $this->form_validation->set_rules('unit_name', '计算单位', 'min_length[1]|max_length[10]|htmlspecialchars');
+        $this->form_validation->set_rules('machine', '使用该耗材的设备', 'min_length[1]|max_length[50]|htmlspecialchars');
         
         if(!empty($_POST['displayorder'])){
             $this->form_validation->set_rules('displayorder', '排序', 'integer');

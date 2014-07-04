@@ -21,6 +21,8 @@
                             <th>耗材名称</th>
                             <th>耗材型号</th>
                             <th>计算单位</th>
+                            <th>使用该耗材的设备</th>
+                            <th>数量</th>
                             <th>创建时间</th>
                             <th>最后修改时间</th>
                             <th>操作</th>
@@ -32,6 +34,8 @@
                            <td>{$item['name']|escape}</td>
                            <td>{$item['type']|escape}</td>
                            <td>{$item['unit_name']|escape}</td>
+                           <td>{$item['machine']|escape}</td>
+                           <td>{$item['quantity']|escape}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>

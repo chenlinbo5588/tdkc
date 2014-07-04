@@ -19,6 +19,13 @@
                                 <td colspan="2">尚未添加薪资结构，<a class="notice" href="{url_path('salary_type','add')}">点击添加</a></td>
                             {/foreach}
                             <tr>
+                                <td>调整原因</td>
+                                <td>
+                                    <textarea name="reason" rows="5" cols="40"></textarea>
+                                    <br/>{form_error("reason")}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td></td>
                                 <td>
                                     {if $salaryTypeList}
@@ -46,6 +53,7 @@
                                 <td>日期</td>
                                 <td>操作人员</td>
                                 <td>历史薪资</td>
+                                <td>调整原因</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,9 +62,10 @@
                                 <td>{$item['createtime']|date_format:"Y-m-d H:i"}</td>
                                 <td>{$item['creator']}</td>
                                 <td>{$item['salary_text']}</td>
+                                <td>{$item['reason']|escape}</td>
                             </tr>
                             {foreachelse}
-                            <tr><td colspan="3">还没有薪资日志</td></tr>
+                            <tr><td colspan="4">还没有薪资日志</td></tr>
                             {/foreach}
                         </tbody>
                     </table>

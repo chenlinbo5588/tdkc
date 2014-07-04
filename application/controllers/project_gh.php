@@ -1487,7 +1487,7 @@ class project_gh extends TZ_Admin_Controller {
             $this->display('showmessage','common');
         }else{
             $this->_getSendorList(array(
-               'gh_cs' => 'y'
+               'gh_fs' => 'y'
             ));
             if(!empty($info['files'])){
                 $this->assign('files',$this->_getFiles($info['files']));

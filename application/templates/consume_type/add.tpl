@@ -12,11 +12,19 @@
                                 <td><label class="required"><em>*</em><strong>耗材名称</strong></label></td><td><input type="text" style="width:200px" name="name" value="{$info['name']}" placeholder="请输入名称"/>{form_error('name')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>耗材型号</strong></label></td><td><input type="text" style="width:200px" name="type" value="{$info['type']}" placeholder="请输入型号"/>{form_error('type')}</td>
+                                <td><label class="optional"><em></em><strong>耗材型号</strong></label></td><td><input type="text" style="width:200px" name="type" value="{$info['type']}" placeholder="请输入型号"/>{form_error('type')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>计算单位</strong></label></td><td><input type="text" style="width:200px" name="unit_name" value="{$info['unit_name']}" placeholder="请输入计算单位"/><span class="tip">{form_error('unit_name')} 单位名称:如 支，个</span></td>
+                                <td><label class="optional"><em></em><strong>计算单位</strong></label></td><td><input type="text" style="width:200px" name="unit_name" value="{$info['unit_name']}" placeholder="请输入计算单位"/><span class="tip">{form_error('unit_name')} 单位名称:如 支，个</span></td>
                             </tr>
+                            <tr>
+                                <td><label class="optional"><em></em><strong>使用该耗材的设备</strong></label></td><td><input type="text" style="width:200px" name="machine" value="{$info['machine']}" placeholder="请输入使用改耗材的设备"/>{form_error('machine')}</td>
+                            </tr>
+                            {if $action == 'edit'}
+                            <tr>
+                                <td><label class="required"><em></em><strong>耗材数量</strong></label></td><td><input type="text" style="width:200px" name="quantity" value="{$info['quantity']}" placeholder="请输入数量"/>{form_error('quantity')}</td>
+                            </tr>    
+                            {/if}
                             <tr>
                                 <td></td>
                                 <td>

@@ -43,7 +43,7 @@ class Contacts extends TZ_Admin_Controller {
                 $condition['like']['tel'] = $_GET['tel'];
             }
             
-            if(!empty($_GET['type'])){
+            if($_GET['type'] !== ''){
                 $condition['where']['type'] = $_GET['type'];
             }
             

@@ -17,6 +17,7 @@ class Consume_Type_Model extends TZ_Model {
             'name' => $param['name'],
             'type' => $param['type'],
             'unit_name' => $param['unit_name'],
+            'machine' => $param['machine'],
             'displayorder' => $param['displayorder'],
             'creator' => $param['creator'],
             'updator' => $param['creator'],
@@ -51,6 +52,8 @@ class Consume_Type_Model extends TZ_Model {
             'name' => $param['name'],
             'type' => $param['type'],
             'unit_name' => $param['unit_name'],
+            'machine' => $param['machine'],
+            'quantity' => $param['quantity'],
             'displayorder' => $param['displayorder'],
             'updator' => $param['updator'],
             'updatetime' => time()

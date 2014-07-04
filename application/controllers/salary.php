@@ -52,6 +52,8 @@ class Salary extends TZ_Admin_Controller {
                 $d[$type['name']] = !empty($_POST['salary_'.$type['id']]) ? $_POST['salary_'.$type['id']]: 0;
             }
             
+            $this->form_validation->set_rules('reason', '调整原因', 'max_length[200]');
+            
             if($this->form_validation->run()){
                 
                 $this->User_Salary_Model->updateByWhere(array(

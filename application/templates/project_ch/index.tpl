@@ -6,10 +6,10 @@
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
-                            <label><strong>台账号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/></label>
-                            <label><strong>登记名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
-                            <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
-                            <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
+                            {*<label><strong>台账号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/></label>*}
+                            <label><strong>登记名称</strong><input type="text" name="name" style="width:100px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
+                            <label><strong>登记日期开始</strong><input type="text" name="sdate" style="width:90px;" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
+                            <label><strong>登记日期结束</strong><input type="text" name="edate" style="width:90px;" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>项目类型</strong>
                                 <select name="type" >
                                     <option value="">全部</option>
@@ -85,7 +85,7 @@
                            <td>{$item['id']}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td><a href="{url_path('project_ch','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
-                           <td>{$item['type_name']}-{$item['cate_name']}-{$item['type']}</td>
+                           <td>{str_replace('项目','',$item['type_name'])}-{$item['type']}</td>
                            <td>{$item['contacter']}</td>
                            <td>{$item['contacter_mobile']}</td>
                            <td>{$item['region_name']|escape}({$item['region_code']})</td>
@@ -94,7 +94,7 @@
                            <td>{$item['manager_mobile']}</td>
                            <td>{$item['pm']}</td>
                            <td>{$item['sendor']}</td>
-                           <td><a href="javascript:void(0);" class="modlist"  data-href="{url_path('search','getProjectModList','project_id=')}{$item['id']}">{$item['status']}</a></td>
+                           <td><a href="javascript:void(0);" class="popwin"  data-title="项目流转历史" data-href="{url_path('search','getmods','project_id=')}{$item['id']}">{$item['status']}</a></td>
                            <td>{if $item['end_date']}{$item['end_date']|date_format:"Y-m-d"}{/if}</td>
                            <td>{$item['descripton']}</td>
                            <td>{if $item['has_doc'] == 1}已形成{else}未形成{/if}</td>
@@ -166,65 +166,7 @@
                      <td></td>
                      <td></td>
                      <td></td>
-                     <td>
-                         <input type="text" name="name" value="" placeholder="请输入登记名称"/>
-                     </td>
-                     <td>
-                        <select name="type_id">
-                            {foreach from=$projectTypeList item=item}
-                            <option value="{$item['id']}" {if $info['type_id'] == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
-                            {/foreach}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" name="manager" id="manager" value="" placeholder="请输入接洽人名称"/>
-                    </td>
-                    <td>
-                        <input type="text" name="manager_mobile" id="manager_mobile" value="" placeholder="请输入接洽人号码"/>
-                    </td>
-                    <td>
-                        <select name="region_code">
-                            {foreach from=$regionList item=item}
-                            <option value="{$item['code']}" {if $info['region_code'] == $item['code']}selected{/if}>{$item['name']}</option>
-                            {/foreach}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" name="address" value="{$info['address']}" placeholder="请输入地址"/>
-                    </td>
-                    <td>
-                        <input type="text" name="contacter" id="contacter" value="" placeholder="请输入联系人名称"/>
-                    </td>
-                    <td>
-                        <input type="text" name="contacter_mobile" id="contacter_mobile" value="" placeholder="请输入联系人号码"/></span>
-                    </td>
-                    <td>
-                        {* 负责人 *}
-                        <select name="pm_id">
-                            {foreach from=$userSendorList item=item}
-                            <option value="{$item['sendor_id']}" {if $info['pm_id'] == $item['sendor_id']}selected{/if}>{$item['sendor']}</option>
-                            {/foreach}
-                        </select>
-                    </td>
-                    <td>
-                        {* 当前操作人 *}
-                    </td>
-                    <td>
-                        {* 状态 *}
-                        新增
-                    </td>
-                    <td>
-                        <input type="text" name="end_date" class="Wdate" readonly onclick="WdatePicker({ minDate:'%y-%M-%d' })" value="" /></span>
-                    </td>
-                    <td>
-                        <input type="text" name="descripton" placeholder="请输入备注" value=""/>
-                    </td>
-                    <td>
-                        <select name="has_doc">
-                            <option value="0">未形成</option>
-                            <option value="1">已形成</option>
-                        </select>
-                    </td>
+                     {include file="project_ch/fields_list.tpl"}
                     <td>
                         {* 操作 *}
                         <div class="loading" style="display:none;"></div>
@@ -398,7 +340,8 @@
                             url: that.attr("data-href") + '&isajax=1',
                             success:function(resp){
                                 $("#row_" + edit_id).hide();
-                                $(resp).insertAfter("#row_" + edit_id);
+                                $("#listtable tbody").prepend($(resp));
+                                //$(resp).insertAfter("#row_" + edit_id);
                             },
                             complete:function(){
                                 that.show();
@@ -412,50 +355,9 @@
                         
                     });
                     
-                    {*
-                    $("a.modlist").bind("click",function(e){
-                        var that = $(e.target);
-                        
-                        if(that.data('tipContent')){
-                            that.tooltip({
-                                content:function(){
-                                    return that.data('tipContent');
-                                }
-                            });
-                        }
-                        
-                        if(that.data("inajax")){
-                            return ;
-                        }else{
-                           that.data("inajax",1);
-                        }
-                        
-                        $.ajax({
-                            type:"GET",
-                            url: that.attr("data-href"),
-                            data:{ isajax : "1"},
-                            success:function(resp){
-                                that.data('tipContent',resp);
-                                
-                                that.tooltip({
-                                    content:function(){
-                                        return that.data('tipContent');
-                                    }
-                                });
-                            
-                            },
-                            complete:function(){
-                                that.removeData("inajax");
-                            },
-                            error:function(){
-                                that.removeData("inajax");
-                            }
-                        });
-                    });
-                    *}
                     $("a.popwin").bind("click",function(e){
                         var url = $(e.target).attr("data-href");
-                        $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:600});
+                        $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:600,buttons:{ "关闭" : 1}});
                     });
                 });
                 

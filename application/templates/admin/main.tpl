@@ -21,7 +21,7 @@
         
 <div class="fm">
     <h2>最近项目列表</h2>
-    <table class="table" style="width:auto" align="center" border="0" >
+    <table class="table" style="width:auto" border="0" >
         <thead>
             <tr>
                 <th>登记日期</th>

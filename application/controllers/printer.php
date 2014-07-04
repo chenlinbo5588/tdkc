@@ -155,6 +155,31 @@ class Printer extends TZ_Controller {
         }
         
         $info = $this->Project_Model->queryById($id);
+        
+        
+        $this->load->model('Project_Fault_Model');
+        
+        //初审错误
+        $csFault = $this->Project_Fault_Model->getList(array(
+            'where' => array(
+                'project_type' => 0,
+                'type' => 0,
+                'project_id' => $info['id'],
+                'status' => 0
+            )
+        ));
+        //复审错误
+        $fsFault = $this->Project_Fault_Model->getList(array(
+            'where' => array(
+                'project_type' => 0,
+                'type' => 1,
+                'project_id' => $info['id'],
+                'status' => 0
+            )
+        ));
+        
+        $this->assign('csFault',$csFault['data']);
+        $this->assign('fsFault',$fsFault['data']);
         $this->assign('info',$info);
         $this->display();
     }

@@ -41,12 +41,21 @@ class Admin extends TZ_Admin_Controller {
     }
     public function main(){
         
+        $this->load->model('User_Sendor_Model');
+        $sendorCount = $this->User_Sendor_Model->getCount(array(
+            'user_id' => $this->_userProfile['id']
+        ));
+        
+        if(0 == $sendorCount){
+            redirect(url_path('sendor','add'));
+        }
+        
         $this->load->model('Project_Model');
         $projectList = $this->Project_Model->getList(array(
             'where' => array(
                 'user_id' => $this->_userProfile['id'],
-                'status != ' => '已归档',
-                'status != ' => '已删除'
+                'status != ' => '已通过复审',
+                'status !=' => '已删除'
             ),
             'order' => 'createtime DESC'
         ));
@@ -58,7 +67,7 @@ class Admin extends TZ_Admin_Controller {
             'where' => array(
                 'user_id' => $this->_userProfile['id'],
                 'status != ' => '已归档',
-                'status != ' => '已删除'
+                'status !=' => '已删除'
             ),
             'order' => 'createtime DESC'
         ));

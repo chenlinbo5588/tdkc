@@ -140,7 +140,7 @@ class reports_salary extends TZ_Admin_Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, '=SUM(C'.$current_row.':F'.$current_row.')');
             $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, 0);
             $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row, '=SUM(G'.$current_row.':H'.$current_row.')');
-            
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_row, $userSalary[$p['id']]['reason']);
             /**
              * 有变更
              */

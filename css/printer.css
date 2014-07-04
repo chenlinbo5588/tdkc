@@ -242,7 +242,6 @@ textarea.noborder {
     height:200px;
 }
 .check .col td {
-    border-width: 0px 1px 0px 1px;
 }
 
 .check .last td {

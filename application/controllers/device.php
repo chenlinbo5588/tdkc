@@ -58,12 +58,42 @@ class Device extends TZ_Admin_Controller {
     
     private function _addRules(){
         $this->form_validation->set_rules('name', '设备名称', 'required|min_length[1]|max_length[100]');
-        $this->form_validation->set_rules('type', '设备型号', 'required|min_length[1]|max_length[100]');
-        $this->form_validation->set_rules('buy_time', '购买日期', 'required|valid_date');
-        $this->form_validation->set_rules('pay_amout', '购买价格', 'required|is_numeric');
-        $this->form_validation->set_rules('user', '使用者', 'required|max_length[30]');
-        $this->form_validation->set_rules('check_sdate', '质检有效期开始', 'required|valid_date');
-        $this->form_validation->set_rules('check_edate', '质检有效期结束', 'required|valid_date');
+        
+        
+        if(!empty($_POST['type'])){
+            $this->form_validation->set_rules('type', '设备型号', 'min_length[1]|max_length[100]');
+        }else{
+            $_POST['type'] = '';
+        }
+        if(!empty($_POST['buy_time'])){
+            $this->form_validation->set_rules('buy_time', '购买日期', 'valid_date');
+        }else{
+            $_POST['buy_time'] = '';
+        }
+        
+        if(!empty($_POST['pay_amout'])){
+            $this->form_validation->set_rules('pay_amout', '购买价格', 'is_numeric');
+        }else{
+            $_POST['pay_amout'] = 0;
+        }
+        
+        if(!empty($_POST['user'])){
+            $this->form_validation->set_rules('user', '使用者', 'max_length[30]');
+        }else{
+            $_POST['user'] = '';
+        }
+        
+        if(!empty($_POST['check_sdate'])){
+            $this->form_validation->set_rules('check_sdate', '质检有效期开始', 'valid_date');
+        }else{
+            $_POST['check_sdate'] = '';
+        }
+        if(!empty($_POST['check_edate'])){
+            $this->form_validation->set_rules('check_edate', '质检有效期结束', 'valid_date');
+        }else{
+            $_POST['check_edate'] = '';
+        }
+        
         $this->form_validation->set_rules('is_off', '是否报废', 'required|is_natural|less_than[2]');
         
         if(!empty($_POST['displayorder'])){

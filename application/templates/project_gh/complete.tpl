@@ -1,42 +1,4 @@
-<div class="pd20 project_detail">
-    {include file="common/upload.tpl"}
-    <script>
-        $(function(){
-            $(".Uploader").each(function(index){
-                var handler = {
-                    success:function(file,serverData){
-                        try {
-                            var progress = new FileProgress(file, this.customSettings.progressTarget);
-                            progress.setComplete();
-                            progress.setStatus("Complete.");
-                            progress.toggleCancel(false);
-
-                            if(typeof(this.customSettings.callback) != "undefined"){
-                                this.customSettings.callback(file,serverData);
-                            }
-                            var response = $.parseJSON(serverData);
-
-                            var html = '';
-                            if(response.error){
-                                html += '<li style="color:red;">';
-                            }else{
-                                html += '<li style="color:blue;">';
-                            }
-                            html += '<div class="fname"><a title="点击下载" href="{url_path('attachment','download')}' + '&id=' + response.id + '">' + file.name  + '</a></div><div class="fsize">&nbsp;</div><a class="df" href="javascript:void(0);">删除</a>';
-                            html += '<input type="hidden" name="file_id[]" value="' + response.id + '"/>';
-                            html += '</li>';
-                            $("#filelist").append(html);
-
-                        } catch (ex) {
-                            this.debug(ex);
-                        }
-                    }
-                };
-
-                createSwfUpload(index + 1,$(this).attr("data-url"),{},$(this).attr("data-allowsize"),$(this).attr("data-allowfile"),handler);
-            });
-        });
-    </script>
+<div class="pd20">
     
     <form name="saveForm" action="{url_path('project_gh','complete')}" method="post" target="post_iframe">
         <input type="hidden" name="id" value="{$info['id']}"/>
@@ -96,15 +58,51 @@
         </table>
     </form>
                 
-    
+    <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
+    {include file="common/upload.tpl"}
     <script>
         $(function(){
+        
             $("#filelist").delegate("a.df","click",function(e){
                 if(confirm("确定要删除吗")){
                     $(this).closest("li").remove();
                 }
             });
+            
+            
+            $(".Uploader").each(function(index){
+                var handler = {
+                    success:function(file,serverData){
+                        try {
+                            var progress = new FileProgress(file, this.customSettings.progressTarget);
+                            progress.setComplete();
+                            progress.setStatus("Complete.");
+                            progress.toggleCancel(false);
+
+                            if(typeof(this.customSettings.callback) != "undefined"){
+                                this.customSettings.callback(file,serverData);
+                            }
+                            var response = $.parseJSON(serverData);
+
+                            var html = '';
+                            if(response.error){
+                                html += '<li style="color:red;">';
+                            }else{
+                                html += '<li style="color:blue;">';
+                            }
+                            html += '<div class="fname"><a title="点击下载" href="{url_path('attachment','download')}' + '&id=' + response.id + '">' + file.name  + '</a></div><div class="fsize">&nbsp;</div><a class="df" href="javascript:void(0);">删除</a>';
+                            html += '<input type="hidden" name="file_id[]" value="' + response.id + '"/>';
+                            html += '</li>';
+                            $("#filelist").append(html);
+
+                        } catch (ex) {
+                            this.debug(ex);
+                        }
+                    }
+                };
+
+                createSwfUpload(index + 1,$(this).attr("data-url"),{},$(this).attr("data-allowsize"),$(this).attr("data-allowfile"),handler);
+            });
         });
-    </script>            
-    <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
+    </script>
 </div>

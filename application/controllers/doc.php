@@ -30,7 +30,11 @@ class Doc extends TZ_Admin_Controller {
                 $condition['like'] = array('title' => $_GET['title']);
             }
             
-            $condition['where'] = array();
+            $condition['where'] = array(
+                
+            );
+            
+            $condition['order'] = 'sign_time ASC';
             $condition['where']['status'] = '正常';
             
             if(!empty($_GET['sdate'])){
@@ -56,8 +60,8 @@ class Doc extends TZ_Admin_Controller {
     private function _addRules(){
         $this->form_validation->set_rules('title', '项目名称', 'required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('sign_time', '合同签订日期', 'required|valid_date');
-        $this->form_validation->set_rules('amount', '合同金额', 'required|is_numeric');
-        $this->form_validation->set_rules('linkman', '联系人名称', 'required|max_length[20]|htmlspecialchars');
+        $this->form_validation->set_rules('amount', '合同金额', 'max_length[100]|htmlspecialchars');
+        $this->form_validation->set_rules('linkman', '联系人名称', 'max_length[20]|htmlspecialchars');
         $this->form_validation->set_rules('is_comp', '是否完成', 'required|is_natural|less_than[2]');
     }
     

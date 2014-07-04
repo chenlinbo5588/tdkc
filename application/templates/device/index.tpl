@@ -36,10 +36,10 @@
                            <td>{$item['name']|escape}</td>
                            <td>{$item['type']|escape}</td>
                            <td>{$item['buy_time']|date_format:"Y-m-d"}</td>
-                           <td>{$item['pay_amout']}</td>
+                           <td>{if $item['pay_amount'] != 0}{$item['pay_amout']}{/if}</td>
                            <td>{$item['user']|escape}</td>
-                           <td>{$item['check_sdate']}</td>
-                           <td>{$item['check_edate']}</td>
+                           <td>{$item['check_sdate']|date_format:"Y-m-d"}</td>
+                           <td>{$item['check_edate']|date_format:"Y-m-d"}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d H:i:s"}</td>
                            <td>

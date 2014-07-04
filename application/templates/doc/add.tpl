@@ -15,10 +15,10 @@
                                 <td><label class="required"><em>*</em><strong>合同签订日期</strong></label></td><td><input type="text"  name="sign_time"  class="Wdate" readonly onclick="WdatePicker()"  value="{$info['sign_time']|date_format:"Y-m-d"}" placeholder="请输入签订日期"/>{form_error('sign_time')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>合同金额</strong></label></td><td><input type="text"  name="amount"  value="{$info['amount']}" placeholder="请输入合同金额"/>{form_error('amount')}</td>
+                                <td><label class="optional"><em></em><strong>合同金额</strong></label></td><td><input type="text"  name="amount"  value="{$info['amount']}" placeholder="请输入合同金额"/>{form_error('amount')}</td>
                             </tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>联系人</strong></label></td><td><input type="text"  name="linkman"  value="{$info['linkman']}" placeholder="请输入联系人名称"/>{form_error('linkman')}</td>
+                                <td><label class="optional"><em></em><strong>联系人</strong></label></td><td><input type="text"  name="linkman"  value="{$info['linkman']}" placeholder="请输入联系人名称"/>{form_error('linkman')}</td>
                             </tr>
                             <tr>
                                 <td><label class="optional"><em></em><strong>是否完成</strong></label></td>

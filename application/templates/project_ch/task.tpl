@@ -946,7 +946,7 @@
                         $("#readJzFrom").bind("click",function(e){
                             var that = $(e.target);
                             var input = $("input[name=source_id]");
-                            if(input.val() == '' || input.val().length < 10){
+                            if(input.val() == ''){
                                 alert("请输入合法的流水号");
                                 return ;
                             }
@@ -958,7 +958,7 @@
                                 url: "{url_path('search','getJzListByProjectNO')}",
                                 dataType:"json",
                                 data : {
-                                    project_no: input.val()
+                                    id: input.val()
                                 },
                                 success:function(resp){
                                     that.prop("disabled",false);

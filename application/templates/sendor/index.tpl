@@ -1,7 +1,8 @@
 {include file="common/main_header.tpl"}
         <form name="sendorForm" action="{url_path('sendor','edit')}" method="post" target="post_iframe">
             <div class="searchform row-fluid">
-                {auth name="sendor+edit"}<input type="submit" name="save" value="保存设置" />{/auth} {auth name="sendor+add"}<a class="addlink" href="{url_path('sendor','add')}">设置发送人</a>{/auth}
+                {auth name="sendor+edit"}<input type="submit" name="save" value="保存设置" />{/auth} 
+                {auth name="sendor+add"}<a class="addlink" href="{url_path('sendor','add')}">设置发送人</a>{/auth}
             </div>
             
             <div class="span12">

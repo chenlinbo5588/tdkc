@@ -1,4 +1,4 @@
-<div class="pd20 project_detail">
+<div class="pd20">
     <form name="postform" action="{url_path('project_ch','tuihui')}" method="post" target="post_iframe">
         <input type="hidden" name="id" value="{$info['id']}"/>
         <table class="maintain border1">

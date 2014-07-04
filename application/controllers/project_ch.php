@@ -1709,7 +1709,7 @@ class project_ch extends TZ_Admin_Controller {
             $this->display('showmessage','common');
         }else{
             $this->_getSendorList(array(
-               'ch_cs' => 'y'
+               'ch_fs' => 'y'
             ));
             if(!empty($info['files'])){
                 $this->assign('files',$this->_getFiles($info['files']));
@@ -1834,7 +1834,7 @@ class project_ch extends TZ_Admin_Controller {
         }
         
         $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|numeric|min_length[4]|max_length[15]');
+        $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|numeric_dash|min_length[4]|max_length[15]');
         
         if(!empty($_POST['contacter_tel'])){
             $this->form_validation->set_rules('contacter_tel', '联系人固定电话', 'trim|valid_telephone');
@@ -1843,7 +1843,7 @@ class project_ch extends TZ_Admin_Controller {
         }
         
         $this->form_validation->set_rules('manager', '接洽人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        $this->form_validation->set_rules('manager_mobile', '接洽人手机', 'trim|numeric|min_length[4]|max_length[15]');
+        $this->form_validation->set_rules('manager_mobile', '接洽人手机', 'trim|numeric_dash|min_length[4]|max_length[15]');
         
         if(!empty($_POST['manager_tel'])){
             $this->form_validation->set_rules('manager_tel', '接洽人固定电话', 'trim|valid_telephone');
@@ -2155,24 +2155,19 @@ class project_ch extends TZ_Admin_Controller {
                 $_POST['cate_name'] = $project_type['cate_name'];
                 $_POST['weight'] = $project_type['weight'];
                 
-                
-                if($info['region_code'] != strtoupper($_POST['region_code'])){
-                    $regionName = $this->Region_Model->getList(array(
-                        'select' => 'name',
-                        'where' => array(
-                            'year' => $info['year'],
-                            'code' => $_POST['region_code'],
-                            'status' => '正常'
-                        )
-                    ));
+                $regionName = $this->Region_Model->getList(array(
+                    'select' => 'name',
+                    'where' => array(
+                        'year' => $info['year'],
+                        'code' => $_POST['region_code'],
+                        'status' => '正常'
+                    )
+                ));
 
-                    if($regionName['data'][0]['name']){
-                        $_POST['region_name'] = $regionName['data'][0]['name'];
-                    }else{
-                        $_POST['region_name'] = '';
-                    }
+                if($regionName['data'][0]['name']){
+                    $_POST['region_name'] = $regionName['data'][0]['name'];
                 }else{
-                    $_POST['region_name'] = $info['region_code'];
+                    $_POST['region_name'] = '';
                 }
                 
                 if(!empty($_POST['pm_id'])){
