@@ -96,10 +96,26 @@ class Sendor extends TZ_Admin_Controller {
                     )
                 ));
 
+                
+                $currentSendor = $this->User_Sendor_Model->getList(array('where' => array('user_id' => $this->_userProfile['id'])));
+                $currentSendorId = array();
+                foreach($currentSendor['data'] as $sendor){
+                    $currentSendorId[$sendor['sendor_id']] = $sendor['sendor_id'];
+                }
+                
                 $data = array();
-
+                
                 $now = time();
                 foreach($selectedUser['data'] as $val){
+                    
+                    /**
+                     * 勾选的已经 在发送列表中了 
+                     */
+                    if(in_array($val['id'],$currentSendorId)){
+                        unset($currentSendorId[$val['id']]);
+                        continue;
+                    }
+                    
                     $temp['user_id'] = $this->_userProfile['id'];
                     $temp['sendor_id'] = $val['id'];
                     $temp['sendor'] = $val['name'];
@@ -116,8 +132,16 @@ class Sendor extends TZ_Admin_Controller {
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['user_id'] = $this->_userProfile['id'];
 
-                $this->User_Sendor_Model->deleteByWhere(array('user_id' => $this->_userProfile['id']));
+                //$this->User_Sendor_Model->deleteByWhere(array('user_id' => $this->_userProfile['id']));
                 //$this->User_Sendor_Model->updateByWhere(array('status' => '已删除'),array('user_id' => $this->_userProfile['id']));
+                
+                /**
+                 * 剩下来的就是要删除的
+                 */
+                if($currentSendorId){
+                    $this->db->query("DELETE FROM {$this->User_Sendor_Model->_tableName} WHERE user_id = {$this->_userProfile['id']} AND sendor_id IN(".implode(',',$currentSendorId).")");
+                }
+                
                 $this->User_Sendor_Model->batchInsert($data);
             }else{
                 $this->User_Sendor_Model->deleteByWhere(array('user_id' => $this->_userProfile['id']));

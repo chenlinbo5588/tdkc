@@ -35,6 +35,13 @@ body {
     font-size: 18px;
 }
 
+.nt {
+    position:absolute;
+    margin:6px 0 0 -45px;
+    font-size:12px;
+    color:red;
+ }
+
 -->
 </style></head>
 
@@ -56,7 +63,7 @@ body {
                 <td width="183" background="/img/login/login_07.gif"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td width="21%" height="30"><div align="center"><span class="STYLE3">用户</span></div></td>
-                    <td width="79%" height="30"><input type="text" name="username" value="{$smarty.post.username}"   style="height:18px; width:130px; border:solid 1px #cadcb2; font-size:12px; "></td>
+                    <td width="79%" height="30"><input type="text" name="username" value="{$smarty.post.username}" style="height:18px; width:130px; border:solid 1px #cadcb2; font-size:12px; "></td>
                 </tr>
                 <tr>
                     <td height="30"><div align="center"><span class="STYLE3">密码</span></div></td>
@@ -64,7 +71,9 @@ body {
                 </tr>
                 <tr>
                     <td height="30">&nbsp;</td>
-                    <td height="30"><button class="btn btn-lg btn-primary btn-block" type="submit">登录</button></td>
+                    <td height="30">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+                    </td>
                 </tr>
                 </table></td>
                 <td width="255" background="/img/login/login_08.gif">&nbsp;</td>
