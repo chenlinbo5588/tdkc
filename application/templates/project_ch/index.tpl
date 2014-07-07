@@ -297,7 +297,7 @@
                                     type_id: $("select[name=type_id]",newrow).val(),
                                     manager:$("input[name=manager]",newrow).val(),
                                     manager_mobile: $("input[name=manager_mobile]",newrow).val(),
-                                    region_code: $("select[name=region_code]",newrow).val(),
+                                    region_name: $("select[name=region_name]",newrow).val(),
                                     address: $("input[name=address]",newrow).val(),
                                     contacter:$("input[name=contacter]",newrow).val(),
                                     contacter_mobile: $("input[name=contacter_mobile]",newrow).val(),

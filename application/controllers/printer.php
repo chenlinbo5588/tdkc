@@ -82,9 +82,11 @@ class Printer extends TZ_Controller {
         
         $info = $this->Project_Model->queryById($id);
         $this->assign('info',$info);
-        
-        
-        
+        $this->load->helper('number');
+        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
+        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $this->assign('dateInfo',$dateInfo);
         $this->display();
     }
     

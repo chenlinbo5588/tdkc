@@ -2,9 +2,9 @@
         <input type="text" name="master_serial" value="{$info['master_serial']}" style="width:50px" placeholder="请输入总编号"/>
     </td>
     <td>
-        <select name="region_code">
+        <select name="region_name">
         {foreach from=$regionList item=item}
-        <option value="{$item['code']}" {if $info['region_code'] == $item['code']}selected{/if}>{$item['name']}</option>
+        <option value="{$item['name']}" {if $info['region_name'] == $item['name']}selected{/if}>{$item['name']}</option>
         {/foreach}
     </select>
         <input type="text" name="region_serial" value="{$info['region_serial']}" style="width:50px"  placeholder="请输入分编号"/>

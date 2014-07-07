@@ -226,7 +226,7 @@
                                     isajax:"1",
                                     name:$("input[name=name]",newrow).val(),
                                     master_serial: $("input[name=master_serial]",newrow).val(),
-                                    region_code: $("select[name=region_code]",newrow).val(),
+                                    region_name: $("select[name=region_name]",newrow).val(),
                                     region_serial: $("input[name=region_serial]",newrow).val(),
                                     address: $("input[name=address]",newrow).val(),
                                     total_area:$("input[name=total_area]",newrow).val(),

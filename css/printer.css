@@ -4,7 +4,7 @@
     padding:0;
 }
 
-body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
+body,div,span,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
 	outline-style:none;
 	font-family: "Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
@@ -368,3 +368,76 @@ input.viliage {
 .mjb .tptxt {
     width: 80%;
 }
+
+
+/**
+ * 宗地调查表
+ */
+ 
+ .zddj {
+     width:470px;
+     margin:0 auto;
+ }
+ 
+ 
+ .zddj .title {
+     font-size:24px;
+     text-align: center;
+ }
+ 
+ 
+ .zddj .subtitle {
+     font-weight: normal;
+     font-size: 17px;
+ }
+ 
+ .zddj .pg {
+     line-height: 30px;
+     padding:10px 0;
+ }
+ 
+  .zddj .pg li , .zddj .pg li p{
+     font-size: 17px;
+ }
+ 
+ .zddj .pg li p {
+     text-indent: 2em;
+ }
+ 
+.zddj .pg1 {
+     text-indent: 2em;
+     margin: 20px 0 0 0 ;
+ }
+ 
+
+ 
+ .zddj .pg1 span {
+     font-size:17px;
+ }
+ 
+ .zddj .pg2 .fixtb {
+    margin: 0 0 0 20px;
+}
+
+.zddj .pg2 .fixtb td {
+    font-size:17px;
+}
+
+ .zddj .pg2 li {
+ }
+ 
+ .zddj .pg3 h3.subtitle {
+     text-indent: 20px;
+ }
+
+ .zddj .sign {
+     text-align:right;
+ }
+ 
+  .zddj .sign p {
+      font-size:17px;
+  }
+  
+  .zddj .sign span {
+      margin: 0 80px 0 0;
+  }

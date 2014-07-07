@@ -1810,7 +1810,7 @@ class project_ch extends TZ_Admin_Controller {
     private function _addRules(){
         
         //$this->form_validation->set_rules('year', '年份', 'required|integer');
-        $this->form_validation->set_rules('region_code', '区域', 'required|alpha');
+        $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('type_id', '登记类型', 'required|is_natural_no_zero' );
         $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '登记地址', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
@@ -2103,19 +2103,19 @@ class project_ch extends TZ_Admin_Controller {
         $_POST['region_serial'] = 0;
         $_POST['project_no'] = '';
         
-        $regionName = $this->Region_Model->getList(array(
-                'select' => 'name',
+        $region_code = $this->Region_Model->getList(array(
+                'select' => 'code',
                 'where' => array(
                     'year' => $year,
-                    'code' => $_POST['region_code'],
+                    'name' => $_POST['region_name'],
                     'status' => '正常'
                 )
         ));
         
-        if($regionName['data'][0]['name']){
-            $_POST['region_name'] = $regionName['data'][0]['name'];
+        if($region_code['data'][0]['code']){
+            $_POST['region_code'] = $region_code['data'][0]['code'];
         }else{
-            $_POST['region_name'] = '';
+            $_POST['region_code'] = '';
         }
         
         $project_type = $this->Project_Type_Model->queryById($_POST['type_id']);
@@ -2155,19 +2155,19 @@ class project_ch extends TZ_Admin_Controller {
                 $_POST['cate_name'] = $project_type['cate_name'];
                 $_POST['weight'] = $project_type['weight'];
                 
-                $regionName = $this->Region_Model->getList(array(
-                    'select' => 'name',
+                $region_code = $this->Region_Model->getList(array(
+                    'select' => 'code',
                     'where' => array(
                         'year' => $info['year'],
-                        'code' => $_POST['region_code'],
+                        'name' => $_POST['region_name'],
                         'status' => '正常'
                     )
                 ));
 
-                if($regionName['data'][0]['name']){
-                    $_POST['region_name'] = $regionName['data'][0]['name'];
+                if($region_code['data'][0]['code']){
+                    $_POST['region_code'] = $region_code['data'][0]['code'];
                 }else{
-                    $_POST['region_name'] = '';
+                    $_POST['region_code'] = '';
                 }
                 
                 if(!empty($_POST['pm_id'])){

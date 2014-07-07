@@ -15,9 +15,9 @@
                         <input type="text" name="manager_mobile" style="width:80px;" value="{$info['manager_mobile']}" placeholder="请输入接洽人号码"/>
                     </td>
                     <td>
-                        <select name="region_code">
+                        <select name="region_name">
                             {foreach from=$regionList item=item}
-                            <option value="{$item['code']}" {if $info['region_code'] == $item['code']}selected{/if}>{$item['name']}</option>
+                            <option value="{$item['name']}" {if $info['region_name'] == $item['name']}selected{/if}>{$item['name']}</option>
                             {/foreach}
                         </select>
                     </td>

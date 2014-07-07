@@ -35,7 +35,7 @@ class Taizhang extends TZ_Admin_Controller {
         $this->form_validation->set_rules('region_serial', '分编号', 'required|numeric');
         $this->form_validation->set_rules('name', '单位名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '登记地址', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
-        $this->form_validation->set_rules('region_code', '区域', 'required|alpha');
+        $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('total_area', '总面积', 'required|numeric');
         $this->form_validation->set_rules('churan_area', '出让面积', 'required|numeric');
         
@@ -194,22 +194,20 @@ class Taizhang extends TZ_Admin_Controller {
         $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
         */
         
-        
-        $regionName = $this->Region_Model->getList(array(
-                'select' => 'name',
-                'where' => array(
-                    'year' => $year,
-                    'code' => $_POST['region_code'],
-                    'status' => '正常'
-                )
+        $region_code = $this->Region_Model->getList(array(
+            'select' => 'code',
+            'where' => array(
+                'year' => $year,
+                'name' => $_POST['region_name'],
+                'status' => '正常'
+            )
         ));
-        
-        if($regionName['data'][0]['name']){
-            $_POST['region_name'] = $regionName['data'][0]['name'];
+
+        if($region_code['data'][0]['code']){
+            $_POST['region_code'] = $region_code['data'][0]['code'];
         }else{
-            $_POST['region_name'] = '';
+            $_POST['region_code'] = '';
         }
-        
         
         $insertid = $this->Taizhang_Model->add($_POST);
         
@@ -226,23 +224,19 @@ class Taizhang extends TZ_Admin_Controller {
                 $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_POST['id'])));
                 $_POST['updator'] = $this->_userProfile['name'];
                 
-                if($info['region_code'] != strtoupper($_POST['region_code'])){
-                    $regionName = $this->Region_Model->getList(array(
-                        'select' => 'name',
-                        'where' => array(
-                            'year' => $info['year'],
-                            'code' => $_POST['region_code'],
-                            'status' => '正常'
-                        )
-                    ));
+                $region_code = $this->Region_Model->getList(array(
+                    'select' => 'code',
+                    'where' => array(
+                        'year' => $info['year'],
+                        'name' => $_POST['region_name'],
+                        'status' => '正常'
+                    )
+                ));
 
-                    if($regionName['data'][0]['name']){
-                        $_POST['region_name'] = $regionName['data'][0]['name'];
-                    }else{
-                        $_POST['region_name'] = '';
-                    }
+                if($region_code['data'][0]['code']){
+                    $_POST['region_code'] = $region_code['data'][0]['code'];
                 }else{
-                    $_POST['region_name'] = $info['region_name'];
+                    $_POST['region_code'] = '';
                 }
                 
                 $_POST['project_no'] = $this->_formatProjectNo($info['year'], $_POST['region_code'], $_POST['master_serial'], $_POST['region_serial']);
