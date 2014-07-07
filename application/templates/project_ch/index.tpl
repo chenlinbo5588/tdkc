@@ -86,12 +86,12 @@
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td><a href="{url_path('project_ch','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
                            <td>{str_replace('项目','',$item['type_name'])}-{$item['type']}</td>
-                           <td>{$item['contacter']}</td>
-                           <td>{$item['contacter_mobile']}</td>
-                           <td>{$item['region_name']|escape}({$item['region_code']})</td>
-                           <td>{$item['address']|escape}</td>
                            <td>{$item['manager']}</td>
                            <td>{$item['manager_mobile']}</td>
+                           <td>{$item['region_name']|escape}({$item['region_code']})</td>
+                           <td>{$item['address']|escape}</td>
+                           <td>{$item['contacter']}</td>
+                           <td>{$item['contacter_mobile']}</td>
                            <td>{$item['pm']}</td>
                            <td>{$item['sendor']}</td>
                            <td><a href="javascript:void(0);" class="popwin"  data-title="项目流转历史" data-href="{url_path('search','getmods','project_id=')}{$item['id']}">{$item['status']}</a></td>

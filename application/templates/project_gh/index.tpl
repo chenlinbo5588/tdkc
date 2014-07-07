@@ -61,6 +61,8 @@
                             <th>登记人</th>
                             <th>登记名称</th>
                             <th>类型</th>
+                            <th>接洽人</th>
+                            <th>电话</th>
                             <th>乡镇街道</th>
                             <th>联系单位</th>
                             <th>联系人</th>
@@ -81,6 +83,8 @@
                            <td>{$item['creator']}</td>
                            <td><a href="{url_path('project_gh','task','id=')}{$item['id']}">{$item['name']|escape}</a></td>
                            <td>{$item['type']}</td>
+                           <td>{$item['manager']}</td>
+                           <td>{$item['manager_mobile']}</td>
                            <td>{$item['region_name']}</td>
                            <td>{$item['union_name']|escape}</td>
                            <td>{$item['contacter']}</td>
