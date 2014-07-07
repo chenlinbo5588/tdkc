@@ -77,6 +77,8 @@ class Project_Gh_Model extends TZ_Model {
     public function update($param){
         $data = array(
             'month' => $param['month'],
+            'region_code' => strtoupper($param['region_code']),
+            'region_name' => $param['region_name'],
             'name' => $param['name'],
             'type_id' => $param['type_id'],
             'type' => $param['type'],

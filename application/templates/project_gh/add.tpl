@@ -47,9 +47,9 @@
                         <tr>
                             <td><label class="required"><em>*</em><strong>区域</strong></label></td>
                             <td>
-                                <select name="region_code" style="width:300px">
+                                <select name="region_name" style="width:300px">
                                     {foreach from=$regionList item=item}
-                                    <option value="{$item['code']}" {if $info['region_code'] == $item['code']}selected{/if}>{$item['name']}</option>
+                                    <option value="{$item['name']}" {if $info['region_name'] == $item['name']}selected{/if}>{$item['name']}</option>
                                     {/foreach}
                                 </select>
                                 {form_error('region_code')}
