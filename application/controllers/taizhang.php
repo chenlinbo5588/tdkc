@@ -134,6 +134,86 @@ class Taizhang extends TZ_Admin_Controller {
         }
     }
     
+    public function fee(){
+        
+        $id = (int)gpc('id','GP',0);
+        
+        if(empty($id)){
+            die('参数错误');
+        }
+        
+        $info = $this->Taizhang_Model->queryById($id);
+        
+        if(!$info){
+            die('找不到项目');
+        }
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            
+            $this->form_validation->set_rules('complete_time', '项目完成时间', 'required|valid_date');
+            $this->form_validation->set_rules('get_doc', '成果资料领取', 'required|is_natural|less_than[2]');
+            $this->form_validation->set_rules('get_doctime', '成果资料领取时间', 'required|valid_date');
+            
+            if(!empty($_POST['get_owner'])){
+                $this->form_validation->set_rules('get_owner', '成果资料领取人', 'max_length[20]');
+            }else{
+                $_POST['get_owner'] = '';
+            }
+            
+            if(!empty($_POST['owner_tel'])){
+                $this->form_validation->set_rules('owner_tel', '成果资料领取人联系号码', 'numeric_dash|max_length[20]');
+            }else{
+                $_POST['owner_tel'] = '';
+            }
+            
+            $this->form_validation->set_rules('kh_amount', '考核金额', 'required|numeric');
+            $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
+            $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
+            $this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
+            $this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
+            $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural|less_than[5]');
+            
+            if(!empty($_POST['remark'])){
+                $this->form_validation->set_rules('remark', '备注', 'max_length[500]');
+            }else{
+                $_POST['remark'] = '';
+            }
+            
+            if($this->form_validation->run()){
+                $now = time();
+                $data = array(
+                    'complete_time' => $_POST['complete_time'],
+                    'get_doc' => $_POST['get_doc'],
+                    'get_doctime' => $_POST['get_doctime'],
+                    'get_owner' => $_POST['get_owner'],
+                    'owner_tel' => $_POST['owner_tel'],
+                    'kh_amount' => $_POST['kh_amount'],
+                    'ys_amount' => $_POST['ys_amount'],
+                    'ss_amount' => $_POST['ss_amount'],
+                    'is_owed' => $_POST['is_owed'],
+                    'is_gov' => $_POST['is_gov'],
+                    'collect_date' => date("Y-m-d"),
+                    'fee_type' => $_POST['fee_type'],
+                    'remark' => $_POST['remark'],
+                    'updator' => $this->_userProfile['name'],
+                    'updatetime' => $now
+                );
+                $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id']));
+                if($return){
+                    $this->sendFormatJson('success', array('text' => '保存成功'));
+                }else{
+                    $this->sendFormatJson('failed', array('text' => '保存失败'));
+                }
+            }else{
+                $message = strip_tags(validation_errors());
+                $this->sendFormatJson('failed', array('text' => $message));
+            }
+            
+        }else{
+            $this->assign('info',$info);
+            $this->display();
+        }
+    }
     
     public function add()
 	{

@@ -73,6 +73,7 @@
                            <td>{$item['descripton']}</td>
                            <td>
                                {auth name="taizhang+edit"}<a href="javascript:void(0);" class="edit" data-id="{$item['id']}" data-href="{url_path('taizhang','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}
                            </td>
                         </tr>
                         {/foreach}
@@ -137,6 +138,11 @@
                  
                  
                  $(function(){
+                    $("a.popwin").bind("click",function(e){
+                        var url = $(e.target).attr("data-href");
+                        $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:650,buttons:{ "关闭" : 1}});
+                    });
+                    
                     $("a.addlink").bind("click",function(e){
                         if($("tr.newrow").size() > 0){
                             return ;

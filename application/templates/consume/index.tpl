@@ -26,6 +26,7 @@
                             <th>剩余数量</th>
                             <th>创建时间</th>
                             <th>最后修改时间</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,7 @@
                            <td>{if $item['quantity'] < 10}<span class="notice">{$item['quantity']}</span>{else}{$item['quantity']}{/if}</td>
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td>{$item['updatetime']|date_format:"Y-m-d"}</td>
+                           <td>{auth name="consume_type+edit"}<a href="{url_path('consume_type','edit','id=')}{$item['id']}">编辑</a>{/auth}</td>
                         </tr>
                         {foreachelse}
                             <tr><td colspan="6">找不到数据</td></tr>
