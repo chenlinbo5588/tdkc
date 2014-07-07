@@ -302,6 +302,7 @@
                                     contacter:$("input[name=contacter]",newrow).val(),
                                     contacter_mobile: $("input[name=contacter_mobile]",newrow).val(),
                                     pm_id:$("select[name=pm_id]",newrow).val(),
+                                    sendor_id:$("select[name=sendor_id]",newrow).val(),
                                     end_date:$("input[name=end_date]",newrow).val(),
                                     descripton:$("input[name=descripton]",newrow).val(),
                                     has_doc:$("select[name=has_doc]",newrow).val()

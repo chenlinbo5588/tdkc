@@ -43,8 +43,10 @@ class Project_Model extends TZ_Model {
             'descripton' => $param['descripton'],
             'has_doc' => $param['has_doc'],
             'displayorder' => $param['displayorder'],
-            'sendor_id' => $param['user_id'],
-            'sendor' => $param['creator'],
+            'pm_id' => $param['pm_id'],
+            'pm' => $param['pm'],
+            'sendor_id' => $param['sendor_id'],
+            'sendor' => $param['sendor'],
             'user_id' => $param['user_id'],
             'creator' => $param['creator'],
             'updator' => $param['creator'],
@@ -105,9 +107,17 @@ class Project_Model extends TZ_Model {
             'descripton' => $param['descripton'],
             'has_doc' => $param['has_doc'],
             'displayorder' => $param['displayorder'],
+            'pm_id' => $param['pm_id'],
+            'pm' => $param['pm'],
             'updator' => $param['updator'],
             'updatetime' => time()
         );
+        
+        if($param['sendor']){
+            $data['sendor'] = $param['sendor'];
+            $data['sendor_id'] = $param['sendor_id'];
+        }
+        
         if($param['end_date']){
             $data['end_date'] = $param['end_date'];
         }

@@ -38,7 +38,12 @@
                         </select>
                     </td>
                     <td>
-                        {$info['sendor']}
+                        <select name="sendor_id">
+                            <option value="">请选择</option>
+                            {foreach from=$userSendorList item=item}
+                            <option value="{$item['sendor_id']}" {if $info['sendor_id'] == $item['sendor_id']}selected{/if}>{$item['sendor']}</option>
+                            {/foreach}
+                        </select>
                     </td>
                     <td>
                         {$info['status']}

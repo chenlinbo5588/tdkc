@@ -2000,32 +2000,6 @@ class project_ch extends TZ_Admin_Controller {
                 $_POST['nature'] = '';
                 $new_projectId =  $this->_add($addYear);
                 
-                
-                $info = $this->Project_Model->queryById($new_projectId);
-                /**
-                 * 如果指定了项目负责人， 则将项目发送给他 
-                 */
-                if(!empty($_POST['pm_id'])){
-                    $op = '发送';
-                    $sendorInfo = $this->User_Model->queryById($_POST['pm_id']);
-                    $data = array(
-                        'sendor_id' => $sendorInfo['id'],
-                        'sendor' => $sendorInfo['name'],
-                        'pm_id' => $sendorInfo['id'],
-                        'pm' => $sendorInfo['name'],
-                        'status' => '已'.$op,
-                        'updator' => $this->_userProfile['name'],
-                        'updatetime' => time()
-                    );
-                    
-                    
-                    $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
-                    if($return){
-                        $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} $op 至 {$sendorInfo['name']}",$data);
-                        $this->_addPm($info,$sendorInfo);
-                    }
-                }
-                
                 $this->sendFormatJson('success', array('text' => '创建成功'));
             }else{
                 //$message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
@@ -2131,10 +2105,44 @@ class project_ch extends TZ_Admin_Controller {
             $_POST['end_date'] = strtotime($_POST['end_date']);
         }
         
+        /**
+         * * 如果指定了项目负责人
+         */
+        if(!empty($_POST['pm_id'])){
+            $pmInfo = $this->User_Model->queryById($_POST['pm_id']);
+            $_POST['pm_id'] = $pmInfo['id'];
+            $_POST['pm'] = $pmInfo['name'];
+        }
+        
+        /**
+         * * 如果指定了当前操作人
+         */
+        //$desc = '';
+        if(!empty($_POST['sendor_id'])){
+            $sendorInfo = $this->User_Model->queryById($_POST['sendor_id']);
+            if($sendorInfo){
+                $_POST['sendor_id'] = $sendorInfo['id'];
+                $_POST['sendor'] = $sendorInfo['name'];
+
+                //"并设置当前操作人为 {$_POST['sendor']}";
+            }
+        }
+        
+        if(empty($sendorInfo)){
+            $_POST['sendor_id'] = $this->_userProfile['id'];
+            $_POST['sendor'] = $this->_userProfile['name'];
+        }
+        
         $insertid = $this->Project_Model->add($_POST);
         //$this->db->trans_complete();
         
         $this->_addProjectLog('workflow', $insertid,'新增',"{$this->_userProfile['name']} 新增",$_POST);
+        
+        if($_POST['sendor_id'] != $this->_userProfile['id']  && $sendorInfo){
+            $info = $this->Project_Model->queryById($insertid);
+            $this->_addPm($info,$sendorInfo);
+        }
+        
         return $insertid;
         
     }
@@ -2171,8 +2179,16 @@ class project_ch extends TZ_Admin_Controller {
                 }
                 
                 if(!empty($_POST['pm_id'])){
-                    $sendorInfo = $this->User_Model->queryById($_POST['pm_id']);
-                    $_POST['pm'] = $sendorInfo['name'];
+                    $pmInfo = $this->User_Model->queryById($_POST['pm_id']);
+                    $_POST['pm'] = $pmInfo['name'];
+                }
+                
+                if($info['status'] == '新增' && !empty($_POST['sendor_id'])){
+                    $sendorInfo = $this->User_Model->queryById($_POST['sendor_id']);
+                    
+                    if($sendorInfo){
+                        $_POST['sendor'] = $sendorInfo['name'];
+                    }
                 }
                 
                 if(!empty($_POST['end_date'])){
@@ -2198,7 +2214,7 @@ class project_ch extends TZ_Admin_Controller {
         
     }
     
-    
+
     
     
     
