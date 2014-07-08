@@ -10,6 +10,32 @@ class Pm_Model extends TZ_Model {
     }
     
     
+    /**
+     * 添加一条消息
+     * @param type $param
+     * @return type 
+     */
+    public function addOnePm($param){
+        $now = time();
+        $data = array(
+            'id' => NULL,
+            'user_id' => $param['to_user_id'],
+            'receivor' => $param['to_user_name'],
+            'driection' => 1,
+            'isnew' => 1,
+            'title' => $param['title'],
+            'content' => $param['content'],
+            'creator' => $param['creator'],
+            'updator' => $param['creator'],
+            'createtime' => $now,
+            'updatetime' => $now
+        );
+        
+        $this->db->insert($this->_tableName, $data); 
+        return $this->db->insert_id();
+    }
+    
+    
     public function add($param){
         $now = time();
         
