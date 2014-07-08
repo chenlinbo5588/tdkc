@@ -34,7 +34,7 @@
                     <td>{$info['zc_remark']|escape}</td>
                 </tr>   
                 {/if}
-                
+                {include file="project_ch/doc_list.tpl"}
                 {if $info['status'] == '已通过初审'}
                 <tr>
                     <td>初审意见</td>

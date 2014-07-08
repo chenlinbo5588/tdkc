@@ -226,6 +226,96 @@ class project_ch extends TZ_Admin_Controller {
         
     }
     
+    
+    /**
+     *  保存变更表
+     */
+    public function savebgb(){
+        $project_id = (int)gpc("id",'GP',0);
+        
+        $reload = false;
+        if(empty($project_id)){
+            $message = "参数错误,请重新请求";
+        }else{
+            
+            for($i = 0; $i < 1; $i++){
+                $info = $this->Project_Model->queryById($project_id);
+
+                if(!$info){
+                    $message = "保存失败,找不到记录";
+                    break;
+                }
+
+                if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
+                    $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
+                    break;
+                }
+                
+                $this->load->model('Project_Bgb_Model');
+                
+                $this->Project_Bgb_Model->deleteByWhere(array(
+                    'type' => 0,
+                    'project_id' => $info['id']
+                ));
+                $_POST['type'] = 0;
+                $_POST['project_id'] = $info['id'];
+                $_POST['creator'] = $this->_userProfile['name'];
+                $this->Project_Bgb_Model->add($_POST);
+                
+                $message = '保存成功';
+            }
+        }
+        
+        $this->assign('message',$message);
+        $this->display('showmessage','common');
+        
+    }
+    
+    
+    /**
+     *  推荐方式 保存界址表
+     */
+    public function savefastjzb(){
+        $project_id = (int)gpc("id",'GP',0);
+        
+        $reload = false;
+        if(empty($project_id)){
+            $message = "参数错误,请重新请求";
+        }else{
+            
+            for($i = 0; $i < 1; $i++){
+                $info = $this->Project_Model->queryById($project_id);
+
+                if(!$info){
+                    $message = "保存失败,找不到记录";
+                    break;
+                }
+
+                if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
+                    $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
+                    break;
+                }
+                
+                $this->load->model('Project_Jzb_Model');
+                
+                $this->Project_Jzb_Model->deleteByWhere(array(
+                    'type' => 0,
+                    'project_id' => $info['id']
+                ));
+                $_POST['type'] = 0;
+                $_POST['project_id'] = $info['id'];
+                $_POST['creator'] = $this->_userProfile['name'];
+                $this->Project_Jzb_Model->add($_POST);
+                
+                $message = '保存成功';
+            }
+        }
+        
+        $this->assign('message',$message);
+        $this->display('showmessage','common');
+        
+    }
+    
     /**
      * 保存面积表 
      */
@@ -250,10 +340,10 @@ class project_ch extends TZ_Admin_Controller {
                     break;
                 }
                 
-                if(!preg_match("/<div class=\"mjb\">/", $_POST['mjb'])){
-                    $message = '保存失败,没有发现面积表';
-                    break;
-                }
+                //if(!preg_match("/<div class=\"mjb\">/", $_POST['mjb'])){
+                    //$message = '保存失败,没有发现面积表';
+                    //break;
+                //}
                 
                 $this->load->model('Project_Area_Model');
                 

@@ -188,7 +188,7 @@ textarea.noborder {
 /**
  * 打印自动分页
  */
-.jzb , .mjb {
+.jzb , .mjb , .bgb {
     page-break-after:always;
 }
 
@@ -222,6 +222,12 @@ textarea.noborder {
 }
 
 
+.jzb .jdr {
+    text-align: center;
+    vertical-align: middle;
+    border-width: 0px 1px 0px 1px;
+}
+
 .jzb .direction {
     border-width: 0px 1px 0px 1px;
 }
@@ -233,6 +239,62 @@ textarea.noborder {
 .jzb .yj_item {
     margin-left:20px;
 }
+
+
+
+.jzb .fulltable {
+    table-layout: fixed;
+}
+
+.jzb .sth {
+    height:60px;
+}
+
+.jzb .as {
+    text-align: left;vertical-align: top;padding:3px;
+}
+
+.jzb .bs {
+    padding:3px;vertical-align: middle;
+}
+
+.jzb .cs {
+    margin-left:10px;
+}
+
+.jzb .zjr {
+    width: 50%;float:left;
+}
+
+.jzb .clz {
+    width: 48%;float:left;
+}
+
+.jzb .fjyj {
+    width:20px;float:left;
+}
+
+.jzb .jdyj {
+    width:20px;float:left;
+}
+
+
+.jzb .ba {
+    text-align:left;padding:3px;
+}
+
+.jzb .ba .d1 {
+    width:50%;float:left;
+}
+
+.jzb .ba .d2 {
+    float:left;
+}
+
+.jzb .jf {
+    text-align: right;
+}
+
 
 /**
  * 审核表
@@ -441,3 +503,61 @@ input.viliage {
   .zddj .sign span {
       margin: 0 80px 0 0;
   }
+  
+  
+  
+  /**
+   * 变更表
+   *
+   */
+ 
+.bgb {
+    width:650px;
+    margin:0 auto;
+}
+
+.bgb .bgb_title {
+    font-size:24px;
+    margin-bottom: 20px;
+}
+
+.bgb .fulltable {
+    
+}
+
+.bgb tr {
+    height:90px;
+}
+
+.bgb tr.last {
+    height:180px;
+}
+
+.bgb .namelist {
+    padding:15px;
+}
+
+.bgb .namelist .sign {
+    margin: 10px;
+}
+
+.bgb .namelist span ,.bgb .ct span {
+    font-size:16px;
+    font-weight: bold;
+}
+
+.bgb .ud {
+    padding: 0 10px;
+    margin: 0 10px;
+    border-bottom: 1px solid black;
+}
+
+.bgb .ct {
+    text-align: right;
+    margin-right:100px;
+}
+
+
+.bgb  .fulltable th , .bgb  .fulltable td {
+    font-size:16px;
+}

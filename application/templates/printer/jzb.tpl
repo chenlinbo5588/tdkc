@@ -11,9 +11,9 @@
         <div class="container">
             {foreach name=pg from=$pageAr item=pageIndex}
             <div class="jzb">
-                <h1 class="title center">宗地界址调查表</h1>
+                <h1 class="title center jzb_title">宗地界址调查表</h1>
                 <div><strong>QR-10-03</strong></div>
-                <table class="fulltable border1" style="table-layout:fixed">
+                <table class="fulltable border1">
                     <colgroup>
                         <col width="40"/>
                         <col width="40"/>
@@ -25,15 +25,15 @@
                     <tbody>
                         <tr class="center">
                             <td colspan="2">土地使用者名称</td>
-                            <td style="text-align: left;" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
+                            <td class="alignleft" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
                         </tr>
                         <tr class="center">
                             <td colspan="2">本宗地用签名盖章</td>
-                            <td style="text-align: left;" colspan="3"></td>
+                            <td class="alignleft" colspan="3"></td>
                         </tr>
                         <tr class="center">
                             <td colspan="2">宗地坐落</td>
-                            <td style="text-align: left;" colspan="3">{$info['address']|escape}</td>
+                            <td class="alignleft" colspan="3">{$info['address']|escape}</td>
                         </tr>
                         <tr class="center vmd">
                             <td>四址</td>
@@ -74,39 +74,39 @@
                         </tr>
                         {/foreach}
                         {/if}
-                        <tr class="center" style="height:60px;">
+                        <tr class="center sth">
                             <td rowspan="2">备<br/>注</td>
-                            <td colspan="4" style="text-align: left;vertical-align: top;padding:3px;">
+                            <td colspan="4" class="as">
                                 <div>调查人:</div>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="4" style="padding:3px;vertical-align: middle;">
-                                <ul style="margin-left:10px;">
-                                    <li style="width: 50%;float:left;">指界人： </li>
-                                    <li style="width: 48%;float:left;">测量者: {$info['pm']}</li>
+                            <td colspan="4" class="bs">
+                                <ul class="cs">
+                                    <li class="zjr">指界人： </li>
+                                    <li class="clz">测量者: {$info['pm']}</li>
                                 </ul>
                             </td>
                         </tr>
                         <tr class="center">
                             <td> 
-                                <ul style="margin-left:10px">
-                                    <li style="width:20px;float:left;">分局确认意见</li>
-                                    <li style="width:20px;float:left;">镇、街道土管所</li>
+                                <ul class="cs">
+                                    <li class="fjyj">分局确认意见</li>
+                                    <li class="jdyj">镇、街道土管所</li>
                                 </ul>
                             </td>
-                            <td colspan="4" style="text-align:left;padding:3px;">
+                            <td colspan="4" class="ba">
                                 <p class="yj_item">该宗地地号：</p>
                                 <p class="yj_item">调查人签名：        (公章)</p>
                                 <ul class="yj_item">
-                                    <li style="width:50%;float:left;">所（分局）领导签字：</li>
-                                    <li style="float:left;">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>
+                                    <li class="d1">所（分局）领导签字：</li>
+                                    <li class="d2">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>
                                 </ul>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <p style="text-align:right;"><span>勘测日期</span> <span>{$info['arrange_date']|date_format:"Y年m月d日"}</p>
+                <p class="jf"><span>勘测日期</span> <span>{$info['arrange_date']|date_format:"Y年m月d日"}</p>
             </div>
            {/foreach}
         </div>

@@ -74,6 +74,8 @@
     
     <script>
         $(function(){
+            var areaReg = /^\d+(.\d*)?$/;
+            
             $("body").delegate(".inputarea","click",function(e){
                 var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
                 var that = $(e.target);

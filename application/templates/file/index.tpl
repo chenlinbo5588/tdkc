@@ -2,7 +2,7 @@
             <div>
                 <span class="uploader"></span>
                 <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
-                <span class="Uploader" data-url="{url_path('file','upload')}&folder_id={$folder_id}&uid={$uid}"  data-allowsize="2Mb" data-allowfile="*.*" ><storeng class="notice">请选择文件,单文件大小2Mb以下</strong></span>
+                <span class="Uploader" data-url="{url_path('file','upload')}&folder_id={$folder_id}&uid={$uid}"  data-allowsize="20Mb" data-allowfile="*.*" ><storeng class="notice">请选择文件,单文件大小20Mb以下</strong></span>
                 
                 {*<input type="button" name="upload" id="beginUpload" value="开始上传"/>*}
             </div>

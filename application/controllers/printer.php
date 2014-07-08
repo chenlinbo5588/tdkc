@@ -91,6 +91,100 @@ class Printer extends TZ_Controller {
     }
     
     
+     /**
+     * 界址表
+     */
+    public function fastjzb(){
+        $id = (int)gpc('id','GP',0);
+       
+        if(!$id){
+            die('参数错误');
+        }
+        
+        $type = $_GET['type'];
+        
+        
+        $this->load->helper('number');
+        $info = $this->Project_Model->queryById($id);
+        
+        if(!$info){
+            die('找不到记录');
+        }
+        
+        $this->assign('info',$info);
+ 
+        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
+        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        
+        $this->assign('dateInfo',$dateInfo);
+        
+        
+        $this->load->model('Project_Jzb_Model');
+        $jzb = $this->Project_Jzb_Model->getList(array(
+            'where' => array(
+                'type' => 0,
+                'project_id' => $info['id']
+            ),
+            'order' => 'createtime DESC',
+            'limit' => 1
+        ));
+
+        if($jzb['data'][0]){
+            $this->assign('jzb',$jzb['data'][0]);
+        }
+        
+        $this->display();
+    }
+    
+    
+    /**
+     * 变更表
+     */
+    public function bgb(){
+        $id = (int)gpc('id','GP',0);
+       
+        if(!$id){
+            die('参数错误');
+        }
+        
+        $type = $_GET['type'];
+        
+        
+        $this->load->helper('number');
+        $info = $this->Project_Model->queryById($id);
+        
+        if(!$info){
+            die('找不到记录');
+        }
+        
+        $this->assign('info',$info);
+ 
+        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
+        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        
+        $this->assign('dateInfo',$dateInfo);
+        
+        $this->load->model('Project_Bgb_Model');
+        $bgb = $this->Project_Bgb_Model->getList(array(
+            'where' => array(
+                'type' => 0,
+                'project_id' => $info['id']
+            ),
+            'order' => 'createtime DESC',
+            'limit' => 1
+        ));
+
+        if($bgb['data'][0]){
+            $this->assign('bgb',$bgb['data'][0]);
+        }
+        
+        $this->display();
+    }
+    
+    
+    
     /**
      * 土地面积分类表 
      */

@@ -23,6 +23,7 @@
                         <textarea style="width: 500px; height: 50px;" name="cs_remark">{$info['cs_remark']|escape}</textarea>
                     </td>
                 </tr>
+                {include file="project_ch/doc_list.tpl"}
                 <tr>
                     <td>电子图件</td>
                     <td>{include file="project_ch/filelist.tpl"}</td>

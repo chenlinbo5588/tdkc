@@ -205,7 +205,7 @@
 }
 
 .link_btn {
-    font-size:16px;
+    font-size:15px;
 }
 
 .btn-orange,.btn-gray {
@@ -495,7 +495,7 @@ ol.style_decimal , ul.style_decimal {
     border:1px solid #c7c7c7;
     padding:5px;
     margin:2px;
-    width:100px;
+    width:70px;
     float:left;
     display:block;
     cursor:pointer;

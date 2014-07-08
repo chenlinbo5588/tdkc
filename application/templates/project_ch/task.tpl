@@ -405,26 +405,23 @@
                     
                     
                     {if $info['type'] == $smarty.const.CH_RCZD}
-                    <tr>
-                        <td>宗地勘测定界报告</td>
-                        <td>
-                            <a class="link_btn" href="{url_path('printer','zddj','id=')}{$info['id']}" target="_blank">打印宗地勘测定界报告</a>
-                        </td>
-                    </tr>
+                    {include file="project_ch/doc_list.tpl"}
                     <tr>
                         <td>界址信息</td>
                         <td>
                             <div>{form_error('jz_list')}</div>
                             <div>
-                                <a class="link_btn" href="{url_path('printer','jzb','id=')}{$info['id']}" target="_blank">打印界址表</a>
                                 {if $info['status'] == '已实施'}
-                                <a href="javascript:void(0);" id="addJz">添加界址</a>&nbsp;
-                                <label>请输入原流水号(不区分大小写)<input type="text" name="source_id" value="" placeholder="请输入原流水号"/></label>
-                                <input type="button" name="readJzFrom" id="readJzFrom" value="从已有界址读入"/>
-                                <input type="button" name="saveJz" id="saveJz" value="保存界址表"/>
+                                <div class="notice">可以通过两种方式录入界址信息,方式1:直接模拟界址表表格填写，方式2:录入界址记录后在打印</div>
+                                <a class="link_btn" href="{url_path('printer','fastjzb','id=')}{$info['id']}" target="_blank">方式1:填写界址表(推荐)</a>   
+                                <div style="margin-top:10px;">
+                                    <a class="link_btn" href="javascript:void(0);" id="addJz">方式2:添加界址</a>&nbsp;
+                                    <label>请输入原流水号(不区分大小写)<input type="text" name="source_id" value="" placeholder="请输入原流水号"/></label>
+                                    <input type="button" name="readJzFrom" id="readJzFrom" value="从已有界址读入"/>
+                                    <input type="button" name="saveJz" id="saveJz" value="保存界址表"/>
+                                    <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
+                                </div>
                                 {/if}
-                                
-                                <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起","+展开"],"target":"#jz_list" }' >-收起</a>
                             </div>
                             <div id="jz_list" style="margin:10px 0;">
                                 <input type="hidden" name="jz_cnt" value="{count($jzList)}"/>
@@ -508,6 +505,18 @@
                             </div>
                         </td>
                      </tr>
+                     <tr>
+                    <td>变更情况表</td>
+                        <td>
+                            <div>
+                                {if $info['status'] == '已实施'}
+                                    <a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}" target="_blank">填写土地勘测定界成果变更情况表</a>
+                                {else}
+                                    <a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}&type=print" target="_blank">打印填写土地勘测定界成果变更情况表</a>
+                                {/if}
+                            </div>
+                        </td>
+                    </tr>
                      {/if}
                     </tbody>
                 </table>
