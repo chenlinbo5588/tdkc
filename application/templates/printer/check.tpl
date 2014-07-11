@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
         

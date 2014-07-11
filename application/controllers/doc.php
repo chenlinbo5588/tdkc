@@ -34,7 +34,7 @@ class Doc extends TZ_Admin_Controller {
                 
             );
             
-            $condition['order'] = 'sign_time ASC';
+            $condition['order'] = 'sign_time DESC';
             $condition['where']['status'] = '正常';
             
             if(!empty($_GET['sdate'])){

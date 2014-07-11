@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>{$TITLE}</title>
 <meta name="keywords" content="{$KEYWORDS}">
 <meta name="description" content="{$DESCRIPTION}">

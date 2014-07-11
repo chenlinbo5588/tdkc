@@ -3,6 +3,7 @@
 <head>
 <title>{$TITLE}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="keywords" content="{$KEYWORDS}">
 <meta name="description" content="{$DESCRIPTION}">
 <link href="/css/base.css" rel="stylesheet" type="text/css">
