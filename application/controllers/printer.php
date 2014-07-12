@@ -294,6 +294,24 @@ class Printer extends TZ_Controller {
        $this->display();
     }
     
+    
+    public function covertd(){
+        $id = (int)gpc('id','GP',0);
+       
+       if(!$id){
+           die('参数错误');
+       }
+       
+       $info = $this->Project_Model->queryById($id);
+       if(!$info){
+            die('找不到记录');
+        }
+        
+       $this->assign('info', $info);
+       
+       $this->display();
+       
+    }
 }
 
 /* End of file printer.php */
