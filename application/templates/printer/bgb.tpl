@@ -29,27 +29,27 @@
                         <tbody>
                             <tr>
                                 <th class="center">原土地使用者名称</th>
-                                <td class="inputarea"></td>
+                                <td class="center inputarea"></td>
                             </tr>
                             <tr>
                                 <th class="center">宗地坐落</th>
-                                <td class="inputarea"></td>
+                                <td class="center inputarea">{$info['region_name']}{$info['address']|escape}</td>
                             </tr>
                             <tr>
                                 <th class="center">原编号</th>
-                                <td class="inputarea"></td>
+                                <td class="center inputarea"></td>
                             </tr>
                             <tr>
                                 <th class="center">变更原因</th>
-                                <td class="inputarea"></td>
+                                <td class="center inputarea"></td>
                             </tr>
                             <tr>
                                 <th class="center">现土地使用者名称</th>
-                                <td class="inputarea"></td>
+                                <td class="center inputarea"></td>
                             </tr>
                             <tr>
                                 <th class="center">现编号</th>
-                                <td class="inputarea"></td>
+                                <td class="center inputarea"></td>
                             </tr>
                             <tr class="last">
                                 <td colspan="2">

@@ -27,7 +27,7 @@
                     <table class="fulltable border1">
                         <colgroup>
                             <col width="40"/>
-                            <col width="40"/>
+                            <col width="80"/>
                             <col width="150"/>
                             <col width="150"/>
                             <col width="70"/>
@@ -43,7 +43,7 @@
                             </tr>
                             <tr class="center">
                                 <td colspan="2">宗地坐落</td>
-                                <td class="alignleft inputarea" colspan="3">{$info['address']|escape}</td>
+                                <td class="alignleft inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
                             </tr>
                             <tr class="center vmd">
                                 <td>四址</td>
@@ -139,7 +139,7 @@
                                     </ul>
                                 </td>
                             </tr>
-                            <tr class="center">
+                            <tr class="last">
                                 <td> 
                                     <ul class="cs">
                                         <li class="fjyj">分局确认意见</li>
@@ -148,7 +148,7 @@
                                 </td>
                                 <td colspan="4" class="ba">
                                     <p class="yj_item inputarea">该宗地地号：</p>
-                                    <p class="yj_item">调查人签名：        (公章)</p>
+                                    <p class="yj_item">调查人签名：        <span class="gz">(公章)</span></p>
                                     <ul class="yj_item">
                                         <li class="d1">所（分局）领导签字：</li>
                                         <li class="d2 inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>
@@ -171,7 +171,7 @@
                 <table class="fulltable border1">
                     <colgroup>
                         <col width="40"/>
-                        <col width="40"/>
+                        <col width="80"/>
                         <col width="150"/>
                         <col width="150"/>
                         <col width="70"/>
@@ -187,7 +187,7 @@
                         </tr>
                         <tr class="center">
                             <td colspan="2">宗地坐落</td>
-                            <td class="alignleft inputarea" colspan="3">{$info['address']|escape}</td>
+                            <td class="alignleft inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
                         </tr>
                         <tr class="center vmd">
                             <td>四址</td>
@@ -283,7 +283,7 @@
                                 </ul>
                             </td>
                         </tr>
-                        <tr class="center">
+                        <tr class="last">
                             <td> 
                                 <ul class="cs">
                                     <li class="fjyj">分局确认意见</li>
@@ -292,7 +292,7 @@
                             </td>
                             <td colspan="4" class="ba">
                                 <p class="yj_item inputarea">该宗地地号：</p>
-                                <p class="yj_item">调查人签名：        (公章)</p>
+                                <p class="yj_item">调查人签名：        <span class="gz">(公章)</span></p>
                                 <ul class="yj_item">
                                     <li class="d1">所（分局）领导签字：</li>
                                     <li class="d2 inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>

@@ -738,10 +738,12 @@
                             }
                             {elseif $info['status'] == '已实施' }
                             if(op == '完成'){
+                                {if $info['cate_name'] != $smarty.const.CH_FCCH }
                                 if(cansubmit && $("input[name='file_id[]']").length == 0){
                                     $.jBox.alert("请上传图件文档",'提示');
                                     cansubmit = false;
                                 }
+                                {/if}
                             }
                             {elseif $info['status'] == '已完成' }
                             if(op == '提交初审'){

@@ -52,7 +52,7 @@
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
                     {auth name="project_ch+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
-                    {auth name="project_gh+sendone"}<a href="javascript:sendAll('id[]');" class="coolbg">发送</a>{/auth}
+                    {auth name="project_ch+sendone"}<a href="javascript:sendAll('id[]');" class="coolbg">发送</a>{/auth}
                 </div>
                 <form name="listform" action="" method="post">
                 <table class="table" id="listtable">
@@ -246,11 +246,13 @@
                             $("input[name=name]",newrow).focus();
                         }
                         
+                        {*
                         if(cansubmit && $.trim($("input[name=manager]",newrow).val()) == ''){
                             alert("请输入接洽人名称");
                             cansubmit = false;
                             $("input[name=manager]",newrow).focus();
                         }
+                        *}
                         
                         if(cansubmit && $.trim($("input[name=manager_mobile]",newrow).val()) == ''){
                             alert("请输入接洽人号码");

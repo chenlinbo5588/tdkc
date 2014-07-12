@@ -6,12 +6,7 @@
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
         <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
-        <style>
-            body,div,span,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
-                font-size: 15px;
-            }
-            
-        </style>
+        
     </head>
     <body>
         <div class="container">
@@ -19,16 +14,16 @@
                 <h1 class="title">宗地勘测定界成果报告</h1>
                 <div class="pg pg1">
                     <span class="inputarea">慈溪市土地勘测规划设计院有限公司于</span><span class="inputarea">{$info['createtime']|date_format:"Y年m月"}</span>
-                    <span>受</span><span class="inputarea">{$info['name']}及慈溪市{$info['region_name']}国土资源所</span><span>委托，对位于</span><span class="inputarea">{$info['address']}</span><span>的该宗地所在地块进行土地勘测定界测量和属性、权属调查。经实地调查，其征收土地</span><span class="inputarea">总面积{$info['area']}</span><span>m<sup>2</sup>,<span class="inputarea">平面坐标为宁波独立坐标系</span><span>，高程基准为1985国家高程基准。</span>
+                    <span>受</span><span class="inputarea ud">{$info['name']}</span>及<span class="inputarea ud">{$info['region_name']}</span><span>国土资源所</span><span>委托，对位于</span><span class="inputarea ud">{$info['region_name']}{$info['address']}</span><span>的该宗地所在地块进行土地勘测定界测量和属性、权属调查。经实地调查，其征收土地</span><span >总面积</span><span class="inputarea ud">{if $info['area']}{$info['area']}{else}请输入面积{/if}</span><span>m<sup>2</sup>,<span class="inputarea">平面坐标为宁波独立坐标系</span><span>，高程基准为1985国家高程基准。</span>
                 </div>
                 <div class="pg pg2">
                     <h2 class="subtitle">一、作业依据</h2>
                     <table class="fixtb">
                         <colgroup>
                             <col width="50"/>
-                            <col width="450"/>
+                            <col width="500"/>
                         </colgroup>
-                        <tr><td>1、</td><td>GB/T 21010-2007中华人民共和国关于《土地利用现状分类》。</td></tr>
+                        <tr><td>1、</td><td>GB/T 21010-2007 &nbsp;&nbsp;中华人民共和国关于《土地利用现状分类》。</td></tr>
                         <tr><td>2、</td><td>[2003] 《浙江省土地利用现状更新调查技术规范》。</td></tr>
                         <tr><td>3、</td><td>[2005] 《浙江省城镇数字地籍调查暂行规定》。</td></tr>
                         <tr><td>4、</td><td>CJJ-99 《城市测量规范》。</td></tr>
@@ -38,7 +33,7 @@
                     <table class="fixtb">
                         <colgroup>
                             <col width="50"/>
-                            <col width="450"/>
+                            <col width="500"/>
                         </colgroup>
                         <tr><td>1、</td><td>本次作业根据任务情况，组织三名测绘技术人员（其中测绘助理工程师一名，技术员一名，测工一名），提供技术保障。</td></tr>
                         <tr><td>2、</td><td>本次作业投入的仪器设备有拓普康全站仪一台采用全野外数字法观测、Trimble 5700 GPS RTK 仪器一套，投入的仪器设备均经过质检。电脑成图由“瑞德”软件作为基本软件。</td></tr>
@@ -49,6 +44,7 @@
                     <ul>
                         <li>
                             <h3 class="subtitle">1、权属及地类调查</h3>
+                            <div class="pagemarker">&nbsp;</div>
                             <p>对收集到的资料进行整理、分析、实地调查用地范围内的权属性质、地类性质、查清用地范围内的土地权属界线，查清用地范围内的土地利用类型及分布。</p>
                         </li>
                         <li>

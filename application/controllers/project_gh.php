@@ -24,7 +24,7 @@ class project_gh extends TZ_Admin_Controller {
             'status' => '已处理',
             'updator' => $this->_userProfile['name'],
             'updatetime' => time()
-        ),array('user_id' => $this->_userProfile['id'],'project_type' => 0, 'project_id' => $info['id']));
+        ),array('user_id' => $this->_userProfile['id'],'project_type' => 1, 'project_id' => $info['id']));
         
         
         $this->User_Event_Model->deleteByWhere(array(
@@ -1783,7 +1783,7 @@ class project_gh extends TZ_Admin_Controller {
         $this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('type_id', '登记类型', 'required|is_natural_no_zero' );
-        $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[1]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '登记地址', 'trim|max_length[200]|htmlspecialchars');
         
         if(!empty($_POST['village'])){

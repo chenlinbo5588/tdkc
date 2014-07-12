@@ -7,6 +7,7 @@
 body,div,span,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
 	outline-style:none;
 	font-family: "Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size:16px;
 }
 
 html {
@@ -35,9 +36,9 @@ ul,ol {
 }
 
 
-h1 { color:#171B16; font-size:130%; font-weight:bold; }
-h2 { color:#171B16; font-size:115%; font-weight:bold; }
-h3 { color:#171B16; font-size:100%; font-weight:bold;}
+h1 { font-size:130%; font-weight:bold; }
+h2 { font-size:115%; font-weight:bold; }
+h3 { font-size:100%; font-weight:bold;}
 /*
 a:link { font-size: 9pt; color: #000000; text-decoration: none;  }
 a:visited{ font-size: 9pt; text-decoration: none;  }
@@ -137,7 +138,9 @@ table td,table th {
 }
 
 
-
+.ud {
+    border-bottom:1px solid black;
+}
 
 .container {
     width: 750px;
@@ -188,15 +191,20 @@ textarea.noborder {
 /**
  * 打印自动分页
  */
-.jzb , .mjb , .bgb {
-    page-break-after:always;
+.jzb , .mjb , .bgb , .pagemarker {
+    page-break-before:always;
 }
+
 
 
 .jzb , .mjb {
     width:700px;
     margin:0 auto;
 }
+.mjb {
+    width:730px;
+}
+
 
 .jzb .fulltable, .check .fulltable {
     width:100%;
@@ -259,7 +267,7 @@ textarea.noborder {
 }
 
 .jzb .cs {
-    margin-left:10px;
+    position: relative;
 }
 
 .jzb .zjr {
@@ -271,17 +279,34 @@ textarea.noborder {
 }
 
 .jzb .fjyj {
-    width:20px;float:left;
+    width:20px;
+    position: absolute;
+    top:0p;x
+    left:0px;
 }
 
 .jzb .jdyj {
-    width:20px;float:left;
+    width:20px;
+    position: absolute;
+    top:0px;
+    left:20px;
 }
-
+.jzb .last {
+    height:180px;
+}
 
 .jzb .ba {
     text-align:left;padding:3px;
 }
+
+.jzb .ba .yj_item {
+    margin:30px 0;
+}
+.jzb .ba .yj_item .gz {
+    margin: 0 0 0 300px;
+    font-size:18px;
+}
+
 
 .jzb .ba .d1 {
     width:50%;float:left;
@@ -360,12 +385,12 @@ input.viliage {
 }
 
 .mjb .cp1 {width:40px;}
-.mjb .cp2 {width:60px;}
-.mjb .cp3 {width:80px;}
-.mjb .cp4 {width:130px;}
-.mjb .cp5 {width:130px;}
-.mjb .cp6 {width:130px;}
-.mjb .cp7 {width:120px;}
+.mjb .cp2 {width:80px;}
+.mjb .cp3 {width:120px;}
+.mjb .cp4 {width:120px;}
+.mjb .cp5 {width:120px;}
+.mjb .cp6 {width:120px;}
+.mjb .cp7 {width:100px;}
 
 
 
@@ -437,7 +462,7 @@ input.viliage {
  */
  
  .zddj {
-     width:470px;
+     width:600px;
      margin:0 auto;
  }
  
@@ -445,6 +470,7 @@ input.viliage {
  .zddj .title {
      font-size:24px;
      text-align: center;
+     margin:50px 0 40px 0
  }
  
  
@@ -454,12 +480,13 @@ input.viliage {
  }
  
  .zddj .pg {
-     line-height: 30px;
+     line-height: 40px;
      padding:10px 0;
+     letter-spacing: 2px;
  }
  
   .zddj .pg li , .zddj .pg li p{
-     font-size: 17px;
+     font-size: 16px;
  }
  
  .zddj .pg li p {
@@ -472,18 +499,10 @@ input.viliage {
  }
  
 
- 
- .zddj .pg1 span {
-     font-size:17px;
- }
- 
  .zddj .pg2 .fixtb {
     margin: 0 0 0 20px;
 }
 
-.zddj .pg2 .fixtb td {
-    font-size:17px;
-}
 
  .zddj .pg2 li {
  }
@@ -496,9 +515,7 @@ input.viliage {
      text-align:right;
  }
  
-  .zddj .sign p {
-      font-size:17px;
-  }
+
   
   .zddj .sign span {
       margin: 0 80px 0 0;

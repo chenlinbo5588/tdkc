@@ -245,12 +245,12 @@ class project_ch extends TZ_Admin_Controller {
                     $message = "保存失败,找不到记录";
                     break;
                 }
-
+                /*
                 if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
                     $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
                     break;
                 }
-                
+                */
                 $this->load->model('Project_Bgb_Model');
                 
                 $this->Project_Bgb_Model->deleteByWhere(array(
@@ -290,11 +290,13 @@ class project_ch extends TZ_Admin_Controller {
                     $message = "保存失败,找不到记录";
                     break;
                 }
-
+                
+                /*
                 if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
                     $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
                     break;
                 }
+                */
                 
                 $this->load->model('Project_Jzb_Model');
                 
@@ -334,12 +336,12 @@ class project_ch extends TZ_Admin_Controller {
                     $message = "保存失败,找不到记录";
                     break;
                 }
-
+                /*
                 if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
                     $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
                     break;
                 }
-                
+                */
                 //if(!preg_match("/<div class=\"mjb\">/", $_POST['mjb'])){
                     //$message = '保存失败,没有发现面积表';
                     //break;
@@ -487,7 +489,9 @@ class project_ch extends TZ_Admin_Controller {
                     
                 }elseif($op == '完成'){
                     
-                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    if($info['cate_name'] != CH_FCCH){
+                        $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    }
                     //$this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     
                     if($info['type'] == CH_RCZD){
@@ -514,7 +518,9 @@ class project_ch extends TZ_Admin_Controller {
                         $_POST['zc_remark'] = '合格';
                     }
                     
-                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    if($info['cate_name'] != CH_FCCH){
+                        $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    }
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
                     if(!$this->form_validation->run()){
                         $info['zc_yj'] = $_POST['zc_yj'];
@@ -535,7 +541,9 @@ class project_ch extends TZ_Admin_Controller {
                         $_POST['cs_remark'] = '合格';
                     }
                     
-                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    if($info['cate_name'] != CH_FCCH){
+                        $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    }
                     if(!$this->form_validation->run()){
                         $info['cs_yj'] = $_POST['cs_yj'];
                         $info['cs_remark'] = $_POST['cs_remark'];
@@ -543,7 +551,9 @@ class project_ch extends TZ_Admin_Controller {
                     }
                 }elseif($op == '提交复审'){
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
-                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    if($info['cate_name'] != CH_FCCH){
+                        $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    }
                     
                     if(!$this->form_validation->run()){
                         break;
@@ -559,8 +569,9 @@ class project_ch extends TZ_Admin_Controller {
                     }else{
                         $_POST['fs_remark'] = '合格';
                     }
-                    
-                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    if($info['cate_name'] != CH_FCCH){
+                        $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    }
                     if(!$this->form_validation->run()){
                         $info['fs_yj'] = $_POST['fs_yj'];
                         $info['fs_remark'] = $_POST['fs_remark'];
@@ -568,7 +579,9 @@ class project_ch extends TZ_Admin_Controller {
                     }
                 }elseif($op == '项目提交'){
                     $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
-                    $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    if($info['cate_name'] != CH_FCCH){
+                        $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+                    }
                     $this->form_validation->set_rules('title', '项目成功名称', 'required|min_length[3]|max_length[200]');
                     $this->form_validation->set_rules('area', '项目面积', 'required|greater_than[0]|numeric');
                     
@@ -1520,7 +1533,10 @@ class project_ch extends TZ_Admin_Controller {
                 $_POST['zc_remark'] = '合格';
             }
             
-            $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+            if($info['cate_name'] != CH_FCCH){
+                $this->form_validation->set_rules('file_id[]', '图件文档', 'required');
+            }
+            
             $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
             if($info['type'] == CH_RCZD){
                 //界址可选， 因为有人打字速度慢
@@ -1902,7 +1918,7 @@ class project_ch extends TZ_Admin_Controller {
         //$this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('type_id', '登记类型', 'required|is_natural_no_zero' );
-        $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('name', '登记名称', 'trim|required|min_length[1]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '登记地址', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
         
         if(!empty($_POST['village'])){
@@ -1932,7 +1948,10 @@ class project_ch extends TZ_Admin_Controller {
             $_POST['contacter_tel'] = isset($_POST['contacter_tel'])  == true ?  trim($_POST['contacter_tel']) : '';
         }
         
-        $this->form_validation->set_rules('manager', '接洽人名称', 'trim|required|max_length[15]|htmlspecialchars');
+        if(!empty($_POST['manager'])){
+            $this->form_validation->set_rules('manager', '接洽人名称', 'trim|max_length[15]|htmlspecialchars');
+        }
+        
         $this->form_validation->set_rules('manager_mobile', '接洽人手机', 'trim|numeric_dash|min_length[4]|max_length[15]');
         
         if(!empty($_POST['manager_tel'])){

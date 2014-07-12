@@ -10,7 +10,7 @@
         <style>
             body,div,span,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
                 font-family: "隶书","Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-                font-size: 15px;
+                font-size: 16px;
             }
         </style>
         <!--[if lt IE 7]>
@@ -222,7 +222,7 @@
                             </tr>
                             <tr class="center">
                                 <td colspan="3">合计</td>
-                                <td colspan="4" class="total_sum"></td>
+                                <td colspan="4" class="total_sum inputarea"></td>
                             </tr>
                             <tr class="center">
                                 <td rowspan="2">其中</td>
@@ -240,9 +240,9 @@
                         </tfoot>
                     </table>
                     <div class="mjb_db">
-                        <p>测量者: {$info['pm']}</p>
-                        <p>填写者: {$info['worker']}</p>
-                        <p>审核者: <span class="checkor">{$info['cs_name']}</span></p>
+                        <p><span class="inputarea">测量者: </span></p>
+                        <p><span class="inputarea">填写者: </span></p>
+                        <p><span class="inputarea">审核者: </span></p>
 
                         <div class="center mjb_lk">
                             <p>慈溪市土地勘测规划设计院有限公司</p>
@@ -463,9 +463,9 @@
                     </tfoot>
                 </table>
                 <div class="mjb_db">
-                    <p>测量者: {$info['pm']}</p>
-                    <p>填写者: {$info['worker']}</p>
-                    <p>审核者: <span class="checkor">{$info['cs_name']}</span></p>
+                    <p><span class="inputarea">测量者: </span></p>
+                    <p><span class="inputarea">填写者: </span></p>
+                    <p><span class="inputarea">审核者: </span></p>
 
                     <div class="center mjb_lk">
                         <p>慈溪市土地勘测规划设计院有限公司</p>

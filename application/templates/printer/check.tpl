@@ -2,10 +2,10 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
-        
+        <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
         <style>
             .container {
                 width:650px;
@@ -83,9 +83,9 @@
                     </colgroup>
                     <thead>
                         <tr class="noborder">
-                            <th>{$info['createtime']|date_format:"Y年m月d日"}</th>
-                            <th>编号 <input type="text" class="noborder" id="bianhao" value="{if $info['project_no'] == ''}A{$smarty.now|date_format:"Y"}-{else}{$info['project_no']}{/if}"/></th>
-                            <th>项目负责人： {$info['pm']}</th>
+                            <th class="inputarea">{$info['createtime']|date_format:"Y年m月d日"}</th>
+                            <th class="inputarea">编号:</th>
+                            <th class="inputarea">项目负责人： {$info['pm']}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -156,5 +156,60 @@
                 </ul>
             </div>
         </div>
+        <script>
+            $(function(){
+                var areaReg = /^\d+(.\d*)?$/;
+                
+                
+                $("body").delegate(".inputarea","click",function(e){
+                    var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
+                    var that = $(e.target);
+                    var number = false;
+                    var jzbTitle = false;
+                    if(that.hasClass("number")){
+                        number = true;
+                    }else if(that.hasClass('jzb_title')){
+                        jzbTitle = true;
+                    }
+                    
+                    that.html(txt);
+                    txt.focus();
+                    
+                    var setval = function(){
+                        var a = txt.val();
+                        
+                        if(number){
+                            if(areaReg.test(a)){
+                                that.html(parseFloat(a).toFixed(2));
+                            }else{
+                                that.html('');
+                            }
+                        }else{
+                            if(jzbTitle){
+                                if(a == ''){
+                                    that.closest(".jzb").remove();
+                                }else{
+                                    that.html('宗地界址调查表');
+                                }
+                            }else{
+                                that.html(a);
+                            }
+                        }
+                        txt.remove();
+                    }
+                    
+                    txt.bind("keydown",function(e){
+                        if(e.keyCode == 13){
+                            setval();
+                        }
+                    });
+                    
+                    txt.bind('blur',function(e){
+                        setval();
+                    });
+                });
+            });
+            
+        </script>
     </body>
 </html>
