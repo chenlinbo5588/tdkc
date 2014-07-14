@@ -71,6 +71,28 @@ class Printer extends TZ_Controller {
     }
     
     /**
+     * 宗地勘测定界
+     */
+    public function kcdj(){
+        $id = (int)gpc('id','GP',0);
+       
+        if(!$id){
+            die('参数错误');
+        }
+        
+        $info = $this->Project_Model->queryById($id);
+        $this->assign('info',$info);
+        $this->load->helper('number');
+        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
+        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $this->assign('dateInfo',$dateInfo);
+        $this->display();
+    }
+    
+    
+    
+    /**
      * 宗地勘测定界成果报告 
      */
     public function zddj(){
@@ -306,6 +328,18 @@ class Printer extends TZ_Controller {
        if(!$info){
             die('找不到记录');
         }
+        $this->load->helper('number');
+        
+        $dt = time();
+        if($info['fs_time']){
+            $dt = $info['fs_time'];
+        }
+        
+        
+        $dateInfo['year'] = to_chinese_number(date("Y",$dt),'O');
+        $dateInfo['month'] = to_chinese_number(date("n",$dt),'O');
+        $dateInfo['day'] = to_chinese_number(date("j",$dt),'O');
+        $this->assign('dateInfo',$dateInfo);
         
        $this->assign('info', $info);
        

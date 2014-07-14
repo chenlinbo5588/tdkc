@@ -6,7 +6,7 @@
 
 body,div,span,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
 	outline-style:none;
-	font-family: "Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-family: "SimSun", "Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size:16px;
 }
 
@@ -577,4 +577,59 @@ input.viliage {
 
 .bgb  .fulltable th , .bgb  .fulltable td {
     font-size:16px;
+}
+
+
+/**
+ * 勘测定界报告
+ */
+ .kcdj {
+     width:600px;
+ }
+ 
+ .kcdj .pg {
+     margin:15px;
+ }
+ .kcdj .pg p {
+     line-height: 30px;
+ }
+ 
+ .kcdj .subtitle {
+     margin: 0 0 10px 0;
+     
+ }
+ 
+ .kcdj .title {
+     text-align: center;
+     margin: 50px 0 40px 0;
+ }
+ 
+ .kcdj .pg1 p ,  .kcdj .pg5 p {
+     text-indent:2em;
+ }
+ 
+ .kcdj .fixtb td {
+     padding:5px ;
+ }
+ 
+ .kcdj .pg4 p {
+     text-indent:2em;
+     margin:5px;
+ }
+ 
+ .kcdj .pg4 .smalltitle {
+     text-indent: 5px;
+ }
+ 
+ .kcdj .pg6 p {
+     text-indent: 5px;
+ }
+ 
+.kcdj .sign {
+    margin-top:80px;
+    text-align:right;
+}
+ 
+.kcdj .sign span {
+    margin: 0 80px 0 0;
 }

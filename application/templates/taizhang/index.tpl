@@ -52,8 +52,8 @@
                         <tr id="row_{$item['id']}">
                            {auth name="taizhang+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
-                           <td>{str_pad($item['master_serial'], 4,'0', STR_PAD_LEFT)}</td>
-                           <td>{$item['region_code']}{str_pad($item['region_serial'], 3,'0', STR_PAD_LEFT)}</td>
+                           <td>{str_pad($item['master_serial'], 4,'0', $smarty.const.STR_PAD_LEFT)}</td>
+                           <td>{$item['region_code']}{str_pad($item['region_serial'], 3,'0', $smarty.const.STR_PAD_LEFT)}</td>
                            <td>{$item['name']|escape}</td>
                            <td>{$item['address']|escape}</td>
                            <td>{$item['total_area']}</td>

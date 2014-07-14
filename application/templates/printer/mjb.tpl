@@ -40,7 +40,7 @@
                         <thead>
                             <tr>
                                 <td class="center toptitle" colspan="3">编号</td>
-                                <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
+                                <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
                             </tr>
                             <tr>
                                 <td class="center toptitle" colspan="3" >单位名称</td>
@@ -263,7 +263,7 @@
                     <thead>
                         <tr>
                             <td class="center toptitle" colspan="3">编号</td>
-                            <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {$info['region_name']|cutText:1:''}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
+                            <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
                         </tr>
                         <tr>
                             <td class="center toptitle" colspan="3" >单位名称</td>
@@ -570,8 +570,6 @@
                     
                 };
                 
-                //同步审核人名称
-                $(".checkor").html("{$info['cs_name']}");
                 $("#addMjb").bind('click',function(e){
                     $(".container").append($($("#mjbTemplate").html()));
                 });
