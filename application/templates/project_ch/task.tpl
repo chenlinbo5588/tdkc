@@ -403,8 +403,6 @@
                         </td>
                     </tr>
                     
-                    
-                    {if $info['type'] == $smarty.const.CH_RCZD}
                     {include file="project_ch/doc_list.tpl"}
                     <tr>
                         <td>界址信息</td>
@@ -496,24 +494,15 @@
                      <tr>
                         <td>土地面积分类表</td>
                         <td>
-                            <div id="mjb">
-                                {if $info['status'] == '已实施'}
-                                    <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a>
-                                {/if}
-                            </div>
+                            <div id="mjb"><a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a></div>
                         </td>
                      </tr>
                      <tr>
                     <td>变更情况表</td>
                         <td>
-                            <div>
-                                {if $info['status'] == '已实施'}
-                                    <a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}" target="_blank">填写土地勘测定界成果变更情况表</a>
-                                {/if}
-                            </div>
+                            <div><a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}" target="_blank">填写土地勘测定界成果变更情况表</a></div>
                         </td>
                     </tr>
-                     {/if}
                     </tbody>
                 </table>
                <a name="anchor_check" id="anchor_check"></a>
@@ -790,7 +779,6 @@
                 {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                 </div>
              </form>
-                {if $info['type'] == $smarty.const.CH_RCZD}
                 <script type="x-my-template" id="jzRowTemplate">
                     <tr>
                         <td>
@@ -988,7 +976,6 @@
                         });
                     });
                 </script>
-                {/if}
                 <script>
                     $(function(){
                         {if $message}
@@ -1084,7 +1071,6 @@
                                     cansubmit = false;
                                 }
                                 
-                                {if $info['type'] == $smarty.const.CH_RCZD}
                                 {* 界址可选
                                 if(cansubmit && $("input[name='jz_name[]']").length < 3 ){
                                     $.jBox.alert("请录入界址信息,至少三址",'提示');
@@ -1108,7 +1094,6 @@
                                     });
                                 }
                                 
-                                {/if}
                             }
                             {elseif $info['status'] == '已完成' }
                             if(op == '提交初审'){

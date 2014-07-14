@@ -191,32 +191,30 @@ class project_ch extends TZ_Admin_Controller {
             }
             
             $param = $_POST;
-            if($info['type'] == CH_RCZD){
-                $this->load->model('Project_Jz_Model');
-                $this->Project_Jz_Model->deleteByWhere(array(
-                    'project_id' => $info['id']
-                ));
+            $this->load->model('Project_Jz_Model');
+            $this->Project_Jz_Model->deleteByWhere(array(
+                'project_id' => $info['id']
+            ));
 
-                $insertData = array();
+            $insertData = array();
 
-                if(!empty($param['direction'])){
-                    foreach($param['direction'] as $key => $val){
-                        $insertTime = time();
+            if(!empty($param['direction'])){
+                foreach($param['direction'] as $key => $val){
+                    $insertTime = time();
 
-                        $insertData[] = array(
-                            'project_id' => $info['id'],
-                            'direction' => $val,
-                            'name' => !empty($param['jz_name'][$key]) ? $param['jz_name'][$key] : '',
-                            'neighbor' => !empty($param['neighbor'][$key]) ? $param['neighbor'][$key] : '',
-                            'creator' => $this->_userProfile['name'],
-                            'updator' => $this->_userProfile['name'],
-                            'createtime' => $insertTime,
-                            'updatetime' => $insertTime
-                        );
-                    }
-
-                    $this->Project_Jz_Model->batchInsert($insertData);
+                    $insertData[] = array(
+                        'project_id' => $info['id'],
+                        'direction' => $val,
+                        'name' => !empty($param['jz_name'][$key]) ? $param['jz_name'][$key] : '',
+                        'neighbor' => !empty($param['neighbor'][$key]) ? $param['neighbor'][$key] : '',
+                        'creator' => $this->_userProfile['name'],
+                        'updator' => $this->_userProfile['name'],
+                        'createtime' => $insertTime,
+                        'updatetime' => $insertTime
+                    );
                 }
+
+                $this->Project_Jz_Model->batchInsert($insertData);
             }
 
             $this->sendFormatJson('success', array('text' => '保存成功'));
@@ -730,23 +728,21 @@ class project_ch extends TZ_Admin_Controller {
         
         $this->assign('userFaultList0',$userFaultList[0]['data']);
         $this->assign('userFaultList1',$userFaultList[1]['data']);
-        if($info['type'] == CH_RCZD){
             
-            /**
-             * 取得界址信息 
-             */
-            $this->load->model('Project_Jz_Model');
+        /**
+            * 取得界址信息 
+            */
+        $this->load->model('Project_Jz_Model');
+
+        $jzList = $this->Project_Jz_Model->getList(array(
+            'where' => array(
+                'project_id' => $info['id']
+            ),
+            'order' => 'direction ASC'
+        ));
+
+        $this->assign('jzList',$jzList['data']);
             
-            $jzList = $this->Project_Jz_Model->getList(array(
-                'where' => array(
-                    'project_id' => $info['id']
-                ),
-                'order' => 'direction ASC'
-            ));
-            
-            $this->assign('jzList',$jzList['data']);
-            
-        }
         
         $this->assign('statusHtml',$statusHtml);
         $info['event_id'] = $event_id;
@@ -925,7 +921,7 @@ class project_ch extends TZ_Admin_Controller {
                     
                     break;
                 case '完成':
-                    if($info['type'] == CH_RCZD && $info['status'] == '已实施'){
+                    if($info['status'] == '已实施'){
                         
                         $this->load->model('Project_Jz_Model');
                         $this->Project_Jz_Model->deleteByWhere(array(
@@ -1547,7 +1543,7 @@ class project_ch extends TZ_Admin_Controller {
                 $op1 = '完成';
                 $op2 = '提交初审';
                 
-                if($info['type'] == CH_RCZD && $info['status'] == '已实施'){
+                if($info['status'] == '已实施'){
                     $this->load->model('Project_Jz_Model');
                     $this->Project_Jz_Model->deleteByWhere(array(
                         'project_id' => $info['id']
@@ -1610,21 +1606,19 @@ class project_ch extends TZ_Admin_Controller {
             }
         }else{
             
-            if($info['type'] == CH_RCZD){
-                /**
-                * 取得界址信息 
-                */
-                $this->load->model('Project_Jz_Model');
+            /**
+            * 取得界址信息 
+            */
+            $this->load->model('Project_Jz_Model');
 
-                $jzList = $this->Project_Jz_Model->getList(array(
-                    'where' => array(
-                        'project_id' => $info['id']
-                    ),
-                    'order' => 'direction ASC'
-                ));
+            $jzList = $this->Project_Jz_Model->getList(array(
+                'where' => array(
+                    'project_id' => $info['id']
+                ),
+                'order' => 'direction ASC'
+            ));
 
-                $this->assign('jzList',$jzList['data']);
-            }
+            $this->assign('jzList',$jzList['data']);
             
             $this->_getSendorList(array(
                'ch_cs' => 'y' 

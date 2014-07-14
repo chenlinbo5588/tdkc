@@ -45,7 +45,6 @@
                     </td>
                 </tr>
                 {include file="project_ch/doc_list.tpl"}
-                {if $info['type'] == $smarty.const.CH_RCZD}
                 <tr>
                     <td>界址信息</td>
                     <td>
@@ -137,28 +136,15 @@
                 <tr>
                     <td>土地面积分类表</td>
                     <td>
-                        <div>
-                            {if $info['status'] == '已实施'}
-                                <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a>
-                            {else}
-                                <a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}&type=print" target="_blank">打印面积分类表</a>
-                            {/if}
-                        </div>
+                        <div><a class="link_btn" href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">填写面积分类表</a></div>
                     </td>
                 </tr>
                 <tr>
                     <td>变更情况表</td>
                     <td>
-                        <div>
-                            {if $info['status'] == '已实施'}
-                                <a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}" target="_blank">填写土地勘测定界成果变更情况表</a>
-                            {else}
-                                <a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}&type=print" target="_blank">打印填写土地勘测定界成果变更情况表</a>
-                            {/if}
-                        </div>
+                        <div><a class="link_btn" href="{url_path('printer','bgb','id=')}{$info['id']}" target="_blank">填写土地勘测定界成果变更情况表</a></div>
                     </td>
                 </tr>
-                {/if}
                 <tr>
                     <td>发送给初审</td>
                     <td>{include file="project_ch/sendorlist.tpl"}</td>

@@ -12,84 +12,156 @@
                 position:relative;
                 width:1480px;
                 height:1020px;
+                background:url("/img/doc_cover.jpg") no-repeat left top;
+                left:-740px;
             }
             
             .preview {
-                background:url("/img/doc_cover.jpg") no-repeat left top;
+                1background:url("/img/doc_cover_roll.jpg") no-repeat left top;
+                background:none;
+                left:0px;
             }
             
-            .covertd div {
+            .covertd .item {
                 position:absolute;
-                left:0px;
-                top:0px;
-                font-size:16px;
+                font-size:20px;
                 font-weight:bold;
             }
             
-            #zi {
-                top:318px;
+            .preview .item {
+                 -moz-transform-origin: 50% 50%;
+                -webkit-transform-origin: 50% 50%;
+                -o-transform-origin: 50% 50%;
+                -ms-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+                
+                -moz-transform: rotate(180deg);
+                -webkit-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                transform: rotate(180deg);
+            }
+            
+            .zi {
+                top:315px;
                 left:950px;
             }
             
-            #project_no {
-                top:318px;
-                left:1058px;
+            .project_no {
+                top:315px;
+                left:1040px;
             }
             
-            #nature {
-                top:318px;
+            .nature {
+                top:315px;
                 left:1220px;
             }
             
-            #yddw {
-                top:450px;
+            .yddw {
+                top:445px;
                 left:1050px;
+                width:300px;
             }
             
-            #clz {
+            .clz {
                 left:1060px;
                 top:580px;
             }
             
-            #zlz {
+            .zlz {
                 left:1060px;
                 top:625px;
             }
             
-            #checkor {
+            .checkor {
                 left:1060px;
                 top:670px;
             }
             
-            #dyear {
-                left:990px;
+            .dyear {
+                left:980px;
                 top:865px;
             }
             
-            #dmonth {
+            .dmonth {
                 left:1111px;
                 top:865px;
             }
             
-            #dday {
+            .dday {
                 left:1190px;
                 top:865px;
+            }
+            
+            .preview .zi {
+                left: 505px;
+                top: 675px;
+            }
+            
+            .preview .project_no {
+                left: 280px;
+                top: 675px;
+            }
+            .preview .nature {
+                left: 175px;
+                top: 675px;
+            }
+            
+            .preview .yddw {
+                left: 145px;
+                top: 545px;
+            }
+            
+            .preview .clz {
+                left: 350px;
+                top: 415px;
+            }
+            
+            .preview .zlz {
+                left: 350px;
+                top: 370px;
+            }
+            
+            .preview .checkor {
+                left: 350px;
+                top: 325px;
+            }
+            
+            
+            .preview .year {
+                left: 250px;
+                top: 100px;
+            }
+            
+            .preview .dyear {
+                left: 425px;
+                top: 130px;
+            }
+            
+            .preview .dmonth {
+                left: 350px;
+                top: 130px;
+            }
+            
+            .preview .dday {
+                left: 250px;
+                top: 130px;
             }
         </style>
     </head>
     <body>
-        <div class="covertd preview">
-            <div id="zi">{if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}</div>
-            <div id="project_no" class="inputarea">请输入项目编号</div>
-            <div id="nature" class="inputarea">{if $info['nature']}{$info['nature']}{else}请输入性质{/if}</div>
-            <div id="yddw" class="inputarea">{$info['name']|escape}</div>
-            <div id="clz" class="inputarea">{$info['pm']|escape}</div>
-            <div id="zlz" class="inputarea">罗陆燕</div>
-            <div id="checkor" class="inputarea">王立琴</div>
-            
-            <div id="dyear" class="inputarea">{$dateInfo['year']}</div>
-            <div id="dmonth" class="inputarea">{$dateInfo['month']}</div>
-            <div id="dday" class="inputarea">{$dateInfo['day']}</div>
+        <h1 id="notice">打印时请按键盘 Shift + Enter 组合 预览，并按照预览方向放置封面</h1>
+        <div class="covertd">
+            <div class="item zi inputarea">{if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}</div>
+            <div class="item project_no inputarea">请输入项目编号</div>
+            <div class="item nature inputarea">{if $info['nature']}{$info['nature']}{else}请输入性质{/if}</div>
+            <div class="item yddw inputarea">{$info['name']|escape}</div>
+            <div class="item clz inputarea">{$info['pm']|escape}</div>
+            <div class="item zlz inputarea">罗陆燕</div>
+            <div class="item checkor inputarea">王立琴</div>
+            <div class="item dyear inputarea">{$dateInfo['year']}</div>
+            <div class="item dmonth inputarea">{$dateInfo['month']}</div>
+            <div class="item dday inputarea">{$dateInfo['day']}</div>
         </div>
     </body>
     
@@ -100,6 +172,20 @@
             $("body").bind("keydown",function(e){
                 if(e.shiftKey && e.keyCode == 13){
                     $(".covertd").toggleClass("preview");
+                    $("#notice").toggle();
+                    
+                    var lineh = $(".yddw").height();
+                    var numrow = Math.ceil(lineh / 30);
+                    //console.log($(".yddw").css("top"));
+                    
+                    if($(".covertd").hasClass("preview")){
+                        $(".yddw").css({
+                            top: parseInt($(".yddw").css("top")) - ((numrow - 1) * 30)
+                        });
+                    }else{
+                        $(".yddw").removeAttr("style");
+                    }
+                    
                 }
             });
             
@@ -110,8 +196,6 @@
                 var mjbTitle = false;
                 if(that.hasClass("number")){
                     number = true;
-                }else if(that.hasClass('mjb_title')){
-                    mjbTitle = true;
                 }
 
                 that.html(txt);
