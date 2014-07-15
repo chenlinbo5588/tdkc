@@ -109,11 +109,8 @@
                     var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
                     var that = $(e.target);
                     var number = false;
-                    var jzbTitle = false;
                     if(that.hasClass("number")){
                         number = true;
-                    }else if(that.hasClass('jzb_title')){
-                        jzbTitle = true;
                     }
                     
                     that.html(txt);
@@ -129,14 +126,10 @@
                                 that.html('');
                             }
                         }else{
-                            if(jzbTitle){
-                                if(a == ''){
-                                    that.closest(".jzb").remove();
-                                }else{
-                                    that.html('宗地界址调查表');
-                                }
-                            }else{
+                            if($.trim(a).length != 0){
                                 that.html(a);
+                            }else{
+                                that.html('请输入内容');
                             }
                         }
                         txt.remove();

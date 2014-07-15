@@ -77,11 +77,8 @@
                 var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
                 var that = $(e.target);
                 var number = false;
-                var mjbTitle = false;
                 if(that.hasClass("number")){
                     number = true;
-                }else if(that.hasClass('mjb_title')){
-                    mjbTitle = true;
                 }
 
                 that.html(txt);
@@ -97,14 +94,10 @@
                             that.html('');
                         }
                     }else{
-                        if(mjbTitle){
-                            if(a == ''){
-                                that.closest(".mjb").remove();
-                            }else{
-                                that.html('土地面积分类表');
-                            }
-                        }else{
+                        if($.trim(a).length != 0){
                             that.html(a);
+                        }else{
+                            that.html('请输入内容');
                         }
                     }
                     txt.remove();

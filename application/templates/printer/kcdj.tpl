@@ -92,7 +92,6 @@
                 var txt = $('<input type="text" class="tptxt" name="" value="' + $(e.target).html() + '"/>');
                 var that = $(e.target);
                 var number = false;
-                var mjbTitle = false;
                 if(that.hasClass("number")){
                     number = true;
                 }
@@ -110,12 +109,10 @@
                             that.html('');
                         }
                     }else{
-                        if(mjbTitle){
-                            if(a == ''){
-                                that.closest(".mjb").remove();
-                            }
-                        }else{
+                        if($.trim(a).length != 0){
                             that.html(a);
+                        }else{
+                            that.html('请输入内容');
                         }
                     }
                     txt.remove();

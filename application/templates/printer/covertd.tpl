@@ -24,8 +24,9 @@
             
             .covertd .item {
                 position:absolute;
-                font-size:20px;
+                font-size:34px;
                 font-weight:bold;
+                font-family: "隶书";
             }
             
             .preview .item {
@@ -42,116 +43,117 @@
                 transform: rotate(180deg);
             }
             
-            .zi {
+            .covertd .zi {
                 top:315px;
                 left:950px;
+                font-size:30px;
             }
             
-            .project_no {
+            .covertd .project_no {
                 top:315px;
                 left:1040px;
+                font-size:26px;
             }
             
-            .nature {
+            .covertd .nature {
                 top:315px;
                 left:1220px;
+                font-size:30px;
             }
             
-            .yddw {
+            .covertd .yddw {
                 top:445px;
                 left:1050px;
-                width:300px;
+                width:500px;
+                line-height:30px;
             }
             
-            .clz {
+            .covertd .clz {
                 left:1060px;
-                top:580px;
+                top:575px;
             }
             
-            .zlz {
+            .covertd .zlz {
                 left:1060px;
-                top:625px;
+                top:620px;
             }
             
-            .checkor {
+            .covertd .checkor {
                 left:1060px;
-                top:670px;
+                top:665px;
             }
             
-            .dyear {
-                left:980px;
-                top:865px;
+            .covertd .dyear {
+                left:970px;
+                top:860px;
             }
             
-            .dmonth {
-                left:1111px;
-                top:865px;
+            .covertd .dmonth {
+                left:1105px;
+                top:860px;
             }
             
-            .dday {
-                left:1190px;
-                top:865px;
+            .covertd .dday {
+                left:1185px;
+                top:860px;
             }
             
             .preview .zi {
-                left: 505px;
-                top: 675px;
+                left: 650px;
+                top: 980px;
+                
             }
             
             .preview .project_no {
-                left: 280px;
-                top: 675px;
+                left: 345px;
+                top: 980px;
+                
             }
             .preview .nature {
-                left: 175px;
-                top: 675px;
+                left: 150px;
+                top: 980px;
+                
             }
             
             .preview .yddw {
-                left: 145px;
-                top: 545px;
+                left: 20px;
+                top: 780px;
             }
             
             .preview .clz {
-                left: 350px;
-                top: 415px;
+                left: 410px;
+                top: 580px;
             }
             
             .preview .zlz {
-                left: 350px;
-                top: 370px;
+                left: 410px;
+                top: 510px;
             }
             
             .preview .checkor {
-                left: 350px;
-                top: 325px;
-            }
-            
-            
-            .preview .year {
-                left: 250px;
-                top: 100px;
+                left: 410px;
+                top: 440px;
             }
             
             .preview .dyear {
-                left: 425px;
-                top: 130px;
+                left: 530px;
+                top: 150px;
             }
             
             .preview .dmonth {
-                left: 350px;
-                top: 130px;
+                left: 415px;
+                top: 150px;
             }
             
             .preview .dday {
-                left: 250px;
-                top: 130px;
+                left: 240px;
+                top: 150px;
             }
         </style>
     </head>
     <body>
-        <h1 id="notice">打印时请按键盘 Shift + Enter 组合 预览，并按照预览方向放置封面</h1>
-        <div class="covertd">
+        <h1 id="notice" style="display:none;">打印时请按键盘 Shift + Enter 组合 预览，并按照预览方向放置封面</h1>
+        <div class="covertd preview">
             <div class="item zi inputarea">{if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}</div>
             <div class="item project_no inputarea">请输入项目编号</div>
             <div class="item nature inputarea">{if $info['nature']}{$info['nature']}{else}请输入性质{/if}</div>
@@ -173,7 +175,7 @@
                 if(e.shiftKey && e.keyCode == 13){
                     $(".covertd").toggleClass("preview");
                     $("#notice").toggle();
-                    
+                    /*
                     var lineh = $(".yddw").height();
                     var numrow = Math.ceil(lineh / 30);
                     //console.log($(".yddw").css("top"));
@@ -185,7 +187,7 @@
                     }else{
                         $(".yddw").removeAttr("style");
                     }
-                    
+                    */
                 }
             });
             
@@ -211,7 +213,11 @@
                             that.html('');
                         }
                     }else{
-                        that.html(a);
+                        if($.trim(a).length != 0){
+                            that.html(a);
+                        }else{
+                            that.html('请输入内容');
+                        }
                     }
                     
                     txt.remove();
