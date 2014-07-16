@@ -46,7 +46,8 @@
             {auth name="share_file"}<li><a href="{url_path('share_file')}">文件共享</a></li>{/auth}
             {auth name="work_log"}<li><a href="{url_path('work_log')}">工作日志</a></li>{/auth}
             {auth name="sendor"}<li><a href="{url_path('sendor')}">发送人设置</a></li>{/auth}
-            {auth name="contacts"}<li><a href="{url_path('contacts')}">通讯录</a></li>{/auth}
+            {auth name="contacts"}<li><a href="{url_path('contacts')}">外部通讯录</a></li>{/auth}
+            {auth name="our_contacts"}<li><a href="{url_path('our_contacts')}">内部通讯录</a></li>{/auth}
             {*<li><a href="{url_path('kq')}">考勤统计</a></li>*}
           </ul>
         </dd>

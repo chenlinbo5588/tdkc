@@ -219,8 +219,10 @@ class Employ extends TZ_Admin_Controller {
                 $condition['like'] = array('name' => $_GET['name']);
             }
             $condition['where'] = array(
-                'id !=' => 1
+                'id !=' => 1,
             );
+            
+            $condition['order'] = 'createtime ASC';
             
             if(!empty($_GET['gh'])){
                 $condition['where']['gh'] = $_GET['gh'];

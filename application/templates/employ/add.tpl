@@ -132,6 +132,17 @@
                 </form>
                 <script>
                     $(function(){
+                        
+                        $("input[name=id_card]").bind("blur",function(e){
+                            var txt = $(e.target);
+                            var s = $.trim(txt.val());
+                            
+                            if(s.length >= 15){
+                                $("input[name=birthday]").val(s.substr(6, 4) + '-' + s.substr(10, 2) + '-' + s.substr(12, 2));
+                            }
+                        });
+                        
+                    
                     {if $feedback == 'success' && $action != 'edit'}
                         if(confirm('{$feedMessage}')){
                             location.href = "{url_path('employ','add')}";

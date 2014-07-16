@@ -33,7 +33,9 @@ class Contacts extends TZ_Admin_Controller {
             if(!empty($_GET['name'])){
                 $condition['like'] = array('name' => $_GET['name']);
             }
-            $condition['where'] = array();
+            $condition['where'] = array(
+                'type' => '1'
+            );
             
             if(!empty($_GET['mobile'])){
                 $condition['like']['mobile'] = $_GET['mobile'];
@@ -43,14 +45,9 @@ class Contacts extends TZ_Admin_Controller {
                 $condition['like']['tel'] = $_GET['tel'];
             }
             
-            if(isset($_GET['type']) && $_GET['type'] !== ''){
-                $condition['where']['type'] = $_GET['type'];
-            }
-            
             if($_GET['inc_del'] != '是'){
                 $condition['where']['status'] = '正常';
             }
-            
             
             $data = $this->Contacts_Model->getList($condition);
             $this->assign('page',$data['pager']);
@@ -65,13 +62,7 @@ class Contacts extends TZ_Admin_Controller {
     
     private function _addRules(){
         
-        
-        $this->form_validation->set_rules('type', '类型', 'required|is_natural|less_than[2]');
-        
-        if($_POST['type'] == 1){
-            $this->form_validation->set_rules('company_name', '单位名称', 'required|min_length[1]|max_length[100]|htmlspecialchars');
-        }
-        
+        $this->form_validation->set_rules('company_name', '单位名称', 'required|min_length[1]|max_length[100]|htmlspecialchars');
         $this->form_validation->set_rules('name', '名称', 'required|min_length[1]|max_length[100]|htmlspecialchars');
         if(!empty($_POST['mobile'])){
             $this->form_validation->set_rules('mobile', '手机号码', 'trim|valid_mobile');
@@ -96,10 +87,7 @@ class Contacts extends TZ_Admin_Controller {
                 // add
                 $_POST['creator'] = $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['user_id'] = $this->_userProfile['id'];
-                
-                if($_POST['type'] == 0){
-                    $_POST['company_name'] = OUR_COMPANY_NAME;
-                }
+                $_POST['type'] = 1;
                 
                 $insertid = $this->Contacts_Model->add($_POST);
                 

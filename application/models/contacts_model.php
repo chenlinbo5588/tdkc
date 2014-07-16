@@ -60,7 +60,6 @@ class Contacts_Model extends TZ_Model {
         $data = array(
             'company_name' => $info['company_name'],
             'name' => $info['name'],
-            'type' => $info['type'],
             'mobile' => $info['mobile'],
             'tel' => $info['tel'],
             'virtual_no' => $info['virtual_no'],

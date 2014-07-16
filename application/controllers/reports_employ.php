@@ -21,7 +21,7 @@ class reports_employ extends TZ_Admin_Controller {
         $dataList = $this->User_Model->getList(array(
             'select' => implode(',',$param['select']),
             'where' => $condition['where'],
-            'order' => 'createtime ASC'
+            'order' => 'status DESC ,createtime ASC '
         ));
         
         
@@ -187,6 +187,23 @@ class reports_employ extends TZ_Admin_Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('Q'.$current_row, (string)$p['virtual_no']);
             $objPHPExcel->getActiveSheet()->setCellValue('R'.$current_row, $p['contract_year']);
             $objPHPExcel->getActiveSheet()->setCellValue('S'.$current_row, $p['contract_start'] .'至'.$p['contract_end']);
+            
+            if($p['status'] == '已删除'){
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$current_row.':S'.$current_row)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type'       => PHPExcel_Style_Fill::FILL_PATTERN_LIGHTGRAY,
+                                'startcolor' => array(
+                                    'argb' => 'FFFC6161'
+                                ),
+                                'endcolor'   => array(
+                                    'argb' => 'FFFC6161'
+                                )
+                            )
+                        )
+                );
+            }
+            
             $i++;
         }
         
@@ -254,6 +271,7 @@ class reports_employ extends TZ_Admin_Controller {
             $fields = $this->db->list_fields($this->User_Model->_tableName);
             
             $_POST['select'] = array();
+            $_POST['select'][] = 'status';
             foreach($_POST['field'] as $v){
                 if(in_array($v,$fields)){
                     $_POST['select'][] = $v;

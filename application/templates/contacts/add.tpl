@@ -10,16 +10,7 @@
                         <tbody>
                             <tr><td></td><td>{form_error('id')}</td></tr>
                             <tr>
-                                <td><label class="required"><em>*</em><strong>类型</strong></label></td>
-                                <td>
-                                    <select name="type" style="width:200px" >
-                                        <option value="0" {if $info['type'] === '0'}selected{/if}>内部通讯录</optin>
-                                        <option value="1" {if $info['type'] === '1'}selected{/if}>外部通讯录</optin>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label class="required"><em>*</em><strong>单位名称</strong></label></td><td><input type="text" style="width:400px" name="company_name" value="{$info['company_name']}" placeholder="请输入单位名称"/>{form_error('company_name')}<span class="tip">内部通讯路可以不需要输入单位名称</td>
+                                <td><label class="required"><em>*</em><strong>单位名称</strong></label></td><td><input type="text" style="width:400px" name="company_name" value="{$info['company_name']}" placeholder="请输入单位名称"/>{form_error('company_name')}</td>
                             </tr>
                             <tr>
                                 <td><label class="required"><em>*</em><strong>姓名</strong></label></td><td><input type="text" style="width:200px" name="name" value="{$info['name']}" placeholder="请输入名称"/>{form_error('name')}</td>
