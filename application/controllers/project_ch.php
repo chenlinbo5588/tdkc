@@ -63,29 +63,36 @@ class project_ch extends TZ_Admin_Controller {
      * 统计 
      */
     public function statistics(){
-        $projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
-        $this->assign('projectTypeList',$projectTypeList['data']);
         
-        $typeKeys = array();
+        $projectTypeList = array(
+            '土地勘测登记' => '土地勘测登记台账',
+            '房产项目登记' => '房产项目登记台账',
+            '放线竣工登记' => '放线竣工登记台账',
+            '违法用地登记' => '违法用地登记台账',
+            '其他登记' => '土方山塘地形评估控制登记台账',
+            '个人建房登记' => '个人建房登记台账'
+        );
         
-        foreach($projectTypeList['data'] as $v){
-            $typeKeys[$v['id']] = $v['type'].'-'.$v['name'];
-        }
-        
-        $this->assign('typeKeys',$typeKeys);
+        //$projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('projectTypeList',$projectTypeList);
         
         $condition = array();
         
-        $fields = array('COUNT(*) AS cnt', 'year' ,'month','region_name','pm','type_id','fee_type');
+        $this->load->model('Taizhang_Model');
+        
+        $fields = array('COUNT(*) AS cnt', 'year' ,'month','category' ,'region_name','pm','nature');
         
         if(!empty($_GET['sdate'])){
             $condition['where']['createtime >='] = strtotime($_GET['sdate']);
+        }else{
+            $condition['where']['createtime >='] = strtotime(date("Y-m-d"));
         }
 
         if(!empty($_GET['edate'])){
             $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
+        }else{
+            $condition['where']['createtime <='] = strtotime(date("Y-m-d")) + 86400;
         }
-        
         
         $condition['group_by'] = array('year','month');
         
@@ -101,14 +108,16 @@ class project_ch extends TZ_Admin_Controller {
             array_push($condition['group_by'],'pm');
         }
         
-        if(!empty($_GET['type_id'])){
-            $condition['where']['type_id'] = $_GET['type_id'];
+        if(!empty($_GET['category'])){
+            $condition['where']['category'] = $_GET['category'];
         }else{
-            array_push($condition['group_by'],'type_id');
+            array_push($condition['group_by'],'category');
         }
         
+        array_push($condition['group_by'],'nature');
+        
         $condition['select'] = implode(',',$fields);
-        $data = $this->Project_Model->getList($condition);
+        $data = $this->Taizhang_Model->getList($condition);
         
         $this->assign('data',$data);
         $this->display();
@@ -1586,7 +1595,7 @@ class project_ch extends TZ_Admin_Controller {
                     'zc_remark' => $_POST['zc_remark'],
                     'files' => implode(',',$_POST['file_id'])
                 );
-
+                
                 $return = $this->Project_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已实施','sendor_id' => $this->_userProfile['id']));
                 if($return){
                     $this->_addProjectLog('workflow',  $info['id'],$op2,"{$this->_userProfile['name']} {$op2} 并流转至 {$sendorInfo['name']}",$data);

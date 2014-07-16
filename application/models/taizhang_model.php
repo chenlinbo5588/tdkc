@@ -14,6 +14,7 @@ class Taizhang_Model extends TZ_Model {
         $now = time();
         $data = array(
             'id' => NULL,
+            'category' => $param['category'],
             'project_no' => $param['project_no'],
             'year' => $param['year'],
             'month' => $param['month'],
@@ -84,6 +85,10 @@ class Taizhang_Model extends TZ_Model {
             'updator' => $param['updator'],
             'updatetime' => time()
         );
+        
+        if($param['project_no']){
+            $data['project_no'] = $param['project_no'];
+        }
         
         $where = array(
             'id' => $param['id']

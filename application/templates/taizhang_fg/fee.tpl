@@ -1,5 +1,5 @@
 <div class="pd20">
-    <form name="postform" id="tzfee" action="{url_path('taizhang','fee')}" method="post" >
+    <form name="postform" id="tzfee" action="{url_path('taizhang_fg','fee')}" method="post" >
         <input type="hidden" name="id" value="{$info['id']}"/>
         {include file="taizhang/fee_list.tpl"}
     </form>
@@ -14,7 +14,7 @@
                 
                 $.ajax({
                     type:"POST",
-                    url:"{url_path('taizhang','fee')}",
+                    url:"{url_path('taizhang_fg','fee')}",
                     data: $("#tzfee").serialize(),
                     dataType:"json",
                     success:function(resp){

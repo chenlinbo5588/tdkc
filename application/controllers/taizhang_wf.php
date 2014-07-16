@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-class Taizhang extends TZ_Admin_Controller {
+class Taizhang_Wf extends TZ_Admin_Controller {
     
     public function __construct(){
         parent::__construct();
@@ -28,28 +28,15 @@ class Taizhang extends TZ_Admin_Controller {
     
     private function _addRules(){
         
-        //$this->form_validation->set_rules('year', '年份', 'required|integer');
         $this->form_validation->set_rules('master_serial', '总编号', 'required|numeric');
         $this->form_validation->set_rules('region_serial', '分编号', 'required|numeric');
         $this->form_validation->set_rules('name', '单位名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('total_area', '总面积', 'required|numeric');
-        $this->form_validation->set_rules('churan_area', '出让面积', 'required|numeric');
         
-        $this->form_validation->set_rules('nature', '用途', 'required' );
+        $this->form_validation->set_rules('nature', '用地性质', 'required' );
         
-        if(!empty($_POST['contacter'])){
-            $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        }else{
-            $_POST['contacter'] = '';
-        }
-        
-        if(!empty($_POST['contacter_mobile'])){
-            $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|numeric|min_length[4]|max_length[15]');
-        }else{
-            $_POST['contacter_mobile'] = '';
-        }
         $this->form_validation->set_rules('pm', '作业组负责人', 'trim|required|callback_checkname');
         $this->form_validation->set_rules('fee_type', '收费情况', 'required|integer|greater_than[0]|less_than[5]');
         $this->form_validation->set_rules('has_doc', '成果资料', 'required|integer|less_than[2]');
@@ -232,7 +219,10 @@ class Taizhang extends TZ_Admin_Controller {
                 $_POST['year'] = date("Y");
                 $_POST['month'] = date("m");
                 $_POST['contacter_tel'] = '';
-                $_POST['category'] = '土地勘测登记';
+                $_POST['category'] = '违法用地勘测登记';
+                $_POST['contacter'] = '';
+                $_POST['contacter_mobile'] = '';
+                $_POST['churan_area'] = 0;
                 
                 
                 $this->_add($_POST['year']);
@@ -298,6 +288,7 @@ class Taizhang extends TZ_Admin_Controller {
         }
         
         $_POST['project_no'] = $this->_formatProjectNo($_POST['year'], $_POST['region_code'], $_POST['master_serial'], $_POST['region_serial']);
+        
         $insertid = $this->Taizhang_Model->add($_POST);
         
         return $insertid;
@@ -327,6 +318,10 @@ class Taizhang extends TZ_Admin_Controller {
                 }else{
                     $_POST['region_code'] = '';
                 }
+                
+                $_POST['contacter'] = '';
+                $_POST['contacter_mobile'] = '';
+                $_POST['churan_area'] = 0;
                 
                 $_POST['project_no'] = $this->_formatProjectNo($info['year'], $_POST['region_code'], $_POST['master_serial'], $_POST['region_serial']);
                 
@@ -391,7 +386,7 @@ class Taizhang extends TZ_Admin_Controller {
             }
             
             $condition['where'] = array(
-                'category' => '土地勘测登记',
+                'category' => '违法用地勘测登记',
                 'status !=' => '已删除'
             );
             

@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
-class Taizhang extends TZ_Admin_Controller {
+class Taizhang_House extends TZ_Admin_Controller {
     
     public function __construct(){
         parent::__construct();
@@ -17,9 +16,8 @@ class Taizhang extends TZ_Admin_Controller {
     
 	public function index()
 	{
-        
         $this->assign('action','index');
-        $this->_initPageData(date("Y"));
+        //$this->_initPageData(date("Y"));
         $this->_getPageData();
 		$this->display();
 	}
@@ -29,28 +27,11 @@ class Taizhang extends TZ_Admin_Controller {
     private function _addRules(){
         
         //$this->form_validation->set_rules('year', '年份', 'required|integer');
-        $this->form_validation->set_rules('master_serial', '总编号', 'required|numeric');
-        $this->form_validation->set_rules('region_serial', '分编号', 'required|numeric');
-        $this->form_validation->set_rules('name', '单位名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('name', '项目名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
-        $this->form_validation->set_rules('region_name', '区域', 'required');
-        $this->form_validation->set_rules('total_area', '总面积', 'required|numeric');
-        $this->form_validation->set_rules('churan_area', '出让面积', 'required|numeric');
         
-        $this->form_validation->set_rules('nature', '用途', 'required' );
-        
-        if(!empty($_POST['contacter'])){
-            $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
-        }else{
-            $_POST['contacter'] = '';
-        }
-        
-        if(!empty($_POST['contacter_mobile'])){
-            $this->form_validation->set_rules('contacter_mobile', '联系人手机', 'trim|numeric|min_length[4]|max_length[15]');
-        }else{
-            $_POST['contacter_mobile'] = '';
-        }
         $this->form_validation->set_rules('pm', '作业组负责人', 'trim|required|callback_checkname');
+        $this->form_validation->set_rules('project_no', '合同编号', 'trim|required|min_length[1]|max_length[20]');
         $this->form_validation->set_rules('fee_type', '收费情况', 'required|integer|greater_than[0]|less_than[5]');
         $this->form_validation->set_rules('has_doc', '成果资料', 'required|integer|less_than[2]');
         
@@ -232,10 +213,20 @@ class Taizhang extends TZ_Admin_Controller {
                 $_POST['year'] = date("Y");
                 $_POST['month'] = date("m");
                 $_POST['contacter_tel'] = '';
-                $_POST['category'] = '土地勘测登记';
-                
-                
-                $this->_add($_POST['year']);
+                $_POST['category'] = '房产项目登记';
+                $_POST['region_code'] = '';
+                $_POST['region_name'] = '';
+                $_POST['master_serial'] = 0;
+                $_POST['region_serial'] = 0;
+                $_POST['nature'] = '';
+                $_POST['contacter'] = '';
+                $_POST['contacter_mobile'] = '';
+                $_POST['total_area'] = 0;
+                $_POST['churan_area'] = 0;
+                $_POST['user_id'] = $this->_userProfile['id'];
+                $_POST['creator'] = $this->_userProfile['name'];
+        
+                $insertid = $this->Taizhang_Model->add($_POST);
                 $this->sendFormatJson('success', array('text' => '创建成功'));
             }else{
                 //$message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
@@ -248,62 +239,6 @@ class Taizhang extends TZ_Admin_Controller {
 		
 	}
     
-    
-    private function _add($year){
-         // add
-        $_POST['user_id'] = $this->_userProfile['id'];
-        $_POST['creator'] = $this->_userProfile['name'];
-        
-        /*
-        $master_serial = $this->Taizhang_Model->getMaxByWhere('master_serial',array(
-            'year' => $year
-        ));
-
-        $region_serial = $this->Taizhang_Model->getMaxByWhere('region_serial',array(
-            'year' => $year,
-            'region_code' => $_POST['region_code']
-        ));
-
-        $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
-            
-        $totalOffset = config_item('total_offset');
-        if(!empty($totalOffset)){
-            $_POST['master_serial'] += (int)$totalOffset[date("Y")];
-        }
-
-        $_POST['region_serial'] = $region_serial ? $region_serial + 1 : 1;
-
-        $regionOffset = config_item('region_offset_'.date("Y"));
-
-        if(!empty($regionOffset)){
-            $_POST['region_serial'] += (int)$regionOffset[$_POST['region_code']];
-        }
-
-        $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['region_code'],$_POST['master_serial'],$_POST['region_serial']);
-        */
-        
-        $region_code = $this->Region_Model->getList(array(
-            'select' => 'code',
-            'where' => array(
-                'year' => $year,
-                'name' => $_POST['region_name'],
-                'status' => '正常'
-            )
-        ));
-
-        if($region_code['data'][0]['code']){
-            $_POST['region_code'] = $region_code['data'][0]['code'];
-        }else{
-            $_POST['region_code'] = '';
-        }
-        
-        $_POST['project_no'] = $this->_formatProjectNo($_POST['year'], $_POST['region_code'], $_POST['master_serial'], $_POST['region_serial']);
-        $insertid = $this->Taizhang_Model->add($_POST);
-        
-        return $insertid;
-        
-    }
-    
     public function edit(){
         $this->assign('action','edit');
      
@@ -311,24 +246,18 @@ class Taizhang extends TZ_Admin_Controller {
             $this->_addRules();
             if($this->form_validation->run()){
                 $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_POST['id'])));
+                
+                $_POST['contacter_tel'] = '';
+                $_POST['region_code'] = '';
+                $_POST['region_name'] = '';
+                $_POST['master_serial'] = 0;
+                $_POST['region_serial'] = 0;
+                $_POST['nature'] = '';
+                $_POST['contacter'] = '';
+                $_POST['contacter_mobile'] = '';
+                $_POST['total_area'] = 0;
+                $_POST['churan_area'] = 0;
                 $_POST['updator'] = $this->_userProfile['name'];
-                
-                $region_code = $this->Region_Model->getList(array(
-                    'select' => 'code',
-                    'where' => array(
-                        'year' => $info['year'],
-                        'name' => $_POST['region_name'],
-                        'status' => '正常'
-                    )
-                ));
-
-                if($region_code['data'][0]['code']){
-                    $_POST['region_code'] = $region_code['data'][0]['code'];
-                }else{
-                    $_POST['region_code'] = '';
-                }
-                
-                $_POST['project_no'] = $this->_formatProjectNo($info['year'], $_POST['region_code'], $_POST['master_serial'], $_POST['region_serial']);
                 
                 $this->Taizhang_Model->update($_POST);
                 $this->sendFormatJson('success', array('text' => '修改成功'));
@@ -338,7 +267,7 @@ class Taizhang extends TZ_Admin_Controller {
             }
         }else{
             $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_GET['id'])));
-            $this->_initPageData($info['year']);
+            //$this->_initPageData($info['year']);
             
             $this->assign('info',$info);
             $this->display('edit');
@@ -391,7 +320,7 @@ class Taizhang extends TZ_Admin_Controller {
             }
             
             $condition['where'] = array(
-                'category' => '土地勘测登记',
+                'category' => '房产项目登记',
                 'status !=' => '已删除'
             );
             

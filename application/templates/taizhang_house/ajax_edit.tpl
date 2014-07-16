@@ -1,7 +1,7 @@
 <tr id="editrow_{$info['id']}">
     <td></td>
     <td>{$info['createtime']|date_format:"Y-m-d"}</td>
-    {include file="taizhang/fields_list.tpl"}
+    {include file="taizhang_house/fields_list.tpl"}
     <td>
         {* 操作 *}
         <div class="loading" style="display:none;"></div>
@@ -18,20 +18,9 @@ $(function(){
         var newrow = that.closest('tr');
         var cansubmit = true;
 
-        if(cansubmit && !/^[0-9]+$/.test($("input[name=master_serial]",newrow).val())){
-            alert("请输入正确的总编号");
-            cansubmit = false;
-            $("input[name=master_serial]",newrow).focus();
-        }
-
-        if(cansubmit && !/^[0-9]+$/.test($("input[name=region_serial]",newrow).val())){
-            alert("请输入正确的分编号");
-            cansubmit = false;
-            $("input[name=region_serial]",newrow).focus();
-        }
 
         if(cansubmit && $.trim($("input[name=name]",newrow).val()) == ''){
-            alert("请输入单位名称");
+            alert("请输入项目名称");
             cansubmit = false;
             $("input[name=name]",newrow).focus();
         }
@@ -42,30 +31,16 @@ $(function(){
             $("input[name=address]",newrow).focus();
         }
 
-
-        if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=total_area]",newrow).val())){
-            $("input[name=total_area]",newrow).focus();
-            alert("请输入正确的总面积",'提示');
-            cansubmit = false;
-        }
-
-        if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=churan_area]",newrow).val())){
-            $("input[name=churan_area]",newrow).focus();
-            alert("请输入正确的出让面积",'提示');
-            cansubmit = false;
-        }
-
-
-        if(cansubmit && $.trim($("select[name=nature]",newrow).val()) == ''){
-            alert("请选择用途");
-            cansubmit = false;
-            $("select[name=nature]",newrow).focus();
-        }
-
         if(cansubmit && $.trim($("input[name=pm]",newrow).val()) == ''){
             alert("请输入作业组负责人名称");
             cansubmit = false;
             $("input[name=pm]",newrow).focus();
+        }
+        
+        if(cansubmit && $.trim($("input[name=project_no]",newrow).val()) == ''){
+            alert("请输入合同编号");
+            cansubmit = false;
+            $("input[name=project_no]",newrow).focus();
         }
 
         if(cansubmit){
@@ -74,21 +49,14 @@ $(function(){
             $(".loading",newrow).show();
             $.ajax({
                 type:"POST",
-                url:"{url_path('taizhang','edit')}",
+                url:"{url_path('taizhang_house','edit')}",
                 data : {
                     isajax:"1",
                     id: "{$info['id']}",
                     name:$("input[name=name]",newrow).val(),
-                    master_serial: $("input[name=master_serial]",newrow).val(),
-                    region_name: $("select[name=region_name]",newrow).val(),
-                    region_serial: $("input[name=region_serial]",newrow).val(),
                     address: $("input[name=address]",newrow).val(),
-                    total_area:$("input[name=total_area]",newrow).val(),
-                    churan_area: $("input[name=churan_area]",newrow).val(),
-                    nature: $("select[name=nature]",newrow).val(),
-                    contacter:$("input[name=contacter]",newrow).val(),
-                    contacter_mobile: $("input[name=contacter_mobile]",newrow).val(),
                     pm:$("input[name=pm]",newrow).val(),
+                    project_no:$("input[name=project_no]",newrow).val(),
                     fee_type:$("select[name=fee_type]",newrow).val(),
                     has_doc:$("select[name=has_doc]",newrow).val(),
                     descripton:$("input[name=descripton]",newrow).val()

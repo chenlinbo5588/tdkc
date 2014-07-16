@@ -57,7 +57,12 @@
         <dt onClick='showHide("project_ch")'><b>测绘项目</b></dt>
         <dd style='display:block' class='sitem' id='project_ch'>
           <ul class='sitemu'>
-            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">项目台账</a></li>{/auth}
+            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">土地勘测登记台账</a></li>{/auth}
+            {auth name="taizhang_house"}<li><a href="{url_path('taizhang_house')}">房产项目登记台帐</a></li>{/auth}
+            {auth name="taizhang_fg"}<li><a href="{url_path('taizhang_fg')}">放线、竣工登记台帐</a></li>{/auth}
+            {auth name="taizhang_wf"}<li><a href="{url_path('taizhang_wf')}">违法用地登记台帐</a></li>{/auth}
+            {auth name="taizhang_other"}<li><a href="{url_path('taizhang_other')}">土方山塘地形评估控制登记台帐</a></li>{/auth}
+            {auth name="taizhang_person"}<li><a href="{url_path('taizhang_person')}">个人建房登记台帐</a></li>{/auth}
             {*
             {auth name="project_ch+send"}<li><a href="{url_path('project_ch','send')}">项目发送</a></li>{/auth}
             {auth name="project_ch+dispatch"}<li><a href="{url_path('project_ch','dispatch')}">项目布置</a></li>{/auth}

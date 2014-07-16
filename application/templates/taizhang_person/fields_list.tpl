@@ -1,38 +1,16 @@
-<td>
-        <input type="text" name="master_serial" value="{$info['master_serial']}" style="width:50px" placeholder="请输入总编号"/>
-    </td>
     <td>
         <select name="region_name">
         {foreach from=$regionList item=item}
         <option value="{$item['name']}" {if $info['region_name'] == $item['name']}selected{/if}>{$item['name']}</option>
         {/foreach}
     </select>
-        <input type="text" name="region_serial" value="{$info['region_serial']}" style="width:50px"  placeholder="请输入分编号"/>
+        <input type="text" name="region_serial" value="{$info['region_serial']}" style="width:50px"  placeholder="请输入编号"/>
     </td>
     <td>
-        <input type="text" name="name" value="{$info['name']|escape}" placeholder="请输入单位名称"/>
+        <input type="text" name="name" value="{$info['name']|escape}" placeholder="请输入名称"/>
     </td>
     <td>
         <input type="text" name="address" value="{$info['address']|escape}" placeholder="请输入土地坐落"/>
-    </td>
-    <td>
-        <input type="text" name="total_area" value="{if $info['total_area']}{$info['total_area']}{else}0{/if}" style="width:60px"  placeholder="请输入总面积"/>
-    </td>
-    <td>
-        <input type="text" name="churan_area" value="{if $info['churan_area']}{$info['churan_area']}{else}0{/if}" style="width:60px"  placeholder="请输入出让面积"/>
-    </td>
-    <td>
-        <select name="nature">
-            {foreach from=$natureList item=item}
-            <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
-            {/foreach}
-        </select>
-    </td>
-    <td>
-        <input type="text" name="contacter" value="{$info['contacter']}" style="width:50px"  placeholder="请输入联系人名称"/>
-    </td>
-    <td>
-        <input type="text" name="contacter_mobile" value="{$info['contacter_mobile']}" style="width:80px" placeholder="请输入联系人号码"/></span>
     </td>
     <td>
         <input type="text" name="pm" value="{$info['pm']}" style="width:50px" placeholder="作业组负责人"/>

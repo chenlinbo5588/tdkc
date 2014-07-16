@@ -25,7 +25,6 @@
             .covertd .item {
                 position:absolute;
                 font-size:34px;
-                font-weight:bold;
                 font-family: "隶书";
             }
             

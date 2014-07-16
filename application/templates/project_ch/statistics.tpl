@@ -10,10 +10,10 @@
                             <label><strong>镇乡名称</strong><input type="text" name="region_name" value="{$smarty.get.region_name}" placeholder="请输入镇乡名称"/></label>
                             <label><strong>负责人名称</strong><input type="text" name="pm" value="{$smarty.get.pm}" placeholder="请输入项目负责人"/></label>
                             <label><strong>项目类型</strong>
-                                <select name="type_id" >
+                                <select name="category" >
                                     <option value="">全部</option>
-                                    {foreach from=$projectTypeList item=item}
-                                    <option value="{$item['id']}" {if $smarty.get.type_id == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
+                                    {foreach from=$projectTypeList key=key item=item}
+                                    <option value="{$key}" {if $smarty.get.category == $key}selected{/if}>{$item}</option>
                                     {/foreach}
                                 </select>
                             </label>
@@ -32,7 +32,8 @@
                             <th>登记年-月</th>
                             <th>镇街名称</th>
                             <th>负责人</th>
-                            <th>类型</th>
+                            <th>台账类型</th>
+                            <th>用途</th>
                             <th>数量</th>
                         </tr>
                     </thead>
@@ -41,8 +42,9 @@
                         <tr id="row_{$item['id']}">
                            <td>{$item['year']}年-{$item['month']}月</td>
                            <td>{$item['region_name']}</td>
-                           <td>{if $item['pm']}{$item['pm']}{else}尚未布置到负责人{/if}</td>
-                           <td>{$typeKeys[$item['type_id']]}</td>
+                           <td>{$item['pm']}</td>
+                           <td>{$item['category']}</td>
+                           <td>{$item['nature']}</td>
                            <td>{$item['cnt']}</td>
                         </tr>
                         {/foreach}

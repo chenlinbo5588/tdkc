@@ -35,8 +35,8 @@
                         <td>{$info['id']}</td>
                     </tr>
                     <tr>
-                        <td>录入类型</td>
-                        <td>{if $info['input_type'] == 0}正常登记{elseif $info['input_type'] == 1}意向登记{/if}</td>
+                        <td>登记台账号</td>
+                        <td>{$info['project_no']|escape}</td>
                     </tr>
                     <tr>
                         <td>登记年月</td>
@@ -52,7 +52,7 @@
                     </tr>
                     <tr>
                         <td>性质</td>
-                        <td>{$info['nature']}</td>
+                        <td>{$info['nature']|escape}</td>
                     </tr>
                     <tr>
                         <td>登记名称</td>

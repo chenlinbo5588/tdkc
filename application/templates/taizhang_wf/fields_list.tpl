@@ -16,23 +16,18 @@
         <input type="text" name="address" value="{$info['address']|escape}" placeholder="请输入土地坐落"/>
     </td>
     <td>
-        <input type="text" name="total_area" value="{if $info['total_area']}{$info['total_area']}{else}0{/if}" style="width:60px"  placeholder="请输入总面积"/>
+        <input type="text" name="total_area" value="{$info['total_area']}" style="width:60px"  placeholder="请输入总面积"/>
     </td>
-    <td>
-        <input type="text" name="churan_area" value="{if $info['churan_area']}{$info['churan_area']}{else}0{/if}" style="width:60px"  placeholder="请输入出让面积"/>
-    </td>
+    
     <td>
         <select name="nature">
+            <option value="违法" {if $info['nature'] == '违法'}selected{/if}>违法</option>
+            {*
             {foreach from=$natureList item=item}
             <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
             {/foreach}
+            *}
         </select>
-    </td>
-    <td>
-        <input type="text" name="contacter" value="{$info['contacter']}" style="width:50px"  placeholder="请输入联系人名称"/>
-    </td>
-    <td>
-        <input type="text" name="contacter_mobile" value="{$info['contacter_mobile']}" style="width:80px" placeholder="请输入联系人号码"/></span>
     </td>
     <td>
         <input type="text" name="pm" value="{$info['pm']}" style="width:50px" placeholder="作业组负责人"/>

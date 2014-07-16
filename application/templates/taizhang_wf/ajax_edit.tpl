@@ -1,7 +1,7 @@
 <tr id="editrow_{$info['id']}">
     <td></td>
     <td>{$info['createtime']|date_format:"Y-m-d"}</td>
-    {include file="taizhang/fields_list.tpl"}
+    {include file="taizhang_wf/fields_list.tpl"}
     <td>
         {* 操作 *}
         <div class="loading" style="display:none;"></div>
@@ -49,15 +49,8 @@ $(function(){
             cansubmit = false;
         }
 
-        if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=churan_area]",newrow).val())){
-            $("input[name=churan_area]",newrow).focus();
-            alert("请输入正确的出让面积",'提示');
-            cansubmit = false;
-        }
-
-
         if(cansubmit && $.trim($("select[name=nature]",newrow).val()) == ''){
-            alert("请选择用途");
+            alert("请选择用地性质");
             cansubmit = false;
             $("select[name=nature]",newrow).focus();
         }
@@ -74,7 +67,7 @@ $(function(){
             $(".loading",newrow).show();
             $.ajax({
                 type:"POST",
-                url:"{url_path('taizhang','edit')}",
+                url:"{url_path('taizhang_wf','edit')}",
                 data : {
                     isajax:"1",
                     id: "{$info['id']}",

@@ -1,24 +1,24 @@
 {include file="common/main_header.tpl"}
             <div class="row-fluid">
                 <div class="searchform row-fluid">
-                <form action="{url_path('taizhang')}" method="get" name="searchform">
-                    <input type="hidden" value="taizhang" name="{config_item('controller_trigger')}"/>
+                <form action="{url_path('taizhang_other')}" method="get" name="searchform">
+                    <input type="hidden" value="taizhang_other" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
-                            <label><strong>编号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/></label>
-                            <label><strong>单位名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
+                            <label><strong>编号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入编号"/></label>
+                            <label><strong>项目名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入项目名称"/></label>
                             <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
                             <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            {auth name="taizhang+add"}<a href="javascript:void(0);" class="addlink">+新增土地勘测台账</a>{/auth}
+                            {auth name="taizhang_other+add"}<a href="javascript:void(0);" class="addlink">+新增土方、山塘、地形、评估、控制台账</a>{/auth}
                         </li>
                      </ul>
                 </form>
             </div>
                         
             <div class="span12">
-                {auth name="taizhang+delete"}
+                {auth name="taizhang_other+delete"}
                 <div class="operator">
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
@@ -29,18 +29,13 @@
                 <table class="table" id="listtable" >
                     <thead>
                         <tr>
-                            {auth name="taizhang+delete"}<th></th>{/auth}
+                            {auth name="taizhang_other+delete"}<th></th>{/auth}
                             <th>时间</th>
-                            <th>总编号</th>
-                            <th>分编号</th>
+                            <th>编号</th>
                             <th>单位名称</th>
                             <th>土地坐落</th>
-                            <th>总面积(M<sup>2</sup>)</th>
-                            <th>出让/面积(M<sup>2</sup>)</th>
-                            <th>用途</th>
-                            <th>联系人</th>
-                            <th>联系电话</th>
                             <th>作业组负责人</th>
+                            <th>用途</th>
                             <th>收费情况</th>
                             <th>成果资料</th>
                             <th>备注</th>
@@ -50,18 +45,13 @@
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           {auth name="taizhang+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
+                           {auth name="taizhang_other+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
-                           <td>{str_pad($item['master_serial'], 4,'0', $smarty.const.STR_PAD_LEFT)}</td>
-                           <td>{$item['region_code']}{str_pad($item['region_serial'], 3,'0', $smarty.const.STR_PAD_LEFT)}</td>
+                           <td>{$item['project_no']}</td>
                            <td>{$item['name']|escape}</td>
                            <td>{$item['address']|escape}</td>
-                           <td>{$item['total_area']}</td>
-                           <td>{$item['churan_area']}</td>
-                           <td>{$item['nature']}</td>
-                           <td>{$item['contacter']}</td>
-                           <td>{$item['contacter_mobile']}</td>
                            <td>{$item['pm']}</td>
+                           <td>{$item['nature']}</td>
                            <td>
                                {if $item['fee_type'] == 1}挂账
                                 {elseif $item['fee_type'] == 2}票开款收
@@ -72,8 +62,8 @@
                            <td>{if $item['has_doc'] == 1}已形成{else}未形成{/if}</td>
                            <td>{$item['descripton']}</td>
                            <td>
-                               {auth name="taizhang+edit"}<a href="javascript:void(0);" class="edit" data-id="{$item['id']}" data-href="{url_path('taizhang','edit','id=')}{$item['id']}">编辑</a>{/auth}
-                               {auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}
+                               {auth name="taizhang_other+edit"}<a href="javascript:void(0);" class="edit" data-id="{$item['id']}" data-href="{url_path('taizhang_other','edit','id=')}{$item['id']}">编辑</a>{/auth}
+                               {auth name="taizhang_other+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang_other','fee','id=')}{$item['id']}">收费</a>{/auth}
                            </td>
                         </tr>
                         {/foreach}
@@ -81,7 +71,7 @@
                 </table>
             </div>
                     
-            <form id="delete_form" name="deleteForm" action="{url_path('taizhang','delete')}" method="post" target="post_iframe">
+            <form id="delete_form" name="deleteForm" action="{url_path('taizhang_other','delete')}" method="post" target="post_iframe">
                 <div class="inputlist">
 
                 </div>
@@ -92,7 +82,7 @@
                  <tr class="newrow">
                      <td></td>
                      <td></td>
-                     {include file="taizhang/fields_list.tpl"}
+                     {include file="taizhang_other/fields_list.tpl"}
                     <td>
                         {* 操作 *}
                         <div class="loading" style="display:none;"></div>
@@ -157,48 +147,22 @@
                         var cansubmit = true;
                         var newrow = $(".newrow");
                         
-                        if(cansubmit && !/^[0-9]+$/.test($("input[name=master_serial]",newrow).val())){
-                            alert("请输入正确的总编号");
+                        if(cansubmit && $.trim($("input[name=master_serial]",newrow).val()) == ''){
+                            alert("请输入编号");
                             cansubmit = false;
                             $("input[name=master_serial]",newrow).focus();
                         }
                         
-                        if(cansubmit && !/^[0-9]+$/.test($("input[name=region_serial]",newrow).val())){
-                            alert("请输入正确的分编号");
-                            cansubmit = false;
-                            $("input[name=region_serial]",newrow).focus();
-                        }
-                        
                         if(cansubmit && $.trim($("input[name=name]",newrow).val()) == ''){
-                            alert("请输入单位名称");
+                            alert("请输入项目名称");
                             cansubmit = false;
                             $("input[name=name]",newrow).focus();
                         }
                         
                         if(cansubmit && $.trim($("input[name=address]",newrow).val()) == ''){
-                            alert("请输入土地坐落");
+                            alert("请输入宗地坐落");
                             cansubmit = false;
                             $("input[name=address]",newrow).focus();
-                        }
-                        
-                        
-                        if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=total_area]",newrow).val())){
-                            $("input[name=total_area]",newrow).focus();
-                            alert("请输入正确的总面积",'提示');
-                            cansubmit = false;
-                        }
-                        
-                        if(cansubmit && !/^[0-9]+(.[0-9]+)?$/.test($("input[name=churan_area]",newrow).val())){
-                            $("input[name=churan_area]",newrow).focus();
-                            alert("请输入正确的出让面积",'提示');
-                            cansubmit = false;
-                        }
-                                
-                                
-                        if(cansubmit && $.trim($("select[name=nature]",newrow).val()) == ''){
-                            alert("请选择用途");
-                            cansubmit = false;
-                            $("select[name=nature]",newrow).focus();
                         }
                         
                         if(cansubmit && $.trim($("input[name=pm]",newrow).val()) == ''){
@@ -207,26 +171,27 @@
                             $("input[name=pm]",newrow).focus();
                         }
                         
+                        if(cansubmit && $.trim($("select[name=nature]",newrow).val()) == ''){
+                            alert("请选择用途");
+                            cansubmit = false;
+                            $("select[name=nature]",newrow).focus();
+                        }
+                        
+                        
                         if(cansubmit){
                             that.prop("disabled",true);
                             
                             $(".loading",newrow).show();
                             $.ajax({
                                 type:"POST",
-                                url:"{url_path('taizhang','add')}",
+                                url:"{url_path('taizhang_other','add')}",
                                 data : {
                                     isajax:"1",
+                                    master_serial:$("input[name=master_serial]",newrow).val(),
                                     name:$("input[name=name]",newrow).val(),
-                                    master_serial: $("input[name=master_serial]",newrow).val(),
-                                    region_name: $("select[name=region_name]",newrow).val(),
-                                    region_serial: $("input[name=region_serial]",newrow).val(),
                                     address: $("input[name=address]",newrow).val(),
-                                    total_area:$("input[name=total_area]",newrow).val(),
-                                    churan_area: $("input[name=churan_area]",newrow).val(),
-                                    nature: $("select[name=nature]",newrow).val(),
-                                    contacter:$("input[name=contacter]",newrow).val(),
-                                    contacter_mobile: $("input[name=contacter_mobile]",newrow).val(),
                                     pm:$("input[name=pm]",newrow).val(),
+                                    nature: $("select[name=nature]",newrow).val(),
                                     fee_type:$("select[name=fee_type]",newrow).val(),
                                     has_doc:$("select[name=has_doc]",newrow).val(),
                                     descripton:$("input[name=descripton]",newrow).val()
