@@ -748,7 +748,7 @@
                     {/if}
                     <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                     <input type="hidden" name="workflow" value=""/>
-                {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已归档'}
+                {if $info['sendor_id'] == $userProfile['id']}
                     {if $info['status'] == '新增'}
                         <input type="submit" name="submit" class="btn btn-orange" value="发送"/>
                     {elseif $info['status'] == '已发送'}
@@ -772,9 +772,7 @@
                     {elseif $info['status'] == '已收费'}
                         {*<input type="submit" name="submit" class="btn btn-orange" value="归档"/>*}
                     {/if}
-                    {if !in_array($info['status'],array('新增','项目已提交','已收费','已归档'))}
-                        <input type="submit" name="submit" class="btn btn-sm btn-gray" value="退回"/>
-                    {/if}
+                    <input type="submit" name="submit" class="btn btn-sm btn-gray" value="退回"/>
                 {/if}
                 {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                 </div>
@@ -1190,9 +1188,11 @@
                             }
                             {/if}
                         
-                            if(op != '退回' && cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
-                                $.jBox.alert("请选择发送人",'提示');
-                                cansubmit = false;
+                            if(cansubmit && (op == '发送' || op == '布置' || op == '提交初审' || op == '提交复审' || op == '项目提交' || op == '收费')){
+                                if($("input[name=sendor]:checked").length == 0){
+                                    $.jBox.alert("请选择发送人",'提示');
+                                    cansubmit = false;
+                                }
                             }
                             
                             if(!cansubmit){

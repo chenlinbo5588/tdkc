@@ -62,7 +62,7 @@
     {include file="common/upload.tpl"}
     <script>
         $(function(){
-        
+            
             $("#filelist").delegate("a.df","click",function(e){
                 if(confirm("确定要删除吗")){
                     $(this).closest("li").remove();

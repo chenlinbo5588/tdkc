@@ -92,7 +92,7 @@
                             <td><label class="optional"><em></em><strong>联系人固定电话</strong></label></td><td><input type="text" style="width:300px" name="contacter_tel" value="{$info['contacter_tel']}" placeholder="请输入联系人固定电话"/><span class="tip">{form_error('contacter_tel')}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="optional"><em></em><strong>联系单位</strong></label></td><td><input type="text" style="width:600px" name="union_name" value="{$info['union_name']}" placeholder="请输入联系单位名称"/><span class="tip">{form_error('union_name')}</span></td>
+                            <td><label class="required"><em>*</em><strong>联系单位</strong></label></td><td><input type="text" style="width:300px" name="union_name" value="{$info['union_name']}" placeholder="请输入联系单位名称"/><span class="tip">{form_error('union_name')}</span></td>
                         </tr>
                         <tr>
                             <td><label class="required"><em>*</em><strong>接洽人名称</strong></label></td><td><input type="text" style="width:300px" name="manager" id="manager" value="{$info['manager']}" placeholder="请输入接洽人名称"/><span class="tip">{form_error('manager')} 输入名称将自动从通讯录匹配</span></td>

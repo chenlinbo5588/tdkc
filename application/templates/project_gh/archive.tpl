@@ -18,6 +18,7 @@
                         <label><input type="radio" name="get_doc" value="0" {if $info['get_doc'] == 0}checked{/if}>未领取</label>
                     </td>
                 </tr>
+                {include file="project_gh/fee_list.tpl"}
                 <tr>
                     <td>应收金额</td>
                     <td>

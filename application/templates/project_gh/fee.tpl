@@ -18,10 +18,11 @@
                         <label><input type="radio" name="get_doc" value="0" {if $info['get_doc'] == 0}checked{/if}>未领取</label>
                     </td>
                 </tr>
+                {include file="project_gh/fee_list.tpl"}
                 <tr>
                     <td>应收金额</td>
                     <td>
-                        <input type="text" name="ys_amount" value="{$info['ys_amount']}"/>
+                        <input type="text" name="ys_amount" value="{$info['ys_amount']}"/><input type="button" name="autofill" value="自动填入"/>
                     </td>
                 </tr>
                 <tr>
@@ -59,5 +60,31 @@
             </tbody>
         </table>
     </form>
+                
+    <script>
+        
+        $("input[name=autofill]").bind("click",function(e){
+            var total = 0;
+            $("#feetb .subtotal").each(function(idx){
+                var p = $(this).html();
+                if(!/^[0-9]+(.[0-9]+)?$/.test(p)){
+                    p = 0;
+                }
+
+                total += parseFloat(p);
+            });
+
+            $("input[name=ys_amount]").val(total.toFixed(2));
+        });
+            
+        $("input[name=submit]").bind("click",function(e){
+            var cansubmit = true;
+            
+            {include file="project_gh/fee_script.tpl"}
+            
+            return cansubmit;
+        });        
+        
+    </script>            
     <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
 </div>

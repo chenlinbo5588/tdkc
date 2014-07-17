@@ -251,13 +251,13 @@ class project_gh extends TZ_Admin_Controller {
                         $lastOpName = '通过复审';
                         $lastStatus = '已通过复审';
                         
-                    }elseif($info['status'] == '项目已收费'){
+                    }elseif($info['status'] == '已收费'){
                         $lastOpName = '项目提交';
                         $lastStatus = '项目已提交';
                         
-                    }elseif($info['status'] == '项目已归档'){
-                        $lastOpName = '项目收费';
-                        $lastStatus = '项目已收费';
+                    }elseif($info['status'] == '已归档'){
+                        $lastOpName = '收费';
+                        $lastStatus = '已收费';
                     }
                     
                 }elseif($op == '发送'){
@@ -381,6 +381,11 @@ class project_gh extends TZ_Admin_Controller {
                     $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural');
                     
                     if(!$this->form_validation->run()){
+                        $info['size'] = $_POST['size'];
+                        $info['num'] = $_POST['num'];
+                        $info['price'] = $_POST['price'];
+                        $info['charge_make'] = $_POST['charge_make'];
+                        
                         $info['get_doc'] = $_POST['get_doc'];
                         $info['ys_amount'] = $_POST['ys_amount'];
                         $info['ss_amount'] = $_POST['ss_amount'];
@@ -509,6 +514,20 @@ class project_gh extends TZ_Admin_Controller {
         
         $this->assign('userFaultList0',$userFaultList[0]['data']);
         $this->assign('userFaultList1',$userFaultList[1]['data']);
+        
+        /**
+         * 取得收费信息 
+         */
+        $this->load->model('Gh_Fee_Model');
+        $feeList = $this->Gh_Fee_Model->getList(array(
+            'where' => array(
+                'project_id' => $info['id']
+            ),
+            'order' => 'createtime ASC'
+        ));
+
+        $this->assign('feeList',$feeList['data']);
+        
         
         $info['event_id'] = $event_id;
         $this->assign('message',$message);
@@ -1015,6 +1034,33 @@ class project_gh extends TZ_Admin_Controller {
                     
                     break;
                 case '收费':
+                    if($info['status'] == '项目已提交'){
+                        $this->load->model('Gh_Fee_Model');
+                        $this->Gh_Fee_Model->deleteByWhere(array(
+                            'project_id' => $info['id']
+                        ));
+
+                        $insertData = array();
+
+                        if(!empty($param['size'])){
+                            foreach($param['size'] as $key => $val){
+                                $insertTime = time();
+
+                                $insertData[] = array(
+                                    'project_id' => $info['id'],
+                                    'size' => $val,
+                                    'num' => !empty($param['num'][$key]) ? $param['num'][$key] : 1,
+                                    'price' => !empty($param['price'][$key]) ? $param['price'][$key] : 0,
+                                    'charge_make' => !empty($param['charge_make'][$key]) ? $param['charge_make'][$key] : 0,
+                                    'remark' => !empty($param['remark'][$key]) ? $param['remark'][$key] : '',
+                                    'creator' => $this->_userProfile['name'],
+                                    'createtime' => $insertTime
+                                );
+                            }
+                            $this->Gh_Fee_Model->batchInsert($insertData);
+                        }
+                    }
+                    
                     $sendorInfo = $this->User_Model->queryById($param['sendor']);
                     $data = array(
                         'sendor_id' => $sendorInfo['id'],
@@ -1672,6 +1718,34 @@ class project_gh extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 $op = '收费';
                 $now = time();
+                
+                if($info['status'] == '项目已提交'){
+                    $this->load->model('Gh_Fee_Model');
+                    $this->Gh_Fee_Model->deleteByWhere(array(
+                        'project_id' => $info['id']
+                    ));
+
+                    $insertData = array();
+
+                    if(!empty($_POST['size'])){
+                        foreach($_POST['size'] as $key => $val){
+                            $insertTime = time();
+
+                            $insertData[] = array(
+                                'project_id' => $info['id'],
+                                'size' => $val,
+                                'num' => !empty($_POST['num'][$key]) ? $_POST['num'][$key] : 1,
+                                'price' => !empty($_POST['price'][$key]) ? $_POST['price'][$key] : 0,
+                                'charge_make' => !empty($_POST['charge_make'][$key]) ? $_POST['charge_make'][$key] : 0,
+                                'remark' => !empty($_POST['remark'][$key]) ? $_POST['remark'][$key] : '',
+                                'creator' => $this->_userProfile['name'],
+                                'createtime' => $insertTime
+                            );
+                        }
+                        $this->Gh_Fee_Model->batchInsert($insertData);
+                    }
+                }
+                
                 $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
                 $data = array(
                     'sendor_id' => $sendorInfo['id'],
@@ -1709,6 +1783,22 @@ class project_gh extends TZ_Admin_Controller {
             if(!empty($info['files'])){
                 $this->assign('files',$this->_getFiles($info['files']));
             }
+            
+            /**
+            * 取得收费信息 
+            */
+            $this->load->model('Gh_Fee_Model');
+            $feeList = $this->Gh_Fee_Model->getList(array(
+                'where' => array(
+                    'project_id' => $info['id']
+                ),
+                'order' => 'createtime ASC'
+            ));
+
+            $this->assign('feeList',$feeList['data']);
+
+            
+            
             $this->assign('info',$info);
             $this->display();
         }
@@ -1772,6 +1862,20 @@ class project_gh extends TZ_Admin_Controller {
             if(!empty($info['files'])){
                 $this->assign('files',$this->_getFiles($info['files']));
             }
+            
+            /**
+            * 取得收费信息 
+            */
+            $this->load->model('Gh_Fee_Model');
+            $feeList = $this->Gh_Fee_Model->getList(array(
+                'where' => array(
+                    'project_id' => $info['id']
+                ),
+                'order' => 'createtime ASC'
+            ));
+
+            $this->assign('feeList',$feeList['data']);
+            
             $this->assign('info',$info);
             $this->display();
         }
@@ -1792,11 +1896,7 @@ class project_gh extends TZ_Admin_Controller {
             $_POST['village'] = trim($_POST['village']);
         }
         
-        if(!empty($_POST['union_name'])){
-            $this->form_validation->set_rules('union_name', '联系单位名称', 'trim|max_length[100]|htmlspecialchars');
-        }else{
-            $_POST['union_name'] = trim($_POST['union_name']);
-        }
+        $this->form_validation->set_rules('union_name', '联系单位名称', 'trim||required|max_length[50]|htmlspecialchars');
         
         if(!empty($_POST['source'])){
             $this->form_validation->set_rules('source', '项目来源', 'trim|max_length[50]|htmlspecialchars');

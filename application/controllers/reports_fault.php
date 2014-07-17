@@ -172,7 +172,7 @@ class reports_fault extends TZ_Admin_Controller {
             $current_row_end = $current_row_start + $p['fault_cnt1'] - 1;
             
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$jump,$i + 1 );
-            if($p['fault_cnt1'] > 1){
+            if($p['fault_cnt1'] != 0){
                 foreach($p['fault_list'] as $fault){
                     $inner_current_row = $current_row_start + $j; 
                     $objPHPExcel->getActiveSheet()->setCellValue('B'.$inner_current_row,date("Y-m-d",$p['cs_time']));
@@ -196,19 +196,6 @@ class reports_fault extends TZ_Admin_Controller {
                 $objPHPExcel->getActiveSheet()->mergeCells('E'.$current_row_start.':E'.$current_row_end);
                 $objPHPExcel->getActiveSheet()->mergeCells('F'.$current_row_start.':F'.$current_row_end);
                 $objPHPExcel->getActiveSheet()->mergeCells('G'.$current_row_start.':G'.$current_row_end);
-                
-            }else{
-                
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$current_row_start,date("Y-m-d",$p['cs_time']));
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$current_row_start, $p['project_no']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row_start, $p['name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row_start, $p['type']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row_start, $p['pm']);
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row_start, $p['worker']);
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row_start, $p['fault_list'][0]['score']);
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row_start, $p['fault_list'][0]['fault_code']);
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_row_start, $p['fault_list'][0]['remark']);
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_row_start, '');
             }
             
             $jump += $p['fault_cnt1'];
@@ -225,7 +212,7 @@ class reports_fault extends TZ_Admin_Controller {
             $current_row_end = $current_row_start + $p['fault_cnt2'] - 1;
             
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$jump,$i + 1 );
-            if($p['fault_cnt2'] > 1){
+            if($p['fault_cnt2'] != 0){
                 foreach($p['fault_list'] as $fault){
                     $inner_current_row = $current_row_start + $j; 
                     $objPHPExcel->getActiveSheet()->setCellValue('B'.$inner_current_row,date("Y-m-d",$p['cs_time']));
@@ -249,19 +236,6 @@ class reports_fault extends TZ_Admin_Controller {
                 $objPHPExcel->getActiveSheet()->mergeCells('E'.$current_row_start.':E'.$current_row_end);
                 $objPHPExcel->getActiveSheet()->mergeCells('F'.$current_row_start.':F'.$current_row_end);
                 $objPHPExcel->getActiveSheet()->mergeCells('G'.$current_row_start.':G'.$current_row_end);
-                
-            }else{
-                
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$current_row_start,date("Y-m-d",$p['cs_time']));
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$current_row_start, $p['project_no']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row_start, $p['name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row_start, $p['type']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row_start, $p['pm']);
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row_start, $p['worker']);
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row_start, $p['fault_list'][0]['score']);
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row_start, $p['fault_list'][0]['fault_code']);
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_row_start, $p['fault_list'][0]['remark']);
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_row_start, '');
             }
             
             $jump += $p['fault_cnt2'];

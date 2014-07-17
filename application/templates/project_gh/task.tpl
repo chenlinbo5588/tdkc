@@ -552,11 +552,12 @@
                             <td>领取时间</td>
                             <td>{if $info['get_doctime']}{$info['get_doctime']|date_format:"Y-m-d"}{/if}</td>
                         </tr>
+                        {include file="project_gh/fee_list.tpl"}
                         <tr>
                             <td>应收金额</td>
                             <td>
                                 {if $info['status'] == '项目已提交' && $info['sendor_id'] == $userProfile['id']}
-                                <input type="text" name="ys_amount" value="{$info['ys_amount']}"/>{form_error('ys_amount')}
+                                <input type="text" name="ys_amount" value="{$info['ys_amount']}"/><input type="button" name="autofill" value="自动填入"/>{form_error('ys_amount')}
                                 {else}
                                     {$info['ys_amount']}
                                 {/if}
@@ -628,7 +629,7 @@
                     
                     <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                     <input type="hidden" name="workflow" value=""/>
-                    {if $info['sendor_id'] == $userProfile['id'] && $info['status'] != '已归档'}
+                    {if $info['sendor_id'] == $userProfile['id']}
                         {if $info['status'] == '新增'}
                             <input type="submit" name="submit" class="btn btn-orange" value="发送"/>
                         {elseif $info['status'] == '已发送'}
@@ -652,9 +653,7 @@
                         {elseif $info['status'] == '已收费'}
                             <input type="submit" name="submit" class="btn btn-orange" value="归档"/>
                         {/if}
-                        {if !in_array($info['status'],array('新增','项目已提交','已收费','已归档'))}
-                            <input type="submit" name="submit" class="btn btn-sm btn-gray" value="退回"/>
-                        {/if}
+                        <input type="submit" name="submit" class="btn btn-sm btn-gray" value="退回"/>
                     {/if}
                     {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                 </div>
@@ -669,6 +668,21 @@
                                 $(this).closest("li").remove();
                             }
                         });
+                        
+                        $("input[name=autofill]").bind("click",function(e){
+                            var total = 0;
+                            $("#feetb .subtotal").each(function(idx){
+                                var p = $(this).html();
+                                if(!/^[0-9]+(.[0-9]+)?$/.test(p)){
+                                    p = 0;
+                                }
+
+                                total += parseFloat(p);
+                            });
+
+                            $("input[name=ys_amount]").val(total.toFixed(2));
+                        });
+                        
                         
                         $("input[name=submit]").bind('click',function(e){
                             var that = $(e.target);
@@ -807,6 +821,8 @@
                             }
                             {elseif $info['status'] == '项目已提交' }
                             if(op == '收费'){    
+                                {include file="project_gh/fee_script.tpl"}
+                                    
                                 if(cansubmit && $("input[name=get_doc]:checked").length == 0){
                                     $.jBox.alert("请勾选成果资料资料情况",'提示');
                                     cansubmit = false;
@@ -828,10 +844,12 @@
                                 }
                             }
                             {/if}
-                        
-                            if(op != '退回' && cansubmit && $("input[name=sendor]").length != 0 && $("input[name=sendor]:checked").length == 0){
-                                $.jBox.alert("请选择发送人",'提示');
-                                cansubmit = false;
+                            
+                            if(cansubmit && (op == '发送' || op == '布置' || op == '提交初审' || op == '提交复审' || op == '项目提交' || op == '收费')){
+                                if($("input[name=sendor]:checked").length == 0){
+                                    $.jBox.alert("请选择发送人",'提示');
+                                    cansubmit = false;
+                                }
                             }
                             
                             if(!cansubmit){
