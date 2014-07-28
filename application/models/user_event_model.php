@@ -15,6 +15,7 @@ class User_Event_Model extends TZ_Model {
         
         $data = array(
             'id' => NULL,
+            'project_type' => $param['project_type'],
             'project_id' => $param['project_id'],
             'user_id' => $param['user_id'],
             'title' => $param['title'],

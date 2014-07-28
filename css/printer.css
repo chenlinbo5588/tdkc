@@ -6,7 +6,7 @@
 
 body,div,span,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,select,button,textarea,p,blockquote,iframe,table,th,td,article,aside,details,figcaption,figure,footer,header,hgroupd,nav,section {
 	outline-style:none;
-	font-family: "SimSun", "Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-family: "SimSun", sans-serif ,"Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei" ;
     font-size:16px;
 }
 
@@ -339,7 +339,7 @@ textarea.noborder {
 .check .noborder th {
     border-width:0px;
     text-align: left;
-    text-indent: 2em;
+    text-indent: 1em;
     
 }
 
@@ -585,7 +585,22 @@ input.viliage {
  */
  .kcdj {
      width:600px;
+     margin:0 auto;
  }
+ 
+ .kcdj .cover {
+     text-align: center;
+ }
+ 
+ .kcdj .cover h1 {
+     margin-top:200px;
+     
+ }
+ 
+ .kcdj .cover_foot {
+     margin-top:600px;
+ }
+ 
  
  .kcdj .pg {
      margin:15px;

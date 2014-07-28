@@ -54,7 +54,7 @@ class Admin extends TZ_Admin_Controller {
         $projectList = $this->Project_Model->getList(array(
             'where' => array(
                 'user_id' => $this->_userProfile['id'],
-                'status != ' => '已通过复审',
+                'status != ' => '已实施',
                 'status !=' => '已删除'
             ),
             'order' => 'createtime DESC'

@@ -112,12 +112,12 @@
                                <a href="javascript:void(0);" data-href="{url_path('project_ch','implement','id=')}{$item['id']}" data-title="项目实施" class="popwin">实施</a>
                                {/if}
                                {/auth}
-                               
+                               {*
                                {auth name="project_ch+complete"}
                                {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已实施'}
                                <a href="javascript:void(0);" data-href="{url_path('project_ch','complete','id=')}{$item['id']}" data-title="完成作业" class="popwin">完成作业</a>
                                {/if}
-                               {/auth}
+                               {/auth}*}
                                
                                {auth name="project_ch+check"}
                                {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已完成'}

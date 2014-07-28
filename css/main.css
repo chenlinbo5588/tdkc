@@ -47,6 +47,10 @@
     filter: Alpha(opacity=60);
 }
 
+input.input_error , .input_error {
+    border:1px solid red;
+}
+
 .loading {
     width:32px;
     height:32px;
@@ -126,7 +130,7 @@
 
 
 .breadcrumb {
-    margin: 0 0 10px 0;
+    margin: 10px 0 10px 0;
 }
 
 .required em {
@@ -620,7 +624,7 @@ ol.style_decimal , ul.style_decimal {
 }
 
 .tj_list {
-    margin: 15px 0;
+    
 }
 
 .tj_list li {
@@ -653,4 +657,87 @@ ol.style_decimal , ul.style_decimal {
     padding: 2px 5px;
 }
 
+#daiban {
+    background: #F00F0F;
+    width: 48px;
+    line-height: 1.2;
+    padding: 5px 0;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    position: fixed;
+    _position: absolute;
+    right: 0px;
+    bottom: 5px;
+    _bottom: "auto";
+    cursor: pointer;
+    opacity: 0.6;
+    filter: Alpha(opacity=60);
+}
 
+
+.taizhang_entry h1 {
+    
+    
+}
+
+.taizhang_entry ol {
+    
+    margin-left: 30px;
+}
+
+.taizhang_entry ol li {
+    list-style-type: decimal;
+    margin:5px 10px;
+}
+
+.taizhang_detail .sidelist {
+    position:fixed;
+    width:220px;
+    left:20px;
+}
+
+.taizhang_detail .mainarea {
+    float:left;
+    margin-left:230px;
+    border:1px solid #666666;
+    padding:15px;
+}
+
+.sideitem {
+    border:1px solid #666666;
+    margin-bottom:5px;
+}
+
+.sideitem h2 {
+    background-color:#ACACAC;
+    text-indent: 1em;
+    
+}
+.sideitem  ul  {
+    padding:5px;
+}
+.sideitem li {
+    padding:3px 0;
+}
+.sideitem li a {
+    display:block;
+}
+
+.sideitem li.current a {
+    background:#D5DFD7 url(../img/arrows.png) no-repeat right center;
+}
+
+.sideitem li.ok {
+    
+}
+
+.sideitem li {
+    
+}
+
+.mainarea .maintain caption {
+    background:#DDDDDD;
+    text-align:left;
+    padding:5px;
+}

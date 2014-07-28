@@ -11,7 +11,20 @@
     <body>
         <div class="container">
             <div class="kcdj">
-                <h1 class="title"><span class="inputarea ud">{if $info['name']}{$info['name']|escape}{else}请输入名称{/if}</span>土地勘测定界报告</h1>
+                
+                {*
+                <div class="pg cover">
+                    <h1>{$info['name']|escape}</h1>
+                    <h2>土地勘测定界报告</h2>
+                    <div class="cover_foot">
+                        <p>{$smarty.const.OUR_COMPANY_NAME}</p>
+                        <p>{$info['createtime']|date_format:"Y"} &nbsp;年 {$info['createtime']|date_format:"m"}&nbsp;月</p>
+                    </div>
+                    
+                </div>    
+                    *}
+                
+                <h1 class="title"><span class="inputarea ud">{if $info['name']}{$info['name']|escape}{else}请输入名称{/if}</span><span>土地勘测定界报告</span></h1>
                 <div class="pg pg1">
                     <h2 class="subtitle">一、概述</h2>
                     <p>

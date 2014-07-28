@@ -97,7 +97,7 @@ class TZ_Admin_Controller extends TZ_Controller {
         $eventCount = $this->User_Event_Model->getCount(array(
            'where' => array(
                'user_id' => $session['id'],
-               'isnew' => 1
+               'status' => '未处理'
            ) 
         ));
         
@@ -115,5 +115,289 @@ class TZ_Admin_Controller extends TZ_Controller {
 
     public function getUserProfile(){
         return $this->_userProfile;
+    }
+    
+    
+    
+    protected function _getFiles($param){
+        
+        if(is_string($param)){
+            $param = explode(',',$param);
+        }
+        
+        $this->load->model('Attachment_Model');
+        $hasFiles = $this->Attachment_Model->getList(array(
+            'where_in' => array(
+                array('key' => 'id', 'value' => $param)
+            )
+        ));
+        
+        return $hasFiles['data'];
+        
+    }
+    
+    
+    
+    protected function _getStep($info){
+        $status = array(
+           // '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '项目提交','收费','归档'
+            '新增' , '提交初审','通过初审',  '提交复审', '通过复审','收费'
+        );
+        
+        $statusKey = array_keys($status);
+        $currentKey = 0;
+        
+        //print_r($statusKey);
+        foreach($statusKey as $v){
+            if($status[$v] == str_replace('已','',$info['status'])){
+                $currentKey = $v + 1;
+            }
+        }
+
+        $statusHtml = array();
+        foreach($status as $k => $v){
+            if($k < $currentKey){
+                $statusHtml[] = '<span class="status statusover">'.$v."</span>";
+                
+            }elseif($k == $currentKey){
+                $statusHtml[] = '<span class="status current">'.$v."</span>";
+            }else{
+                $statusHtml[] = '<span class="status">'.$v."</span>";
+            }
+        }
+        
+        $this->assign('statusHtml',$statusHtml);
+    }
+    
+    
+    /**
+     * 添加待办记录
+     */
+    protected function _addPm($info,$sendorInfo,$project_type){
+        
+        //file_put_contents('debug.txt',print_r($info,true));
+        //file_put_contents('debug.txt',print_r($sendorInfo,true),FILE_APPEND);
+        //file_put_contents('debug.txt',$project_type,FILE_APPEND);
+        $this->User_Event_Model->updateByWhere(array(
+            'isnew' => 0,
+            'status' => '已处理',
+            'updator' => $this->_userProfile['name'],
+            'updatetime' => time()
+        ),array('user_id' => $this->_userProfile['id'],'project_type' => $project_type, 'project_id' => $info['id']));
+        
+        $this->User_Event_Model->deleteByWhere(array(
+            'user_id' => $sendorInfo['id'],
+            'project_type' => $project_type,
+            'project_id' => $info['id']
+        ));
+        
+        if($sendorInfo['id'] != $this->_userProfile['id']){
+            $url = '';
+            switch($project_type){
+                case 0:
+                    $url = url_path('project_ch','index','name='.urlencode($info['name']).'&id='.$info['id']);
+                    break;
+                case 1:
+                    $url = url_path('project_gh','index','name='.urlencode($info['name']).'&id='.$info['id']);
+                    break;
+                case 2:
+                    $url = url_path('taizhang','index','name='.urlencode($info['name']).'&id='.$info['id']);
+                    break;
+                default:
+                    break;
+            }
+            
+            $this->User_Event_Model->add(array(
+                'project_type' => $project_type,
+                'project_id' => $info['id'],
+                'user_id' => $sendorInfo['id'],
+                'title' => cut($info['name'],100),
+                'url' => $url,
+                'creator' => $this->_userProfile['name']
+            ));
+        }
+        
+    }
+    
+    
+    
+    protected function _getSendorList($where = array()){
+        if(!$this->User_Sendor_Model){
+            $this->load->model('User_Sendor_Model');
+        }
+        
+        $where = array_merge(array('user_id' => $this->_userProfile['id']),$where);
+        $userSendorList = $this->User_Sendor_Model->getList(array(
+            'where' => $where,
+            'order' => 'createtime ASC ,displayorder DESC'
+        ));
+        $this->assign('userSendorList',$userSendorList['data']);
+    }
+    
+    
+    protected function _cleanFile($current_files , $file_ids){
+        $needCleanFile = array();
+        
+        if(!empty($current_files)){
+            $currentFiles = explode(',',$current_files);
+        }else{
+            $currentFiles = array();
+        }
+        
+        if(!empty($file_ids)){
+            if($currentFiles){
+                foreach($currentFiles as $file){
+                    if(!in_array($file,$file_ids)){
+                        $needCleanFile[] = $file;
+                    }
+                }
+            }
+        }else{
+            if(!empty($current_files)){
+                $needCleanFile = explode(',',$current_files);
+            }
+        }
+        
+        ///file_put_contents("debug.txt", print_r($needCleanFile,true));
+        
+        if($needCleanFile){
+            $prepath = config_item('filestore_dir');
+
+            $cleanFiles = $this->_getFiles($needCleanFile);
+            foreach($cleanFiles as $file){
+                $file_realpath = $prepath.$file['file_store_path'].$file['file_md5'].$file['file_extension'];
+                @unlink($file_realpath);
+            }
+        }
+        
+    }
+    
+    /**
+     * 获取缺陷列表
+     * @param type $info 
+     */
+    protected function _getProjectFault($info){
+        
+        if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
+            
+            $this->load->model('Fault_Model');
+            $sysFaultList = $this->Fault_Model->getList(array(
+                'order' => 'type ASC,level DESC'
+            ));
+            
+            $tmpFaultList = array();
+            foreach($sysFaultList['data'] as $v){
+                if(!isset($tmpFaultList[$v['type']])){
+                    $tmpFaultList[$v['type']] = array(
+                        'title' => $v['typename'],
+                        'list' => array()
+                    );
+                    $tmpFaultList[$v['type']]['list'][] = $v;
+                }else{
+                    $tmpFaultList[$v['type']]['list'][] = $v;
+                }
+            }
+            
+            $this->assign('sysFaultList',$tmpFaultList);
+        }
+        
+        
+        $this->load->model('Project_Fault_Model');
+        
+        //初审错误
+        $userFaultList[] = $this->Project_Fault_Model->getList(array(
+            'where' => array(
+                'project_type' => 0,
+                'type' => 0,
+                'project_id' => $info['id'],
+                'status' => 0
+            )
+        ));
+        
+        //复审错误
+        $userFaultList[] = $this->Project_Fault_Model->getList(array(
+                'where' => array(
+                    'project_type' => 0,
+                    'type' => 1,
+                    'project_id' => $info['id'],
+                    'status' => 0
+                )
+            ));
+        
+        $this->assign('userFaultList0',$userFaultList[0]['data']);
+        $this->assign('userFaultList1',$userFaultList[1]['data']);
+    }
+    
+    
+    protected function _addProjectFault($info,$param,$project_type = 0){
+        $data = array();
+        
+        if(!empty($param['fault'])){
+            if($info['status'] == '已提交初审'){
+                $fault_step = 0;
+            }else{
+                $fault_step = 1;
+            }
+
+            $this->load->model('Project_Fault_Model');
+            
+            
+            $this->Project_Fault_Model->deleteByWhere(array(
+                'project_type' => $project_type,
+                'project_id' => $info['id'],
+                'type' => $fault_step
+            ));
+            
+            if($project_type == 0){
+                $this->load->model('Fault_Model');
+                
+                $sysFaultList = $this->Fault_Model->getList(array(
+                    'where_in' => array(
+                        array('key' => 'code','value' => $_POST['fault'])
+                    )
+                ));
+                
+            }else{
+                $this->load->model('Gh_Fault_Model');
+                $sysFaultList = $this->Gh_Fault_Model->getList(array(
+                    'where_in' => array(
+                        array('key' => 'code','value' => $_POST['fault'])
+                    )
+                ));
+            }
+            
+
+            $insertData = array();
+
+            foreach($sysFaultList['data'] as $fkey => $fvalue){
+                $insertTime = time();
+                $insertData[] = array(
+                    'project_type' => $project_type,
+                    'project_id' => $info['id'],
+                    'type' => $fault_step,
+                    'fault_code' => $fvalue['code'],
+                    'fault_name' => $fvalue['name'],
+                    'remark' => !empty($param[strtoupper($fvalue['code']).'_remark']) ? $param[strtoupper($fvalue['code']).'_remark'] : '',
+                    'score' => (double)$fvalue['score'],
+                    'creator' => $this->_userProfile['name'],
+                    'updator' => $this->_userProfile['name'],
+                    'createtime' => $insertTime,
+                    'updatetime' => $insertTime
+                );
+            }
+
+            if($fault_step == 0){
+                $data['fault_cnt1'] = count($_POST['fault']);
+                $data['total_fault'] = $data['fault_cnt1'] + $info['fault_cnt2'];
+            }else if($fault_step == 1){
+                $data['fault_cnt2'] = count($_POST['fault']);
+                $data['total_fault'] = $data['fault_cnt2'] + $info['fault_cnt1'];
+            }
+
+            $this->Project_Fault_Model->batchInsert($insertData);
+        }
+        
+        return $data;
+        
     }
 }

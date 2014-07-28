@@ -34,37 +34,21 @@
       </dl>
       {/auth}
       
-      {auth name="personal"}
-      <dl class='bitem'>
-        <dt onClick='showHide("personal")'><b>个人办公</b></dt>
-        <dd style='display:block' class='sitem' id="personal">
-          <ul class='sitemu'>
-            {auth name="my_event"}<li><a href="{url_path('my_event')}">待办事宜</a></li>{/auth}
-            {auth name="pm+receive"}<li><a href="{url_path('pm','receive')}">点对点消息</a></li>{/auth}
-            {auth name="my_schedule"}<li><a href="{url_path('my_schedule')}">日程安排</a></li>{/auth}
-            {auth name="my_file"}<li><a href="{url_path('my_file')}">我的文件</a></li>{/auth}
-            {auth name="share_file"}<li><a href="{url_path('share_file')}">文件共享</a></li>{/auth}
-            {auth name="work_log"}<li><a href="{url_path('work_log')}">工作日志</a></li>{/auth}
-            {auth name="sendor"}<li><a href="{url_path('sendor')}">发送人设置</a></li>{/auth}
-            {auth name="contacts"}<li><a href="{url_path('contacts')}">外部通讯录</a></li>{/auth}
-            {auth name="our_contacts"}<li><a href="{url_path('our_contacts')}">内部通讯录</a></li>{/auth}
-            {*<li><a href="{url_path('kq')}">考勤统计</a></li>*}
-          </ul>
-        </dd>
-      </dl>
-      {/auth}
+      
       {auth name="project"}
       <dl class='bitem'>
         <dt onClick='showHide("project_ch")'><b>测绘项目</b></dt>
         <dd style='display:block' class='sitem' id='project_ch'>
           <ul class='sitemu'>
-            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">土地勘测登记台账</a></li>{/auth}
+            {auth name="taizhang+add"}<li><a href="{url_path('taizhang','add')}">台账登记</a></li>{/auth}
+            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">台账查询</a></li>{/auth}
+            {*
+            {auth name="taizhang_ch"}<li><a href="{url_path('taizhang_ch')}">土地勘测登记台账</a></li>{/auth}
             {auth name="taizhang_house"}<li><a href="{url_path('taizhang_house')}">房产项目登记台帐</a></li>{/auth}
             {auth name="taizhang_fg"}<li><a href="{url_path('taizhang_fg')}">放线、竣工登记台帐</a></li>{/auth}
             {auth name="taizhang_wf"}<li><a href="{url_path('taizhang_wf')}">违法用地登记台帐</a></li>{/auth}
             {auth name="taizhang_other"}<li><a href="{url_path('taizhang_other')}">土方山塘地形评估控制登记台帐</a></li>{/auth}
             {auth name="taizhang_person"}<li><a href="{url_path('taizhang_person')}">个人建房登记台帐</a></li>{/auth}
-            {*
             {auth name="project_ch+send"}<li><a href="{url_path('project_ch','send')}">项目发送</a></li>{/auth}
             {auth name="project_ch+dispatch"}<li><a href="{url_path('project_ch','dispatch')}">项目布置</a></li>{/auth}
             {auth name="project_ch+implement"}<li><a href="{url_path('project_ch','implement')}">项目实施</a></li>{/auth}
@@ -75,7 +59,7 @@
             {auth name="project_ch+archive"}<li><a href="{url_path('project_ch','archive')}">项目归档</a></li>{/auth}
             *}
             {auth name="project_ch"}<li><a href="{url_path('project_ch')}">测绘项目管理</a></li>{/auth}
-            {auth name="project_ch+statistics"}<li><a href="{url_path('project_ch','statistics')}">项目统计</a></li>{/auth}
+            {auth name="project_ch+statistics"}<li><a href="{url_path('taizhang','statistics')}">台账统计</a></li>{/auth}
           </ul>
         </dd>
       </dl>
@@ -148,6 +132,27 @@
             {auth name="reports_employ"}<li><a href="{url_path('reports_employ')}">人事报表</a></li>{/auth}
             {auth name="reports_salary"}<li><a href="{url_path('reports_salary')}">薪资变动报表</a></li>{/auth}
             {auth name="reports_ghfee"}<li><a href="{url_path('reports_ghfee')}">规划项目费用报表</a></li>{/auth}
+          </ul>
+        </dd>
+      </dl>
+      {/auth}
+      
+      
+      {auth name="personal"}
+      <dl class='bitem'>
+        <dt onClick='showHide("personal")'><b>个人办公</b></dt>
+        <dd style='display:block' class='sitem' id="personal">
+          <ul class='sitemu'>
+            {auth name="my_event"}<li><a href="{url_path('my_event')}">待办事宜</a></li>{/auth}
+            {auth name="pm+receive"}<li><a href="{url_path('pm','receive')}">点对点消息</a></li>{/auth}
+            {auth name="my_schedule"}<li><a href="{url_path('my_schedule')}">日程安排</a></li>{/auth}
+            {auth name="my_file"}<li><a href="{url_path('my_file')}">我的文件</a></li>{/auth}
+            {auth name="share_file"}<li><a href="{url_path('share_file')}">文件共享</a></li>{/auth}
+            {auth name="work_log"}<li><a href="{url_path('work_log')}">工作日志</a></li>{/auth}
+            {auth name="sendor"}<li><a href="{url_path('sendor')}">发送人设置</a></li>{/auth}
+            {auth name="contacts"}<li><a href="{url_path('contacts')}">外部通讯录</a></li>{/auth}
+            {auth name="our_contacts"}<li><a href="{url_path('our_contacts')}">内部通讯录</a></li>{/auth}
+            {*<li><a href="{url_path('kq')}">考勤统计</a></li>*}
           </ul>
         </dd>
       </dl>

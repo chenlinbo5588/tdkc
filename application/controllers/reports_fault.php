@@ -7,7 +7,7 @@ class reports_fault extends TZ_Admin_Controller {
     
     public function __construct(){
         parent::__construct();
-        $this->load->model('Project_Model');
+        $this->load->model('Taizhang_Model');
         $this->load->model('Project_Fault_Model');
         $this->load->helper('number');
     }
@@ -20,7 +20,7 @@ class reports_fault extends TZ_Admin_Controller {
         
         
         //初审错误
-        $faultList1 = $this->Project_Model->getList(array(
+        $faultList1 = $this->Taizhang_Model->getList(array(
             'where' => array(
                 'fault_cnt1 > ' => 0 ,
                 'createtime >= ' => strtotime($_POST['sdate']),
@@ -65,7 +65,7 @@ class reports_fault extends TZ_Admin_Controller {
         
         unset($faultList1);
         
-        $faultList2 = $this->Project_Model->getList(array(
+        $faultList2 = $this->Taizhang_Model->getList(array(
             'where' => array(
                 'fault_cnt2 > ' => 0 ,
                 'createtime >= ' => strtotime($_POST['sdate']),
@@ -110,7 +110,7 @@ class reports_fault extends TZ_Admin_Controller {
         }
         unset($faultList2);
         
-        
+
         $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_discISAM; 
         $cacheSettings = array( 'dir'  => ROOT_DIR.'/temp' );
         PHPExcel_Settings::setLocale('zh_CN');
@@ -178,9 +178,9 @@ class reports_fault extends TZ_Admin_Controller {
                     $objPHPExcel->getActiveSheet()->setCellValue('B'.$inner_current_row,date("Y-m-d",$p['cs_time']));
                     $objPHPExcel->getActiveSheet()->setCellValue('C'.$inner_current_row, $p['project_no']);
                     $objPHPExcel->getActiveSheet()->setCellValue('D'.$inner_current_row, $p['name']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$inner_current_row, $p['type']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$inner_current_row, $p['ptype_name']);
                     $objPHPExcel->getActiveSheet()->setCellValue('F'.$inner_current_row, $p['pm']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$inner_current_row, $p['worker']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$inner_current_row, $p['pm']);
                     $objPHPExcel->getActiveSheet()->setCellValue('H'.$inner_current_row, $fault['score']);
                     $objPHPExcel->getActiveSheet()->setCellValue('I'.$inner_current_row, $fault['fault_code']);
                     $objPHPExcel->getActiveSheet()->setCellValue('J'.$inner_current_row, $fault['remark']);
@@ -218,9 +218,9 @@ class reports_fault extends TZ_Admin_Controller {
                     $objPHPExcel->getActiveSheet()->setCellValue('B'.$inner_current_row,date("Y-m-d",$p['cs_time']));
                     $objPHPExcel->getActiveSheet()->setCellValue('C'.$inner_current_row, $p['project_no']);
                     $objPHPExcel->getActiveSheet()->setCellValue('D'.$inner_current_row, $p['name']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$inner_current_row, $p['type']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$inner_current_row, $p['ptype_name']);
                     $objPHPExcel->getActiveSheet()->setCellValue('F'.$inner_current_row, $p['pm']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$inner_current_row, $p['worker']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$inner_current_row, $p['pm']);
                     $objPHPExcel->getActiveSheet()->setCellValue('H'.$inner_current_row, $fault['score']);
                     $objPHPExcel->getActiveSheet()->setCellValue('I'.$inner_current_row, $fault['fault_code']);
                     $objPHPExcel->getActiveSheet()->setCellValue('J'.$inner_current_row, $fault['remark']);

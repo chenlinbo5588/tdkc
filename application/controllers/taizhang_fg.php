@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+
 class Taizhang_Fg extends TZ_Admin_Controller {
     
     public function __construct(){
@@ -7,39 +8,53 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         $this->load->model('Region_Model');
         $this->load->model('Project_Nature_Model');
         $this->load->model('Taizhang_Model');
+        $this->load->model('Project_Type_Model');
         
         $this->load->helper('number');
-    }
-    
-    
-    
-    
-	public function index()
-	{
         
-        $this->assign('action','index');
-        //$this->_initPageData(date("Y"));
-        $this->_getPageData();
-		$this->display();
-	}
-    
-    
+    }
     
     private function _addRules(){
         
         //$this->form_validation->set_rules('year', '年份', 'required|integer');
-        $this->form_validation->set_rules('master_serial', '编号', 'required|numeric');
-        $this->form_validation->set_rules('name', '项目名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
+        //自动生成
+        //$this->form_validation->set_rules('master_serial', '总编号', 'required|numeric');
+        //$this->form_validation->set_rules('region_serial', '分编号', 'required|numeric');
+        $this->form_validation->set_rules('region_name', '区域', 'required');
+        $this->form_validation->set_rules('name', '单位名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
+        
+        
+        if(!empty($_POST['contacter'])){
+            $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
+        }else{
+            $_POST['contacter'] = '';
+        }
+        
+        if(!empty($_POST['contacter_mobile'])){
+            $this->form_validation->set_rules('contacter_mobile', '联系人号码', 'trim|numeric|min_length[4]|max_length[15]');
+        }else{
+            $_POST['contacter_mobile'] = '';
+        }
+        
+        if(!empty($_POST['contacter_tel'])){
+            $this->form_validation->set_rules('contacter_tel', '联系人座机', 'trim|numeric|min_length[4]|max_length[15]');
+        }else{
+            $_POST['contacter_tel'] = '';
+        }
+        
         $this->form_validation->set_rules('pm', '作业组负责人', 'trim|required|callback_checkname');
-        $this->form_validation->set_rules('fee_type', '收费情况', 'required|integer|greater_than[0]|less_than[5]');
-        $this->form_validation->set_rules('has_doc', '成果资料', 'required|integer|less_than[2]');
         
         if(!empty($_POST['descripton'])){
             $this->form_validation->set_rules('descripton', '备注', 'trim|max_length[300]|htmlspecialchars');
         }else{
             $_POST['descripton'] = isset($_POST['descripton'])  == true ? trim($_POST['descripton']) : '';
         }
+        
+        if(!empty($_POST['file_id'])){
+            $this->form_validation->set_rules('file_id[]', '图件文档', 'required|is_natural_no_zero');
+        }
+        
     }
     
     
@@ -56,216 +71,171 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         }
     }
     
-    private function _formatProjectNo($masterSerial){
+    private function _formatProjectNo($year,$masterSerial,$prefix = ''){
         
         if($masterSerial < 1000){
-            $masterSerial = str_pad($masterSerial, 4,'0', STR_PAD_LEFT);
+            $masterSerial = str_pad($masterSerial, 3,'0', STR_PAD_LEFT);
         }
-
-        return $masterSerial;
+        
+        return $prefix.$year.$masterSerial;
     }
-    
     
     
     /**
-     * 删除 
+     *  基本信息
      */
-    public function delete(){
-        if($this->isPostRequest() && !empty($_POST['delete_id'])){
-            $message = array();
-            $reload = 0;
-            
-            $successCnt = 0;
-            $failedCnt = 0;
-            
-            foreach($_POST['delete_id'] as $val){
-                $flag = $this->Taizhang_Model->updateByWhere(
-                    array(
-                        'status' => '已删除',
-                        'updatetime' => time(), 
-                        'updator' => $this->_userProfile['name']
-                    ),
-                    array(
-                        'id' => $val
-                    )
-                );
-                
-                if($flag){
-                    $successCnt++;
-                }else{
-                    $failedCnt++;
-                }
-            }
-            
-            if($successCnt){
-                $reload = 1;
-            }
-            
-            if($successCnt){
-                $message[] = '<p class="success">'.$successCnt.'个记录被删除成功</p>';
-            }
-            
-            if($failedCnt){
-                $message[] = '<p class="failed">'.$failedCnt.'个记录被删除失败</p>';
-            }
-            $this->assign('reload',$reload);
-            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
-            $this->display('showmessage','common');
-            
-        }else{
-            $this->assign('message','删除失败参数错误');
-            $this->display('showmessage','common');
-        }
-    }
-    
-    public function fee(){
+    public function add(){
         
-        $id = (int)gpc('id','GP',0);
+        $year = date("Y");
         
-        if(empty($id)){
-            die('参数错误');
-        }
-        
-        $info = $this->Taizhang_Model->queryById($id);
-        
-        if(!$info){
-            die('找不到项目');
-        }
-        
-        if($this->isPostRequest() && !empty($_POST['id'])){
-            
-            $this->form_validation->set_rules('complete_time', '项目完成时间', 'required|valid_date');
-            $this->form_validation->set_rules('get_doc', '成果资料领取', 'required|is_natural|less_than[2]');
-            $this->form_validation->set_rules('get_doctime', '成果资料领取时间', 'required|valid_date');
-            
-            if(!empty($_POST['get_owner'])){
-                $this->form_validation->set_rules('get_owner', '成果资料领取人', 'max_length[20]');
-            }else{
-                $_POST['get_owner'] = '';
-            }
-            
-            if(!empty($_POST['owner_tel'])){
-                $this->form_validation->set_rules('owner_tel', '成果资料领取人联系号码', 'numeric_dash|max_length[20]');
-            }else{
-                $_POST['owner_tel'] = '';
-            }
-            
-            $this->form_validation->set_rules('kh_amount', '考核金额', 'required|numeric');
-            $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
-            $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
-            $this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
-            $this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
-            $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural|less_than[5]');
-            
-            if(!empty($_POST['remark'])){
-                $this->form_validation->set_rules('remark', '备注', 'max_length[500]');
-            }else{
-                $_POST['remark'] = '';
-            }
-            
-            if($this->form_validation->run()){
-                $now = time();
-                $data = array(
-                    'complete_time' => $_POST['complete_time'],
-                    'get_doc' => $_POST['get_doc'],
-                    'get_doctime' => $_POST['get_doctime'],
-                    'get_owner' => $_POST['get_owner'],
-                    'owner_tel' => $_POST['owner_tel'],
-                    'kh_amount' => $_POST['kh_amount'],
-                    'ys_amount' => $_POST['ys_amount'],
-                    'ss_amount' => $_POST['ss_amount'],
-                    'is_owed' => $_POST['is_owed'],
-                    'is_gov' => $_POST['is_gov'],
-                    'collect_date' => date("Y-m-d"),
-                    'fee_type' => $_POST['fee_type'],
-                    'remark' => $_POST['remark'],
-                    'updator' => $this->_userProfile['name'],
-                    'updatetime' => $now
-                );
-                $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id']));
-                if($return){
-                    $this->sendFormatJson('success', array('text' => '保存成功'));
-                }else{
-                    $this->sendFormatJson('failed', array('text' => '保存失败'));
-                }
-            }else{
-                $message = strip_tags(validation_errors());
-                $this->sendFormatJson('failed', array('text' => $message));
-            }
-            
-        }else{
-            $this->assign('info',$info);
-            $this->display();
-        }
-    }
-    
-    public function add()
-	{
         $this->assign('action','add');
+        $this->_initPageData($year);
+        
+        
         if($this->isPostRequest()){
-            
+            $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             if($this->form_validation->run()){
                 $_POST['year'] = date("Y");
                 $_POST['month'] = date("m");
-                $_POST['contacter_tel'] = '';
-                $_POST['category'] = '放线竣工登记';
-                $_POST['project_no'] = '';
-                $_POST['region_code'] = '';
-                $_POST['region_name'] = '';
-                $_POST['region_serial'] = 0;
-                $_POST['contacter'] = '';
-                $_POST['contacter_mobile'] = '';
-                $_POST['total_area'] = 0;
-                $_POST['churan_area'] = 0;
+                $_POST['category'] = TAIZHANG_FG;
                 $_POST['user_id'] = $this->_userProfile['id'];
                 $_POST['creator'] = $this->_userProfile['name'];
-                $_POST['project_no'] = $this->_formatProjectNo($_POST['master_serial']);
-                $insertid = $this->Taizhang_Model->add($_POST);
-                $this->sendFormatJson('success', array('text' => '创建成功'));
+                $_POST['total_area'] = 0;
+                $_POST['churan_area'] = 0;
+                $_POST['sendor_id'] = $_POST['user_id'] ;
+                $_POST['sendor'] = $_POST['creator'];
+        
+                $insertid = $this->_op($_POST['year'],'add');
+                $info = $this->Taizhang_Model->queryById($insertid);
+                
+                $message = '操作成功';
+                $feed = 'success';
+                $this->assign('feed',$feed);
+                //$this->sendFormatJson('success', array('text' => '创建成功'));
             }else{
-                //$message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
-                $message = strip_tags(validation_errors());
-                $this->sendFormatJson('failed', array('text' => $message));
+                $info = $_POST;
+                $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                //$message = strip_tags(validation_errors());
             }
+            
+            if($info['file_id']){
+                $this->assign('files',$this->_getFiles($info['file_id']));
+            }
+            
+            $this->assign('info',$info);
+            $this->assign('message',$message);
         }else{
-            $this->sendFormatJson('failed', array('text' => '参数错误'));
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
-		
-	}
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->_getStep($info);
+        $this->display();
+    }
+    
+    
+    private function _op($year,$action = 'add'){
+         // add
+        
+
+        $region_code = $this->Region_Model->getList(array(
+            'select' => 'code',
+            'where' => array(
+                'year' => $year,
+                'name' => $_POST['region_name'],
+                'status' => '正常'
+            )
+        ));
+
+        if($region_code['data'][0]['code']){
+            $_POST['region_code'] = $region_code['data'][0]['code'];
+        }else{
+            $_POST['region_code'] = '';
+        }
+        
+        if($action == 'add'){
+            $master_serial = $this->Taizhang_Model->getCount(array(
+                'where' => array(
+                    'year' => $year,
+                    'category' => TAIZHANG_FG
+                )
+            ));
+            
+            $_POST['master_serial'] = $master_serial ? $master_serial + 1 : 1;
+            $_POST['region_serial'] = 0;
+            $offset = config_item('offset_'.$year);
+            if(!empty($offset)){
+                $_POST['master_serial'] += (int)$offset['FG_TOTAL'];
+            }
+
+            $_POST['project_no'] = $this->_formatProjectNo($year,$_POST['master_serial']);
+        }
+        
+        $project_type = $this->Project_Type_Model->queryById($_POST['type_id']);
+        
+        $_POST['ptype_id'] = $project_type['id'];
+        $_POST['ptype_name'] = $project_type['name'];
+        $_POST['pcate_name'] = $project_type['cate_name'];
+        $_POST['weight'] = $project_type['weight'];
+        
+        if(!empty($_POST['file_id'])){
+            $_POST['files'] = implode(',',$_POST['file_id']);
+        }
+        
+        if($action == 'add'){
+            $insertid = $this->Taizhang_Model->add($_POST);
+            return $insertid;
+        }else{
+            $rows = $this->Taizhang_Model->update($_POST);
+            return $rows;
+        }
+        
+    }
     
     public function edit(){
         $this->assign('action','edit');
      
         if($this->isPostRequest() && !empty($_POST['id'])){
             $this->_addRules();
+            $gobackUrl = $_POST['gobackUrl'];
+            $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_POST['id'])));
+            
             if($this->form_validation->run()){
-                $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_POST['id'])));
-                
-                $_POST['contacter_tel'] = '';
-                $_POST['region_code'] = '';
-                $_POST['region_name'] = '';
-                $_POST['region_serial'] = 0;
-                $_POST['contacter'] = '';
-                $_POST['contacter_mobile'] = '';
+                $_POST['updator'] = $this->_userProfile['name'];
+                $_POST['id'] = $info['id'];
                 $_POST['total_area'] = 0;
                 $_POST['churan_area'] = 0;
-                $_POST['updator'] = $this->_userProfile['name'];
-                $_POST['project_no'] = $this->_formatProjectNo($_POST['master_serial']);
-                $this->Taizhang_Model->update($_POST);
-                $this->sendFormatJson('success', array('text' => '修改成功'));
+                
+                $affectRow = $this->_op($info['year'],'edit');
+                
+                $this->_cleanFile($info['files'],$_POST['file_id']);
+                
+                
+                $message = '操作成功';
+                
+                $info = $this->Taizhang_Model->getById(array('where' => array('id' => $info['id'])));
+                //$this->sendFormatJson('success', array('text' => '修改成功'));
             }else{
-                $message = strip_tags(validation_errors());
-                $this->sendFormatJson('failed', array('text' => $message));
+                $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                //$this->sendFormatJson('failed', array('text' => $message));
             }
-        }else{
-            $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_GET['id'])));
-            //$this->_initPageData($info['year']);
             
-            $this->assign('info',$info);
-            $this->display('edit');
+            $this->assign('message',$message);
+            
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
+            $info = $this->Taizhang_Model->getById(array('where' => array('id' => $_GET['id'])));
         }
         
+        $this->_initPageData($info['year']);
+        if($info['files']){
+            $this->assign('files',$this->_getFiles($info['files']));
+        }
+        
+        $this->_getStep($info);
+        $this->assign('info',$info);
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->display('add');
     }
     
     private function _initPageData($addYear){
@@ -273,70 +243,314 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         /**
          * 区域 
          */
-        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => $addYear),'order' => 'displayorder DESC ,createtime ASC'));
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => $addYear , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('regionList',$regionList['data']);
         
-        /**
-         * 项目性质 
-         */
-        $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
-        $this->assign('natureList',$natureList['data']);
         
-        //$this->assign('yearList',yearList());
-        //$this->assign('monthList',range(1,12));
+        $projectTypeList = $this->Project_Type_Model->getList(array(
+           'where_in' => array(
+               array('key' => 'cate_name','value' => array('竣工测量','土地'))
+           ),
+           'order' => 'createtime ASC'
+        ));
+        
+        $this->assign('projectTypeList',$projectTypeList['data']);
+       
         
     }
     
-    
-    private function _getPageData(){
-        try {
+    /**
+     * 
+     */
+    public function check(){
+        $id = (int)gpc('id','GP',0);
+        
+        $info = $this->Taizhang_Model->queryById($id);
+        
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            $gobackUrl = $_POST['gobackUrl'];
+            if(!empty($_POST['zc_yj'])){
+                $this->form_validation->set_rules('zc_yj', '自查意见', 'max_length[300]');
+            }else{
+                $_POST['zc_yj'] = '合格';
+            }
+            if(!empty($_POST['zc_remark'])){
+                $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'max_length[300]');
+            }else{
+                $_POST['zc_remark'] = '合格';
+            }
+
+            $this->form_validation->set_rules('sendor', '发送给初审', 'required|is_natural_no_zero');
             
-            if(empty($_GET['page'])){
-                $_GET['page'] = 1;
+            if($this->form_validation->run()){
+                $now = time();
+                $op = '提交初审';
+                $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                $data = array(
+                    'sendor_id' => $sendorInfo['id'],
+                    'sendor' => $sendorInfo['name'],
+                    'status' => '已'.$op,
+                    'updator' => $this->_userProfile['name'],
+                    'updatetime' => $now,
+                    'zc_time' => $now,
+                    'zc_name' => $this->_userProfile['name'],
+                    'zc_yj' => $_POST['zc_yj'],
+                    'zc_remark' => $_POST['zc_remark']
+                );
+                $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
+                
+                if($return){
+                    $message = '操作成功';
+                    $this->_addPm($info,$sendorInfo,2);
+                    $info = $this->Taizhang_Model->queryById($id);
+                }else{
+                    $message = '操作失败';
+                }
+                
+                $info = $this->Taizhang_Model->getById(array('where' => array('id' => $info['id'])));
+                //$this->sendFormatJson('success', array('text' => '修改成功'));
+            }else{
+                $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                //$this->sendFormatJson('failed', array('text' => $message));
             }
             
-            //$condition['select'] = 'a,b';
+            $this->assign('message',$message);
+        }else{
             
-            $condition['order'] = "createtime DESC";
-            $condition['pager'] = array(
-                'page_size' => config_item('page_size'),
-                'current_page' => $_GET['page'],
-                'query_param' => url_path('project_ch','index')
-            );
-            
-            if(!empty($_GET['project_no'])){
-                $condition['like']['project_no'] = $_GET['project_no'];
-            }
-            
-            if(!empty($_GET['name'])){
-                $condition['like']['name'] = $_GET['name'];
-            }
-            
-            $condition['where'] = array(
-                'category' => '放线竣工登记',
-                'status !=' => '已删除'
-            );
-            
-            if(!empty($_GET['status'])){
-                $condition['where']['status'] = $_GET['status'];
-            }
-            
-            if(!empty($_GET['sdate'])){
-                $condition['where']['createtime >='] = strtotime($_GET['sdate']);
-            }
-            
-            if(!empty($_GET['edate'])){
-                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
-            }
-            
-            $data = $this->Taizhang_Model->getList($condition);
-            $this->assign('page',$data['pager']);
-            $this->assign('data',$data);
-            
-        }catch(Exception $e){
-            //@todo error code here
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
         }
         
+        if($info['files']){
+            $this->assign('files',$this->_getFiles($info['files']));
+        }
+        $this->_getSendorList(array(
+            'ch_cs' => 'y'
+        ));
+        
+        $this->_getStep($info);
+        $this->_getProjectFault($info);
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->assign('info',$info);
+        $this->display();
+    }
+    
+    
+    /**
+     * 初审
+     */
+    public function first_sh(){
+        $id = (int)gpc('id','GP',0);
+        
+        $info = $this->Taizhang_Model->queryById($id);
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            $gobackUrl = $_POST['gobackUrl'];
+            if($_POST['workflow'] == '退回'){
+                
+                //$this->form_validation->set_rules('reason', '退回原因', 'required|min_length[3]|htmlspecialchars');
+                if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
+                    $this->form_validation->set_rules('fault[]', '缺陷信息', 'required');
+                }
+                if($this->form_validation->run()){
+                    $d = $this->_addProjectFault($info,$_POST,0);
+                    
+                    $sendorInfo = $this->User_Model->queryById($info['zc_name'],'name');
+                    $now = time();
+                    $data = array(
+                        'cs_time' => 0,
+                        'cs_name' => '',
+                        'cs_yj' => '',
+                        'cs_remark' => '',
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'fault_cnt1' => (int)$d['fault_cnt1'],
+                        'total_fault' => (int)$d['total_fault'],
+                        'status' => '新增',
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now
+                    );
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
+                    if($return){
+                        $this->_addPm($info,$sendorInfo,2);
+                        $message = '操作成功';
+                        $info = $this->Taizhang_Model->queryById($id);
+                    }else{
+                        $message = '操作失败';
+                    }
+                    
+                }else{
+                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                }
+                
+            }else{
+                if(!empty($_POST['cs_yj'])){
+                    $this->form_validation->set_rules('cs_yj', '初审意见', 'max_length[300]');
+                }else{
+                    $_POST['cs_yj'] = '按规范要求测量，报告符合要求。';
+                }
+                if(!empty($_POST['cs_remark'])){
+                    $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'max_length[300]');
+                }else{
+                    $_POST['cs_remark'] = '合格';
+                }
+
+                $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                if($this->form_validation->run()){
+                    $op1 = '通过初审';
+                    $op2 = '提交复审';
+
+                    $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                    $now = time();
+                    $data = array(
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'status' => '已'.$op2,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'cs_time' => $now,
+                        'cs_name' => $this->_userProfile['name'],
+                        'cs_yj' => $_POST['cs_yj'],
+                        'cs_remark' => $_POST['cs_remark']
+                    );
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
+                    if($return){
+                        $this->_addPm($info,$sendorInfo,2);
+                        $message = '操作成功';
+                        $info = $this->Taizhang_Model->queryById($id);
+                    }else{
+                        $message = '操作失败';
+                    }
+
+                }else{
+                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                }
+            }
+            
+            $this->assign('message',$message);
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
+        }
+        
+        $this->_getStep($info);
+        $this->_getSendorList(array(
+            'ch_fs' => 'y'
+        ));
+        if(!empty($info['files'])){
+            $this->assign('files',$this->_getFiles($info['files']));
+        }
+        
+        $this->_getProjectFault($info);
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->assign('info',$info);
+        $this->display();
+    }
+    
+    /**
+     * 初审
+     */
+    public function second_sh(){
+        $id = (int)gpc('id','GP',0);
+        
+        $info = $this->Taizhang_Model->queryById($id);
+        if($this->isPostRequest() && !empty($_POST['id'])){
+            $gobackUrl = $_POST['gobackUrl'];
+            if($_POST['workflow'] == '退回'){
+                
+                //$this->form_validation->set_rules('reason', '退回原因', 'required|min_length[3]|htmlspecialchars');
+                if($info['status'] == '已提交初审' || $info['status'] == '已提交复审'){
+                    $this->form_validation->set_rules('fault[]', '缺陷信息', 'required');
+                }
+                if($this->form_validation->run()){
+                    $d = $this->_addProjectFault($info,$_POST,0);
+                    
+                    $sendorInfo = $this->User_Model->queryById($info['cs_name'],'name');
+                    $now = time();
+                    $data = array(
+                        'fs_time' => 0,
+                        'fs_name' => '',
+                        'fs_yj' => '',
+                        'fs_remark' => '',
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'fault_cnt2' => (int)$d['fault_cnt2'],
+                        'total_fault' => (int)$d['total_fault'],
+                        'status' => '已提交初审',
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now
+                    );
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
+                    if($return){
+                        $this->_addPm($info,$sendorInfo,2);
+                        $message = '操作成功';
+                        
+                        $info = $this->Taizhang_Model->queryById($id);
+                    }else{
+                        $message = '操作失败';
+                    }
+                    
+                }else{
+                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                }
+                
+            }else{
+                if(!empty($_POST['fs_yj'])){
+                    $this->form_validation->set_rules('fs_yj', '复审意见', 'max_length[300]');
+                }else{
+                    $_POST['fs_yj'] = '经查资料齐全，合格。';
+                }
+                if(!empty($_POST['fs_remark'])){
+                    $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'max_length[300]');
+                }else{
+                    $_POST['fs_remark'] = '合格';
+                }
+
+                $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                if($this->form_validation->run()){
+                    $op = '通过复审';
+                    
+                    $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                    $now = time();
+                    $data = array(
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'status' => '已'.$op,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'fs_time' => $now,
+                        'fs_name' => $this->_userProfile['name'],
+                        'fs_yj' => $_POST['fs_yj'],
+                        'fs_remark' => $_POST['fs_remark']
+                    );
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
+                    if($return){
+                        $this->_addPm($info,$sendorInfo,2);
+                        $message = '操作成功';
+                        $info = $this->Taizhang_Model->queryById($id);
+                    }else{
+                        $message = '操作失败';
+                    }
+
+                }else{
+                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                }
+            }
+            
+            $this->assign('message',$message);
+        }else{
+            $gobackUrl = $_SERVER['HTTP_REFERER'];
+        }
+        
+        $this->_getStep($info);
+        $this->_getSendorList(array(
+            'ch_fee' => 'y'
+        ));
+        if(!empty($info['files'])){
+            $this->assign('files',$this->_getFiles($info['files']));
+        }
+        
+        $this->_getProjectFault($info);
+        $this->assign('info',$info);
+        $this->assign('gobackUrl',$gobackUrl);
+        $this->display();
     }
     
 }

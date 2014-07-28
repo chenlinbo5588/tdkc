@@ -1,4 +1,4 @@
-<tr>
+{*<tr>
     <td>宗地资料打印</td>
     <td>
         <div><a class="link_btn" href="{url_path('printer','kcdj','id=')}{$info['id']}" target="_blank">打印土地勘测定界报告</a></div>
@@ -11,3 +11,4 @@
         <div><a class="link_btn" href="{url_path('printer','check','id=')}{$info['id']}" target="_blank">打印审核表</a></div>
     </td>
 </tr>
+*}

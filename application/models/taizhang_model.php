@@ -22,8 +22,12 @@ class Taizhang_Model extends TZ_Model {
             'region_name' => $param['region_name'],
             'master_serial' => $param['master_serial'],
             'region_serial' => $param['region_serial'],
+            'ptype_id' => $param['ptype_id'],
+            'ptype_name' => $param['ptype_name'],
+            'pcate_name' => $param['pcate_name'],
+            'weight' => $param['weight'],
             'name' => $param['name'],
-            'nature' => $param['nature'],
+            'nature' => isset($param['nature']) ? $param['nature'] : '',
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
             'contacter_tel' => $param['contacter_tel'],
@@ -32,14 +36,22 @@ class Taizhang_Model extends TZ_Model {
             'descripton' => $param['descripton'],
             'total_area' => $param['total_area'],
             'churan_area' => $param['churan_area'],
-            'fee_type' => $param['fee_type'],
-            'has_doc' => $param['has_doc'],
+            'sendor_id' => $param['sendor_id'],
+            'sendor' => $param['sendor'],
             'creator' => $param['creator'],
             'updator' => $param['creator'],
             'createtime' => $now,
             'updatetime' => $now
         );
-       
+        
+        if(!empty($param['files'])){
+            $data['files'] = $param['files'];
+        }
+        
+        if(!empty($param['complete_time'])){
+            $data['complete_time'] = $param['complete_time'];
+        }
+        
         $this->db->insert($this->_tableName, $data);
         return $this->db->insert_id();
     }
@@ -68,26 +80,34 @@ class Taizhang_Model extends TZ_Model {
         $data = array(
             'region_code' => strtoupper($param['region_code']),
             'region_name' => $param['region_name'],
-            'master_serial' => $param['master_serial'],
-            'region_serial' => $param['region_serial'],
+            'ptype_id' => $param['ptype_id'],
+            'ptype_name' => $param['ptype_name'],
+            'pcate_name' => $param['pcate_name'],
+            'weight' => $param['weight'],
             'name' => $param['name'],
-            'nature' => $param['nature'],
+            'nature' => isset($param['nature']) ? $param['nature'] : '',
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
+            'contacter_tel' => $param['contacter_tel'],
             'address' => $param['address'],
-            'descripton' => $param['descripton'],
             'pm' => $param['pm'],
             'descripton' => $param['descripton'],
-            'total_area' => $param['total_area'],
-            'churan_area' => $param['churan_area'],
-            'fee_type' => $param['fee_type'],
-            'has_doc' => $param['has_doc'],
+            'total_area' => isset($param['total_area']) ? $param['total_area'] : 0 ,
+            'churan_area' => isset($param['churan_area']) ? $param['churan_area'] : 0,
             'updator' => $param['updator'],
             'updatetime' => time()
         );
         
         if($param['project_no']){
             $data['project_no'] = $param['project_no'];
+        }
+        
+        if(!empty($param['files'])){
+            $data['files'] = $param['files'];
+        }
+        
+         if(!empty($param['complete_time'])){
+            $data['complete_time'] = $param['complete_time'];
         }
         
         $where = array(

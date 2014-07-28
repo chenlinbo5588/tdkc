@@ -5,3 +5,14 @@
 #oparea {
    position: absolute;
 }
+
+.taizhang_detail .sidelist {
+    float:left;
+}
+
+.taizhang_detail .mainarea  {
+    margin:5px;
+    display: inline;
+}
+
+

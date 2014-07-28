@@ -43,5 +43,23 @@ define('TZ_TPL_PATH',APPPATH.'templates/');
 define('PHPExcel_PATH',dirname(APPPATH).'/Classes/');
 
 
+
+define('OUR_COMPANY_NAME','慈溪市土地勘测规划设计院有限公司');
+define('CH_RCZD','日常宗地');
+define('CH_JGCL','竣工测量');
+define('CH_FCCH','房产测绘');
+
+define('CH_WFYD','违法用地');
+
+
+
+define('TAIZHANG_TD','土地勘测');
+define('TAIZHANG_FG','放线竣工');
+define('TAIZHANG_HOUSE','房产项目');
+define('TAIZHANG_WF','违法用地勘测');
+define('TAIZHANG_OTHER','土方山塘地形评估控制');
+define('TAIZHANG_PERSON','个人建房');
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

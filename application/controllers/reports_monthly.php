@@ -7,14 +7,14 @@ class reports_monthly extends TZ_Admin_Controller {
     
     public function __construct(){
         parent::__construct();
-        $this->load->model('Project_Model');
+        $this->load->model('Taizhang_Model');
     }
     
     private function _report_monthly(){
         
         require_once PHPExcel_PATH.'PHPExcel.php';
         
-        $projectList = $this->Project_Model->getList(array(
+        $projectList = $this->Taizhang_Model->getList(array(
             'where' => array(
                 'createtime >= ' => strtotime($_POST['sdate']),
                 'createtime < ' => strtotime($_POST['edate']) + 86400
@@ -79,8 +79,8 @@ class reports_monthly extends TZ_Admin_Controller {
         $workerList = array();
         
         foreach($projectList['data'] as $p){
-            $workerProjectList[$p['worker_id']]['list'][] = $p;
-            $workerList[] = $p['worker_id'];
+            $workerProjectList[$p['pm']]['list'][] = $p;
+            $workerList[] = $p['pm'];
         }
         
         $workerList = array_unique($workerList);
@@ -116,15 +116,15 @@ class reports_monthly extends TZ_Admin_Controller {
                 }
                 
                 $levelRate[$levelText]++;
-                $totalWeight += $p['score'];
+                $totalWeight += $p['weight'];
                 
                 $current_row = $i + $row_start;
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$current_row,$i + 1);
                 $objPHPExcel->getActiveSheet()->setCellValue('B'.$current_row,$p['project_no']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C'.$current_row, $p['name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row, $p['type']);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['worker']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row, $p['ptype_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['pm']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $levelText);
                 $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, $p['weight']);
                 $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, "{$p['fault_cnt1']}+{$p['fault_cnt2']}={$p['total_fault']}");

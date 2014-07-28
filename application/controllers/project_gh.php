@@ -17,34 +17,6 @@ class project_gh extends TZ_Admin_Controller {
         $this->load->helper('number');
     }
     
-    private function _addPm($info,$sendorInfo){
-            
-        $this->User_Event_Model->updateByWhere(array(
-            'isnew' => 0,
-            'status' => '已处理',
-            'updator' => $this->_userProfile['name'],
-            'updatetime' => time()
-        ),array('user_id' => $this->_userProfile['id'],'project_type' => 1, 'project_id' => $info['id']));
-        
-        
-        $this->User_Event_Model->deleteByWhere(array(
-            'user_id' => $sendorInfo['id'],
-            'project_type' => 1,
-            'project_id' => $info['id']
-        ));
-        
-        if($sendorInfo['id'] != $this->_userProfile['id']){
-            $this->User_Event_Model->add(array(
-                'project_type' => 1,
-                'project_id' => $info['id'],
-                'user_id' => $sendorInfo['id'],
-                'title' => cut($info['name'],100),
-                'url' => url_path('project_gh','index','name='.urlencode($info['name'])),
-                'creator' => $this->_userProfile['name']
-            ));
-        }
-    }
-    
     protected function _addProjectLog($type,$project_id,$action,$content,$userData = array()){
         //记录日志
         $this->Project_Gh_Mod_Model->add(
@@ -680,7 +652,7 @@ class project_gh extends TZ_Admin_Controller {
                 if($return){
                     $this->_addProjectLog('workflow', $info['id'],$op,"{$this->_userProfile['name']} {$op} 至 {$lastUser['creator']},{$op}原因:<span class=\"notice\">{$_POST['reason']}</span>",$data);
                     $lastUser['id'] = $lastUser['user_id'];
-                    $this->_addPm($info,$lastUser);
+                    $this->_addPm($info,$lastUser,1);
                     $this->assign('reload',1);
                     $this->assign('message','<div class="pd20 success">'.$op.'成功</div>');
                 }else{
@@ -757,24 +729,6 @@ class project_gh extends TZ_Admin_Controller {
     }
     
     
-    private function _getFiles($param){
-        
-        if(is_string($param)){
-            $param = explode(',',$param);
-        }
-        
-        $this->load->model('Attachment_Model');
-        $hasFiles = $this->Attachment_Model->getList(array(
-            'select' => 'id,file_name,file_size',
-            'where_in' => array(
-                array('key' => 'id', 'value' => $param)
-            )
-        ));
-        
-        return $hasFiles['data'];
-        
-    }
-    
     private function _doWorkFlow($info,$param, $op, $gobackStatus, $lastStatus){
         $eventReaded = false;
         $pm = false;
@@ -850,7 +804,7 @@ class project_gh extends TZ_Admin_Controller {
             if($return){
                 $this->_addProjectLog('workflow', $info['id'],$op,"{$this->_userProfile['name']} {$op} 至 {$lastUser['creator']},{$op}原因:<span class=\"notice\">{$param['reason']}</span>",$data);
                 $lastUser['id'] = $lastUser['user_id'];
-                $this->_addPm($info,$lastUser);
+                $this->_addPm($info,$lastUser,1);
                 
                 $eventReaded = true;
             }
@@ -1112,7 +1066,7 @@ class project_gh extends TZ_Admin_Controller {
 
         
         if($pm && $sendorInfo['id']){
-            $this->_addPm($info,$sendorInfo);
+            $this->_addPm($info,$sendorInfo,1);
         }
         
         return $message;
@@ -1178,7 +1132,7 @@ class project_gh extends TZ_Admin_Controller {
                 $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已发送','sendor_id' => $this->_userProfile['id']));
                 if($return){
                     $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 至 {$sendorInfo['name']}",$data);
-                    $this->_addPm($info,$sendorInfo);
+                    $this->_addPm($info,$sendorInfo,1);
                     $this->assign('reload',1);
                     $this->assign('message','<div class="pd20 success">'.$op.'成功</div>');
                 }else{
@@ -1325,7 +1279,7 @@ class project_gh extends TZ_Admin_Controller {
                 if($return){
                     $this->_addProjectLog('workflow',  $info['id'],$op1,"{$this->_userProfile['name']} {$op1}",$data);
                     $this->_addProjectLog('workflow',  $info['id'],$op2,"{$this->_userProfile['name']} {$op2} 并流转至 {$sendorInfo['name']}",$data);
-                    $this->_addPm($info,$sendorInfo);
+                    $this->_addPm($info,$sendorInfo,1);
                     $this->assign('reload',1);
                     $this->assign('message','<div class="pd20 success">'.$op2.'成功</div>');
                 }else{
@@ -1430,7 +1384,7 @@ class project_gh extends TZ_Admin_Controller {
                 $return = $this->Project_Gh_Model->updateByWhere($data,array('id' => $info['id'], 'status' => $info['status'],'sendor_id' => $this->_userProfile['id']));
                 if($return){
                     $this->_addProjectLog('workflow',  $info['id'],$op,"{$this->_userProfile['name']} {$op} 并流转至 {$sendorInfo['name']}",$data);
-                    $this->_addPm($info,$sendorInfo);
+                    $this->_addPm($info,$sendorInfo,1);
                     $this->assign('reload',1);
                     $this->assign('message','<div class="pd20 success">'.$op.'成功</div>');
                 }else{
@@ -1518,7 +1472,7 @@ class project_gh extends TZ_Admin_Controller {
                     $this->_addProjectLog('workflow',  $info['id'],$op2,"{$this->_userProfile['name']} {$op2} 并流转至 {$sendorInfo['name']}",$data);
                     $this->_addProjectLog('workflow',  $info['id'],$op1,"{$this->_userProfile['name']} {$op1}",$data);
                     
-                    $this->_addPm($info,$sendorInfo);
+                    $this->_addPm($info,$sendorInfo,1);
                     $this->assign('reload',1);
                     $this->assign('message','<div class="pd20 success">'.$op2.'成功</div>');
                 }else{
@@ -1599,7 +1553,7 @@ class project_gh extends TZ_Admin_Controller {
                 if($return){
                     $this->_addProjectLog('workflow',  $info['id'],'项目提交',"{$this->_userProfile['name']} 项目提交 并流转至 {$sendorInfo['name']}",$data);
                     $this->_addProjectLog('workflow',  $info['id'],$op1,"{$this->_userProfile['name']} {$op1}",$data);
-                    $this->_addPm($info,$sendorInfo);
+                    $this->_addPm($info,$sendorInfo,1);
                     $this->assign('reload',1);
                     $this->assign('message','<div class="pd20 success">通过复审成功</div>');
                 }else{
@@ -2214,7 +2168,7 @@ class project_gh extends TZ_Admin_Controller {
         
         if($event){
             foreach($event as $value){
-                $this->_addPm($value,$user);
+                $this->_addPm($value,$user,1);
             }
         }
         
@@ -2264,15 +2218,6 @@ class project_gh extends TZ_Admin_Controller {
             ));
             $this->display();
         }
-    }
-    
-    private function _getSendorList($where){
-        $where = array_merge(array('user_id' => $this->_userProfile['id']),$where);
-        $userSendorList = $this->User_Sendor_Model->getList(array(
-            'where' => $where,
-            'order' => 'createtime ASC ,displayorder DESC'
-        ));
-        $this->assign('userSendorList',$userSendorList['data']);
     }
     
     public function _getPageData(){

@@ -80,6 +80,9 @@ class TZ_Controller extends CI_Controller {
         if(ENVIRONMENT == 'production'){
             $this->_smarty->assign('js_compress','min.');
         }
+        
+        $this->assign('tplDir',$this->tplDir);
+        $this->assign('tplName',$this->tplName);
     }
     
     protected function _init_mobile(){

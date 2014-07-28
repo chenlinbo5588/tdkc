@@ -4,7 +4,7 @@ class Printer extends TZ_Controller {
 
     public function __construct(){
         parent::__construct();
-        $this->load->model('Project_Model');
+        $this->load->model('Taizhang_Model');
     }
     
     
@@ -34,7 +34,7 @@ class Printer extends TZ_Controller {
         ));
 
         
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
         $totalPage = ceil(count($jzList['data'])/10); //总页数
         if($totalPage > 1){
             $pageAr = range(1,$totalPage);
@@ -71,7 +71,7 @@ class Printer extends TZ_Controller {
     }
     
     /**
-     * 宗地勘测定界
+     * 勘测定界
      */
     public function kcdj(){
         $id = (int)gpc('id','GP',0);
@@ -80,7 +80,7 @@ class Printer extends TZ_Controller {
             die('参数错误');
         }
         
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
         $this->assign('info',$info);
         $this->load->helper('number');
         $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
@@ -102,7 +102,28 @@ class Printer extends TZ_Controller {
             die('参数错误');
         }
         
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
+        $this->assign('info',$info);
+        $this->load->helper('number');
+        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
+        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $this->assign('dateInfo',$dateInfo);
+        $this->display();
+    }
+    
+    
+    /**
+     * 违法用地勘测定界成果报告 
+     */
+    public function wfzddj(){
+        $id = (int)gpc('id','GP',0);
+       
+        if(!$id){
+            die('参数错误');
+        }
+        
+        $info = $this->Taizhang_Model->queryById($id);
         $this->assign('info',$info);
         $this->load->helper('number');
         $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
@@ -127,7 +148,7 @@ class Printer extends TZ_Controller {
         
         
         $this->load->helper('number');
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
         
         if(!$info){
             die('找不到记录');
@@ -174,7 +195,7 @@ class Printer extends TZ_Controller {
         
         
         $this->load->helper('number');
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
         
         if(!$info){
             die('找不到记录');
@@ -221,7 +242,7 @@ class Printer extends TZ_Controller {
         
         
         $this->load->helper('number');
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
         
         if(!$info){
             die('找不到记录');
@@ -272,7 +293,7 @@ class Printer extends TZ_Controller {
             die('参数错误');
         }
         
-        $info = $this->Project_Model->queryById($id);
+        $info = $this->Taizhang_Model->queryById($id);
         
         
         $this->load->model('Project_Fault_Model');
@@ -324,7 +345,7 @@ class Printer extends TZ_Controller {
            die('参数错误');
        }
        
-       $info = $this->Project_Model->queryById($id);
+       $info = $this->Taizhang_Model->queryById($id);
        if(!$info){
             die('找不到记录');
         }

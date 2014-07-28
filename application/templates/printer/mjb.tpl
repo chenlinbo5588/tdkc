@@ -34,7 +34,7 @@
                     {$mjb['content']}
                 {else}
                 <div class="mjb">
-                    <h1 title="将文字清空可删除当前面积分类表" class="center inputarea mjb_title">土地面积分类表</h1>
+                    <h1 title="将文字清空可删除当前面积分类表" class="center inputarea mjb_title">{if $info['category'] == $smarty.const.TAIZHANG_WF}违法用地面积分类表{else}土地面积分类表{/if}</h1>
                     <div  class="unit">面积单位：平方米</div>
                     <table class="border1" style="table-layout: fixed;">
                         <thead>
@@ -257,7 +257,7 @@
         
         <script type="x-my-template" id="mjbTemplate">
             <div class="mjb">
-                <h1 title="将文字清空可删除当前面积分类表" class="center inputarea mjb_title">土地面积分类表</h1>
+                <h1 title="将文字清空可删除当前面积分类表" class="center inputarea mjb_title">{if $info['category'] == $smarty.const.TAIZHANG_WF}违法用地面积分类表{else}土地面积分类表{/if}</h1>
                 <div  class="unit">面积单位：平方米</div>
                 <table class="border1" style="table-layout: fixed;">
                     <thead>
