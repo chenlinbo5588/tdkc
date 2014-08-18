@@ -246,7 +246,7 @@
 
                         <div class="center mjb_lk">
                             <p>慈溪市土地勘测规划设计院有限公司</p>
-                            <p>{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</p>
+                            <p><span class="inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</span></p>
                         </div>
                     </div>
                 </div>
@@ -469,7 +469,7 @@
 
                     <div class="center mjb_lk">
                         <p>慈溪市土地勘测规划设计院有限公司</p>
-                        <p>{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</p>
+                        <p><span class="inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']}日</span></p>
                     </div>
                 </div>
             </div>    

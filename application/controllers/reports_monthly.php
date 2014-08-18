@@ -1,12 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * 项目统计报表
+ * 台账 项目统计报表
  */
 class reports_monthly extends TZ_Admin_Controller {
     
     public function __construct(){
         parent::__construct();
+        $this->load->model('Region_Model');
         $this->load->model('Taizhang_Model');
     }
     
@@ -14,17 +15,49 @@ class reports_monthly extends TZ_Admin_Controller {
         
         require_once PHPExcel_PATH.'PHPExcel.php';
         
-        $projectList = $this->Taizhang_Model->getList(array(
+        $cd = array(
             'where' => array(
                 'createtime >= ' => strtotime($_POST['sdate']),
                 'createtime < ' => strtotime($_POST['edate']) + 86400
              ),
             'where_in' => array(
                 array(
-                    'key' => 'status','value' => array('已通过复审')
+                    'key' => 'status','value' => array('已通过复审','已收费')
                 )
-            )
-        ));
+            ),
+            'order' => 'createtime ASC , category ASC , region_code ASC'
+        );
+        
+        if($_POST['pm']){
+            if(strpos($_POST['pm'],',') !== false){
+                
+                $pmlist = explode(',',$_POST['pm']);
+                $pms = array();
+                foreach($pmlist as $pm){
+                    if(trim($pm) != ''){
+                        $pms[] = $pm;
+                    }
+                }
+                
+                if($pms){
+                    $cd['where_in'][] = array(
+                        'key' => 'pm',
+                        'value' => $pms
+                    );
+                }
+            }else{
+                $cd['where']['pm'] = $_POST['pm'];
+            }
+        }
+        
+        if($_POST['region_name']){
+            $cd['where_in'][] = array(
+                'key' => 'region_name',
+                'value' => $_POST['region_name']
+            );
+        }
+        
+        $projectList = $this->Taizhang_Model->getList($cd);
         
         
         $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_discISAM; 
@@ -141,7 +174,7 @@ class reports_monthly extends TZ_Admin_Controller {
                 $star_worker_row = $current_start;
             }
             
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_start, $excellent_rate);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_start, ($excellent_rate * 100).'%');
             $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_start, $totalWeight);
             $objPHPExcel->getActiveSheet()->setCellValue('L'.$current_start, "");
             $objPHPExcel->getActiveSheet()->mergeCells('I'.$current_start.':I'.$current_end);
@@ -233,6 +266,10 @@ class reports_monthly extends TZ_Admin_Controller {
      */
     public function index(){
         $this->load->helper('download');
+        
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('regionList',$regionList['data']);
+        
         if($this->isPostRequest()){
             $this->form_validation->set_rules('sdate', '登记开始日期', 'required|valid_date');
             $this->form_validation->set_rules('edate', '登记结束日期', 'required|valid_date');

@@ -3,6 +3,16 @@
 
 class Taizhang extends TZ_Admin_Controller {
     
+    public $projectTypeList = array(
+            '土地勘测' => '土地勘测',
+            '房产项目' => '房产项目',
+            '放线竣工' => '放线竣工',
+            '违法用地勘测' => '违法用地勘测',
+            '土方山塘地形评估控制' => '土方山塘地形评估控制',
+            '个人建房' => '个人建房'
+        );
+    
+    
     public function __construct(){
         parent::__construct();
         $this->load->model('Region_Model');
@@ -19,6 +29,8 @@ class Taizhang extends TZ_Admin_Controller {
 	{
         
         $this->assign('action','index');
+        $this->assign('projectTypeList',$this->projectTypeList);
+        
         $this->_getPageData();
 		$this->display();
 	}
@@ -60,8 +72,8 @@ class Taizhang extends TZ_Admin_Controller {
             $this->form_validation->set_rules('kh_amount', '考核金额', 'required|numeric');
             $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
             $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
-            $this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
-            $this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
+            //$this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
+            //$this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
             $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural|less_than[5]');
             
             if(!empty($_POST['remark'])){
@@ -82,8 +94,8 @@ class Taizhang extends TZ_Admin_Controller {
                     'kh_amount' => $_POST['kh_amount'],
                     'ys_amount' => $_POST['ys_amount'],
                     'ss_amount' => $_POST['ss_amount'],
-                    'is_owed' => $_POST['is_owed'],
-                    'is_gov' => $_POST['is_gov'],
+                    //'is_owed' => $_POST['is_owed'],
+                    //'is_gov' => $_POST['is_gov'],
                     'collect_date' => date("Y-m-d"),
                     'fee_type' => $_POST['fee_type'],
                     'remark' => $_POST['remark'],
@@ -170,17 +182,8 @@ class Taizhang extends TZ_Admin_Controller {
      */
     public function statistics(){
         
-        $projectTypeList = array(
-            '土地勘测' => '土地勘测',
-            '房产项目' => '房产项目',
-            '放线竣工' => '放线竣工',
-            '违法用地勘测' => '违法用地勘测',
-            '土方山塘地形评估控制' => '土方山塘地形评估控制',
-            '个人建房' => '个人建房'
-        );
-        
         //$projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
-        $this->assign('projectTypeList',$projectTypeList);
+        $this->assign('projectTypeList',$this->projectTypeList);
         
         $condition = array();
         
@@ -243,15 +246,15 @@ class Taizhang extends TZ_Admin_Controller {
             $condition['pager'] = array(
                 'page_size' => config_item('page_size'),
                 'current_page' => $_GET['page'],
-                'query_param' => url_path('project_ch','index')
+                'query_param' => url_path('taizhang','index')
             );
             
             if(!empty($_GET['project_no'])){
-                $condition['like']['project_no'] = $_GET['project_no'];
+                $condition['like']['project_no'] = trim($_GET['project_no']);
             }
             
             if(!empty($_GET['name'])){
-                $condition['like']['name'] = $_GET['name'];
+                $condition['like']['name'] = trim($_GET['name']);
             }
             
             $condition['where'] = array(
@@ -262,6 +265,10 @@ class Taizhang extends TZ_Admin_Controller {
                 $condition['where']['id'] = $_GET['id'];
             }
             
+            if(!empty($_GET['category'])){
+                $condition['where']['category'] = $_GET['category'];
+            }
+        
             if(!empty($_GET['status'])){
                 $condition['where']['status'] = $_GET['status'];
             }
@@ -272,6 +279,10 @@ class Taizhang extends TZ_Admin_Controller {
             
             if(!empty($_GET['edate'])){
                 $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
+            }
+            
+            if(!empty($_GET['pm'])){
+                $condition['where']['pm'] = trim($_GET['pm']);
             }
             
             $data = $this->Taizhang_Model->getList($condition);

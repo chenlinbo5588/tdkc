@@ -9,7 +9,7 @@
                             <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>镇乡名称</strong><input type="text" name="region_name" value="{$smarty.get.region_name}" placeholder="请输入镇乡名称"/></label>
                             <label><strong>负责人名称</strong><input type="text" name="pm" value="{$smarty.get.pm}" placeholder="请输入项目负责人"/></label>
-                            <label><strong>项目类型</strong>
+                            <label><strong>业务类型</strong>
                                 <select name="category" >
                                     <option value="">全部</option>
                                     {foreach from=$projectTypeList key=key item=item}

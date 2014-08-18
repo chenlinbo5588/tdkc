@@ -1,9 +1,8 @@
 {include file="common/main_header.tpl"}
             <div class="searchform row-fluid">
-                <form action="{url_path('reports_monthly','index')}" method="post" name="searchform" target="post_iframe">
-                    <input type="hidden" value="reports_monthly" name="{config_item('controller_trigger')}"/>
+                <form action="{url_path('reports_work','index')}" method="post" name="searchform" target="post_iframe">
+                    <input type="hidden" value="reports_work" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
-                    
                     <table class="normal">
                         <tr>
                             <td colspan="2">

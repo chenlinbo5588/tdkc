@@ -28,7 +28,7 @@ class reports_fault extends TZ_Admin_Controller {
              ),
             'where_in' => array(
                 array(
-                    'key' => 'status','value' => array('已通过复审')
+                    'key' => 'status','value' => array('已通过复审','已收费')
                 )
             )
         ));
@@ -73,7 +73,7 @@ class reports_fault extends TZ_Admin_Controller {
              ),
             'where_in' => array(
                 array(
-                    'key' => 'status','value' => array('已通过复审')
+                    'key' => 'status','value' => array('已通过复审','已收费')
                 )
             )
         ));

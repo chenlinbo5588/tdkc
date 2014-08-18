@@ -21,8 +21,8 @@ class Taizhang_Person extends TZ_Admin_Controller {
         //$this->form_validation->set_rules('master_serial', '总编号', 'required|numeric');
         //$this->form_validation->set_rules('region_serial', '分编号', 'required|numeric');
         $this->form_validation->set_rules('region_name', '区域', 'required');
-        $this->form_validation->set_rules('name', '名称', 'trim|required|min_length[3]|max_length[200]|htmlspecialchars');
-        $this->form_validation->set_rules('address', '土地坐落', 'trim|required|min_length[2]|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('name', '名称', 'trim|required|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('address', '土地坐落', 'trim|required|max_length[200]|htmlspecialchars');
         
         if(!empty($_POST['contacter'])){
             $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
@@ -127,6 +127,18 @@ class Taizhang_Person extends TZ_Admin_Controller {
             $this->assign('message',$message);
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
+            
+                        
+            $project_id = (int)gpc('project_id','G',0);
+            if($project_id){
+                $this->load->model('Project_Model');
+                $projectInfo = $this->Project_Model->queryById($project_id);
+                
+                if($projectInfo){
+                    unset($projectInfo['id']);
+                    $this->assign('info',$projectInfo);
+                }
+            }
         }
         $this->assign('gobackUrl',$gobackUrl);
         $this->_getStep($info);

@@ -41,7 +41,8 @@
         <dd style='display:block' class='sitem' id='project_ch'>
           <ul class='sitemu'>
             {auth name="taizhang+add"}<li><a href="{url_path('taizhang','add')}">台账登记</a></li>{/auth}
-            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">台账查询</a></li>{/auth}
+            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">台账查询</a></li>
+            <li><a href="{url_path('taizhang','index','pm=')}{urlencode($userProfile['name'])}">我的台账</a></li>{/auth}
             {*
             {auth name="taizhang_ch"}<li><a href="{url_path('taizhang_ch')}">土地勘测登记台账</a></li>{/auth}
             {auth name="taizhang_house"}<li><a href="{url_path('taizhang_house')}">房产项目登记台帐</a></li>{/auth}
@@ -58,8 +59,9 @@
             {auth name="project_ch+fee"}<li><a href="{url_path('project_ch','fee')}">项目收费</a></li>{/auth}
             {auth name="project_ch+archive"}<li><a href="{url_path('project_ch','archive')}">项目归档</a></li>{/auth}
             *}
+            {auth name="taizhang+statistics"}<li><a href="{url_path('taizhang','statistics')}">台账统计</a></li>{/auth}
+            
             {auth name="project_ch"}<li><a href="{url_path('project_ch')}">测绘项目管理</a></li>{/auth}
-            {auth name="project_ch+statistics"}<li><a href="{url_path('taizhang','statistics')}">台账统计</a></li>{/auth}
           </ul>
         </dd>
       </dl>
@@ -127,7 +129,8 @@
         <dd style='display:block' class='sitem' id='reports'>
           <ul class='sitemu'>
             {auth name="reports_fault"}<li><a href="{url_path('reports_fault')}">缺陷统计报表</a></li>{/auth}
-            {auth name="reports_monthly"}<li><a href="{url_path('reports_monthly')}">项目统计报表</a></li>{/auth}
+            {auth name="reports_monthly"}<li><a href="{url_path('reports_monthly')}">项目台账统计报表</a></li>{/auth}
+            {auth name="reports_work"}<li><a href="{url_path('reports_work')}">工作量统计报表</a></li>{/auth}
             {auth name="reports_device"}<li><a href="{url_path('reports_device')}">仪器清单报表</a></li>{/auth}
             {auth name="reports_employ"}<li><a href="{url_path('reports_employ')}">人事报表</a></li>{/auth}
             {auth name="reports_salary"}<li><a href="{url_path('reports_salary')}">薪资变动报表</a></li>{/auth}

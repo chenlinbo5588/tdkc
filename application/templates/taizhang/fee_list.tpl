@@ -57,6 +57,7 @@
                         <input type="text" name="ss_amount" value="{$info['ss_amount']}"/>
                     </td>
                 </tr>
+                {*
                 <tr>
                     <td>欠费情况</td>
                     <td>
@@ -64,6 +65,7 @@
                         <label><input type="radio" name="is_owed" value="1" {if $info['is_owed'] == 1}checked{/if}/>欠费</label>
                     </td>
                 </tr>
+                
                 <tr>
                     <td>是否政府挂账</td>
                     <td>
@@ -71,6 +73,7 @@
                         <label><input type="radio" name="is_gov" value="1" {if $info['is_gov'] == 1}checked{/if}/>是</label>
                     </td>
                 </tr>
+                *}
                 <tr>
                     <td>收费情况</td>
                     <td>

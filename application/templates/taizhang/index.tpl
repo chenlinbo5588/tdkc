@@ -6,10 +6,19 @@
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
+                            <label><strong>业务类型</strong>
+                                <select name="category" >
+                                    <option value="">全部</option>
+                                    {foreach from=$projectTypeList key=key item=item}
+                                    <option value="{$key}" {if $smarty.get.category == $key}selected{/if}>{$item}</option>
+                                    {/foreach}
+                                </select>
+                            </label>
                             <label><strong>编号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/></label>
                             <label><strong>单位名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
-                            <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
-                            <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
+                            <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
+                            <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
+                            <label><strong>作业组负责人</strong><input type="text" name="pm" style="width:60px;" value="{$smarty.get.pm}" placeholder="作业组负责人"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
                             <a class="addlink" href="{url_path('taizhang','add')}">+编台账</a>
                         </li>
@@ -43,7 +52,7 @@
                             <th>经办人</th>
                             <th>收费情况</th>
                             <th>考核金额</th>
-                            {auth name="taizhang+fee"}<th>应收金额</th><th>实收金额</th>{/auth}
+                            {auth name="taizhang+fee"}<th>应收金额</th><th>实收金额</th><th>收费备注</th>{/auth}
                             <th>成果资料</th>
                             <th>备注</th>
                             <th>操作</th>
@@ -89,9 +98,9 @@
                                 {elseif $item['fee_type'] == 4}票未开款收
                                 {/if}
                            </td>
-                           <td>{$item['kh_amout']}</td>
-                           {auth name="taizhang+fee"}<td>{$item['ys_amout']}</td><td>{$item['ss_amout']}</td>{/auth}
-                           <td>{if $item['has_doc'] == 1}已形成{else}未形成{/if}</td>
+                           <td>{$item['kh_amount']}</td>
+                           {auth name="taizhang+fee"}<td>{$item['ys_amount']}</td><td>{$item['ss_amount']}</td><td>{$item['remark']|escape}</td>{/auth}
+                           <td>{if $item['get_doc'] == 1}已领取{else}未领取{/if}</td>
                            <td>{$item['descripton']}</td>
                            <td>
                            {auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}

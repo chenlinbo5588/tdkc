@@ -224,6 +224,15 @@ class Search extends TZ_Controller {
         
         $this->sendJson(array('newcount' => $msgCount));
     }
+    
+    
+    public function list_taizhang(){
+        
+        $project_id = (int)gpc('id','GP',0);
+        
+        $this->assign('project_id',$project_id);
+        $this->display();
+    }
 }
 
 /* End of file search.php */

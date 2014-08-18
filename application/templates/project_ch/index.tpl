@@ -25,12 +25,12 @@
                                     <option value="已发送" {if $smarty.get.status == '已发送'}selected{/if}>已发送</option>
                                     <option value="已布置" {if $smarty.get.status == '已布置'}selected{/if}>已布置</option>
                                     <option value="已实施" {if $smarty.get.status == '已实施'}selected{/if}>已实施</option>
-                                    <option value="已完成" {if $smarty.get.status == '已完成'}selected{/if}>已完成</option>
+                                    {*<option value="已完成" {if $smarty.get.status == '已完成'}selected{/if}>已完成</option>
                                     <option value="已提交初审" {if $smarty.get.status == '已提交初审'}selected{/if}>已提交初审</option>
                                     <option value="已通过初审" {if $smarty.get.status == '已通过初审'}selected{/if}>已通过初审</option>
                                     <option value="已提交复审" {if $smarty.get.status == '已提交复审'}selected{/if}>已提交复审</option>
                                     <option value="已通过复审" {if $smarty.get.status == '已通过复审'}selected{/if}>已通过复审</option>
-                                    {*
+                                    
                                     <option value="项目已提交" {if $smarty.get.status == '项目已提交'}selected{/if}>项目已提交</option>
                                     <option value="已收费" {if $smarty.get.status == '已收费'}selected{/if}>已收费</option>
                                     <option value="已归档" {if $smarty.get.status == '已归档'}selected{/if}>已归档</option>
@@ -112,6 +112,10 @@
                                <a href="javascript:void(0);" data-href="{url_path('project_ch','implement','id=')}{$item['id']}" data-title="项目实施" class="popwin">实施</a>
                                {/if}
                                {/auth}
+                               
+                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已实施'}
+                               <a href="javascript:void(0);" data-href="{url_path('search','list_taizhang','id=')}{$item['id']}" data-title="登记台账" class="popwin">登记台账</a>
+                               {/if}
                                {*
                                {auth name="project_ch+complete"}
                                {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已实施'}

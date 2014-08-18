@@ -296,6 +296,12 @@ input.input_error , .input_error {
     text-align: left;
 }
 
+.normal {
+    border-collapse: collapse;
+}
+.normal td , .normal th {
+    padding: 5px;
+}
 
 .table {
     border-collapse: collapse;
@@ -702,6 +708,23 @@ ol.style_decimal , ul.style_decimal {
     margin-left:230px;
     border:1px solid #666666;
     padding:15px;
+}
+
+.list_taizhang ol li {
+    list-style-type: decimal;
+    margin:5px;
+}
+
+.list_taizhang li, .list_taizhang li a {
+    display:block;
+}
+
+.list_taizhang li a {
+    padding:5px;
+}
+
+.list_taizhang li a:hover {
+    background:#EEF4EA;
 }
 
 .sideitem {
