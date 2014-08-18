@@ -53,9 +53,9 @@
                             <tr class="title_col">
                                 <td colspan="3" class="two_title">
                                     <div class="two_title_wrap">
-                                        <span style="float:right">分村土地面积</span>
+                                        <span class="two_text" style="float:right">分村土地面积</span>
                                         <br/>
-                                        <span>土地分类</span>
+                                        <span class="two_text">土地分类</span>
                                         <div class="djline"></div>
                                         <div class="adjust_area">
                                             <a href="javascript:void(0);" class="adjust_add">+增加角度</a>&nbsp;
@@ -276,9 +276,9 @@
                         <tr class="title_col">
                             <td colspan="3" class="two_title">
                                 <div class="two_title_wrap">
-                                    <span style="float:right">分村土地面积</span>
+                                    <span class="two_text" style="float:right">分村土地面积</span>
                                     <br/>
-                                    <span>土地分类</span>
+                                    <span class="two_text">土地分类</span>
                                     <div class="adjust_area">
                                         <a href="javascript:void(0);" class="adjust_add">+增加角度</a>&nbsp;
                                         <label>步长<input type="text" class="step" name="step" value="0.01"/></label>
@@ -821,8 +821,12 @@
                 
                 $("input[name=addDjx]").bind('click',function(e){
                     $(".two_title_wrap").each(function(){
-                        var w = $(this).width();
-                        var h = $(this).height();
+                        //console.log($(this).height());
+                        //console.log($(this).closest("td").height());
+                        $(this).css({ height: $(this).closest("td").height() + "px" });
+                        
+                        var w = $(this).outerWidth();
+                        var h = $(this).outerHeight();
                         var s = Math.sqrt(w * w + h * h);
                         var sina = (h / s) ;
                         var cosa = (w / s) ;
