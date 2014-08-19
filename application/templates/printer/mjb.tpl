@@ -250,9 +250,9 @@
                         </tfoot>
                     </table>
                     <div class="mjb_db">
-                        <p><span class="inputarea">测量者: </span></p>
-                        <p><span class="inputarea">填写者: </span></p>
-                        <p><span class="inputarea">审核者: </span></p>
+                        <p><span class="inputarea">测量者: {$info['pm']|escape}</span></p>
+                        <p><span class="inputarea">填写者: {$info['pm']|escape}</span></p>
+                        <p><span class="inputarea">审核者: {$info['cs_name']|escape}</span></p>
 
                         <div class="center mjb_lk">
                             <p>慈溪市土地勘测规划设计院有限公司</p>
@@ -482,9 +482,9 @@
                     </tfoot>
                 </table>
                 <div class="mjb_db">
-                    <p><span class="inputarea">测量者: </span></p>
-                    <p><span class="inputarea">填写者: </span></p>
-                    <p><span class="inputarea">审核者: </span></p>
+                    <p><span class="inputarea">测量者: {$info['pm']|escape}</span></p>
+                    <p><span class="inputarea">填写者: {$info['pm']|escape}</span></p>
+                    <p><span class="inputarea">审核者: {$info['cs_name']|escape}</span></p>
 
                     <div class="center mjb_lk">
                         <p>慈溪市土地勘测规划设计院有限公司</p>
