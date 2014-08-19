@@ -31,6 +31,12 @@ class Taizhang extends TZ_Admin_Controller {
         $this->assign('action','index');
         $this->assign('projectTypeList',$this->projectTypeList);
         
+        /**
+         * 区域 
+         */
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('regionList',$regionList['data']);
+        
         $this->_getPageData();
 		$this->display();
 	}
@@ -281,8 +287,16 @@ class Taizhang extends TZ_Admin_Controller {
                 $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
             }
             
+            if(!empty($_GET['region_name'])){
+                $condition['where']['region_name'] = trim($_GET['region_name']);
+            }
+            
             if(!empty($_GET['pm'])){
                 $condition['where']['pm'] = trim($_GET['pm']);
+            }
+            
+            if(!empty($_GET['creator'])){
+                $condition['where']['creator'] = trim($_GET['creator']);
             }
             
             $data = $this->Taizhang_Model->getList($condition);

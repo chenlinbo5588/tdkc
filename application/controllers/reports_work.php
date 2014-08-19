@@ -118,7 +118,7 @@ class reports_work extends TZ_Admin_Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$current_row,$p['contacter']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$current_row, $p['contacter_mobile']);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row, $p['name']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['nature']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['type']);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $p['region_name'].$p['address']);
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, '');
             $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['pm']);

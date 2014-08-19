@@ -128,17 +128,7 @@ class Taizhang_Person extends TZ_Admin_Controller {
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
             
-                        
-            $project_id = (int)gpc('project_id','G',0);
-            if($project_id){
-                $this->load->model('Project_Model');
-                $projectInfo = $this->Project_Model->queryById($project_id);
-                
-                if($projectInfo){
-                    unset($projectInfo['id']);
-                    $this->assign('info',$projectInfo);
-                }
-            }
+            $this->_fetchProjectInfo(TAIZHANG_PERSON);
         }
         $this->assign('gobackUrl',$gobackUrl);
         $this->_getStep($info);

@@ -40,9 +40,11 @@
         <dt onClick='showHide("project_ch")'><b>测绘项目</b></dt>
         <dd style='display:block' class='sitem' id='project_ch'>
           <ul class='sitemu'>
-            {auth name="taizhang+add"}<li><a href="{url_path('taizhang','add')}">台账登记</a></li>{/auth}
-            {auth name="taizhang"}<li><a href="{url_path('taizhang')}">台账查询</a></li>
-            <li><a href="{url_path('taizhang','index','pm=')}{urlencode($userProfile['name'])}">我的台账</a></li>{/auth}
+            {auth name="project_ch"}<li><a href="{url_path('project_ch')}">测绘项目管理</a></li>{/auth}
+            {auth name="taizhang"}
+                <li><a href="{url_path('taizhang','index','pm=')}{urlencode($userProfile['name'])}">我的台账</a></li>
+                <li><a href="{url_path('taizhang')}">台账查询</a></li>
+            {/auth}
             {*
             {auth name="taizhang_ch"}<li><a href="{url_path('taizhang_ch')}">土地勘测登记台账</a></li>{/auth}
             {auth name="taizhang_house"}<li><a href="{url_path('taizhang_house')}">房产项目登记台帐</a></li>{/auth}
@@ -60,8 +62,6 @@
             {auth name="project_ch+archive"}<li><a href="{url_path('project_ch','archive')}">项目归档</a></li>{/auth}
             *}
             {auth name="taizhang+statistics"}<li><a href="{url_path('taizhang','statistics')}">台账统计</a></li>{/auth}
-            
-            {auth name="project_ch"}<li><a href="{url_path('project_ch')}">测绘项目管理</a></li>{/auth}
           </ul>
         </dd>
       </dl>

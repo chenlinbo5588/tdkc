@@ -400,4 +400,45 @@ class TZ_Admin_Controller extends TZ_Controller {
         return $data;
         
     }
+    
+    
+    protected function _fetchProjectInfo($category){
+        $project_id = (int)gpc('project_id','G',0);
+        $projectInfo = array();
+        
+        if($project_id){
+            $this->load->model('Project_Model');
+            $projectInfo = $this->Project_Model->queryById($project_id);
+
+            if($projectInfo){
+                unset($projectInfo['id']);
+                $this->assign('info',$projectInfo);
+                
+                
+                if(!$this->Taizhang_Model){
+                    $this->load->model('Taizhang_Model');
+                }
+                $history = $this->Taizhang_Model->getList(array(
+                    'where' => array(
+                        'category' => $category,
+                        'name' => $projectInfo['name']
+                    ),
+                    'order' => 'createtime DESC'
+                ));
+                
+                $dupTips = array();
+                
+                if($history['data']){
+                    foreach($history['data'] as $his){
+                        $dupTips[] = '<p>'.$his['project_no'].'</p>';
+                    }
+                    
+                    $this->assign('dupTips','<p>该名称已入台账，如需新编台账，注意名称问题</p><p>原台账号信息:</p>'.  implode('', $dupTips));
+                }
+            }
+        }
+        
+        return $projectInfo;
+    }
+    
 }

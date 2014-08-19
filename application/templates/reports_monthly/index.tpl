@@ -19,7 +19,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label><strong>镇乡名称(按住Ctrl点击多选)</strong></label></td>
+                            <td><label><strong>镇乡名称(<span class="notice">按住Ctrl点击多选</span>)</strong></label></td>
                             <td>
                                 <select name="region_name[]" multiple="" size="{count($regionList)}">
                                     {foreach from=$regionList item=item}

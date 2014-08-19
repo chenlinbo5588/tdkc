@@ -300,7 +300,7 @@ input.input_error , .input_error {
     border-collapse: collapse;
 }
 .normal td , .normal th {
-    padding: 5px;
+    padding: 3px;
 }
 
 .table {

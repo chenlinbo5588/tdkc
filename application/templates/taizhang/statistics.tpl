@@ -51,7 +51,7 @@
                     </tbody>
                 </table>
                 {else}
-                    <p>无数据</p>
+                    <p>请选择统计条件</p>
                 {/if}
              </div>
              <script>

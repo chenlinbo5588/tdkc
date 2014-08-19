@@ -113,6 +113,7 @@
                 {if empty($info['status']) || $info['status'] == '新增'}
                 {include file="taizhang/upload_file.tpl"}
                 {/if}
+                {include file="taizhang/dup_tip.tpl"}
                 <script>
                     $(function(){
                         $("#filelist").delegate("a.df","click",function(e){

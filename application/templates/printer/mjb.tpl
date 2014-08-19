@@ -40,7 +40,7 @@
                         <thead>
                             <tr>
                                 <td class="center toptitle" colspan="3">编号</td>
-                                <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
+                                <td colspan="4"><span class="bh inputarea" >NO( {strtoupper($info['project_no'])} )</span> <span class="word inputarea" > 字 ( {if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
                             </tr>
                             <tr>
                                 <td class="center toptitle" colspan="3" >单位名称</td>
@@ -72,7 +72,7 @@
                         </thead>
                         <tbody>
                             <tr class="center dl_1">
-                                <td class="cp1" rowspan="6">农<br/>用<br/>地</td>
+                                <td class="cp1" rowspan="7">农<br/>用<br/>地</td>
                                 <td class="cp2" rowspan="2">
                                     <span class="dlname">耕地</span>
                                 </td>
@@ -118,7 +118,17 @@
                                 <td class="sub_sum"></td>
                             </tr>
                             <tr class="center dl_1">
-                                <td><span class="dlname">牧草地</span></td>
+                                <td rowspan="2"><span class="dlname">草地</span></td>
+                                <td class="dlcode2">
+                                    <span class="showtext"></span>
+                                    <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                                </td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="area"></td>
+                                <td class="sub_sum"></td>
+                            </tr>
+                            <tr class="center dl_1">
                                 <td class="dlcode2">
                                     <span class="showtext"></span>
                                     <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -139,7 +149,7 @@
                                 <td class="area"></td>
                                 <td class="sub_sum"></td>
                             </tr>
-
+                            
                             <tr class="center dl_2">
                                 <td rowspan="5">建<br/>设<br/>用<br/>地</td>
                                 <td rowspan="2"><span class="dlname">住宅用地</span</td>
@@ -197,7 +207,7 @@
                             </tr>
                             <tr class="center dl_3">
                                 <td>未利<br/>用地</td>
-                                <td><span class="dlname">其他用地</span></td>
+                                <td><span class="dlname">水域及水利设施用地</span></td>
                                 <td class="dlcode2">
                                     <span class="showtext"></span>
                                     <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -263,7 +273,7 @@
                     <thead>
                         <tr>
                             <td class="center toptitle" colspan="3">编号</td>
-                            <td colspan="4"><span class="bh inputarea" >NO( {$info['project_no']} )</span> <span class="word inputarea" > 字 ( {if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
+                            <td colspan="4"><span class="bh inputarea" >NO( {strtoupper($info['project_no'])} )</span> <span class="word inputarea" > 字 ( {if strtoupper($info['region_code']) == 'A'}浒{else}{$info['region_name']|cutText:1:''}{/if}) </span> <span class="nature">性质: <span class="inputarea">{if $info['nature']}{$info['nature']}{else}请填写性质{/if}</span></span></td>
                         </tr>
                         <tr>
                             <td class="center toptitle" colspan="3" >单位名称</td>
@@ -295,7 +305,7 @@
                     </thead>
                     <tbody>
                         <tr class="center dl_1">
-                            <td class="cp1" rowspan="6"><div>农</div><div>用</div><div>地</div></td>
+                            <td class="cp1" rowspan="7"><div>农</div><div>用</div><div>地</div></td>
                             <td class="cp2" rowspan="2">
                                 <span class="dlname">耕地</span>
                             </td>
@@ -341,7 +351,7 @@
                             <td class="sub_sum"></td>
                         </tr>
                         <tr class="center dl_1">
-                            <td><span class="dlname">牧草地</span></td>
+                            <td><span class="dlname">草地</span></td>
                             <td class="dlcode2">
                                 <span class="showtext"></span>
                                 <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -352,7 +362,7 @@
                             <td class="sub_sum"></td>
                         </tr>
                         <tr class="center dl_1">
-                            <td><span class="dlname">其他农用地</span></td>
+                            <td rowspan="2"><span class="dlname">其他农用地</span></td>
                             <td class="dlcode2">
                                 <span class="showtext"></span>
                                 <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -362,7 +372,16 @@
                             <td class="area"></td>
                             <td class="sub_sum"></td>
                         </tr>
-
+                        <tr class="center dl_1">
+                            <td class="dlcode2">
+                                <span class="showtext"></span>
+                                <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
+                            </td>
+                            <td class="area"></td>
+                            <td class="area"></td>
+                            <td class="area"></td>
+                            <td class="sub_sum"></td>
+                        </tr>
                         <tr class="center dl_2">
                             <td rowspan="5"><div>建</div><div>设</div><div>用</div><div>地</div></td>
                             <td rowspan="2"><span class="dlname">住宅用地</span</td>
@@ -420,7 +439,7 @@
                         </tr>
                         <tr class="center dl_3">
                             <td><div>未利</div><div>用地</div></td>
-                            <td><span class="dlname">其他用地</span></td>
+                            <td><span class="dlname">水域及水利设施用地</span></td>
                             <td class="dlcode2">
                                 <span class="showtext"></span>
                                 <select type="text" class="txtcode2 hidden" name="dlcode2"></select>

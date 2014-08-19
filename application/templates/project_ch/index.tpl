@@ -4,21 +4,33 @@
                 <form action="{url_path('project_ch')}" method="get" name="searchform">
                     <input type="hidden" value="project_ch" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
-                    <ul>
-                        <li>
-                            {*<label><strong>台账号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/></label>*}
-                            <label><strong>登记名称</strong><input type="text" name="name" style="width:100px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
-                            <label><strong>登记日期开始</strong><input type="text" name="sdate" style="width:90px;" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
-                            <label><strong>登记日期结束</strong><input type="text" name="edate" style="width:90px;" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
-                            <label><strong>项目类型</strong>
+                    <table class="normal">
+                        <tr>
+                            <td><label><strong>登记名称</strong></label></td>
+                            <td><input type="text" name="name"  value="{$smarty.get.name}" placeholder="请输入登记名称"/></td>
+                            <td><label><strong>登记日期开始</strong></label></td>
+                            <td><input type="text" name="sdate" style="width:90px;" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></td>
+                            <td><label><strong>登记日期结束</strong></label></td>
+                            <td><input type="text" name="edate" style="width:90px;" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></td>
+                            <td>
+                                
+                                <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                                <input type="button" name="refresh" class="btn btn-primary" value="刷新" onclick="javascript:location.reload();"/>
+                                {auth name="project_ch+add"}<a href="javascript:void(0);" class="addlink">+新增登记</a>{/auth}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label><strong>项目类型</strong></label></td>
+                            <td>
                                 <select name="type" >
                                     <option value="">全部</option>
                                     {foreach from=$projectTypeList item=item}
                                     <option value="{$item['name']}" {if $smarty.get.type == $item['name']}selected{/if}>{$item['name']}</option>
                                     {/foreach}
                                 </select>
-                            </label>
-                            <label><strong>状态</strong>
+                            </td>
+                            <td><label><strong>状态</strong></label></td>
+                            <td>
                                 <select name="status" >
                                     <option value="" {if $smarty.get.status == ''}selected{/if}>全部</option>
                                     <option value="新增" {if $smarty.get.status == '新增'}selected{/if}>新增</option>
@@ -36,13 +48,10 @@
                                     <option value="已归档" {if $smarty.get.status == '已归档'}selected{/if}>已归档</option>
                                     *}
                                 </select>
-                            </label>
-                            {*<label><input type="checkbox" name="view" value="my" {if $smarty.get.view == 'my'}checked{/if}/>我登记的</label>*}
-                            <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <input type="button" name="refresh" class="btn btn-primary" value="刷新" onclick="javascript:location.reload();"/>
-                            {auth name="project_ch+add"}<a href="javascript:void(0);" class="addlink">+新增登记</a>{/auth}
-                        </li>
-                     </ul>
+                            </td>
+                            <td colspan="2"><label><input type="checkbox" name="view" value="my" {if $smarty.get.view == 'my'}checked{/if}/>只看我登记的</label></td>
+                        </tr>
+                     </table>
                 </form>
             </div>
             {/if}
@@ -113,7 +122,7 @@
                                {/if}
                                {/auth}
                                
-                               {if $item['sendor_id'] == $userProfile['id'] && $item['status'] == '已实施'}
+                               {if $item['status'] == '已实施'}
                                <a href="javascript:void(0);" data-href="{url_path('search','list_taizhang','id=')}{$item['id']}" data-title="登记台账" class="popwin">登记台账</a>
                                {/if}
                                {*

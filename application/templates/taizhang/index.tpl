@@ -4,25 +4,52 @@
                 <form action="{url_path('taizhang')}" method="get" name="searchform">
                     <input type="hidden" value="taizhang" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="{$action}" name="{config_item('function_trigger')}"/>
-                    <ul>
-                        <li>
-                            <label><strong>业务类型</strong>
+                    <table class="normal">
+                        <tr>
+                            <td>
+                                <label><strong>业务类型</strong></label>
+                            </td>
+                            <td>
                                 <select name="category" >
                                     <option value="">全部</option>
                                     {foreach from=$projectTypeList key=key item=item}
                                     <option value="{$key}" {if $smarty.get.category == $key}selected{/if}>{$item}</option>
                                     {/foreach}
                                 </select>
-                            </label>
-                            <label><strong>编号</strong><input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/></label>
-                            <label><strong>单位名称</strong><input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/></label>
-                            <label><strong>登记日期开始</strong><input type="text" name="sdate" id="sdate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
-                            <label><strong>登记日期结束</strong><input type="text" name="edate" id="edate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
-                            <label><strong>作业组负责人</strong><input type="text" name="pm" style="width:60px;" value="{$smarty.get.pm}" placeholder="作业组负责人"/></label>
-                            <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                            <a class="addlink" href="{url_path('taizhang','add')}">+编台账</a>
-                        </li>
-                     </ul>
+                            </td>
+                            <td><label><strong>镇乡名称</strong></label></td>
+                            <td>
+                                <select name="region_name">
+                                    <option value="">请选择镇街</option>
+                                    {foreach from=$regionList item=item}
+                                    <option value="{$item['name']}" {if $smarty.get.region_name == $item['name']}selected{/if}>{$item['name']}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
+                            <td><label><strong>编号</strong></label></td>
+                            <td>
+                                <input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/>
+                            </td>
+                            <td colspan="2">
+                                <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                                <a class="addlink" href="{url_path('taizhang','add')}">+编台账</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label><strong>单位名称</strong></label></td>
+                            <td>
+                                <input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/>
+                            </td>
+                            <td>
+                                <label><strong>登记日期开始</strong></label>
+                            </td>
+                            <td><input type="text" name="sdate" id="sdate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></td>
+                            <td><label><strong>登记日期结束</strong></label></td>
+                            <td><input type="text" name="edate" id="edate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></td>
+                            <td><label><strong>作业组负责人</strong></label></td>
+                            <td><input type="text" name="pm" style="width:60px;" value="{$smarty.get.pm}" placeholder="作业组负责人"/></td>
+                        </tr>
+                     </table>
                 </form>
             </div>
                         
@@ -40,6 +67,7 @@
                             {auth name="taizhang+delete"}<th></th>{/auth}
                             <th>时间</th>
                             <th>台账类型</th>
+                            <th>镇街</th>
                             <th>台账编号</th>
                             <th>单位名称</th>
                             <th>土地坐落</th>
@@ -64,6 +92,7 @@
                            {auth name="taizhang+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td>{$item['category']}</td>
+                           <td>{$item['region_name']|escape}</td>
                            <td>{$item['project_no']}</td>
                            <td>
                            {if $item['category'] == $smarty.const.TAIZHANG_TD}
