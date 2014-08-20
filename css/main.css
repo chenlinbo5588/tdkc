@@ -698,7 +698,7 @@ ol.style_decimal , ul.style_decimal {
 }
 
 .taizhang_detail .sidelist {
-    position:fixed;
+    position:absolute;
     width:220px;
     left:20px;
 }

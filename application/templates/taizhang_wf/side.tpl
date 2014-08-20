@@ -14,7 +14,7 @@
                     <div class="sideitem">
                         <h2>宗地表格信息</h2>
                         <ul>
-                            <li><a href="/docs/{urlencode('违法用地勘测定界成果报告模板.doc')}" title="违法用地勘测定界成果报告模板" >违法用地勘测定界成果报告模板.doc</a></li>
+                            <li><a href="/docs/wfydkcdjbg.doc" title="违法用地勘测定界成果报告模板" >违法用地勘测定界成果报告模板.doc</a></li>
                             <li {if $smarty.get.m == 'mjb'}class="current"{/if}><a href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">违法用地土地面积分类表</a></li>
                             <li {if $smarty.get.m == 'mjcgb'}class="current"{/if}><a href="javascript:void(0);">宗地面积成果表（附件形式上传)</a></li>
                         </ul>

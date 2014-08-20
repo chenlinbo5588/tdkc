@@ -95,24 +95,37 @@ class Taizhang_Person extends TZ_Admin_Controller {
             $gobackUrl = $_POST['gobackUrl'];
             $this->_addRules();
             if($this->form_validation->run()){
-                $_POST['year'] = date("Y");
-                $_POST['month'] = date("m");
-                $_POST['category'] = TAIZHANG_PERSON;
-                $_POST['user_id'] = $this->_userProfile['id'];
-                $_POST['creator'] = $this->_userProfile['name'];
-                $_POST['total_area'] = 0;
-                $_POST['churan_area'] = 0;
-                $_POST['nature'] = '';
-                $_POST['sendor_id'] = $_POST['user_id'] ;
-                $_POST['sendor'] = $_POST['creator'];
-        
-                $insertid = $this->_op($_POST['year'],'add');
-                $info = $this->Taizhang_Model->queryById($insertid);
-                
-                $message = '操作成功';
-                $feed = 'success';
-                $this->assign('feed',$feed);
-                //$this->sendFormatJson('success', array('text' => '创建成功'));
+                $message = '';
+                for($i = 0 ; $i < 1; $i++){
+                    if('保存' == $_POST['submit']){
+                        $dupTips = $this->_getDupList(TAIZHANG_PERSON, $_POST['name']);
+                        if($dupTips){
+                            $info = $_POST;
+                            $this->assign('saveText','确认');
+                            $this->assign('dupTips','<p>名称'.$_POST['name'].'已入'.TAIZHANG_PERSON.'台账，点击<span class=\"notice\">确定</span>继续保存，</p><p>原台账号信息:</p>'.  implode('', $dupTips));
+                            break;
+                        }
+                    }
+                    
+                    $_POST['year'] = date("Y");
+                    $_POST['month'] = date("m");
+                    $_POST['category'] = TAIZHANG_PERSON;
+                    $_POST['user_id'] = $this->_userProfile['id'];
+                    $_POST['creator'] = $this->_userProfile['name'];
+                    $_POST['total_area'] = 0;
+                    $_POST['churan_area'] = 0;
+                    $_POST['nature'] = '';
+                    $_POST['sendor_id'] = $_POST['user_id'] ;
+                    $_POST['sendor'] = $_POST['creator'];
+
+                    $insertid = $this->_op($_POST['year'],'add');
+                    $info = $this->Taizhang_Model->queryById($insertid);
+
+                    $message = '操作成功';
+                    $feed = 'success';
+                    $this->assign('feed',$feed);
+                    //$this->sendFormatJson('success', array('text' => '创建成功'));
+                }
             }else{
                 $info = $_POST;
                 $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));

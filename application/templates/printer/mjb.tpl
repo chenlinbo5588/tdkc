@@ -118,7 +118,7 @@
                                 <td class="sub_sum"></td>
                             </tr>
                             <tr class="center dl_1">
-                                <td rowspan="2"><span class="dlname">草地</span></td>
+                                <td><span class="dlname">草地</span></td>
                                 <td class="dlcode2">
                                     <span class="showtext"></span>
                                     <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -129,6 +129,7 @@
                                 <td class="sub_sum"></td>
                             </tr>
                             <tr class="center dl_1">
+                                <td rowspan="2"><span class="dlname">其他农用地</span></td>
                                 <td class="dlcode2">
                                     <span class="showtext"></span>
                                     <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -139,7 +140,6 @@
                                 <td class="sub_sum"></td>
                             </tr>
                             <tr class="center dl_1">
-                                <td><span class="dlname">其他农用地</span></td>
                                 <td class="dlcode2">
                                     <span class="showtext"></span>
                                     <select type="text" class="txtcode2 hidden" name="dlcode2"></select>
@@ -559,6 +559,8 @@
                         
                         if(total > 0){
                             sub_sum.html(total.toFixed(2));
+                        }else{
+                            sub_sum.html('');
                         }
                         
                         col_sub_sum += total;
@@ -577,6 +579,8 @@
                         });
                         if(total > 0){
                             $(this).html(total.toFixed(2));
+                        }else{
+                            $(this).html('');
                         }
                         
                         col_sub_sum += total;
@@ -585,6 +589,9 @@
                     if(col_sub_sum > 0){
                         $(".col_sub_sum",table).html(col_sub_sum.toFixed(2));
                         $(".total_sum",table).html(col_sub_sum.toFixed(2));
+                    }else{
+                        $(".col_sub_sum",table).html('');
+                        $(".total_sum",table).html('');
                     }
                     
                 };

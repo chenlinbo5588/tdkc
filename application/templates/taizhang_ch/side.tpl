@@ -26,9 +26,9 @@
                     <div class="sideitem">
                         <h2>新征（或供地)表格信息</h2>
                         <ul>
-                            <li><a href="/docs/{urlencode('五本勘测定界报告模版.doc')}" title="五本勘测定界报告" >五本勘测定界报告模版.doc</a></li>
-                            <li><a href="/docs/{urlencode('五本封面模版.doc')}" title="五本封面" >五本封面模版.doc</a></li>
-                            <li><a href="/docs/{urlencode('面积统计表征收模版.xls')}" title="面积统计表征收模版" >面积统计表征收模版.xls</a></li>
+                            <li><a href="/docs/wbkcdjbg.doc" title="五本勘测定界报告" >五本勘测定界报告模版.doc</a></li>
+                            <li><a href="/docs/wbfm.doc" title="五本封面" >五本封面模版.doc</a></li>
+                            <li><a href="/docs/mjtjbzs.xls" title="面积统计表征收模版" >面积统计表征收模版.xls</a></li>
                             {*<li><a href="{url_path('printer','kcdj','id=')}{$info['id']}" target="_blank">土地勘测定界报告</a></li>*}
                             
                         </ul>

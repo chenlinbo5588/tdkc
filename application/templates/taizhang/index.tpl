@@ -32,7 +32,7 @@
                             </td>
                             <td colspan="2">
                                 <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                                <a class="addlink" href="{url_path('taizhang','add')}">+编台账</a>
+                                {*<a class="addlink" href="{url_path('taizhang','add')}">+编台账</a>*}
                             </td>
                         </tr>
                         <tr>

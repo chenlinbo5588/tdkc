@@ -411,34 +411,50 @@ class TZ_Admin_Controller extends TZ_Controller {
             $projectInfo = $this->Project_Model->queryById($project_id);
 
             if($projectInfo){
-                unset($projectInfo['id']);
+                unset($projectInfo['id'],$projectInfo['status'],$projectInfo['sendor_id']);
                 $this->assign('info',$projectInfo);
                 
+                /**
+                $dupTips = $this->_getDupList($category,$projectInfo['name']);
                 
-                if(!$this->Taizhang_Model){
-                    $this->load->model('Taizhang_Model');
+                if($dupTips){
+                    $this->assign('dupTips','<p>名称 '.$projectInfo['name'].' 已入'.$category.'台账，如需新编台账，注意名称问题</p><p>原台账号信息:</p>'.  implode('', $dupTips));
                 }
-                $history = $this->Taizhang_Model->getList(array(
-                    'where' => array(
-                        'category' => $category,
-                        'name' => $projectInfo['name']
-                    ),
-                    'order' => 'createtime DESC'
-                ));
-                
-                $dupTips = array();
-                
-                if($history['data']){
-                    foreach($history['data'] as $his){
-                        $dupTips[] = '<p>'.$his['project_no'].'</p>';
-                    }
-                    
-                    $this->assign('dupTips','<p>该名称已入台账，如需新编台账，注意名称问题</p><p>原台账号信息:</p>'.  implode('', $dupTips));
-                }
+                 * 
+                 */
             }
         }
         
         return $projectInfo;
+    }
+    
+    /**
+     * 获得重复的台账名称列表
+     * @param type $category
+     * @param type $name
+     * @return string 
+     */
+    protected function _getDupList($category, $name){
+        $dupTips = array();
+        
+        if(!$this->Taizhang_Model){
+            $this->load->model('Taizhang_Model');
+        }
+        $history = $this->Taizhang_Model->getList(array(
+            'where' => array(
+                'category' => $category,
+                'name' => $name
+            ),
+            'order' => 'createtime DESC'
+        ));
+        
+        if($history['data']){
+            foreach($history['data'] as $his){
+                $dupTips[] = '<p>'.$his['project_no'].'</p>';
+            }
+        }
+        
+        return $dupTips;
     }
     
 }

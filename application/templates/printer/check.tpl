@@ -84,7 +84,7 @@
                     <thead>
                         <tr class="noborder">
                             <th class="inputarea">{$info['createtime']|date_format:"Y年m月d日"}</th>
-                            <th class="inputarea">编号:{$info['project_no']}</th>
+                            <th class="inputarea">编号:{strtoupper($info['project_no'])}</th>
                             <th class="inputarea">项目负责人： {$info['pm']}</th>
                         </tr>
                     </thead>

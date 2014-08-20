@@ -128,14 +128,14 @@
                             <tr class="center sth" >
                                 <td rowspan="2">备<br/>注</td>
                                 <td colspan="4" class="as">
-                                    <div class="inputarea">调查人:</div>
+                                    <div><span class="inputarea">调查人:</span></div>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4" class="bs">
                                     <ul class="cs">
-                                        <li class="zjr inputarea">指界人： </li>
-                                        <li class="clz inputarea">测量者: {$info['pm']}</li>
+                                        <li class="zjr"><span class="inputarea">指界人： </span></li>
+                                        <li class="clz"><span class="inputarea">测量者: {$info['pm']}</span></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -147,17 +147,17 @@
                                     </ul>
                                 </td>
                                 <td colspan="4" class="ba">
-                                    <p class="yj_item inputarea">该宗地地号：</p>
+                                    <p class="yj_item"><span class="inputarea">该宗地地号：</span></p>
                                     <p class="yj_item">调查人签名：        <span class="gz">(公章)</span></p>
                                     <ul class="yj_item">
                                         <li class="d1">所（分局）领导签字：</li>
-                                        <li class="d2 inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>
+                                        <li class="d2"><span class="inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</span></li>
                                     </ul>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <p class="jf"><span>勘测日期</span> <span class="inputarea">{$info['arrange_date']|date_format:"Y年m月d日"}</p>
+                    <p class="jf"><span>勘测日期</span><span class="inputarea">{$info['createtime']|date_format:"Y年m月d日"}</span></p>
                 </div>
                 {/if}
             </div>
@@ -272,14 +272,14 @@
                         <tr class="center sth" >
                             <td rowspan="2">备<br/>注</td>
                             <td colspan="4" class="as">
-                                <div class="inputarea">调查人:</div>
+                                <div><span class="inputarea">调查人:</span></div>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4" class="bs">
                                 <ul class="cs">
-                                    <li class="zjr inputarea">指界人： </li>
-                                    <li class="clz inputarea">测量者: {$info['pm']}</li>
+                                    <li class="zjr"><span class="inputarea">指界人： </span></li>
+                                    <li class="clz"><span class="inputarea">测量者: {$info['pm']}</span></li>
                                 </ul>
                             </td>
                         </tr>
@@ -291,17 +291,17 @@
                                 </ul>
                             </td>
                             <td colspan="4" class="ba">
-                                <p class="yj_item inputarea">该宗地地号：</p>
+                                <p class="yj_item"><span class="inputarea">该宗地地号：</span></p>
                                 <p class="yj_item">调查人签名：        <span class="gz">(公章)</span></p>
                                 <ul class="yj_item">
                                     <li class="d1">所（分局）领导签字：</li>
-                                    <li class="d2 inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</li>
+                                    <li class="d2"><span class="inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</span></li>
                                 </ul>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <p class="jf"><span>勘测日期</span> <span class="inputarea">{$info['arrange_date']|date_format:"Y年m月d日"}</p>
+                <p class="jf"><span>勘测日期</span><span class="inputarea">{$info['createtime']|date_format:"Y年m月d日"}</span></p>
             </div>
         </script>
         <script>
@@ -352,7 +352,7 @@
                 });
                 
                 $("#addJzb").bind('click',function(e){
-                    $(".container").append($($("#jzbTemplate").html()));
+                    $("div.container").append($($("#jzbTemplate").html()));
                 });
                 
                 $("body").delegate(".inputarea","click",function(e){
