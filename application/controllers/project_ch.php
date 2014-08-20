@@ -1313,9 +1313,6 @@ class project_ch extends TZ_Admin_Controller {
                 
                 $now = time();
                 $data = array(
-                    /* 执行布置操作人 为项目负责人 */
-                    'pm_id' => $this->_userProfile['id'],
-                    'pm' => $this->_userProfile['name'],
                     'dept_id' => $this->_userProfile['dept_id'],
                     'sendor_id' => $sendorInfo['id'],
                     'sendor' => $sendorInfo['name'],
