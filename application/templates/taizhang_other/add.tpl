@@ -48,6 +48,7 @@
                                     <td><label class="required"><em>*</em><strong>用途</strong></label></td>
                                     <td>
                                         <select name="nature" style="width:300px">
+                                            <option value="">请选择用途</option>
                                             <option value="山塘" {if $info['nature'] == '山塘'}selected{/if}>山塘</option>
                                             <option value="土方" {if $info['nature'] == '土方'}selected{/if}>土方</option>
                                             <option value="地形" {if $info['nature'] == '地形'}selected{/if}>地形</option>

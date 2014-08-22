@@ -23,7 +23,7 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('name', '单位名称', 'trim|required|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|max_length[200]|htmlspecialchars');
-        
+        $this->form_validation->set_rules('nature', '用途', 'required' );
         
         if(!empty($_POST['contacter'])){
             $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
