@@ -183,6 +183,88 @@ class Taizhang extends TZ_Admin_Controller {
         }
     }
     
+    
+    public function recyclebin(){
+        $this->assign('action','recyclebin');
+        $this->assign('projectTypeList',$this->projectTypeList);
+        
+        /**
+         * 区域 
+         */
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('regionList',$regionList['data']);
+        
+        $this->_getPageData(array('status' => '已删除'));
+		$this->display('index');
+        
+    }
+    
+    
+    /**
+     * 重新启用 
+     */
+    public function restore(){
+        if($this->isPostRequest() && !empty($_POST['restore_id'])){
+            $message = array();
+            $reload = 0;
+            
+            $successCnt = 0;
+            $failedCnt = 0;
+            
+            foreach($_POST['restore_id'] as $val){
+                $flag = $this->Taizhang_Model->updateByWhere(
+                    array(
+                        'status' => '新增',
+                        'zc_time' => 0,
+                        'cs_time' => 0,
+                        'fs_time' => 0,
+                        'zc_name' => '',
+                        'cs_name' => '',
+                        'fs_name' => '',
+                        'zc_yj' => '',
+                        'cs_yj' => '',
+                        'fs_yj' => '',
+                        'zc_remark' => '',
+                        'cs_remark' => '',
+                        'fs_remark' => '',
+                        'updatetime' => time(), 
+                        'updator' => $this->_userProfile['name']
+                    ),
+                    array(
+                        'id' => $val,
+                        'status' => '已删除'
+                    )
+                );
+                
+                if($flag){
+                    $successCnt++;
+                }else{
+                    $failedCnt++;
+                }
+            }
+            
+            if($successCnt){
+                $reload = 1;
+            }
+            
+            if($successCnt){
+                $message[] = '<p class="success">'.$successCnt.'个记录重新启用成功</p>';
+            }
+            
+            if($failedCnt){
+                $message[] = '<p class="failed">'.$failedCnt.'个记录重新启用失败</p>';
+            }
+            $this->assign('reload',$reload);
+            $this->assign('message','<div class="pd20">'.implode('',$message).'</div>');
+            $this->display('showmessage','common');
+            
+        }else{
+            $this->assign('message','删除失败参数错误');
+            $this->display('showmessage','common');
+        }
+    }
+    
+    
     /**
      * 统计 
      */
@@ -239,7 +321,7 @@ class Taizhang extends TZ_Admin_Controller {
     }
     
     
-     private function _getPageData(){
+     private function _getPageData($status = array( 'status !=' => '已删除')){
         try {
             
             if(empty($_GET['page'])){
@@ -263,9 +345,7 @@ class Taizhang extends TZ_Admin_Controller {
                 $condition['like']['name'] = trim($_GET['name']);
             }
             
-            $condition['where'] = array(
-                'status !=' => '已删除'
-            );
+            $condition['where'] = $status;
             
             if(!empty($_GET['id'])){
                 $condition['where']['id'] = $_GET['id'];

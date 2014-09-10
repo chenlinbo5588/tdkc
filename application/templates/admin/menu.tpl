@@ -20,7 +20,7 @@
       {auth name="system"}
       <dl class='bitem'>
         <dt onClick='showHide("system")'><b>系统管理</b></dt>
-        <dd style='display:block' class='sitem' id='system'>
+        <dd style='display:none' class='sitem' id='system'>
           <ul class='sitemu'>
             {auth name="user"}<li><a href="{url_path('user')}">用户管理</a></li>{/auth}
             {auth name="role"}<li><a href="{url_path('role')}">角色管理</a></li>{/auth}
@@ -45,6 +45,7 @@
                 <li><a href="{url_path('taizhang','index','pm=')}{urlencode($userProfile['name'])}">我的台账</a></li>
                 <li><a href="{url_path('taizhang')}">台账查询</a></li>
             {/auth}
+            {auth name="taizhang+recyclebin"}<li><a href="{url_path('taizhang','recyclebin')}">台账回收站</a></li>{/auth}
             {*
             {auth name="taizhang_ch"}<li><a href="{url_path('taizhang_ch')}">土地勘测登记台账</a></li>{/auth}
             {auth name="taizhang_house"}<li><a href="{url_path('taizhang_house')}">房产项目登记台帐</a></li>{/auth}
@@ -112,7 +113,7 @@
       {auth name="info"}
       <dl class='bitem'>
         <dt onClick='showHide("info")'><b>信息中心</b></dt>
-        <dd style='display:block' class='sitem' id='info'>
+        <dd style='display:none' class='sitem' id='info'>
           <ul class='sitemu'>
             {auth name="announce"}<li><a href="{url_path('announce')}">通知公告</a></li>{/auth}
             {auth name="notice"}<li><a href="{url_path('notice')}">滚动公告</a></li>{/auth}
@@ -126,7 +127,7 @@
       {auth name="reports"}
       <dl class='bitem'>
         <dt onClick='showHide("reports")'><b>数据报表</b></dt>
-        <dd style='display:block' class='sitem' id='reports'>
+        <dd style='display:none' class='sitem' id='reports'>
           <ul class='sitemu'>
             {auth name="reports_fault"}<li><a href="{url_path('reports_fault')}">缺陷统计报表</a></li>{/auth}
             {auth name="reports_monthly"}<li><a href="{url_path('reports_monthly')}">项目台账统计报表</a></li>{/auth}
@@ -144,7 +145,7 @@
       {auth name="personal"}
       <dl class='bitem'>
         <dt onClick='showHide("personal")'><b>个人办公</b></dt>
-        <dd style='display:block' class='sitem' id="personal">
+        <dd style='display:none' class='sitem' id="personal">
           <ul class='sitemu'>
             {auth name="my_event"}<li><a href="{url_path('my_event')}">待办事宜</a></li>{/auth}
             {auth name="pm+receive"}<li><a href="{url_path('pm','receive')}">点对点消息</a></li>{/auth}

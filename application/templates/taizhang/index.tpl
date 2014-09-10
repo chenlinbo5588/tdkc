@@ -54,17 +54,24 @@
             </div>
                         
             <div class="span12">
-                {auth name="taizhang+delete"}
+                
                 <div class="operator">
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                    <a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>
+                    {if $action == 'index'}
+                    {auth name="taizhang+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
+                    {else}
+                    {auth name="taizhang+restore"}<a href="javascript:restoreSelAll('id[]');" class="coolbg">重新启用</a>{/auth}
+                    {/if}
                 </div>
-                {/auth}
                 <table class="table" id="listtable" >
                     <thead>
                         <tr>
+                            {if $action == 'index'}
                             {auth name="taizhang+delete"}<th></th>{/auth}
+                            {else}
+                            {auth name="taizhang+restore"}<th></th>{/auth}
+                            {/if}
                             <th>时间</th>
                             <th>台账类型</th>
                             <th>镇街</th>
@@ -89,7 +96,11 @@
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
+                           {if $action == 'index'}
                            {auth name="taizhang+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
+                           {else}
+                           {auth name="taizhang+restore"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
+                           {/if}
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td>{$item['category']}</td>
                            <td>{$item['region_name']|escape}</td>
@@ -116,9 +127,9 @@
                            <td>{$item['contacter']}</td>
                            <td>{$item['contacter_mobile']}</td>
                            <td>{$item['pm']}</td>
-                           <td>{$item['status']}</td>
+                           <td>{if $item['status'] == '已删除'}<span class="notice">{$item['status']}</span>{else}<span class="success">{$item['status']}</span>{/if}</td>
                            <td>{$item['sendor']}</td>
-                           <td>{$item['zc_name']} {$item['cs_name']} {$item['fs_name']} </td>
+                           <td>{$item['creator']} {$item['zc_name']} {$item['cs_name']} {$item['fs_name']} </td>
                            <td>
                                {if $item['fee_type'] == 0}未收费
                                {elseif $item['fee_type'] == 1}挂账
@@ -132,18 +143,55 @@
                            <td>{if $item['get_doc'] == 1}已领取{else}未领取{/if}</td>
                            <td>{$item['descripton']}</td>
                            <td>
-                           {auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}
-                           </td>
+                           {if $action == 'index'}{auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}{/if}
+                            </td>
                         </tr>
                         {/foreach}
                     </tbody>
                 </table>
+                {include file="pagination.tpl"}
             </div>
             <form id="delete_form" name="deleteForm" action="{url_path('taizhang','delete')}" method="post" target="post_iframe">
                 <div class="inputlist"></div>
             </form>
+            <form id="restore_form" name="restoreForm" action="{url_path('taizhang','restore')}" method="post" target="post_iframe">
+                <div class="inputlist"></div>
+            </form>
+                
             <iframe name="post_iframe" frameborder="0" height="0" width="0"></iframe>
             <script>
+                
+                function restoreSelAll(name){
+                    var checked = false;
+                    $("input[name='" +  name + "']").each(function(){
+                        if($(this).prop("checked")){
+                            checked = true;
+                        }
+                    });
+                    
+                    $("#restore_form .inputlist").html('');
+                    $("input[name='" + name + "']").each(function(index){
+                        if($(this).prop("checked")){
+                            checked = true;
+                            $('<input type="hidden" name="restore_id[]" value="' + $(this).val() + '"/>').appendTo("#restore_form .inputlist");
+                        }
+                    });
+                    
+                    if(!checked){
+                        $.jBox.error('至少选择一条记录', '提示');
+                    }else{
+                        var submit = function (v, h, f) {
+                            if (v == true){
+                                $("#restore_form").submit();
+                            }
+                            return true;
+                        };
+
+                        $.jBox.confirm("确定要重新启用吗", "提示", submit, { buttons: { '确定': true, '取消': false} });
+                    }
+                }
+                
+                
                 function deleteSelAll(name){
                     var checked = false;
                     $("input[name='" +  name + "']").each(function(){
