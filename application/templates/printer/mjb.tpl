@@ -12,6 +12,10 @@
                 font-family: "隶书","Microsoft YaHei", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
                 font-size: 16px;
             }
+            
+            .border1 th , .border1 td {
+                padding: 3px;
+            }
         </style>
         <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" href="/css/ie6.css" />

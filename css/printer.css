@@ -197,13 +197,11 @@ textarea.noborder {
 
 
 .jzb , .mjb {
-    width:700px;
-    margin:0 auto;
+    width:670px;
+    margin:0 20px 0;
 }
 .mjb {
-    width:730px;
-    position: relative;
-    left: 10px;
+    width:700px;
 }
 
 
@@ -212,8 +210,9 @@ textarea.noborder {
 }
 
 .jzb .title {
-    font-size:30px;
-    font-weight: normal;
+    font-size:26px;
+    font-weight: bold;
+    padding: 20px 0 5px 0;
 }
 
 .jzb .sepline {
@@ -222,7 +221,7 @@ textarea.noborder {
 }
 
 .jzb th , .jzb td {
-    height:35px;
+    height:27px;
 }
 
 .direction {
@@ -398,11 +397,11 @@ input.viliage {
 
 
 .mjb .remark {
-    height:60px;
+    height:40px;
 }
 .mjb .remark input {
     width:100%;
-    height:60px
+    height:40px
 }
 
 .mjb .mjb_db {
@@ -478,25 +477,26 @@ input.viliage {
  
  
  .zddj .title {
-     font-size:24px;
+     font-size:26px;
      text-align: center;
-     margin:50px 0 40px 0
+     margin:20px 0 20px 0;
+     font-weight: bold;
  }
  
  
  .zddj .subtitle {
      font-weight: normal;
-     font-size: 17px;
+     font-size: 20px;
  }
  
  .zddj .pg {
-     line-height: 40px;
+     line-height: 35px;
      padding:10px 0;
      letter-spacing: 2px;
  }
  
   .zddj .pg li , .zddj .pg li p{
-     font-size: 16px;
+     font-size: 20px;
  }
  
  .zddj .pg li p {
@@ -545,7 +545,7 @@ input.viliage {
 
 .bgb .bgb_title {
     font-size:24px;
-    margin-bottom: 20px;
+    padding:20px 0;
 }
 
 .bgb .fulltable {

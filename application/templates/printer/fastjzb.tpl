@@ -23,7 +23,7 @@
                 {else}
                 <div class="jzb">
                     <h1 class="title center jzb_title inputarea">宗地界址调查表</h1>
-                    <div><strong>QR-10-03</strong></div>
+                    {*<div><strong>QR-10-03</strong></div>*}
                     <table class="fulltable border1">
                         <colgroup>
                             <col width="40"/>
@@ -35,15 +35,15 @@
                         <tbody>
                             <tr class="center">
                                 <td colspan="2">土地使用者名称</td>
-                                <td class="alignleft inputarea" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
+                                <td class="inputarea" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
                             </tr>
                             <tr class="center">
                                 <td colspan="2">本宗地用签名盖章</td>
-                                <td class="alignleft inputarea" colspan="3"></td>
+                                <td class="inputarea" colspan="3"></td>
                             </tr>
                             <tr class="center">
                                 <td colspan="2">宗地坐落</td>
-                                <td class="alignleft inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
+                                <td class="inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
                             </tr>
                             <tr class="center vmd">
                                 <td>四址</td>
@@ -151,7 +151,7 @@
                                     <p class="yj_item">调查人签名：        <span class="gz">(公章)</span></p>
                                     <ul class="yj_item">
                                         <li class="d1">所（分局）领导签字：</li>
-                                        <li class="d2"><span class="inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</span></li>
+                                        <li class="d2"><span class="inputarea">&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</span></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -167,7 +167,6 @@
         <script type="x-my-template" id="jzbTemplate">
             <div class="jzb">
                 <h1 class="title center jzb_title inputarea">宗地界址调查表</h1>
-                <div><strong>QR-10-03</strong></div>
                 <table class="fulltable border1">
                     <colgroup>
                         <col width="40"/>
@@ -295,7 +294,7 @@
                                 <p class="yj_item">调查人签名：        <span class="gz">(公章)</span></p>
                                 <ul class="yj_item">
                                     <li class="d1">所（分局）领导签字：</li>
-                                    <li class="d2"><span class="inputarea">{$dateInfo['year']}年{$dateInfo['month']}月{$dateInfo['day']} 日</span></li>
+                                    <li class="d2"><span class="inputarea">&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</span></li>
                                 </ul>
                             </td>
                         </tr>
