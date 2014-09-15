@@ -99,18 +99,18 @@
             
             .preview .zi {
                 left: 650px;
-                top: 980px;
+                top: 950px;
                 
             }
             
             .preview .project_no {
                 left: 345px;
-                top: 980px;
+                top: 950px;
                 
             }
             .preview .nature {
                 left: 150px;
-                top: 980px;
+                top: 950px;
                 
             }
             
@@ -121,32 +121,32 @@
             
             .preview .clz {
                 left: 410px;
-                top: 580px;
+                top: 545px;
             }
             
             .preview .zlz {
                 left: 410px;
-                top: 510px;
+                top: 480px;
             }
             
             .preview .checkor {
                 left: 410px;
-                top: 440px;
+                top: 410px;
             }
             
             .preview .dyear {
-                left: 530px;
-                top: 150px;
+                left: 560px;
+                top: 120px;
             }
             
             .preview .dmonth {
-                left: 415px;
-                top: 150px;
+                left: 435px;
+                top: 120px;
             }
             
             .preview .dday {
-                left: 240px;
-                top: 150px;
+                left: 270px;
+                top: 120px;
             }
         </style>
     </head>

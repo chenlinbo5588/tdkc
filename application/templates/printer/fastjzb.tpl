@@ -178,15 +178,15 @@
                     <tbody>
                         <tr class="center">
                             <td colspan="2">土地使用者名称</td>
-                            <td class="alignleft inputarea" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
+                            <td class="inputarea" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
                         </tr>
                         <tr class="center">
                             <td colspan="2">本宗地用签名盖章</td>
-                            <td class="alignleft inputarea" colspan="3"></td>
+                            <td class="inputarea" colspan="3"></td>
                         </tr>
                         <tr class="center">
                             <td colspan="2">宗地坐落</td>
-                            <td class="alignleft inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
+                            <td class="inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
                         </tr>
                         <tr class="center vmd">
                             <td>四址</td>

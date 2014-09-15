@@ -196,12 +196,13 @@ textarea.noborder {
 }
 
 
-.jzb , .mjb {
-    width:670px;
-    margin:0 20px 0;
+.jzb {
+    width:630px;
+    margin:0 auto;
 }
 .mjb {
-    width:700px;
+    width:650px;
+    margin: 0 15px 0 65px;
 }
 
 
@@ -388,10 +389,10 @@ input.viliage {
 
 .mjb .cp1 {width:40px;}
 .mjb .cp2 {width:90px;}
-.mjb .cp3 {width:120px;}
-.mjb .cp4 {width:120px;}
-.mjb .cp5 {width:120px;}
-.mjb .cp6 {width:120px;}
+.mjb .cp3 {width:100px;}
+.mjb .cp4 {width:100px;}
+.mjb .cp5 {width:100px;}
+.mjb .cp6 {width:100px;}
 .mjb .cp7 {width:100px;}
 
 
@@ -472,7 +473,7 @@ input.viliage {
  
  .zddj {
      width:600px;
-     margin:0 auto;
+     margin:0 0 0 90px;
  }
  
  
@@ -492,7 +493,6 @@ input.viliage {
  .zddj .pg {
      line-height: 35px;
      padding:10px 0;
-     letter-spacing: 2px;
  }
  
   .zddj .pg li , .zddj .pg li p{

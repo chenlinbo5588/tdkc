@@ -61,7 +61,7 @@ class Printer extends TZ_Controller {
             $this->assign('padTr',$padTr);
         }
         $this->load->helper('number');
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         $this->assign('dateInfo',$dateInfo);
@@ -83,7 +83,7 @@ class Printer extends TZ_Controller {
         $info = $this->Taizhang_Model->queryById($id);
         $this->assign('info',$info);
         $this->load->helper('number');
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         $this->assign('dateInfo',$dateInfo);
@@ -105,7 +105,7 @@ class Printer extends TZ_Controller {
         $info = $this->Taizhang_Model->queryById($id);
         $this->assign('info',$info);
         $this->load->helper('number');
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         $this->assign('dateInfo',$dateInfo);
@@ -126,7 +126,7 @@ class Printer extends TZ_Controller {
         $info = $this->Taizhang_Model->queryById($id);
         $this->assign('info',$info);
         $this->load->helper('number');
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         $this->assign('dateInfo',$dateInfo);
@@ -156,7 +156,7 @@ class Printer extends TZ_Controller {
         
         $this->assign('info',$info);
  
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         
@@ -203,7 +203,7 @@ class Printer extends TZ_Controller {
         
         $this->assign('info',$info);
  
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         
@@ -250,7 +250,7 @@ class Printer extends TZ_Controller {
         
         $this->assign('info',$info);
  
-        $dateInfo['year'] = to_chinese_number(date("Y",$info['createtime']),'O');
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
         
@@ -357,7 +357,7 @@ class Printer extends TZ_Controller {
         }
         
         
-        $dateInfo['year'] = to_chinese_number(date("Y",$dt),'O');
+        $dateInfo['year'] = year_number(date("Y",$dt),'O');
         $dateInfo['month'] = to_chinese_number(date("n",$dt),'O');
         $dateInfo['day'] = to_chinese_number(date("j",$dt),'O');
         $this->assign('dateInfo',$dateInfo);

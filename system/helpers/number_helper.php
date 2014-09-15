@@ -71,10 +71,9 @@ if ( ! function_exists('byte_format'))
 	}
 }
 
-
-if ( ! function_exists('to_chinese_number')) {
+if ( ! function_exists('year_number')) {
     
-    function to_chinese_number($num,$zero = '零',$lowcase = true){
+    function year_number($num,$zero = '零',$lowcase = true){
         //$c_digIT=array("零","拾","佰","仟","万");
         //'O';
         //$c_num=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖","拾");
@@ -104,6 +103,91 @@ if ( ! function_exists('to_chinese_number')) {
             
             return '';
         }
+    }
+}
+
+
+if ( ! function_exists('to_chinese_number')) {
+    
+    function to_chinese_number($num,$zero = '零',$withunit = true){
+        
+        
+        $char = array("零","一","二","三","四","五","六","七","八","九");
+        $dw = array("","十","百","千","万","亿","兆");
+        $retval = "";
+        $proZero = false;
+        
+        if($zero != '零'){
+            $char[0] = $zero;
+        }
+        
+        for($i = 0;$i < strlen($num);$i++)  {
+            
+            if($i > 0) {
+                $temp = (int)(($num % pow (10,$i+1)) / pow (10,$i));
+            }else {
+                $temp = (int)($num % pow (10,1));
+            }
+
+            if($proZero == true && $temp == 0) continue;
+
+            if($temp == 0) {
+                $proZero = true;
+            }else {
+                $proZero = false;
+            }
+
+            if($proZero)
+            {
+                if($retval == "") continue;
+                
+                $retval = $char[$temp].$retval;
+            }else {
+                
+                if($withunit){
+                    $retval = $char[$temp].$dw[$i].$retval;
+                }else{
+                    $retval = $char[$temp].$retval;
+                }
+                
+            }
+        }
+        
+        if($retval == "一十") $retval = "十";
+        return $retval;
+
+        /*
+        //$c_digIT=array("零","拾","佰","仟","万");
+        //'O';
+        //$c_num=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖","拾");
+        
+        if($lowcase){
+            $c_num=array("零","一","二","三","四","五","六","七","八","九","十");
+        }else{
+            $c_num=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖","拾");
+        }
+        
+        
+        //$c_digIT[0] = $zero;
+        $c_num[0] = $zero;
+        
+        
+        if($num){
+            $str = (string)$num;
+            
+            $rt = array();
+            
+            for($i = 0; $i < strlen($str); $i++){
+                $rt[] = $c_num[substr($str,$i,1)];
+            }
+            
+            return implode('',$rt);
+        }else{
+            
+            return '';
+        }
+         * *
+         */
     }
 }
  
