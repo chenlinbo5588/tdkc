@@ -62,8 +62,8 @@ class Printer extends TZ_Controller {
         }
         $this->load->helper('number');
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         $this->assign('dateInfo',$dateInfo);
         $this->assign('jzList',$data);
        
@@ -84,8 +84,8 @@ class Printer extends TZ_Controller {
         $this->assign('info',$info);
         $this->load->helper('number');
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         $this->assign('dateInfo',$dateInfo);
         $this->display();
     }
@@ -106,8 +106,8 @@ class Printer extends TZ_Controller {
         $this->assign('info',$info);
         $this->load->helper('number');
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         $this->assign('dateInfo',$dateInfo);
         $this->display();
     }
@@ -127,8 +127,8 @@ class Printer extends TZ_Controller {
         $this->assign('info',$info);
         $this->load->helper('number');
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         $this->assign('dateInfo',$dateInfo);
         $this->display();
     }
@@ -157,8 +157,8 @@ class Printer extends TZ_Controller {
         $this->assign('info',$info);
  
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         
         $this->assign('dateInfo',$dateInfo);
         
@@ -204,8 +204,8 @@ class Printer extends TZ_Controller {
         $this->assign('info',$info);
  
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         
         $this->assign('dateInfo',$dateInfo);
         
@@ -251,8 +251,8 @@ class Printer extends TZ_Controller {
         $this->assign('info',$info);
  
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$info['createtime']),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$info['createtime']),'O');
+        $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         
         $this->assign('dateInfo',$dateInfo);
         
@@ -358,8 +358,8 @@ class Printer extends TZ_Controller {
         
         
         $dateInfo['year'] = year_number(date("Y",$dt),'O');
-        $dateInfo['month'] = to_chinese_number(date("n",$dt),'O');
-        $dateInfo['day'] = to_chinese_number(date("j",$dt),'O');
+        $dateInfo['month'] = month_day_number(date("n",$dt));
+        $dateInfo['day'] = month_day_number(date("j",$dt));
         $this->assign('dateInfo',$dateInfo);
         
        $this->assign('info', $info);
