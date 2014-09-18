@@ -188,6 +188,10 @@ textarea.noborder {
     vertical-align: middle;
 }
 
+.jz_sample {
+    text-align: left;
+}
+
 /**
  * 打印自动分页
  */

@@ -16,6 +16,24 @@
                 <input type="button" name="merginDirection" value="合并方向"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addJzb">+增加界址表</a>
                 <div><em>键盘组合建 Shift + Enter 隐藏本区域</em></div>
+                <div>
+                    <ul class="jz_sample">
+                        <li><strong>界址范例</strong></li>
+                        <li>自墙外侧</li>
+                        <li>自围墙外侧</li>
+                        <li>自(围)墙外侧</li>
+                        <li>拼墙基中</li>
+                        <li>拼围墙基中</li>
+                        <li>拼(围)墙基中</li>
+                        <li>他墙外侧</li>
+                        <li>他围墙外侧</li>
+                        <li>他(围)墙外侧</li>
+                        <li>界点连线外侧</li>
+                        <li>河石坎外侧</li>
+                        <li>河岸线外侧</li>
+                        <li>×道路中心线往××米</li>
+                    </ul>
+                </div>
             </div>
             <div class="container">
                 {if $jzb}
