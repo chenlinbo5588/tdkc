@@ -353,7 +353,8 @@
                         
                         $.ajax({
                             type:"GET",
-                            url: that.attr("data-href") + '&isajax=1',
+                            url: that.attr("data-href") + '&isajax=1&rand=' + Math.random(),
+                            cache: false,
                             success:function(resp){
                                 $("#row_" + edit_id).hide();
                                 $("#listtable tbody").prepend($(resp));
