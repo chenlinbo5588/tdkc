@@ -277,6 +277,15 @@ class Taizhang_Ch extends TZ_Admin_Controller {
         }
         
         $this->_getStep($info);
+        
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
+        
+        if($info['churan_area']){
+            $info['churan_area'] = sprintf("%.2f",$info['churan_area']);
+        }
+        
         $this->assign('info',$info);
         $this->assign('gobackUrl',$gobackUrl);
         $this->display('add');

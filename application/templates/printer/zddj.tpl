@@ -18,7 +18,7 @@
                 <h1 class="title">宗地勘测定界成果报告</h1>
                 <div class="pg pg1">
                     <span class="inputarea">慈溪市土地勘测规划设计院有限公司于</span><span class="inputarea">{$info['createtime']|date_format:"Y年"}</span><span class="inputarea ud">{$info['createtime']|date_format:"m"}</span>月
-                    <span>受</span><span class="inputarea ud">{$info['name']}</span>及<span class="inputarea ud">{$info['region_name']}</span><span>国土资源所</span><span>委托，对位于</span><span class="inputarea ud">{$info['address']}</span><span>的该宗地所在地块进行土地勘测定界测量和属性、权属调查。经实地调查，其征收土地</span><span >总面积</span><span class="inputarea ud">{if $info['total_area']}{$info['total_area']}{else}请输入面积{/if}</span><span>m<sup>2</sup>,<span class="inputarea">平面坐标为宁波独立坐标系</span><span>，高程基准为1985国家高程基准。</span>
+                    <span>受</span><span class="inputarea ud">{if $info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征'}慈溪市国土资源局{else}{$info['name']}{/if}</span>及<span class="inputarea ud">{$info['region_name']}</span><span>国土资源所</span><span>委托，对位于</span><span class="inputarea ud">慈溪市{$info['address']}</span><span>的该宗地所在地块进行土地勘测定界测量和属性、权属调查。经实地调查，其征收土地</span><span >总面积</span><span class="inputarea ud">{if $info['total_area']}{$info['total_area']}{else}请输入面积{/if}</span><span>m<sup>2</sup>,<span class="inputarea">平面坐标为宁波市独立坐标系</span><span>，高程基准为1985国家高程基准。</span>
                 </div>
                 <div class="pg pg2">
                     <h2 class="subtitle">一、作业依据</h2>
@@ -40,7 +40,7 @@
                             <col width="550"/>
                         </colgroup>
                         <tr><td>1、</td><td>本次作业根据任务情况，组织三名测绘技术人员（其中测绘助理工程师一名，技术员一名，测工一名），提供技术保障。</td></tr>
-                        <tr><td>2、</td><td>本次作业投入的仪器设备有拓普康全站仪一台采用全野外数字法观测、Trimble 5700 GPS RTK 仪器一套，投入的仪器设备均经过质检。电脑成图由“瑞德”软件作为基本软件。</td></tr>
+                        <tr><td>2、</td><td>本次作业投入的仪器设备有拓普康全站仪一台采用全野外数字法观测、Trimble 5700 GPS RTK 仪器一套，投入的仪器设备均经过质检。电脑成图由“瑞德”软件及南方CASS6.0软件作为基本软件。</td></tr>
                     </table>
                 </div>
                 <div class="pg pg3">
