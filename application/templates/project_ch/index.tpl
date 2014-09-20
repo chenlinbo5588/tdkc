@@ -176,7 +176,7 @@
              </div>
              <script type="x-my-template" id="projectAddTemplate">
                  <tr class="newrow">
-                     <td></td>
+                     {auth name="project_ch+delete"}<td></td>{/auth}
                      <td></td>
                      <td></td>
                      {include file="project_ch/fields_list.tpl"}

@@ -38,7 +38,7 @@
                                     <td>
                                         <select name="type_id" style="width:300px">
                                             {foreach from=$projectTypeList item=item}
-                                            <option value="{$item['id']}" {if $info['ptype_id'] == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
+                                            <option value="{$item['id']}" {if $smarty.post.type_id == $item['id'] || $info['ptype_id'] == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
                                             {/foreach}
                                         </select>
                                         {form_error('type_id')}

@@ -25,8 +25,8 @@ class Taizhang_Ch extends TZ_Admin_Controller {
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('nature', '用途', 'required' );
         $this->form_validation->set_rules('total_area', '总面积', 'required|numeric');
-        $this->form_validation->set_rules('churan_area', '出让面积', 'required|numeric');
-        
+        //$this->form_validation->set_rules('churan_area', '出让面积', 'required|numeric');
+        $_POST['churan_area'] = 0;
         
         if(!empty($_POST['contacter'])){
             $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
@@ -387,6 +387,10 @@ class Taizhang_Ch extends TZ_Admin_Controller {
             'ch_cs' => 'y'
         ));
         
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
+        
         $this->_getStep($info);
         $this->_getProjectFault($info);
         $this->assign('gobackUrl',$gobackUrl);
@@ -498,6 +502,10 @@ class Taizhang_Ch extends TZ_Admin_Controller {
             $this->assign('files',$this->_getFiles($info['files']));
         }
         
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
+        
         $this->_getProjectFault($info);
         $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
@@ -605,6 +613,10 @@ class Taizhang_Ch extends TZ_Admin_Controller {
         ));
         if(!empty($info['files'])){
             $this->assign('files',$this->_getFiles($info['files']));
+        }
+        
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
         }
         
         $this->_getProjectFault($info);

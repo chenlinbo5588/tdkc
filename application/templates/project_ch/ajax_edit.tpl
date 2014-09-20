@@ -1,5 +1,5 @@
 <tr id="editrow_{$info['id']}">
-                     <td></td>
+                     {auth name="project_ch+delete"}<td></td>{/auth}
                      <td>{$info['id']}</td>
                      <td>{$info['createtime']|date_format:"Y-m-d"}</td>
                      {include file="project_ch/fields_list.tpl"}

@@ -37,7 +37,7 @@
                                     <td>
                                         <select name="type_id" style="width:300px">
                                             {foreach from=$projectTypeList item=item}
-                                            <option value="{$item['id']}" {if $info['ptype_id'] == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
+                                            <option value="{$item['id']}" {if $smarty.post.type_id == $item['id'] || $info['ptype_id'] == $item['id']}selected{/if}>{$item['type']}-{$item['name']}</option>
                                             {/foreach}
                                         </select>
                                         {form_error('type_id')}
@@ -63,9 +63,6 @@
                                 </tr>
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>总面积</strong></label></td><td><input type="text" style="width:300px" name="total_area" value="{$info['total_area']}" placeholder="请输入总面积"/><span class="tip">M<sup>2</sup>{form_error('total_area')}</span></td>
-                                </tr>
-                                <tr>
-                                    <td><label class="required"><em>*</em><strong>出让面积</strong></label></td><td><input type="text" style="width:300px" name="churan_area" value="{$info['churan_area']}" placeholder="请输入出让面积"/><span class="tip">M<sup>2</sup>{form_error('churan_area')}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>作业负责人</strong></label></td><td><input type="text" style="width:300px" name="pm" value="{$info['pm']|escape}" placeholder="请输入作业负责人"/><span class="tip">{form_error('pm')}</span></td>

@@ -412,6 +412,7 @@ class TZ_Admin_Controller extends TZ_Controller {
 
             if($projectInfo){
                 unset($projectInfo['id'],$projectInfo['status'],$projectInfo['sendor_id']);
+                $projectInfo['ptype_id'] = $projectInfo['type_id']; 
                 $this->assign('info',$projectInfo);
                 
                 /**

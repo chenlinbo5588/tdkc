@@ -249,6 +249,10 @@ class Taizhang_House extends TZ_Admin_Controller {
             $this->assign('files',$this->_getFiles($info['files']));
         }
         
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
+        
         $this->_getStep($info);
         $this->assign('info',$info);
         $this->assign('gobackUrl',$gobackUrl);
@@ -343,6 +347,10 @@ class Taizhang_House extends TZ_Admin_Controller {
         $this->_getSendorList(array(
             'ch_cs' => 'y'
         ));
+        
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
         
         $this->_getStep($info);
         $this->_getProjectFault($info);
@@ -455,6 +463,10 @@ class Taizhang_House extends TZ_Admin_Controller {
             $this->assign('files',$this->_getFiles($info['files']));
         }
         
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
+        
         $this->_getProjectFault($info);
         $this->assign('gobackUrl',$gobackUrl);
         $this->assign('info',$info);
@@ -562,6 +574,10 @@ class Taizhang_House extends TZ_Admin_Controller {
         ));
         if(!empty($info['files'])){
             $this->assign('files',$this->_getFiles($info['files']));
+        }
+        
+        if($info['total_area']){
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
         }
         
         $this->_getProjectFault($info);

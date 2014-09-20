@@ -103,7 +103,12 @@ class Printer extends TZ_Controller {
         }
         
         $info = $this->Taizhang_Model->queryById($id);
+        if($info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征'){
+            //$info['total_area'] = number_format($info['total_area'],2,".","");
+            $info['total_area'] = sprintf("%.2f",$info['total_area']);
+        }
         $this->assign('info',$info);
+        
         $this->load->helper('number');
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
         $dateInfo['month'] = month_day_number(date("n",$info['createtime']));

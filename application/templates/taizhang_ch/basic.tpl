@@ -25,12 +25,14 @@
                                 </tr>
                                 <tr>
                                     <td><strong>总面积</strong></td>
-                                    <td>{$info['total_area']}M<sup>2</sup></td>
+                                    <td>{$info['total_area']}m<sup>2</sup></td>
                                 </tr>
+                                {*
                                 <tr>
                                     <td><strong>出让面积</strong></td>
-                                    <td>{$info['churan_area']}M<sup>2</sup></td>
+                                    <td>{$info['churan_area']}m<sup>2</sup></td>
                                 </tr>
+                                *}
                                 <tr>
                                     <td><strong>作业负责人</strong></label></td>
                                     <td>{$info['pm']|escape}</td>
