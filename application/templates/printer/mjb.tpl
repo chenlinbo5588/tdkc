@@ -562,7 +562,11 @@
                         });
                         
                         if(total > 0){
+                           {if ($info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征')}
+                           sub_sum.html(total);
+                           {else}
                             sub_sum.html(total.toFixed(2));
+                           {/if}
                         }else{
                             sub_sum.html('');
                         }
@@ -582,7 +586,11 @@
                             }
                         });
                         if(total > 0){
+                            {if ($info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征')}
+                            $(this).html(total);
+                            {else}
                             $(this).html(total.toFixed(2));
+                            {/if}
                         }else{
                             $(this).html('');
                         }
@@ -591,8 +599,13 @@
                     });
                     
                     if(col_sub_sum > 0){
+                        {if ($info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征')}
+                        $(".col_sub_sum",table).html(col_sub_sum);
+                        $(".total_sum",table).html(col_sub_sum);
+                        {else}
                         $(".col_sub_sum",table).html(col_sub_sum.toFixed(2));
                         $(".total_sum",table).html(col_sub_sum.toFixed(2));
+                        {/if}
                     }else{
                         $(".col_sub_sum",table).html('');
                         $(".total_sum",table).html('');
@@ -623,7 +636,11 @@
                     var doSetVal = function(){
                         if($.trim(txt.val()) != '' && areaReg.test(txt.val())){
                             var v = parseFloat(txt.val());
-                            that.html(v.toFixed(2));
+                            {if ($info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征')}
+                                that.html(v);
+                            {else}
+                                that.html(v.toFixed(2));
+                            {/if}
                         }else{
                             that.html('');
                         }
@@ -726,7 +743,11 @@
                         
                         if(number){
                             if(areaReg.test(a)){
-                                that.html(parseFloat(a).toFixed(2));
+                                {if ($info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征')}
+                                    that.html(parseFloat(a));
+                                {else}
+                                    that.html(parseFloat(a).toFixed(2));
+                                {/if}
                             }else{
                                 that.html('');
                             }
