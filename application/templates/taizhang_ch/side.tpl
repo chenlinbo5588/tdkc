@@ -34,5 +34,16 @@
                         </ul>
                     </div>
                     {/if}
+                    
+                    {auth name="taizhang+fee"}
+                    <div class="sideitem">
+                        <h2>打印宗地表格信息</h2>
+                        <ul>
+                            <li><a href="{url_path('printer','mjb','id=')}{$info['id']}&mode=print" target="_blank">打印土地面积分类表</a></li>
+                            <li><a href="{url_path('printer','fastjzb','id=')}{$info['id']}&mode=print" target="_blank">打印宗地界址调查表</a></li>
+                        </ul>
+                    </div>
+                    {/auth}
+                    
                     {/if}
                 </div>

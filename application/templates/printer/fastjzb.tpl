@@ -11,7 +11,7 @@
         <form name="jzbForm" method="post" action="{url_path('project_ch','savefastjzb')}" target="post_iframe">
             <input type="hidden" name="id" value="{$info['id']}"/>
             <textarea name="jzb" style="display: none;"></textarea>
-            <div id="oparea" class="center">
+            <div id="oparea" class="center" {if $smarty.get.mode == 'print'}style="display: none;"{/if}>
                 <input type="submit" name="submit" value="保存"  class="btn btn-sm btn-orange"/>
                 <input type="button" name="merginDirection" value="合并方向"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addJzb">+增加界址表</a>

@@ -26,7 +26,7 @@
         <form name="mjbForm" method="post" action="{url_path('project_ch','savemjb')}" target="post_iframe">
             <input type="hidden" name="id" value="{$info['id']}"/>
             <textarea name="mjb" style="display: none;"></textarea>
-            <div id="oparea" class="center">
+            <div id="oparea" class="center" {if $smarty.get.mode == 'print'}style="display: none;"{/if}>
                 <input type="submit" name="submit" value="保存"  class="btn btn-sm btn-orange"/>
                 <input type="button" name="addDjx" value="添加对角线"  class="btn btn-sm btn-gray"/>
                 <input type="button" name="resetDjx" value="重置对角线"  class="btn btn-sm btn-gray"/>
@@ -256,7 +256,7 @@
                     <div class="mjb_db">
                         <p><span class="inputarea">测量者: {$info['pm']|escape}</span></p>
                         <p><span class="inputarea">填写者: {$info['pm']|escape}</span></p>
-                        <p><span class="inputarea">审核者: {$info['cs_name']|escape}</span></p>
+                        <p><span class="inputarea">审核者: 王立琴</span></p>
 
                         <div class="center mjb_lk">
                             <p>慈溪市土地勘测规划设计院有限公司</p>
@@ -488,7 +488,7 @@
                 <div class="mjb_db">
                     <p><span class="inputarea">测量者: {$info['pm']|escape}</span></p>
                     <p><span class="inputarea">填写者: {$info['pm']|escape}</span></p>
-                    <p><span class="inputarea">审核者: {$info['cs_name']|escape}</span></p>
+                    <p><span class="inputarea">审核者: 王立琴</span></p>
 
                     <div class="center mjb_lk">
                         <p>慈溪市土地勘测规划设计院有限公司</p>
@@ -800,7 +800,11 @@
                 
                 {* 提交按钮 *}
                 $("input[name=submit]").bind("click",function(e){
+                    $("input[name=resetDjx]").trigger("click", {});
+                    $("input[name=addDjx]").trigger("click", {});
+                    
                     $("textarea[name=mjb]").val($(".container").html());
+                    
                 });
                 
                 {* 添加对角线按钮 *}
@@ -893,6 +897,10 @@
                             }).show();
                     });
                 });
+                
+                //自动描绘对角线
+                $("input[name=resetDjx]").trigger("click", {});
+                $("input[name=addDjx]").trigger("click", {});
             });
         
         </script>
