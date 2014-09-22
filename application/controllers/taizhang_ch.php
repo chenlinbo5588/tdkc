@@ -226,6 +226,8 @@ class Taizhang_Ch extends TZ_Admin_Controller {
         
         if(!empty($_POST['file_id'])){
             $_POST['files'] = implode(',',$_POST['file_id']);
+        }else{
+           $_POST['files'] = ''; 
         }
         
         if($action == 'add'){

@@ -104,6 +104,8 @@ class Taizhang_Model extends TZ_Model {
         
         if(!empty($param['files'])){
             $data['files'] = $param['files'];
+        }else{
+            $data['files'] = '';
         }
         
          if(!empty($param['complete_time'])){
