@@ -95,7 +95,7 @@
                                 <tr>
                                     <td></td>
                                     <td>
-                                        {if $action == 'add' || ($action == 'edit' && $info['status'] == '新增' && $info['sendor_id'] == $userProfile['id'])}
+                                        {if $info['status'] != '已收费'}
                                         <input type="submit" name="submit" class="btn btn-sm btn-orange" value="{$saveText}保存"/>
                                         <input type="reset" name="rst" class="btn btn-sm btn-gray" value="重置"/>
                                         {/if}
