@@ -141,7 +141,7 @@ class TZ_Admin_Controller extends TZ_Controller {
     protected function _getStep($info){
         $status = array(
            // '新增' , '发送' ,'布置', '实施','完成','提交初审','通过初审',  '提交复审', '通过复审', '项目提交','收费','归档'
-            '新增' , '提交初审','通过初审',  '提交复审', '通过复审','收费'
+            '新增' , '提交初审','通过初审',  '提交复审', '通过复审'
         );
         
         $statusKey = array_keys($status);
@@ -282,6 +282,9 @@ class TZ_Admin_Controller extends TZ_Controller {
             
             $this->load->model('Fault_Model');
             $sysFaultList = $this->Fault_Model->getList(array(
+                'where' => array(
+                    'score >' => 0
+                ),
                 'order' => 'type ASC,level DESC'
             ));
             

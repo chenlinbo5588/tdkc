@@ -15,12 +15,6 @@
                                 <col width="500"/>
                             </colgroup>
                             <tbody>
-                                {if $info['id']}
-                                <tr>
-                                    <td><strong>编号</strong></td>
-                                    <td>{$info['project_no']}</td>
-                                </tr>
-                                {/if}
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>区域</strong></label></td>
                                     <td>
@@ -45,16 +39,20 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="required"><em>*</em><strong>名称</strong></label></td><td><input type="text" style="width:300px" name="name" value="{$info['name']}" placeholder="请输入项目名称"/><span class="tip">{form_error('name')}</span></td>
+                                    <td><label class="required"><em>*</em><strong>用途</strong></label></td>
+                                    <td>
+                                        <input type="text" style="width:300px" name="nature" value="{$info['nature']}" placeholder="请输入用途"/>
+                                        {form_error('nature')}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="required"><em>*</em><strong>单位名称</strong></label></td><td><input type="text" style="width:300px" name="name" value="{$info['name']}" placeholder="请输入项目名称"/><span class="tip">{form_error('name')}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>土地坐落</strong></label></td><td><input type="text" style="width:300px" name="address" value="{$info['address']}" placeholder="请输入土地坐落"/><span class="tip">{form_error('address')}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>作业负责人</strong></label></td><td><input type="text" style="width:300px" name="pm" value="{$info['pm']|escape}" placeholder="请输入作业负责人"/><span class="tip">{form_error('pm')}</span></td>
-                                </tr>
-                                <tr>
-                                    <td><label class="optional"><em></em><strong>联系人号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_mobile" value="{$info['contacter_mobile']}" placeholder="请输入联系人号码"/><span class="tip">{form_error('contacter_mobile')}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>

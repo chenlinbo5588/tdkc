@@ -60,6 +60,7 @@ define('TAIZHANG_WF','违法用地勘测');
 define('TAIZHANG_OTHER','土方山塘地形评估控制');
 define('TAIZHANG_PERSON','个人建房');
 
+define('TAIZHANG_SH','散活');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

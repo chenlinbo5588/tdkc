@@ -32,7 +32,7 @@
                             </td>
                             <td colspan="2">
                                 <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
-                                {*<a class="addlink" href="{url_path('taizhang','add')}">+编台账</a>*}
+                                {auth name="taizhang_sh+add"}<a class="addlink" href="{url_path('taizhang_sh','add')}">+添加散活台账</a>{/auth}
                             </td>
                         </tr>
                         <tr>
@@ -118,6 +118,8 @@
                                <a href="{url_path('taizhang_other','edit','id=')}{$item['id']}">{$item['name']|escape}</a>
                            {elseif $item['category'] == $smarty.const.TAIZHANG_PERSON}
                                <a href="{url_path('taizhang_person','edit','id=')}{$item['id']}">{$item['name']|escape}</a>
+                           {elseif $item['category'] == $smarty.const.TAIZHANG_SH}
+                               <a href="{url_path('taizhang_sh','edit','id=')}{$item['id']}">{$item['name']|escape}</a>
                            {else}
                             {$item['name']|escape}
                            {/if}

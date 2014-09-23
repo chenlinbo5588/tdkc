@@ -95,7 +95,7 @@
                             <th class="f_remark">修改、处理意见、说明</th>
                         </tr>
                         <tr class="col">
-                            <td class="center" rowspan="3"><b class="font1">{$info['name']|escape}</b></td>
+                            <td class="center" rowspan="3"><b class="font1"><span class="inputarea">{$info['name']|escape}</span></b></td>
                             <td>
                                 <div><b  class="font1">自查：</b></div>
                                 <div><textarea class="noborder font1">{$info['zc_yj']}</textarea></div>
@@ -118,9 +118,9 @@
                                 {/if}
                                 <div>
                                     {foreach from=$csFault item=item}
-                                        <div>{$item['fault_code']}
-                                        {$item['fault_name']}
-                                        {$item['remark']|escape}</div>
+                                        <div><span class="inputarea">{$item['fault_code']}</span>
+                                        <span class="inputarea">{$item['fault_name']}</span>
+                                        <span class="inputarea">{$item['remark']|escape}</span></div>
                                     {/foreach}
                                 </div>
                             </td>
@@ -136,9 +136,9 @@
                                 {/if}
                                 <div>
                                     {foreach from=$fsFault item=item}
-                                        <div>{$item['fault_code']}
-                                        {$item['fault_name']}
-                                        {$item['remark']|escape}</div>
+                                        <div><span class="inputarea">{$item['fault_code']}</span>
+                                        <span class="inputarea">{$item['fault_name']}</span>
+                                        <span class="inputarea">{$item['remark']|escape}</span></div>
                                     {/foreach}
                                 </div>
                             </td>

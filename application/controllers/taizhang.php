@@ -4,12 +4,13 @@
 class Taizhang extends TZ_Admin_Controller {
     
     public $projectTypeList = array(
-            '土地勘测' => '土地勘测',
-            '房产项目' => '房产项目',
-            '放线竣工' => '放线竣工',
-            '违法用地勘测' => '违法用地勘测',
-            '土方山塘地形评估控制' => '土方山塘地形评估控制',
-            '个人建房' => '个人建房'
+            TAIZHANG_TD => TAIZHANG_TD,
+            TAIZHANG_HOUSE => TAIZHANG_HOUSE,
+            TAIZHANG_FG => TAIZHANG_FG,
+            TAIZHANG_WF => TAIZHANG_WF,
+            TAIZHANG_OTHER => TAIZHANG_OTHER,
+            TAIZHANG_PERSON => TAIZHANG_PERSON,
+            TAIZHANG_SH => TAIZHANG_SH
         );
     
     
@@ -59,9 +60,23 @@ class Taizhang extends TZ_Admin_Controller {
         
         if($this->isPostRequest() && !empty($_POST['id'])){
             
-            $this->form_validation->set_rules('complete_time', '项目完成时间', 'required|valid_date');
-            $this->form_validation->set_rules('get_doc', '成果资料领取', 'required|is_natural|less_than[2]');
-            $this->form_validation->set_rules('get_doctime', '成果资料领取时间', 'required|valid_date');
+            if(!empty($_POST['complete_time'])){
+                $this->form_validation->set_rules('complete_time', '项目完成时间', 'valid_date');
+            }else{
+                $_POST['complete_time'] = 0;
+            }
+            
+            if(!empty($_POST['get_doc'])){
+                $this->form_validation->set_rules('get_doc', '成果资料领取', 'is_natural|less_than[2]');
+            }else{
+                $_POST['get_doc'] = 0;
+            }
+            
+            if(!empty($_POST['get_doctime'])){
+                $this->form_validation->set_rules('get_doctime', '成果资料领取时间', 'valid_date');
+            }else{
+                $_POST['get_doctime'] = 0;
+            }
             
             if(!empty($_POST['get_owner'])){
                 $this->form_validation->set_rules('get_owner', '成果资料领取人', 'max_length[20]');
@@ -75,11 +90,27 @@ class Taizhang extends TZ_Admin_Controller {
                 $_POST['owner_tel'] = '';
             }
             
-            $this->form_validation->set_rules('kh_amount', '考核金额', 'required|numeric');
-            $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
-            $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
+            if(!empty($_POST['kh_amount'])){
+                $this->form_validation->set_rules('kh_amount', '考核金额', 'numeric');
+            }else{
+                $_POST['kh_amount'] = 0;
+            }
+            
+            if(!empty($_POST['ys_amount'])){
+                $this->form_validation->set_rules('ys_amount', '应收金额', 'numeric');
+            }else{
+                $_POST['ys_amount'] = 0;
+            }
+            
+            if(!empty($_POST['ss_amount'])){
+                $this->form_validation->set_rules('ss_amount', '实收金额', 'numeric');
+            }else{
+                $_POST['ss_amount'] = 0;
+            }
+            
             //$this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
             //$this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
+            
             $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural|less_than[5]');
             
             if(!empty($_POST['remark'])){
@@ -91,7 +122,6 @@ class Taizhang extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 $now = time();
                 $data = array(
-                    'status' => '已收费',
                     'complete_time' => $_POST['complete_time'],
                     'get_doc' => $_POST['get_doc'],
                     'get_doctime' => $_POST['get_doctime'],
