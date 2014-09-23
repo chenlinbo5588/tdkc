@@ -90,28 +90,18 @@ class Taizhang extends TZ_Admin_Controller {
                 $_POST['owner_tel'] = '';
             }
             
-            if(!empty($_POST['kh_amount'])){
-                $this->form_validation->set_rules('kh_amount', '考核金额', 'numeric');
-            }else{
-                $_POST['kh_amount'] = 0;
-            }
+            $this->form_validation->set_rules('kh_amount', '考核金额', 'required|numeric');
+            $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
+            $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
             
-            if(!empty($_POST['ys_amount'])){
-                $this->form_validation->set_rules('ys_amount', '应收金额', 'numeric');
-            }else{
-                $_POST['ys_amount'] = 0;
-            }
-            
-            if(!empty($_POST['ss_amount'])){
-                $this->form_validation->set_rules('ss_amount', '实收金额', 'numeric');
-            }else{
-                $_POST['ss_amount'] = 0;
-            }
             
             //$this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
             //$this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
-            
-            $this->form_validation->set_rules('fee_type', '收费情况', 'required|is_natural|less_than[5]');
+            if(!empty($_POST['fee_type'])){
+                $this->form_validation->set_rules('fee_type', '收费情况', 'is_natural|less_than[5]');
+            }else{
+                $_POST['fee_type'] = 0;
+            }
             
             if(!empty($_POST['remark'])){
                 $this->form_validation->set_rules('remark', '备注', 'max_length[500]');
