@@ -55,6 +55,14 @@ class project_ch extends TZ_Admin_Controller {
         //$projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
         //$this->assign('projectTypeList',$projectTypeList['data']);
         $this->assign('action','index');
+        
+        /**
+         * 区域 
+         */
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('regionList',$regionList['data']);
+        
+        
         $this->_getPageData();
 		$this->display();
 	}
@@ -2320,6 +2328,10 @@ class project_ch extends TZ_Admin_Controller {
             
             if(!empty($_GET['edate'])){
                 $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
+            }
+            
+            if(!empty($_GET['region_name'])){
+                $condition['where']['region_name'] = trim($_GET['region_name']);
             }
             
             if($_GET['view'] == 'my'){

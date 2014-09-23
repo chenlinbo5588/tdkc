@@ -29,6 +29,15 @@
                                     {/foreach}
                                 </select>
                             </td>
+                            <td><label><strong>镇乡名称</strong></label></td>
+                            <td>
+                                <select name="region_name">
+                                    <option value="">请选择镇街</option>
+                                    {foreach from=$regionList item=item}
+                                    <option value="{$item['name']}" {if $smarty.get.region_name == $item['name']}selected{/if}>{$item['name']}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
                             <td><label><strong>状态</strong></label></td>
                             <td>
                                 <select name="status" >

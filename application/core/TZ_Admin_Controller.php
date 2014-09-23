@@ -191,7 +191,7 @@ class TZ_Admin_Controller extends TZ_Controller {
             'project_id' => $info['id']
         ));
         
-        if($sendorInfo['id'] != $this->_userProfile['id']){
+        //if($sendorInfo['id'] != $this->_userProfile['id']){
             $url = '';
             switch($project_type){
                 case 0:
@@ -215,7 +215,7 @@ class TZ_Admin_Controller extends TZ_Controller {
                 'url' => $url,
                 'creator' => $this->_userProfile['name']
             ));
-        }
+        //}
         
     }
     
