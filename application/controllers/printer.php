@@ -116,6 +116,22 @@ class Printer extends TZ_Controller {
         $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
         $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         $this->assign('dateInfo',$dateInfo);
+        
+        
+        $this->load->model('Project_Zddj_Model');
+        $zddj = $this->Project_Zddj_Model->getList(array(
+            'where' => array(
+                'type' => 0,
+                'project_id' => $info['id']
+            ),
+            'order' => 'createtime DESC',
+            'limit' => 1
+        ));
+
+        if($zddj['data'][0]){
+            $this->assign('zddj',$zddj['data'][0]);
+        }
+        
         $this->display();
     }
     

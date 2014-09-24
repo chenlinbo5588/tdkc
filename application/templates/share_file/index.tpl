@@ -41,7 +41,7 @@
                            <td>
                                <div class="filerow{if $item['is_dir']} isdir{/if}">
                                {if $item['is_dir']}<div class="file_icon dir_icon16"></div><a class="filename" href="{url_path('share_file','index','pid=')}{$item['id']}">{$item['file_name']|escape}</a>
-                               {else}<img src="{filetype_url($item['file_extension'])}"/><span class="filename">{$item['file_name']|escape}</span>{/if}
+                               {else}<img src="{filetype_url($item['file_extension'])}"/><span class="filename"><a href="{url_path('share_file','download','id=')}{$item['id']}">{$item['file_name']|escape}</a></span>{/if}
                                 </div>
                             </td>
                            <td>{byte_format($item['file_size'])}</td>

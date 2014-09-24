@@ -144,6 +144,14 @@ class TZ_Admin_Controller extends TZ_Controller {
             '新增' , '提交初审','通过初审',  '提交复审', '通过复审'
         );
         
+        $names = array(
+            '新增' => 'creator',
+            '提交初审' => 'zc_name',
+            '通过初审' => 'cs_name',
+            '提交复审' => 'cs_name',
+            '通过复审' => 'fs_name'
+        );
+        
         $statusKey = array_keys($status);
         $currentKey = 0;
         
@@ -156,6 +164,10 @@ class TZ_Admin_Controller extends TZ_Controller {
 
         $statusHtml = array();
         foreach($status as $k => $v){
+            if($info[$names[$v]]){
+                $v = $v.'('.$info[$names[$v]].')';
+            }
+            
             if($k < $currentKey){
                 $statusHtml[] = '<span class="status statusover">'.$v."</span>";
                 

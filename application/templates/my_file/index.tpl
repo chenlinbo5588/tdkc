@@ -49,7 +49,7 @@
                            <td>
                                <div class="filerow{if $item['is_dir']} isdir{/if}">
                                {if $item['is_dir']}<div class="file_icon dir_icon16"></div><a class="filename" href="{url_path('my_file','index','pid=')}{$item['id']}">{$item['file_name']|escape}</a>
-                               {else}<img src="{filetype_url($item['file_extension'])}"/><span class="filename">{$item['file_name']|escape}</span>{/if}
+                               {else}<img src="{filetype_url($item['file_extension'])}"/><span class="filename"><a href="{url_path('my_file','download','id=')}{$item['id']}">{$item['file_name']|escape}</a></span>{/if}
                                {if $item['in_share']}<strong>【已共享】</strong>{/if}
                                 </div>
                             </td>

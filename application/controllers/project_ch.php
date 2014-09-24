@@ -178,6 +178,45 @@ class project_ch extends TZ_Admin_Controller {
         
     }
     
+    /**
+     * 保存宗地勘测定界报告 
+     */
+    public function savezddj(){
+        $project_id = (int)gpc("id",'GP',0);
+        
+        $reload = false;
+        if(empty($project_id)){
+            $message = "参数错误,请重新请求";
+        }else{
+            
+            for($i = 0; $i < 1; $i++){
+                $info = $this->Taizhang_Model->queryById($project_id);
+
+                if(!$info){
+                    $message = "保存失败,找不到记录";
+                    break;
+                }
+                
+                $this->load->model('Project_Zddj_Model');
+                
+                $this->Project_Zddj_Model->deleteByWhere(array(
+                    'type' => 0,
+                    'project_id' => $info['id']
+                ));
+                $_POST['type'] = 0;
+                $_POST['project_id'] = $info['id'];
+                $_POST['creator'] = $this->_userProfile['name'];
+                $this->Project_Zddj_Model->add($_POST);
+                
+                $message = '保存成功';
+            }
+        }
+        
+        $this->assign('message',$message);
+        $this->display('showmessage','common');
+        
+    }
+    
     
     /**
      *  保存变更表
