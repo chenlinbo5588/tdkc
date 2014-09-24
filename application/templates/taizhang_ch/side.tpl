@@ -14,12 +14,11 @@
                     <div class="sideitem">
                         <h2>宗地表格信息</h2>
                         <ul>
-                            <li><a href="{url_path('printer','covertd','id=')}{$info['id']}" target="_blank">土地勘测定界成果资料封面</a></li>
                             <li><a href="{url_path('printer','zddj','id=')}{$info['id']}" target="_blank">宗地勘测定界成果报告</a></li>
                             <li><a href="{url_path('printer','mjb','id=')}{$info['id']}" target="_blank">土地面积分类表</a></li>
                             <li><a href="{url_path('printer','fastjzb','id=')}{$info['id']}" target="_blank">宗地界址调查表</a></li>
-                            <li><a href="javascript:void(0);" title="">宗地面积成果表（请附件形式上传)</a></li>
                             <li><a href="{url_path('printer','bgb','id=')}{$info['id']}" target="_blank">土地勘测定界成果变更情况表</a></li>
+                            <li><a href="javascript:void(0);" title="">宗地面积成果表（请附件形式上传)</a></li>
                         </ul>
                     </div>
                     {if $info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征'}
@@ -39,6 +38,7 @@
                     <div class="sideitem">
                         <h2>打印宗地表格信息</h2>
                         <ul>
+                            <li><a href="{url_path('printer','covertd','id=')}{$info['id']}" target="_blank">打印土地勘测定界成果资料封面</a></li>
                             <li><a href="{url_path('printer','zddj','id=')}{$info['id']}&mode=print" target="_blank">打印宗地勘测定界成果报告</a></li>
                             <li><a href="{url_path('printer','mjb','id=')}{$info['id']}&mode=print" target="_blank">打印土地面积分类表</a></li>
                             <li><a href="{url_path('printer','fastjzb','id=')}{$info['id']}&mode=print" target="_blank">打印宗地界址调查表</a></li>
