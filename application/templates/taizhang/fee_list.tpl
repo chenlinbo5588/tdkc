@@ -77,10 +77,11 @@
                 <tr>
                     <td>收费情况</td>
                     <td>
-                        <label><input type="radio" name="fee_type" value="1" {if $info['fee_type'] == 1}checked{/if}/>挂账</label>
-                        <label><input type="radio" name="fee_type" value="2" {if $info['fee_type'] == 2}checked{/if}/>票开款收</label>
-                        <label><input type="radio" name="fee_type" value="3" {if $info['fee_type'] == 3}checked{/if}/>票开款未收</label>
-                        <label><input type="radio" name="fee_type" value="4" {if $info['fee_type'] == 4}checked{/if}/>票未开款收</label>
+                        <label><input type="radio" name="fee_type" value="0" {if $info['fee_type'] == 0}checked{/if}/>未收费</label>&nbsp;
+                        <label><input type="radio" name="fee_type" value="1" {if $info['fee_type'] == 1}checked{/if}/>挂账</label>&nbsp;
+                        <label><input type="radio" name="fee_type" value="2" {if $info['fee_type'] == 2}checked{/if}/>票开款收</label>&nbsp;
+                        <label><input type="radio" name="fee_type" value="3" {if $info['fee_type'] == 3}checked{/if}/>票开款未收</label>&nbsp;
+                        <label><input type="radio" name="fee_type" value="4" {if $info['fee_type'] == 4}checked{/if}/>票未开款收</label>&nbsp;
                     </td>
                 </tr>
                 <tr>

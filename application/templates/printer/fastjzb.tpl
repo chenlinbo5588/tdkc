@@ -5,6 +5,23 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</title>
         <link rel="stylesheet" type="text/css" href="/css/printer.css" media="all" />
+        <style>
+            .border1 th , .border1 td {
+                padding: 3px;
+            }
+            
+            .jzb .font15 , .jzb .font15 td , .jzb .font15 .inputarea {
+                font-size:15px !important;
+            }
+            
+            .jzb .font14 ,  .jzb .font14 td, .jzb .font14 .inputarea {
+                font-size:14px !important;
+            }
+            
+            .notice {
+                color:#f00;
+            }
+        </style>
         <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
     </head>
     <body>
@@ -16,6 +33,20 @@
                 <input type="button" name="merginDirection" value="合并方向"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addJzb">+增加界址表</a>
                 <div><em>键盘组合建 Shift + Enter 隐藏本区域</em></div>
+                <div class="alignleft" style="border:1px solid black;">
+                    <strong>邻居名称过长导致打印超出范围，调节字体大小</strong>
+                    <div>
+                        <label>范围控制<input type="text" name="range" value="" /></label><br/>
+                        <em class="notice">不填表示全部界址表, 1,2表示第一张和第二张应用字体控制</em><br/>
+                        <label>字体控制
+                            <select name="fontCtrl">
+                                <option value="">默认大小</option>
+                                <option value="font15">字体减小1号</option>
+                                <option value="font14">字体减小2号</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
                 <div>
                     <ul class="jz_sample">
                         <li><strong>界址范例</strong></li>
@@ -41,14 +72,13 @@
                 {else}
                 <div class="jzb">
                     <h1 class="title center jzb_title inputarea">宗地界址调查表</h1>
-                    {*<div><strong>QR-10-03</strong></div>*}
                     <table class="fulltable border1">
                         <colgroup>
                             <col width="40"/>
-                            <col width="80"/>
-                            <col width="150"/>
-                            <col width="150"/>
                             <col width="70"/>
+                            <col width="150"/>
+                            <col width="165"/>
+                            <col width="65"/>
                         </colgroup>
                         <tbody>
                             <tr class="center">
@@ -64,83 +94,83 @@
                                 <td class="inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
                             </tr>
                             <tr class="center vmd">
-                                <td>四址</td>
-                                <td>界址线</td>
-                                <td>界址线位置</td>
-                                <td>邻居名称</td>
+                                <td class="inputarea">四址</td>
+                                <td class="inputarea">界址线</td>
+                                <td class="inputarea">界址线位置</td>
+                                <td class="inputarea">邻居名称</td>
                                 <td>
-                                    <div>邻居签名</div>
-                                    <div>盖章</div>
+                                    <div class="inputarea">邻居签名</div>
+                                    <div class="inputarea">盖章</div>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="jdr inputarea"></td>
                                 <td class="center inputarea"></td>
                                 <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                            </tr>
-                            <tr>
-                                <td class="jdr inputarea"></td>
-                                <td class="center inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
                             </tr>
                             <tr>
                                 <td class="jdr inputarea"></td>
                                 <td class="center inputarea"></td>
                                 <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                            </tr>
-                            <tr>
-                                <td class="jdr inputarea"></td>
-                                <td class="center inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
                             </tr>
                             <tr>
                                 <td class="jdr inputarea"></td>
                                 <td class="center inputarea"></td>
                                 <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                            </tr>
-                            <tr>
-                                <td class="jdr inputarea"></td>
-                                <td class="center inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
                             </tr>
                             <tr>
                                 <td class="jdr inputarea"></td>
                                 <td class="center inputarea"></td>
                                 <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
-                            </tr>
-                            <tr>
-                                <td class="jdr inputarea"></td>
-                                <td class="center inputarea"></td>
-                                <td class="inputarea"></td>
-                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
                             </tr>
                             <tr>
                                 <td class="jdr inputarea"></td>
                                 <td class="center inputarea"></td>
                                 <td class="inputarea"></td>
-                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
                             </tr>
                             <tr>
                                 <td class="jdr inputarea"></td>
                                 <td class="center inputarea"></td>
                                 <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
+                            </tr>
+                            <tr>
+                                <td class="jdr inputarea"></td>
+                                <td class="center inputarea"></td>
+                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
+                                <td class="inputarea"></td>
+                            </tr>
+                            <tr>
+                                <td class="jdr inputarea"></td>
+                                <td class="center inputarea"></td>
+                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
+                                <td class="inputarea"></td>
+                            </tr>
+                            <tr>
+                                <td class="jdr inputarea"></td>
+                                <td class="center inputarea"></td>
+                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
+                                <td class="inputarea"></td>
+                            </tr>
+                            <tr>
+                                <td class="jdr inputarea"></td>
+                                <td class="center inputarea"></td>
+                                <td class="inputarea"></td>
+                                <td class="inputarea neighor"></td>
                                 <td class="inputarea"></td>
                             </tr>
                             <tr class="center sth" >
@@ -160,8 +190,8 @@
                             <tr class="last">
                                 <td> 
                                     <ul class="cs">
-                                        <li class="fjyj">分局确认意见</li>
-                                        <li class="jdyj">镇、街道土管所</li>
+                                        <li class="fjyj inputarea">分局确认意见</li>
+                                        <li class="jdyj inputarea">镇、街道土管所</li>
                                     </ul>
                                 </td>
                                 <td colspan="4" class="ba">
@@ -207,83 +237,83 @@
                             <td class="inputarea" colspan="3">{$info['region_name']}{$info['address']|escape}</td>
                         </tr>
                         <tr class="center vmd">
-                            <td>四址</td>
-                            <td>界址线</td>
-                            <td>界址线位置</td>
-                            <td>邻居名称</td>
+                            <td class="inputarea">四址</td>
+                            <td class="inputarea">界址线</td>
+                            <td class="inputarea">界址线位置</td>
+                            <td class="inputarea">邻居名称</td>
                             <td>
-                                <div>邻居签名</div>
-                                <div>盖章</div>
+                                <div class="inputarea">邻居签名</div>
+                                <div class="inputarea">盖章</div>
                             </td>
                         </tr>
                         <tr>
                             <td class="jdr inputarea"></td>
                             <td class="center inputarea"></td>
                             <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                        </tr>
-                        <tr>
-                            <td class="jdr inputarea"></td>
-                            <td class="center inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
                         </tr>
                         <tr>
                             <td class="jdr inputarea"></td>
                             <td class="center inputarea"></td>
                             <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                        </tr>
-                        <tr>
-                            <td class="jdr inputarea"></td>
-                            <td class="center inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
                         </tr>
                         <tr>
                             <td class="jdr inputarea"></td>
                             <td class="center inputarea"></td>
                             <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                        </tr>
-                        <tr>
-                            <td class="jdr inputarea"></td>
-                            <td class="center inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
                         </tr>
                         <tr>
                             <td class="jdr inputarea"></td>
                             <td class="center inputarea"></td>
                             <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
-                        </tr>
-                        <tr>
-                            <td class="jdr inputarea"></td>
-                            <td class="center inputarea"></td>
-                            <td class="inputarea"></td>
-                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
                         </tr>
                         <tr>
                             <td class="jdr inputarea"></td>
                             <td class="center inputarea"></td>
                             <td class="inputarea"></td>
-                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
                         </tr>
                         <tr>
                             <td class="jdr inputarea"></td>
                             <td class="center inputarea"></td>
                             <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
+                        </tr>
+                        <tr>
+                            <td class="jdr inputarea"></td>
+                            <td class="center inputarea"></td>
+                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
+                            <td class="inputarea"></td>
+                        </tr>
+                        <tr>
+                            <td class="jdr inputarea"></td>
+                            <td class="center inputarea"></td>
+                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
+                            <td class="inputarea"></td>
+                        </tr>
+                        <tr>
+                            <td class="jdr inputarea"></td>
+                            <td class="center inputarea"></td>
+                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
+                            <td class="inputarea"></td>
+                        </tr>
+                        <tr>
+                            <td class="jdr inputarea"></td>
+                            <td class="center inputarea"></td>
+                            <td class="inputarea"></td>
+                            <td class="inputarea neighor"></td>
                             <td class="inputarea"></td>
                         </tr>
                         <tr class="center sth" >
@@ -303,8 +333,8 @@
                         <tr class="last">
                             <td> 
                                 <ul class="cs">
-                                    <li class="fjyj">分局确认意见</li>
-                                    <li class="jdyj">镇、街道土管所</li>
+                                    <li class="fjyj inputarea">分局确认意见</li>
+                                    <li class="jdyj inputarea">镇、街道土管所</li>
                                 </ul>
                             </td>
                             <td colspan="4" class="ba">
@@ -339,6 +369,42 @@
             $(function(){
                 var areaReg = /^\d+(.\d*)?$/;
                 
+                $("select[name=fontCtrl]").bind("change",function(e){
+                    var v = $(e.target).val();
+                    var range = $("input[name=range]").val();
+                    var rangeAr = range.split(/[,，]/);
+                    var rangeList = [];
+                    var i = 0;
+                    
+                    for(i = 0; i < rangeAr.length; i++){
+                        rangeAr[i] = $.trim(rangeAr[i]);
+                        
+                        if(parseInt(rangeAr[i]) > 0){
+                            rangeList.push(parseInt(rangeAr[i]) - 1);
+                        }
+                    }
+                    
+                    if(rangeList.length == 0){
+                        if(v == ""){
+                            $(".jzb .fulltable").removeClass("font14").removeClass("font15");
+                        }else if(v == "font14"){
+                            $(".jzb .fulltable").removeClass("font15").addClass("font14");
+                        }else if(v == "font15"){
+                            $(".jzb .fulltable").removeClass("font14").addClass("font15");
+                        }
+                    
+                    }else{
+                        for(i = 0; i < rangeList.length; i++){
+                            if(v == ""){
+                                $(".jzb:eq(" + rangeList[i] + ") .fulltable").removeClass("font14").removeClass("font15");
+                            }else if(v == "font14"){
+                                $(".jzb:eq(" + rangeList[i] + ") .fulltable").removeClass("font15").addClass("font14");
+                            }else if(v == "font15"){
+                                $(".jzb:eq(" + rangeList[i] + ") .fulltable").removeClass("font14").addClass("font15");
+                            }
+                        }
+                    }                    
+                });
                 
                 $("body").bind("keydown",function(e){
                     if(e.shiftKey && e.keyCode == 13){
