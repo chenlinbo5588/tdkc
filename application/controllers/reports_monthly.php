@@ -5,13 +5,24 @@
  */
 class reports_monthly extends TZ_Admin_Controller {
     
+    public $projectTypeList = array(
+            TAIZHANG_TD => TAIZHANG_TD,
+            TAIZHANG_HOUSE => TAIZHANG_HOUSE,
+            TAIZHANG_FG => TAIZHANG_FG,
+            TAIZHANG_WF => TAIZHANG_WF,
+            TAIZHANG_OTHER => TAIZHANG_OTHER,
+            TAIZHANG_PERSON => TAIZHANG_PERSON,
+            TAIZHANG_SH => TAIZHANG_SH
+        );
+    
+    
     public function __construct(){
         parent::__construct();
         $this->load->model('Region_Model');
         $this->load->model('Taizhang_Model');
     }
     
-    private function _report_monthly(){
+    private function _report(){
         
         require_once PHPExcel_PATH.'PHPExcel.php';
         
@@ -20,13 +31,18 @@ class reports_monthly extends TZ_Admin_Controller {
                 'createtime >= ' => strtotime($_POST['sdate']),
                 'createtime < ' => strtotime($_POST['edate']) + 86400
              ),
+            /*
             'where_in' => array(
                 array(
                     'key' => 'status','value' => array('已通过复审','已收费')
                 )
-            ),
+            ),*/
             'order' => 'createtime ASC , category ASC , region_code ASC'
         );
+        
+        if($_POST['status']){
+            $cd['where_in'][] = array('key' => 'status','value' => $_POST['status']);
+        }
         
         if($_POST['pm']){
             if(strpos($_POST['pm'],',') !== false){
@@ -55,6 +71,11 @@ class reports_monthly extends TZ_Admin_Controller {
                 'key' => 'region_name',
                 'value' => $_POST['region_name']
             );
+        }
+        
+        
+        if(!empty($_POST['category'])){
+            $cd['where']['category'] = $_POST['category'];
         }
         
         $projectList = $this->Taizhang_Model->getList($cd);
@@ -269,13 +290,15 @@ class reports_monthly extends TZ_Admin_Controller {
         
         $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('regionList',$regionList['data']);
+        $this->assign('projectTypeList',$this->projectTypeList);
+        
         
         if($this->isPostRequest()){
             $this->form_validation->set_rules('sdate', '登记开始日期', 'required|valid_date');
             $this->form_validation->set_rules('edate', '登记结束日期', 'required|valid_date');
             
             if($this->form_validation->run()){
-                $this->_report_monthly();
+                $this->_report();
             }else{
                 $this->display();
             }

@@ -1,7 +1,7 @@
 {include file="common/main_header.tpl"}
             <div class="searchform row-fluid">
-                <form action="{url_path('reports_monthly','index')}" method="post" name="searchform" target="post_iframe">
-                    <input type="hidden" value="reports_monthly" name="{config_item('controller_trigger')}"/>
+                <form action="{url_path('reports_house','index')}" method="post" name="searchform" target="post_iframe">
+                    <input type="hidden" value="reports_house" name="{config_item('controller_trigger')}"/>
                     <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
                     
                     <table class="normal">
@@ -13,24 +13,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label><strong>台账类型</strong></label></td>
-                            <td>
-                                <select name="category" >
-                                    <option value="">全部</option>
-                                    {foreach from=$projectTypeList key=key item=item}
-                                    <option value="{$key}" {if $smarty.get.category == $key}selected{/if}>{$item}</option>
-                                    {/foreach}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
                             <td><label><strong>状态</strong></label></td>
                             <td>
-                                <label><input type="checkbox" name="status[]" value="新增"/>新增</label>
+                                <label><input type="checkbox" name="status[]" value="新增" checked="checked"/>新增</label>
                                 <label><input type="checkbox" name="status[]" value="已提交初审"/>已提交初审</label>
                                 <label><input type="checkbox" name="status[]" value="已通过初审"/>已通过初审</label>
                                 <label><input type="checkbox" name="status[]" value="已提交复审"/>已提交复审</label>
-                                <label><input type="checkbox" name="status[]" value="已通过复审" checked/>已通过复审</label>
+                                <label><input type="checkbox" name="status[]" value="已通过复审" />已通过复审</label>
                             </td>
                         </tr>
                         <tr>
