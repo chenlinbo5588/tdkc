@@ -198,7 +198,7 @@ class TZ_Admin_Controller extends TZ_Controller {
         ),array('user_id' => $this->_userProfile['id'],'project_type' => $project_type, 'project_id' => $info['id']));
         
         $this->User_Event_Model->deleteByWhere(array(
-            'user_id' => $sendorInfo['id'],
+            'user_id' => empty($sendorInfo['id']) != true ? $sendorInfo['id'] : 0,
             'project_type' => $project_type,
             'project_id' => $info['id']
         ));
@@ -222,7 +222,7 @@ class TZ_Admin_Controller extends TZ_Controller {
             $this->User_Event_Model->add(array(
                 'project_type' => $project_type,
                 'project_id' => $info['id'],
-                'user_id' => $sendorInfo['id'],
+                'user_id' => empty($sendorInfo['id']) != true ? $sendorInfo['id'] : 1,
                 'title' => cut($info['name'],100),
                 'url' => $url,
                 'creator' => $this->_userProfile['name']
