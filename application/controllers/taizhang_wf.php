@@ -75,7 +75,7 @@ class Taizhang_Wf extends TZ_Admin_Controller {
     private function _formatProjectNo($year,$regionCode,$masterSerial,$regionSerial,$prefix = 'A'){
         
         if($masterSerial < 1000){
-            $masterSerial = str_pad($masterSerial, 4,'0', STR_PAD_LEFT);
+            $masterSerial = str_pad($masterSerial, 3,'0', STR_PAD_LEFT);
         }
 
         if($regionSerial < 1000){
