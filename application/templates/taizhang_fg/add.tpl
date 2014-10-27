@@ -86,8 +86,10 @@
                                 <tr>
                                     <td></td>
                                     <td>
+                                        {if $info['status'] == '' || $info['status'] == '新增'}
                                         <input type="submit" name="submit" class="btn btn-sm btn-orange" value="{$saveText}保存"/>
                                         <input type="reset" name="rst" class="btn btn-sm btn-gray" value="重置"/>
+                                        {/if}
                                         {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                                     </td>
                                 </tr>

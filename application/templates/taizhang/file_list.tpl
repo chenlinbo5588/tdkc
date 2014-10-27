@@ -1,3 +1,4 @@
+                                        {if $info['status'] == '' || $info['status'] == '新增'}
                                         <div>
                                             <span class="uploader"></span>
                                             <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
@@ -8,6 +9,7 @@
                                             <div id="UploaderProgress_1"></div>
                                             <div id="UploaderFeedBack_1"></div>
                                         </div>
+                                        {/if}
                                         <div>{form_error('file_id[]')}</div>
                                         <ul id="filelist" class="tj_list">
                                             {foreach from=$files item=item}

@@ -1,3 +1,4 @@
+                {if $info['status'] == '' || $info['status'] == '新增' }
                 {include file="common/upload.tpl"}
                     <script>
                         $(function(){
@@ -36,3 +37,4 @@
                             });
                         });
                     </script>
+                    {/if}
