@@ -1,4 +1,4 @@
-                {if $info['status'] == '' || $info['status'] == '新增' }
+                {if $info['status'] == '' || $info['status'] == '新增' || $userProfile['id'] == 1 }
                 {include file="common/upload.tpl"}
                     <script>
                         $(function(){

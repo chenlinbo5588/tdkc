@@ -1,4 +1,4 @@
-                                        {if $info['status'] == '' || $info['status'] == '新增'}
+                                        {if $info['status'] == '' || $info['status'] == '新增' || $userProfile['id'] == 1}
                                         <div>
                                             <span class="uploader"></span>
                                             <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
