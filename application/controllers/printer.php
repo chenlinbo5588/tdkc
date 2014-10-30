@@ -362,7 +362,7 @@ class Printer extends TZ_Controller {
     
     
     public function covertd(){
-        $id = (int)gpc('id','GP',0);
+       $id = (int)gpc('id','GP',0);
        
        if(!$id){
            die('参数错误');
@@ -379,10 +379,43 @@ class Printer extends TZ_Controller {
             $dt = $info['fs_time'];
         }
         
+        $changeDate = false;
         
-        $dateInfo['year'] = year_number(date("Y",$dt),'O');
-        $dateInfo['month'] = month_day_number(date("n",$dt));
-        $dateInfo['day'] = month_day_number(date("j",$dt));
+        $this->load->model('Project_Area_Model');
+        $mj = $this->Project_Area_Model->getList(array(
+            'where' => array(
+                'type' => 0,
+                'project_id' => $info['id']
+            ),
+            'order' => 'createtime DESC',
+            'limit' => 1
+        ));
+
+        if(!empty($mj['data'][0]['content'])){
+            $matchCount = preg_match("/<div\s*?class=\"center\s*?mjb_lk\"\>(.*?)<\/div\>/is",$mj['data'][0]['content'],$match);
+            //print_r($match);
+            if($matchCount > 0){
+                $matchCount = 0;
+                $matchCount = preg_match("/<span.*?>\s*(.*?)\s*?年\s*?(.*?)\s*?月\s*?(.*?)\s*?日/im",  $match[1],$match2);
+                //print_r($match2);
+                
+                if($matchCount){
+                    $dateInfo['year'] = $match2[1];
+                    $dateInfo['month'] = $match2[2];
+                    $dateInfo['day'] = $match2[3];
+                    
+                    $changeDate = true;
+                }
+            }
+        }
+        
+        
+        if(!$changeDate){
+            $dateInfo['year'] = year_number(date("Y",$dt),'O');
+            $dateInfo['month'] = month_day_number(date("n",$dt));
+            $dateInfo['day'] = month_day_number(date("j",$dt));
+        }
+        
         $this->assign('dateInfo',$dateInfo);
         
        $this->assign('info', $info);
