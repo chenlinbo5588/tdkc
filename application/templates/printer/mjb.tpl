@@ -16,6 +16,18 @@
             .border1 th , .border1 td {
                 padding: 3px;
             }
+            
+            .mjb .font15 , .mjb .font15 td , .mjb .font15 .dlname , .mjb .font15 .inputarea {
+                font-size:15px !important;
+            }
+            
+            .mjb .font14 ,  .mjb .font14 td, .mjb .font14 .dlname , .mjb .font14 .inputarea {
+                font-size:14px !important;
+            }
+            
+            .notice {
+                color:#f00;
+            }
         </style>
         <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" href="/css/ie6.css" />
@@ -32,6 +44,20 @@
                 <input type="button" name="resetDjx" value="重置对角线"  class="btn btn-sm btn-gray"/>
                 <a href="javascript:void(0);" id="addMjb">+增加面积表</a>
                 <div><em>键盘组合建 Shift + Enter 隐藏本区域</em></div>
+                <div class="alignleft" style="border:1px solid black;">
+                    <strong>名称过长导致打印超出范围，调节字体大小</strong>
+                    <div>
+                        <label>范围控制<input type="text" name="range" value="" /></label><br/>
+                        <em class="notice">不填表示全部面积表, 1,2表示第一张和第二张应用字体控制</em><br/>
+                        <label>字体控制
+                            <select name="fontCtrl">
+                                <option value="">默认大小</option>
+                                <option value="font15">字体减小1号</option>
+                                <option value="font14">字体减小2号</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
             </div>
             <div class="container">
                 {if $mjb}
@@ -544,6 +570,44 @@
                     if(e.keyCode == 13){
                         return false;
                     }
+                });
+                
+                
+                $("select[name=fontCtrl]").bind("change",function(e){
+                    var v = $(e.target).val();
+                    var range = $("input[name=range]").val();
+                    var rangeAr = range.split(/[,，]/);
+                    var rangeList = [];
+                    var i = 0;
+                    
+                    for(i = 0; i < rangeAr.length; i++){
+                        rangeAr[i] = $.trim(rangeAr[i]);
+                        
+                        if(parseInt(rangeAr[i]) > 0){
+                            rangeList.push(parseInt(rangeAr[i]) - 1);
+                        }
+                    }
+                    
+                    if(rangeList.length == 0){
+                        if(v == ""){
+                            $(".mjb table.border1").removeClass("font14").removeClass("font15");
+                        }else if(v == "font14"){
+                            $(".mjb table.border1").removeClass("font15").addClass("font14");
+                        }else if(v == "font15"){
+                            $(".mjb table.border1").removeClass("font14").addClass("font15");
+                        }
+                    
+                    }else{
+                        for(i = 0; i < rangeList.length; i++){
+                            if(v == ""){
+                                $(".mjb:eq(" + rangeList[i] + ") table.border1").removeClass("font14").removeClass("font15");
+                            }else if(v == "font14"){
+                                $(".mjb:eq(" + rangeList[i] + ") table.border1").removeClass("font15").addClass("font14");
+                            }else if(v == "font15"){
+                                $(".mjb:eq(" + rangeList[i] + ") table.border1").removeClass("font14").addClass("font15");
+                            }
+                        }
+                    }                    
                 });
                 
                 var reSum = function(obj){

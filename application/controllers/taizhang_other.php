@@ -309,49 +309,71 @@ class Taizhang_Other extends TZ_Admin_Controller {
         
         if($this->isPostRequest() && !empty($_POST['id'])){
             $gobackUrl = $_POST['gobackUrl'];
-            if(!empty($_POST['zc_yj'])){
-                $this->form_validation->set_rules('zc_yj', '自查意见', 'max_length[300]');
-            }else{
-                $_POST['zc_yj'] = '合格';
-            }
-            if(!empty($_POST['zc_remark'])){
-                $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'max_length[300]');
-            }else{
-                $_POST['zc_remark'] = '合格';
-            }
+            $now = time();
+            if('提交初审' ==  $_POST['submit']){
+                if(!empty($_POST['zc_yj'])){
+                    $this->form_validation->set_rules('zc_yj', '自查意见', 'max_length[300]');
+                }else{
+                    $_POST['zc_yj'] = '合格';
+                }
+                if(!empty($_POST['zc_remark'])){
+                    $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'max_length[300]');
+                }else{
+                    $_POST['zc_remark'] = '合格';
+                }
 
-            $this->form_validation->set_rules('sendor', '发送给初审', 'required|is_natural_no_zero');
-            
-            if($this->form_validation->run()){
-                $now = time();
-                $op = '提交初审';
-                $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                $this->form_validation->set_rules('sendor', '发送给初审', 'required|is_natural_no_zero');
+
+                if($this->form_validation->run()){
+
+                    $op = '提交初审';
+                    $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                    $data = array(
+                        'sendor_id' => $sendorInfo['id'],
+                        'sendor' => $sendorInfo['name'],
+                        'status' => '已'.$op,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'zc_time' => $now,
+                        'zc_name' => $this->_userProfile['name'],
+                        'zc_yj' => $_POST['zc_yj'],
+                        'zc_remark' => $_POST['zc_remark'],
+                        'can_revocation' => 1
+                    );
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
+
+                    if($return){
+                        $message = $_POST['submit'].'成功';
+                        $this->_addPm($info,$sendorInfo,2);
+                        $info = $this->Taizhang_Model->queryById($info['id']);
+                    }else{
+                        $message = $_POST['submit'].'失败';
+                    }
+
+                    //$this->sendFormatJson('success', array('text' => '修改成功'));
+                }else{
+                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                    //$this->sendFormatJson('failed', array('text' => $message));
+                }
+            }elseif('撤销' == $_POST['submit']){
+                $op = '新增';
                 $data = array(
-                    'sendor_id' => $sendorInfo['id'],
-                    'sendor' => $sendorInfo['name'],
-                    'status' => '已'.$op,
+                    'sendor_id' => $this->_userProfile['id'],
+                    'sendor' => $this->_userProfile['name'],
+                    'status' => $op,
                     'updator' => $this->_userProfile['name'],
                     'updatetime' => $now,
-                    'zc_time' => $now,
-                    'zc_name' => $this->_userProfile['name'],
-                    'zc_yj' => $_POST['zc_yj'],
-                    'zc_remark' => $_POST['zc_remark']
+                    'zc_name' => '',
+                    'can_revocation' => 0
                 );
-                $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
-                
+                $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审' , 'can_revocation' => 1 ));
+
                 if($return){
-                    $message = '操作成功';
-                    $this->_addPm($info,$sendorInfo,2);
-                    $info = $this->Taizhang_Model->queryById($id);
+                    $message = $_POST['submit'].'成功';
+                    $info = $this->Taizhang_Model->queryById($info['id']);
                 }else{
-                    $message = '操作失败';
+                    $message = $_POST['submit'].'失败';
                 }
-                
-                $info = $this->Taizhang_Model->getById(array('where' => array('id' => $info['id'])));
-                //$this->sendFormatJson('success', array('text' => '修改成功'));
-            }else{
-                $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
-                //$this->sendFormatJson('failed', array('text' => $message));
             }
             
             $this->assign('message',$message);
@@ -384,6 +406,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
         $info = $this->Taizhang_Model->queryById($id);
         if($this->isPostRequest() && !empty($_POST['id'])){
             $gobackUrl = $_POST['gobackUrl'];
+            $now = time();
             if($_POST['workflow'] == '退回'){
                 
                 //$this->form_validation->set_rules('reason', '退回原因', 'required|min_length[3]|htmlspecialchars');
@@ -394,7 +417,6 @@ class Taizhang_Other extends TZ_Admin_Controller {
                     $d = $this->_addProjectFault($info,$_POST,0);
                     
                     $sendorInfo = $this->User_Model->queryById($info['zc_name'],'name');
-                    $now = time();
                     $data = array(
                         'cs_time' => 0,
                         'cs_name' => '',
@@ -406,15 +428,16 @@ class Taizhang_Other extends TZ_Admin_Controller {
                         'total_fault' => (int)$d['total_fault'],
                         'status' => '新增',
                         'updator' => $this->_userProfile['name'],
-                        'updatetime' => $now
+                        'updatetime' => $now,
+                        'can_revocation' => 1
                     );
                     $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addPm($info,$sendorInfo,2);
-                        $message = '操作成功';
+                        $message = $_POST['workflow'].'成功';
                         $info = $this->Taizhang_Model->queryById($id);
                     }else{
-                        $message = '操作失败';
+                        $message = $_POST['workflow'].'失败';
                     }
                     
                 }else{
@@ -422,46 +445,84 @@ class Taizhang_Other extends TZ_Admin_Controller {
                 }
                 
             }else{
-                if(!empty($_POST['cs_yj'])){
-                    $this->form_validation->set_rules('cs_yj', '初审意见', 'max_length[300]');
-                }else{
-                    $_POST['cs_yj'] = '按规范要求测量，报告符合要求。';
-                }
-                if(!empty($_POST['cs_remark'])){
-                    $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'max_length[300]');
-                }else{
-                    $_POST['cs_remark'] = '合格';
-                }
-
-                $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
-                if($this->form_validation->run()){
-                    $op1 = '通过初审';
-                    $op2 = '提交复审';
-
-                    $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
-                    $now = time();
-                    $data = array(
-                        'sendor_id' => $sendorInfo['id'],
-                        'sendor' => $sendorInfo['name'],
-                        'status' => '已'.$op2,
-                        'updator' => $this->_userProfile['name'],
-                        'updatetime' => $now,
-                        'cs_time' => $now,
-                        'cs_name' => $this->_userProfile['name'],
-                        'cs_yj' => $_POST['cs_yj'],
-                        'cs_remark' => $_POST['cs_remark']
-                    );
-                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
-                    if($return){
-                        $this->_addPm($info,$sendorInfo,2);
-                        $message = '操作成功';
-                        $info = $this->Taizhang_Model->queryById($id);
+                if('通过并提交复审' ==  $_POST['submit']){
+                    if(!empty($_POST['cs_yj'])){
+                        $this->form_validation->set_rules('cs_yj', '初审意见', 'max_length[300]');
                     }else{
-                        $message = '操作失败';
+                        $_POST['cs_yj'] = '按规范要求测量，报告符合要求。';
+                    }
+                    if(!empty($_POST['cs_remark'])){
+                        $this->form_validation->set_rules('cs_remark', '初审修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['cs_remark'] = '合格';
                     }
 
-                }else{
-                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                    $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                    if($this->form_validation->run()){
+                        //$op1 = '通过初审';
+                        $op2 = '提交复审';
+
+                        $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                        $now = time();
+                        $data = array(
+                            'sendor_id' => $sendorInfo['id'],
+                            'sendor' => $sendorInfo['name'],
+                            'status' => '已'.$op2,
+                            'updator' => $this->_userProfile['name'],
+                            'updatetime' => $now,
+                            'cs_time' => $now,
+                            'cs_name' => $this->_userProfile['name'],
+                            'cs_yj' => $_POST['cs_yj'],
+                            'cs_remark' => $_POST['cs_remark'],
+                            'can_revocation' => 1
+                        );
+                        $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审','sendor_id' => $this->_userProfile['id']));
+                        if($return){
+                            $this->_addPm($info,$sendorInfo,2);
+                            $message = $_POST['submit'].'成功';
+                            $info = $this->Taizhang_Model->queryById($id);
+                        }else{
+                            $message = $_POST['submit'].'失败';
+                        }
+
+                    }else{
+                        $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                    }
+                }elseif('受理' ==  $_POST['submit']){
+                    $data = array(
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'can_revocation' => 0
+                    );
+                    
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交初审' , 'can_revocation' => 1 ));
+
+                    if($return){
+                        $message = $_POST['submit'].'成功';
+                        $info = $this->Taizhang_Model->queryById($info['id']);
+                    }else{
+                        $message = $_POST['submit'].'失败';
+                    }
+                    
+                }elseif('撤销' ==  $_POST['submit']){
+                    $op = '已提交初审';
+                    $data = array(
+                        'sendor_id' => $this->_userProfile['id'],
+                        'sendor' => $this->_userProfile['name'],
+                        'status' => $op,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'cs_name' => ''
+                    );
+                    
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审' , 'can_revocation' => 1 ));
+
+                    if($return){
+                        $message = $_POST['submit'].'成功';
+                        $info = $this->Taizhang_Model->queryById($info['id']);
+                    }else{
+                        $message = $_POST['submit'].'失败';
+                    }
                 }
             }
             
@@ -493,6 +554,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
         $info = $this->Taizhang_Model->queryById($id);
         if($this->isPostRequest() && !empty($_POST['id'])){
             $gobackUrl = $_POST['gobackUrl'];
+            $now = time();
             if($_POST['workflow'] == '退回'){
                 
                 //$this->form_validation->set_rules('reason', '退回原因', 'required|min_length[3]|htmlspecialchars');
@@ -503,7 +565,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
                     $d = $this->_addProjectFault($info,$_POST,0);
                     
                     $sendorInfo = $this->User_Model->queryById($info['cs_name'],'name');
-                    $now = time();
+                    
                     $data = array(
                         'fs_time' => 0,
                         'fs_name' => '',
@@ -515,16 +577,17 @@ class Taizhang_Other extends TZ_Admin_Controller {
                         'total_fault' => (int)$d['total_fault'],
                         'status' => '已提交初审',
                         'updator' => $this->_userProfile['name'],
-                        'updatetime' => $now
+                        'updatetime' => $now,
+                        'can_revocation' => 1
                     );
                     $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
                     if($return){
                         $this->_addPm($info,$sendorInfo,2);
-                        $message = '操作成功';
+                        $message = $_POST['workflow'].'成功';
                         
                         $info = $this->Taizhang_Model->queryById($id);
                     }else{
-                        $message = '操作失败';
+                        $message = $_POST['workflow'].'失败';
                     }
                     
                 }else{
@@ -532,45 +595,83 @@ class Taizhang_Other extends TZ_Admin_Controller {
                 }
                 
             }else{
-                if(!empty($_POST['fs_yj'])){
-                    $this->form_validation->set_rules('fs_yj', '复审意见', 'max_length[300]');
-                }else{
-                    $_POST['fs_yj'] = '经查资料齐全，合格。';
-                }
-                if(!empty($_POST['fs_remark'])){
-                    $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'max_length[300]');
-                }else{
-                    $_POST['fs_remark'] = '合格';
-                }
-
-                $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
-                if($this->form_validation->run()){
-                    $op = '通过复审';
-                    
-                    $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
-                    $now = time();
-                    $data = array(
-                        'sendor_id' => $sendorInfo['id'],
-                        'sendor' => $sendorInfo['name'],
-                        'status' => '已'.$op,
-                        'updator' => $this->_userProfile['name'],
-                        'updatetime' => $now,
-                        'fs_time' => $now,
-                        'fs_name' => $this->_userProfile['name'],
-                        'fs_yj' => $_POST['fs_yj'],
-                        'fs_remark' => $_POST['fs_remark']
-                    );
-                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
-                    if($return){
-                        $this->_addPm($info,$sendorInfo,2);
-                        $message = '操作成功';
-                        $info = $this->Taizhang_Model->queryById($id);
+                if('通过并提交收费' == $_POST['submit']){
+                    if(!empty($_POST['fs_yj'])){
+                        $this->form_validation->set_rules('fs_yj', '复审意见', 'max_length[300]');
                     }else{
-                        $message = '操作失败';
+                        $_POST['fs_yj'] = '经查资料齐全，合格。';
+                    }
+                    if(!empty($_POST['fs_remark'])){
+                        $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'max_length[300]');
+                    }else{
+                        $_POST['fs_remark'] = '合格';
                     }
 
-                }else{
-                    $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                    $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                    if($this->form_validation->run()){
+                        $op = '通过复审';
+
+                        $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
+                        $now = time();
+                        $data = array(
+                            'sendor_id' => $sendorInfo['id'],
+                            'sendor' => $sendorInfo['name'],
+                            'status' => '已'.$op,
+                            'updator' => $this->_userProfile['name'],
+                            'updatetime' => $now,
+                            'fs_time' => $now,
+                            'fs_name' => $this->_userProfile['name'],
+                            'fs_yj' => $_POST['fs_yj'],
+                            'fs_remark' => $_POST['fs_remark'],
+                            'can_revocation' => 1
+                        );
+                        $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
+                        if($return){
+                            $this->_addPm($info,$sendorInfo,2);
+                            $message = $_POST['submit'].'成功';
+                            $info = $this->Taizhang_Model->queryById($id);
+                        }else{
+                            $message = $_POST['submit'].'失败';
+                        }
+
+                    }else{
+                        $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
+                    }
+                }elseif('受理' ==  $_POST['submit']){
+                    $data = array(
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'can_revocation' => 0
+                    );
+                    
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审' , 'can_revocation' => 1 ));
+
+                    if($return){
+                        $message = $_POST['submit'].'成功';
+                        $info = $this->Taizhang_Model->queryById($info['id']);
+                    }else{
+                        $message = $_POST['submit'].'失败';
+                    }
+                    
+                }elseif('撤销' ==  $_POST['submit']){
+                    $op = '已提交复审';
+                    $data = array(
+                        'sendor_id' => $this->_userProfile['id'],
+                        'sendor' => $this->_userProfile['name'],
+                        'status' => $op,
+                        'updator' => $this->_userProfile['name'],
+                        'updatetime' => $now,
+                        'fs_name' => ''
+                    );
+                    
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审' , 'can_revocation' => 1 ));
+
+                    if($return){
+                        $message = $_POST['submit'].'成功';
+                        $info = $this->Taizhang_Model->queryById($info['id']);
+                    }else{
+                        $message = $_POST['submit'].'失败';
+                    }
                 }
             }
             

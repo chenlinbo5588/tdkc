@@ -8,6 +8,7 @@
         $(function(){
             $("#tzfee input[type=submit]").bind("click",function(e){
                 var that = $(e.target);
+                var btnVal = that.val();
                 var loading = that.siblings(".loading");
                 that.prop("disabled",true);
                 loading.show();
@@ -15,12 +16,16 @@
                 $.ajax({
                     type:"POST",
                     url:"{url_path('taizhang','fee')}",
-                    data: $("#tzfee").serialize(),
+                    data: $("#tzfee").serialize() + "&submit=" + that.val(),
                     dataType:"json",
                     success:function(resp){
                         alert(resp.body.text);
                         if(resp.code == 'success'){
-                            location.reload();
+                            if(btnVal == '受理'){
+                                that.val("收费");
+                            }else{
+                                location.reload();
+                            }
                         }
                     },
                     complete:function(){

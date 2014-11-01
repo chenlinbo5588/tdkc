@@ -59,9 +59,18 @@
                                     <td></td>
                                     <td>
                                         {if $info['status'] == '已提交初审' && $info['sendor_id'] == $userProfile['id']}
-                                        <input type="submit" name="submit" class="btn btn-sm btn-orange" style="font-size:13px;" value="通过并提交复审"/>
-                                        <input type="submit" name="submit" class="btn btn-sm btn-gray"  value="退回"/>
+                                            {if $info['can_revocation'] == 1}
+                                            <input type="submit" name="submit" class="btn btn-sm btn-orange"  value="受理"/>
+                                            {else}
+                                            <input type="submit" name="submit" class="btn btn-sm btn-orange" style="font-size:13px;" value="通过并提交复审"/>
+                                            <input type="submit" name="submit" class="btn btn-sm btn-gray"  value="退回"/>
+                                            {/if}
                                         {/if}
+                                        
+                                        {if $info['status'] == '已提交复审' && $info['cs_name'] == $userProfile['name'] && $info['can_revocation'] == 1}
+                                        <input type="submit" name="submit" class="btn btn-sm btn-orange" value="撤销"/>
+                                        {/if}
+                                        
                                         <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                                         {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                                     </td>

@@ -93,7 +93,15 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input type="submit" name="submit" class="btn btn-orange" value="保存"/>
+                        {if $info['category'] == $smarty.const.TAIZHANG_TD || $info['category'] == $smarty.const.TAIZHANG_WF}
+                            {if $info['can_revocation'] == 1}
+                                <input type="submit" name="submit" class="btn btn-orange" value="受理"/>
+                            {else}
+                                <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
+                            {/if}
+                        {else}
+                            <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
+                        {/if}
                         <div class="loading" style="display:none;"></div>
                     </td>
                 </tr>
