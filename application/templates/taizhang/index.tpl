@@ -86,8 +86,6 @@
                             <th>当前经办人</th>
                             <th>经办人</th>
                             <th>收费情况</th>
-                            <th>考核金额</th>
-                            {auth name="taizhang+fee"}<th>应收金额</th><th>实收金额</th><th>收费备注</th>{/auth}
                             <th>成果资料</th>
                             <th>备注</th>
                             <th>操作</th>
@@ -140,8 +138,6 @@
                                 {elseif $item['fee_type'] == 4}票未开款收
                                 {/if}
                            </td>
-                           <td>{$item['kh_amount']}</td>
-                           {auth name="taizhang+fee"}<td>{$item['ys_amount']}</td><td>{$item['ss_amount']}</td><td>{$item['remark']|escape}</td>{/auth}
                            <td>{if $item['get_doc'] == 1}已领取{else}未领取{/if}</td>
                            <td>{$item['descripton']}</td>
                            <td>
