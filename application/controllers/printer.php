@@ -410,7 +410,7 @@ class Printer extends TZ_Controller {
             
             
             $matchCount = 0;
-            $matchCount = preg_match("/<thead>.*?>单位名称<\/td>.*?\">(.*?)</is",$mj['data'][0]['content'],$match);
+            $matchCount = preg_match("/<thead>.*>单位名称<\/td>.*?\">(.*?)<.*主送部门/is",$mj['data'][0]['content'],$match);
             
             if($matchCount > 0){
                 $info['name'] = strlen(trim($match[1])) > 0 ? $match[1] : $info['name'];
