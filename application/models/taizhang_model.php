@@ -72,11 +72,12 @@ class Taizhang_Model extends TZ_Model {
             'updatetime' => time()
         );
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data, $where);
+        return $this->db->affected_rows();
     }
     
     
-    public function update($param){
+    public function update($param,$whereExtra = array()){
         $data = array(
             'region_code' => strtoupper($param['region_code']),
             'region_name' => $param['region_name'],
@@ -112,11 +113,13 @@ class Taizhang_Model extends TZ_Model {
             $data['complete_time'] = $param['complete_time'];
         }
         
-        $where = array(
+        $where = array_merge(array(
             'id' => $param['id']
-        );
+        ),$whereExtra);
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data,$where);
+        
+        return $this->db->affected_rows();
     }
     
 }

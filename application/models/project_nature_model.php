@@ -41,7 +41,8 @@ class Project_Nature_Model extends TZ_Model {
             'status' => '已删除'
         );
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data, $where);
+        return $this->db->affected_rows();
     }
     
     
@@ -58,7 +59,8 @@ class Project_Nature_Model extends TZ_Model {
             'id' => $param['id']
         );
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data, $where);
+        return $this->db->affected_rows();
     }
     
 }

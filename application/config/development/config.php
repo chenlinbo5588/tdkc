@@ -5,7 +5,7 @@
  * 
  * 
  */
-$config['log_threshold'] = 2;
+$config['log_threshold'] = 0;
 $config['no_cover_image'] = '/img/no_cover.jpg';
 
 

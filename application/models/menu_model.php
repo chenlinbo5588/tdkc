@@ -121,7 +121,7 @@ class Menu_Model extends TZ_Model {
                 );
             }
             
-            return $this->db->update_batch($this->_tableName, $data,'id'); 
+            $this->db->update_batch($this->_tableName, $data,'id'); 
         }else{
             $data = array(
                 'status' => '已删除'
@@ -130,9 +130,9 @@ class Menu_Model extends TZ_Model {
             $where = array(
                 'id' => $param['id']
             );
-            return $this->db->update($this->_tableName, $data,$where);
+            $this->db->update($this->_tableName, $data,$where);
         }
-        
+        return $this->db->affected_rows();
     }
     
     
@@ -153,7 +153,8 @@ class Menu_Model extends TZ_Model {
             'id' => $param['id']
         );
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data, $where);
+        return $this->db->affected_rows();
     }
     
 }

@@ -70,7 +70,8 @@ class Project_Gh_Model extends TZ_Model {
             'updatetime' => time()
         );
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data, $where);
+        return $this->db->affected_rows();
     }
     
     
@@ -106,7 +107,8 @@ class Project_Gh_Model extends TZ_Model {
             'id' => $param['id']
         );
         
-        return $this->db->update($this->_tableName, $data, $where);
+        $this->db->update($this->_tableName, $data, $where);
+        return $this->db->affected_rows();
     }
     
 }

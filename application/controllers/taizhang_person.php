@@ -211,7 +211,12 @@ class Taizhang_Person extends TZ_Admin_Controller {
             $insertid = $this->Taizhang_Model->add($_POST);
             return $insertid;
         }else{
-            $rows = $this->Taizhang_Model->update($_POST);
+            
+            if($this->_userProfile['id'] != 1){
+                $rows = $this->Taizhang_Model->update($_POST,array('creator' => $this->_userProfile['name']));
+            }else{
+                $rows = $this->Taizhang_Model->update($_POST);
+            }
             return $rows;
         }
         
@@ -234,13 +239,16 @@ class Taizhang_Person extends TZ_Admin_Controller {
                 
                 $affectRow = $this->_op($info['year'],'edit');
                 
-                $this->_cleanFile($info['files'],$_POST['file_id']);
+                if($affectRow){
+                    $this->_cleanFile($info['files'],$_POST['file_id']);
+                    $message = '保存成功';
+
+                    $info = $this->Taizhang_Model->getById(array('where' => array('id' => $info['id'])));
+                    //$this->sendFormatJson('success', array('text' => '修改成功'));
+                }else{
+                    $message = '保存失败,只能由'.$info['creator'].'保存';
+                }
                 
-                
-                $message = '操作成功';
-                
-                $info = $this->Taizhang_Model->getById(array('where' => array('id' => $info['id'])));
-                //$this->sendFormatJson('success', array('text' => '修改成功'));
             }else{
                 $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
                 //$this->sendFormatJson('failed', array('text' => $message));

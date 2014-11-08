@@ -59,16 +59,7 @@
                                 <tr>
                                     <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
                                 </tr>
-                                {if $info['id']}
-                                <tr>
-                                    <td><label class="optional"><em></em><strong>当前状态</strong></label></td>
-                                    <td>{$info['status']}</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="optional"><em></em><strong>当前经办人</strong></label></td>
-                                    <td>{$info['sendor']}</td>
-                                </tr>
-                                {/if}
+                                {include file="taizhang/basic_info.tpl"}
                                 <tr>
                                     <td><strong>图件文档</strong></td>
                                     <td>

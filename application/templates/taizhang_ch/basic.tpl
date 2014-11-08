@@ -49,14 +49,7 @@
                                     <td><strong>备注</strong></td>
                                     <td>{$info['descripton']}</td>
                                 </tr>
-                                <tr>
-                                    <td><strong>状态</strong></td>
-                                    <td>{$info['status']}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>当前经办人</strong></td>
-                                    <td>{$info['sendor']}</td>
-                                </tr>
+                                {include file="taizhang/basic_info.tpl"}
                                 <tr>
                                     <td><strong>图件文档</strong></td>
                                     <td>

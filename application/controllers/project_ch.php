@@ -197,6 +197,13 @@ class project_ch extends TZ_Admin_Controller {
                     break;
                 }
                 
+                if($this->_userProfile['id'] != 1){
+                    if($this->_userProfile['name'] != $info['creator']){
+                        $message = '保存失败,只有'.$info['creator'].'才能保存';
+                        break;
+                    }
+                }
+                
                 $this->load->model('Project_Zddj_Model');
                 
                 $this->Project_Zddj_Model->deleteByWhere(array(
@@ -236,12 +243,14 @@ class project_ch extends TZ_Admin_Controller {
                     $message = "保存失败,找不到记录";
                     break;
                 }
-                /*
-                if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
-                    $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
-                    break;
+                
+                if($this->_userProfile['id'] != 1){
+                    if($this->_userProfile['name'] != $info['creator']){
+                        $message = '保存失败,只有'.$info['creator'].'才能保存';
+                        break;
+                    }
                 }
-                */
+                
                 $this->load->model('Project_Bgb_Model');
                 
                 $this->Project_Bgb_Model->deleteByWhere(array(
@@ -282,12 +291,12 @@ class project_ch extends TZ_Admin_Controller {
                     break;
                 }
                 
-                /*
-                if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
-                    $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
-                    break;
+                if($this->_userProfile['id'] != 1){
+                    if($this->_userProfile['name'] != $info['creator']){
+                        $message = '保存失败,只有'.$info['creator'].'才能保存';
+                        break;
+                    }
                 }
-                */
                 
                 $this->load->model('Project_Jzb_Model');
                 
@@ -327,6 +336,14 @@ class project_ch extends TZ_Admin_Controller {
                     $message = "保存失败,找不到记录";
                     break;
                 }
+                
+                if($this->_userProfile['id'] != 1){
+                    if($this->_userProfile['name'] != $info['creator']){
+                        $message = '保存失败,只有'.$info['creator'].'才能保存';
+                        break;
+                    }
+                }
+                
                 /*
                 if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
                     $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
