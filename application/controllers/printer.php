@@ -342,6 +342,29 @@ class Printer extends TZ_Controller {
         
         $this->assign('csFault',$csFault['data']);
         $this->assign('fsFault',$fsFault['data']);
+        
+        $checkTitle = '';
+        
+        if(TAIZHANG_WF == $info['category']){
+            $checkTitle = '违法用地';
+        }else if(TAIZHANG_HOUSE == $info['category']){
+            $checkTitle = '房产项目';
+        }else{
+            switch($info['nature']){
+                case '新征预审':
+                case '供地':
+                case '供地预审':
+                case '放线':
+                case '竣工':
+                    $checkTitle = $info['nature'];
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        
+        $this->assign('checkTitle',$checkTitle);
         $this->assign('info',$info);
         $this->display();
     }

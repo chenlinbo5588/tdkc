@@ -73,7 +73,7 @@
     <body>
         <div class="container">
             <div class="check">
-                <h1 class="center">{if $info['category'] == $smarty.const.TAIZHANG_WF}违法用地{elseif $info['category'] == $smarty.const.TAIZHANG_HOUSE}房产项目{/if}审核表</h1>
+                <h1 class="center">{$checkTitle}审核表</h1>
                 <div class="center wd"><strong>QR-10-04</strong></div>
                 <table class="fulltable border1" style="table-layout:fixed;margin-top:15px;">
                     <colgroup>
