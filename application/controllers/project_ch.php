@@ -196,10 +196,9 @@ class project_ch extends TZ_Admin_Controller {
                     $message = "保存失败,找不到记录";
                     break;
                 }
-                
                 if($this->_userProfile['id'] != 1){
-                    if($this->_userProfile['name'] != $info['creator']){
-                        $message = '保存失败,只有'.$info['creator'].'才能保存';
+                    if('已提交初审' != $info['status']){
+                        $message = '保存失败,只有已提交初审状态下才能保存';
                         break;
                     }
                 }
