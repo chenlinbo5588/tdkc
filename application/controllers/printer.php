@@ -414,6 +414,7 @@ class Printer extends TZ_Controller {
             'limit' => 1
         ));
 
+        //print_r($mj['data'][0]['content']);
         if(!empty($mj['data'][0]['content'])){
             $matchCount = preg_match("/<div\s*?class=\"center\s*?mjb_lk\"\>(.*?)<\/div\>/is",$mj['data'][0]['content'],$match);
             //print_r($match);
@@ -433,10 +434,10 @@ class Printer extends TZ_Controller {
             
             
             $matchCount = 0;
-            $matchCount = preg_match("/<thead>.*>单位名称<\/td>.*?\">(.*?)<.*主送部门/is",$mj['data'][0]['content'],$match);
-            
+            $matchCount = preg_match("/<thead>.*>单位名称<\/td>.*?>(.*?)<.*主送部门/is",$mj['data'][0]['content'],$match3);
+            //print_r($match3);
             if($matchCount > 0){
-                $info['name'] = strlen(trim($match[1])) > 0 ? $match[1] : $info['name'];
+                $info['name'] = strlen(trim($match3[1])) > 0 ? $match3[1] : $info['name'];
             }
         }
         
