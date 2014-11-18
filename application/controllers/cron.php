@@ -3,16 +3,19 @@
 class Cron extends CI_Controller {
 
 	
+    public function __construct(){
+        parent::__construct();
+        
+        if(!$this->input->is_cli_request()){
+            die();
+        }
+    }
+    
     /**
      * 合同 到期提醒他
      */
 	public function index()
 	{
-        
-        if(!$this->input->is_cli_request()){
-            die();
-        }
-        
         $this->load->model('User_Model');
         $this->load->model('Pm_Model');
         
@@ -64,7 +67,39 @@ class Cron extends CI_Controller {
             }
         }
 	}
-}
+    
+    /**
+     * 新的一年，默认初始化上一年的乡镇数据
+     */
+    public function region(){
+        
+        
+        $current_year = date("Y");
+        $last_year = $current_year - 1;
+        
+        $this->load->model('Region_Model');
+        
+        $last_regions = $this->Region_Model->getList(array(
+           'where' => array(
+               'year' => $last_year,
+               'status' => '正常'
+           ) 
+        ));
 
+        if(empty($last_regions['data'])){
+            foreach($last_regions['data'] as $region){
+                $this->Region_Model->add(array(
+                    'code' => $region['code'],
+                    'name' => $region['name'],
+                    'year' => $current_year,
+                    'displayorder' => $region['displayorder'],
+                    'creator' => '后台任务',
+                    'updator' => '后台任务',
+                ));
+            }
+        }
+    }
+        
+}
 /* End of file cron.php */
 /* Location: ./application/controllers/cron.php */

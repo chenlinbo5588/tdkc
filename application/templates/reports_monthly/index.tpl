@@ -15,12 +15,9 @@
                         <tr>
                             <td><label><strong>台账类型</strong></label></td>
                             <td>
-                                <select name="category" >
-                                    <option value="">全部</option>
-                                    {foreach from=$projectTypeList key=key item=item}
-                                    <option value="{$key}" {if $smarty.get.category == $key}selected{/if}>{$item}</option>
-                                    {/foreach}
-                                </select>
+                                {foreach from=$projectTypeList key=key item=item}
+                                    <label><input type="checkbox" name="category[]" value="{$item}" checked="checked"/>{$item}</label>&nbsp;
+                                {/foreach}
                             </td>
                         </tr>
                         <tr>

@@ -37,11 +37,19 @@ class reports_monthly extends TZ_Admin_Controller {
                     'key' => 'status','value' => array('已通过复审','已收费')
                 )
             ),*/
-            'order' => 'createtime ASC , category ASC , region_code ASC'
+            'order' => 'ptype_id ASC ,  createtime ASC ,  region_code ASC'
         );
         
         if($_POST['status']){
             $cd['where_in'][] = array('key' => 'status','value' => $_POST['status']);
+        }else{
+            $cd['where']['status'] = 'XXXX';
+        }
+        
+        if($_POST['category']){
+            $cd['where_in'][] = array('key' => 'category','value' => $_POST['category']);
+        }else{
+            $cd['where']['category'] = 'XXXX';
         }
         
         if($_POST['pm']){
@@ -73,11 +81,6 @@ class reports_monthly extends TZ_Admin_Controller {
             );
         }
         
-        
-        if(!empty($_POST['category'])){
-            $cd['where']['category'] = $_POST['category'];
-        }
-        
         $projectList = $this->Taizhang_Model->getList($cd);
         
         
@@ -99,7 +102,7 @@ class reports_monthly extends TZ_Admin_Controller {
         */
         
         $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', $_POST['sdate'].'至'.$_POST['edate'].'项目统计');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $_POST['sdate'].'至'.$_POST['edate'].'项目台账统计报表');
         $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
         
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '序号');
@@ -118,7 +121,7 @@ class reports_monthly extends TZ_Admin_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(17);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(14);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(14);
@@ -133,8 +136,8 @@ class reports_monthly extends TZ_Admin_Controller {
         $workerList = array();
         
         foreach($projectList['data'] as $p){
-            $workerProjectList[$p['pm']]['list'][] = $p;
-            $workerList[] = $p['pm'];
+            $workerProjectList[$p['creator']]['list'][] = $p;
+            $workerList[] = $p['creator'];
         }
         
         $workerList = array_unique($workerList);
@@ -178,7 +181,7 @@ class reports_monthly extends TZ_Admin_Controller {
                 $objPHPExcel->getActiveSheet()->setCellValue('B'.$current_row,$p['project_no']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C'.$current_row, $p['name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row, $p['ptype_name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['pm']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['creator']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $levelText);
                 $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, $p['weight']);
                 $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, "{$p['fault_cnt1']}+{$p['fault_cnt2']}={$p['total_fault']}");
@@ -274,7 +277,7 @@ class reports_monthly extends TZ_Admin_Controller {
         );
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'项目统计报表.xls');
+        $filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'项目台账统计报表.xls');
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 

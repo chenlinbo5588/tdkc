@@ -32,6 +32,7 @@
                             </td>
                             <td colspan="2">
                                 <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                                <label><input type="checkbox" name="inc_del" value="delete" {if $smarty.get.inc_del == 'delete'}checked{/if}/><strong>包含已删除</strong></label>
                                 {auth name="taizhang_sh+add"}<a class="addlink" href="{url_path('taizhang_sh','add')}">+添加散活台账</a>{/auth}
                             </td>
                         </tr>
@@ -129,7 +130,7 @@
                            <td>{$item['pm']}</td>
                            <td>{if $item['status'] == '已删除'}<span class="notice">{$item['status']}</span>{else}<span class="success">{$item['status']}</span>{/if}</td>
                            <td>{$item['sendor']}</td>
-                           <td>{$item['creator']} {$item['zc_name']} {$item['cs_name']} {$item['fs_name']} </td>
+                           <td>{$item['creator']} {$item['cs_name']} {$item['fs_name']} </td>
                            <td>
                                {if $item['fee_type'] == 0}未收费
                                {elseif $item['fee_type'] == 1}挂账

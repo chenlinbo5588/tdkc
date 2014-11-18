@@ -38,7 +38,13 @@ class Taizhang extends TZ_Admin_Controller {
         $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('regionList',$regionList['data']);
         
-        $this->_getPageData();
+        
+        if('delete' == $_GET['inc_del']){
+            $this->_getPageData(array( 'status !=' => ''));
+        }else{
+            $this->_getPageData(array( 'status !=' => '已删除'));
+        }
+        
 		$this->display();
 	}
     

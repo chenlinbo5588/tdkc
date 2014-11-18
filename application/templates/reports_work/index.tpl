@@ -12,6 +12,15 @@
                             </td>
                         </tr>
                         <tr>
+                            <td><label><strong>状态</strong></label></td>
+                            <td>
+                                <label><input type="checkbox" name="status[]" value="新增"/>新增</label>
+                                <label><input type="checkbox" name="status[]" value="已发送"/>已发送</label>
+                                <label><input type="checkbox" name="status[]" value="已布置"/>已布置</label>
+                                <label><input type="checkbox" name="status[]" value="已实施" checked="checked"/>已实施</label>
+                            </td>
+                        </tr>
+                        <tr>
                             <td><label><strong>负责人名称</strong></label></td>
                             <td>
                                 <input type="text" name="pm" value="{$smarty.post.pm}" placeholder="请输入项目负责人"/><span class="tip">如果有多个名称请用英文逗号,隔开</span>
