@@ -137,6 +137,7 @@
             {auth name="reports_salary"}<li><a href="{url_path('reports_salary')}">薪资变动报表</a></li>{/auth}
             {auth name="reports_ghfee"}<li><a href="{url_path('reports_ghfee')}">规划项目费用报表</a></li>{/auth}
             {auth name="reports_house"}<li><a href="{url_path('reports_house')}">房产台账统计报表</a></li>{/auth}
+            {auth name="reports_reg"}<li><a href="{url_path('reports_reg')}">台账备案报表</a></li>{/auth}
           </ul>
         </dd>
       </dl>

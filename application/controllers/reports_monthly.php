@@ -5,19 +5,12 @@
  */
 class reports_monthly extends TZ_Admin_Controller {
     
-    public $projectTypeList = array(
-            TAIZHANG_TD => TAIZHANG_TD,
-            TAIZHANG_HOUSE => TAIZHANG_HOUSE,
-            TAIZHANG_FG => TAIZHANG_FG,
-            TAIZHANG_WF => TAIZHANG_WF,
-            TAIZHANG_OTHER => TAIZHANG_OTHER,
-            TAIZHANG_PERSON => TAIZHANG_PERSON,
-            TAIZHANG_SH => TAIZHANG_SH
-        );
+    public $projectTypeList = null;
     
     
     public function __construct(){
         parent::__construct();
+        $this->projectTypeList = getTaizhangList();
         $this->load->model('Region_Model');
         $this->load->model('Taizhang_Model');
     }

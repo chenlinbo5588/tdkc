@@ -998,5 +998,18 @@ function yearList($highYear = 0,$lowYear = 1990){
     $yearList = range($lowYear,$highYear);
     return array_reverse($yearList);
 }
+
+
+function getTaizhangList(){
+    return array(
+        TAIZHANG_TD => TAIZHANG_TD,
+        TAIZHANG_HOUSE => TAIZHANG_HOUSE,
+        TAIZHANG_FG => TAIZHANG_FG,
+        TAIZHANG_WF => TAIZHANG_WF,
+        TAIZHANG_OTHER => TAIZHANG_OTHER,
+        TAIZHANG_PERSON => TAIZHANG_PERSON,
+        TAIZHANG_SH => TAIZHANG_SH
+    );
+}
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */

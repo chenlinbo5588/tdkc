@@ -82,7 +82,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
                 $prefix = 'ST';
                 break;
             case '地形':
-                $prefix = 'DS';
+                $prefix = 'DX';
                 break;
             case '评估':
                 $prefix = 'PG';
