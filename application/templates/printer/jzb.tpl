@@ -29,7 +29,7 @@
                             <td class="alignleft" colspan="3">{if !empty($info['title'])}{$info['title']}{else}{$info['name']}{/if}</td>
                         </tr>
                         <tr class="center">
-                            <td colspan="2">本宗地用签名盖章</td>
+                            <td colspan="2">本宗地户签名盖章</td>
                             <td class="alignleft" colspan="3"></td>
                         </tr>
                         <tr class="center">
