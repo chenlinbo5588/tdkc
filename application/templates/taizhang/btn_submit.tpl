@@ -1,5 +1,22 @@
 <script>
     $(function(){
+    
+        $("#fault_cate").bind("click",function(e){
+            var that = $(e.target);
+            var selVal = that.val();
+            
+            switch(selVal){
+                case "":
+                    $(".fault_list .fault_cate").show();
+                    break;
+                default:
+                    $(".fault_list .fault_cate").hide();
+                    $(".fault_list .fault_cate_" + selVal).show();
+                    break;
+            };
+        });
+    
+    
         $("input[name=submit]").bind('click',function(e){
             var that = $(e.target);
             var op = that.val();

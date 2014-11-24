@@ -297,7 +297,7 @@ class TZ_Admin_Controller extends TZ_Controller {
                 'where' => array(
                     'score >' => 0
                 ),
-                'order' => 'type ASC,level DESC'
+                'order' => 'type ASC,code ASC'
             ));
             
             $tmpFaultList = array();

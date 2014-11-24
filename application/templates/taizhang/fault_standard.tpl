@@ -4,6 +4,12 @@
         <div class="fault_wrapper">
             <a href="javascript:void(0);" class="toggle" data-toggle='{ "toggleText": ["-收起扣分标准","+展开扣分标准"],"target":"#faultList" }' >+展开扣分标准</a>
             <div id="faultList" style="display:none;">
+                <label>筛选分类</label><select name="fault_cate" id="fault_cate">
+                    <option value="">所有</option>
+                {foreach from=$sysFaultList key=key item=item}
+                    <option value="{$key}">{$item['title']}</option>
+                {/foreach}
+                </select>
                 <table class="fault_list">
                         <colgroup>
                             <col width="300"/>
@@ -21,7 +27,7 @@
                         <tbody>
                     {foreach from=$sysFaultList item=item}
                         {foreach name="fautlItem" from=$item['list'] item=list}
-                            <tr>
+                            <tr class="fault_cate fault_cate_{$list['type']}">
                             {if trim($list['name']) != ''}
                             <td><div><label><input type="checkbox" name="fault[]" value="{$list['code']}"/>{$list['code']}  {$list['name']}</label></div></td>
                             <td>{$list['score']}</td>
