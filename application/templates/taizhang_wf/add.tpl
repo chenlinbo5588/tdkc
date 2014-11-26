@@ -48,7 +48,9 @@
                                     <td><label class="required"><em>*</em><strong>用途</strong></label></td>
                                     <td>
                                         <select name="nature" style="width:300px">
-                                            <option value="违法">违法</option>
+                                            {foreach from=$natureList item=item}
+                                            <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                            {/foreach}
                                         </select>
                                         {form_error('nature')}
                                     </td>

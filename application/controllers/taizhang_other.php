@@ -304,7 +304,11 @@ class Taizhang_Other extends TZ_Admin_Controller {
         
         $this->assign('projectTypeList',$projectTypeList['data']);
        
-        
+        /**
+         * 项目性质 
+         */
+        $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常','type' => TAIZHANG_OTHER),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('natureList',$natureList['data']);
     }
     
     /**

@@ -28,10 +28,10 @@
                             </td>
                             <td><label><strong>编号</strong></label></td>
                             <td>
-                                <input type="text" name="project_no" style="width:150px;" value="{$smarty.get.project_no}" placeholder="请输入台账号"/>
+                                <input type="text" name="project_no"  value="{$smarty.get.project_no}" placeholder="请输入台账号"/>
                             </td>
                             <td colspan="2">
-                                <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                                <input type="submit" name="submit" class="btn btn-primary" value="查询"/>&nbsp;
                                 <label><input type="checkbox" name="inc_del" value="delete" {if $smarty.get.inc_del == 'delete'}checked{/if}/><strong>包含已删除</strong></label>
                                 {auth name="taizhang_sh+add"}<a class="addlink" href="{url_path('taizhang_sh','add')}">+添加散活台账</a>{/auth}
                             </td>
@@ -39,7 +39,7 @@
                         <tr>
                             <td><label><strong>单位名称</strong></label></td>
                             <td>
-                                <input type="text" name="name" style="width:200px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/>
+                                <input type="text" name="name" style="width:145px;" value="{$smarty.get.name}" placeholder="请输入登记名称"/>
                             </td>
                             <td>
                                 <label><strong>登记日期开始</strong></label>
@@ -48,7 +48,34 @@
                             <td><label><strong>登记日期结束</strong></label></td>
                             <td><input type="text" name="edate" id="edate" style="width:90px;" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></td>
                             <td><label><strong>作业组负责人</strong></label></td>
-                            <td><input type="text" name="pm" style="width:60px;" value="{$smarty.get.pm}" placeholder="作业组负责人"/></td>
+                            <td>
+                                <input type="text" name="pm"  value="{$smarty.get.pm}" placeholder="作业组负责人"/>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label><strong>收费情况</strong></label></td>
+                            <td colspan="3">
+                                <label><input type="checkbox" name="fee_type[]" {if $feeGet['f0']}checked{/if} value="f0"/>未收费</label>
+                                <label><input type="checkbox" name="fee_type[]" {if $feeGet['f1']}checked{/if} value="f1"/>挂账</label>
+                                <label><input type="checkbox" name="fee_type[]" {if $feeGet['f2']}checked{/if} value="f2"/>票开款收</label>
+                                <label><input type="checkbox" name="fee_type[]" {if $feeGet['f3']}checked{/if} value="f3"/>票开款未收</label>
+                                <label><input type="checkbox" name="fee_type[]" {if $feeGet['f4']}checked{/if} value="f4"/>票未开款收</label>
+                            </td>
+                            <td><label><strong>项目性质</strong></label></td>
+                            <td>
+                                <select name="nature">
+                                    <option value="">全部</option>
+                                {foreach from=$natureList item=item}
+                                    <option value="{$item['name']}" {if $smarty.get.nature == $item['name']}selected{/if}>{$item['name']}</option>
+                                {/foreach}
+                                </select>
+                            </td>
+                            <td><label><strong>领取情况</strong></label></td>
+                            <td>
+                                <label><input type="checkbox" name="get_doc[]" value="f0" {if $docGet['f0']}checked{/if}/>未领取</label>
+                                <label><input type="checkbox" name="get_doc[]" value="f1" {if $docGet['f1']}checked{/if}/>已领取</label>
+                            </td>
                         </tr>
                      </table>
                 </form>

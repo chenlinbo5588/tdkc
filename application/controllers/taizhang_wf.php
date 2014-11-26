@@ -299,7 +299,7 @@ class Taizhang_Wf extends TZ_Admin_Controller {
         /**
          * 项目性质 
          */
-        $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常','type' => '测绘项目'),'order' => 'displayorder DESC ,createtime ASC'));
+        $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常','type' => TAIZHANG_WF),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('natureList',$natureList['data']);
         
         //$this->assign('yearList',yearList());

@@ -49,11 +49,9 @@
                                     <td>
                                         <select name="nature" style="width:300px">
                                             <option value="">请选择用途</option>
-                                            <option value="山塘" {if $info['nature'] == '山塘'}selected{/if}>山塘</option>
-                                            <option value="土方" {if $info['nature'] == '土方'}selected{/if}>土方</option>
-                                            <option value="地形" {if $info['nature'] == '地形'}selected{/if}>地形</option>
-                                            <option value="评估" {if $info['nature'] == '评估'}selected{/if}>评估</option>
-                                            <option value="控制" {if $info['nature'] == '控制'}selected{/if}>控制</option>
+                                            {foreach from=$natureList item=item}
+                                            <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                            {/foreach}
                                         </select>
                                         {form_error('nature')}
                                     </td>

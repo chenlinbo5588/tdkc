@@ -24,13 +24,8 @@ class Taizhang extends TZ_Admin_Controller {
 	{
         
         $this->assign('action','index');
-        $this->assign('projectTypeList',$this->projectTypeList);
         
-        /**
-         * 区域 
-         */
-        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
-        $this->assign('regionList',$regionList['data']);
+        $this->_initData();
         
         
         if('delete' == $_GET['inc_del']){
@@ -215,9 +210,7 @@ class Taizhang extends TZ_Admin_Controller {
         }
     }
     
-    
-    public function recyclebin(){
-        $this->assign('action','recyclebin');
+    private function _initData(){
         $this->assign('projectTypeList',$this->projectTypeList);
         
         /**
@@ -225,6 +218,18 @@ class Taizhang extends TZ_Admin_Controller {
          */
         $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('regionList',$regionList['data']);
+        
+        /**
+         * 项目性质 
+         */
+        $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常'),'order' => 'displayorder DESC ,createtime ASC'));
+        $this->assign('natureList',$natureList['data']);
+    }
+    
+    
+    public function recyclebin(){
+        $this->assign('action','recyclebin');
+        $this->_initData();
         
         $this->_getPageData(array('status' => '已删除'));
 		$this->display('index');
@@ -409,6 +414,42 @@ class Taizhang extends TZ_Admin_Controller {
             
             if(!empty($_GET['creator'])){
                 $condition['where']['creator'] = trim($_GET['creator']);
+            }
+            
+            if(!empty($_GET['nature'])){
+                $condition['where']['nature'] = trim($_GET['nature']);
+            }
+            
+            if(is_array($_GET['fee_type'])){
+                $feeValue = array();
+                $feeGet = array();
+                foreach($_GET['fee_type'] as $fv){
+                    $feeValue[] = substr($fv,1);
+                    $feeGet[$fv] = 1;
+                }
+                
+                $this->assign('feeGet',$feeGet);
+                if($feeValue){
+                    $condition['where_in'] = array(
+                        array('key' => 'fee_type' , 'value' => $feeValue)
+                    );
+                }
+            }
+            
+            if(is_array($_GET['get_doc'])){
+                $docValue = array();
+                $docGet = array();
+                foreach($_GET['get_doc'] as $fv){
+                    $docValue[] = substr($fv,1);
+                    $docGet[$fv] = 1;
+                }
+                
+                $this->assign('docGet',$docGet);
+                if($docValue){
+                    $condition['where_in'] = array(
+                        array('key' => 'get_doc' , 'value' => $docValue)
+                    );
+                }
             }
             
             $data = $this->Taizhang_Model->getList($condition);
