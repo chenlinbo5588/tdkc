@@ -271,6 +271,8 @@ class Printer extends TZ_Controller {
             die('找不到记录');
         }
         
+        $info['project_no'] = $this->_makeClear($info['region_code'] ,$info['project_no'] );
+        
         $this->assign('info',$info);
  
         $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
@@ -383,6 +385,27 @@ class Printer extends TZ_Controller {
        $this->display();
     }
     
+    /**
+     * 处理 大写的 O 与 数字 0 相似的问题
+     */
+    private function _makeClear($regionCode , $projectNo){
+        
+        if(strtolower($regionCode) == 'o'){
+            $nos = explode('-',$projectNo);
+            $nos[0] = $nos[0] ? strtoupper($nos[0]) : '';
+            $nos[1] = $nos[1] ? strtoupper($nos[1]) : '';
+            
+            if($nos[2]){
+                $nos[2] = strtolower(substr($nos[2],0,1)) . substr($nos[2],1);
+            }
+            
+            $projectNo = implode('-',$nos);
+        }else{
+            $projectNo = strtoupper($projectNo);
+        }
+        
+        return $projectNo;
+    }
     
     public function covertd(){
        $id = (int)gpc('id','GP',0);
@@ -401,6 +424,8 @@ class Printer extends TZ_Controller {
         if($info['fs_time']){
             $dt = $info['fs_time'];
         }
+        
+        $info['project_no'] = $this->_makeClear($info['region_code'] ,$info['project_no'] );
         
         $changeDate = false;
         

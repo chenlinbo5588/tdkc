@@ -154,7 +154,7 @@
         <h1 id="notice" style="display:none;">打印时请按键盘 Shift + Enter 组合 预览，并按照预览方向放置封面</h1>
         <div class="covertd preview">
             <div class="item zi inputarea">{if strtoupper($info['region_code']) == 'A'}浒{else if ($info['region_name'] == '慈东滨海区')}龙{else}{$info['region_name']|cutText:1:''}{/if}</div>
-            <div class="item project_no inputarea">{strtoupper($info['project_no'])}</div>
+            <div class="item project_no inputarea">{$info['project_no']}</div>
             <div class="item nature inputarea">{if $info['nature']}{$info['nature']}{else}请输入性质{/if}</div>
             <div class="item yddw inputarea">{$info['name']|escape}</div>
             <div class="item clz inputarea">{$info['pm']|escape}</div>
