@@ -99,7 +99,13 @@ class Cron extends CI_Controller {
             }
         }
     }
-        
+    
+    public function clean_zb_trans(){
+        $this->load->model('Zb_Trans_Model');
+        $this->Zb_Trans_Model->deleteByWhere(array(
+            'createtime <' => time()
+        ));
+    }
 }
 /* End of file cron.php */
 /* Location: ./application/controllers/cron.php */
