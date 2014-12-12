@@ -24,6 +24,8 @@ class Zb_Trans extends TZ_Controller {
         $failedCount = 0;
         $batch_id = date("YmdHis");
 
+        $totalLine = 0;
+        
         if($_POST['orgdata']){
             $ar = explode("\n",$_POST['orgdata']);
             
@@ -49,15 +51,17 @@ class Zb_Trans extends TZ_Controller {
                         
                         $d['xmmc'] = str_replace(array("\n","\r","\r\n"),"",$d['xmmc']);
                         
-                        $result = $this->Zb_Trans_Model->add($d);
-                        if($result){
-                            $successCount++;
-                        }else{
-                            $failedCount++;
-                        }
+                        $this->Zb_Trans_Model->add($d);
+                        
+                        $totalLine++;
                     }
                 }
                 
+                $query = $this->db->query("SELECT COUNT(*) AS NUM FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '{$batch_id}'");
+                $rows = $query->result_array();
+                
+                $successCount = $rows[0]['NUM'];
+                $failedCount = $totalLine - $successCount;
             }
         }
         
