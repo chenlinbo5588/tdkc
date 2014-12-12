@@ -17,3 +17,4 @@ Guardfile
 /tmp/
 /temp/PHPExcel.*.cache
 /temp/*.xls
+shell_scripts/
