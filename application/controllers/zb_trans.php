@@ -77,6 +77,8 @@ class Zb_Trans extends TZ_Controller {
         $batch_id = empty($_GET['batch_id']) ? '' : $_GET['batch_id'];
         $point_pre = empty($_GET['point_pre']) ? 'J' : $_GET['point_pre'];
         $point_jd  = empty($_GET['point_jd']) ? '3' : $_GET['point_jd'];
+        $x_pre = empty($_GET['x_pre']) ? '' : $_GET['x_pre'];
+        $y_pre = empty($_GET['y_pre']) ? '' : $_GET['y_pre'];
         
         // 只能3 到 4 位小数点
         if(!in_array($point_jd,array('3','4'))){
@@ -167,8 +169,8 @@ class Zb_Trans extends TZ_Controller {
                             for($i = 0 ; $i < count($tempPoints); $i++){
                                 $point = $tempPoints[$i];
                                 
-                                $point['y'] = sprintf("%.{$point_jd}f",$point['y']);
-                                $point['x'] = sprintf("%.{$point_jd}f",$point['x']);
+                                $point['y'] = $y_pre . sprintf("%.{$point_jd}f",$point['y']);
+                                $point['x'] = $x_pre . sprintf("%.{$point_jd}f",$point['x']);
                                 
                                 $jNum = $i + 1;
                                 if(($i + 1)  == count($tempPoints)){
@@ -182,8 +184,8 @@ class Zb_Trans extends TZ_Controller {
                             for($i = 0 ; $i < count($tempPoints); $i++){
                                 $point = $tempPoints[$i];
                                 
-                                $point['y'] = sprintf("%.{$point_jd}f",$point['y']);
-                                $point['x'] = sprintf("%.{$point_jd}f",$point['x']);
+                                $point['y'] = $y_pre . sprintf("%.{$point_jd}f",$point['y']);
+                                $point['x'] = $x_pre . sprintf("%.{$point_jd}f",$point['x']);
                                 
                                 $jNum = $jump +  $i + 1  ;
                                 if(($i + 1)  == count($tempPoints)){
@@ -205,8 +207,8 @@ class Zb_Trans extends TZ_Controller {
                     for($i = 0 ; $i < count($dkPoints); $i++){
                         $point = $dkPoints[$i];
                         
-                        $point['y'] = sprintf("%.{$point_jd}f",$point['y']);
-                        $point['x'] = sprintf("%.{$point_jd}f",$point['x']);
+                        $point['y'] = $y_pre . sprintf("%.{$point_jd}f",$point['y']);
+                        $point['x'] = $x_pre . sprintf("%.{$point_jd}f",$point['x']);
                         
                         
                         $jNum = $i + 1;
