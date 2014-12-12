@@ -120,7 +120,7 @@ class Zb_Trans extends TZ_Controller {
                     $dkQuery = $this->db->query("SELECT * FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC LIMIT 1");
                     $dkInfo = $dkQuery->result_array();
                     
-                    $djMj = sprintf("%.3f",$dkInfo[0]['mj'] / 10000);
+                    $djMj = sprintf("%.4f",$dkInfo[0]['mj'] / 10000);
                     
                     $txt[] = $dkPoints[0]['NUM'].",{$djMj},{$dkInfo[0]['xmmc']}{$dk},面,,土地整理项目,,@";
                     $dbLkBlocks = $this->Zb_Trans_Model->getList(array(
@@ -196,7 +196,7 @@ class Zb_Trans extends TZ_Controller {
                     //没有镂空
                     $query = $this->db->query("SELECT * FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC ");
                     $dkPoints = $query->result_array();
-                    $dkMj = sprintf("%.3f",$dkPoints[0]['mj'] / 10000);
+                    $dkMj = sprintf("%.4f",$dkPoints[0]['mj'] / 10000);
                     $txt[] = count($dkPoints).",{$dkMj},{$dkPoints[0]['xmmc']}{$dk},面,,土地整理项目,,@";
                     for($i = 0 ; $i < count($dkPoints); $i++){
                         $point = $dkPoints[$i];

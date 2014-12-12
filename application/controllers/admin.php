@@ -136,9 +136,9 @@ class Admin extends TZ_Admin_Controller {
     public function change_password()
     {
         if($this->isPostRequest()){
-            $this->form_validation->set_rules('old_psw', '原密码', 'required|min_length[6]|max_length[10]');
-            $this->form_validation->set_rules('new_psw', '新密码', 'required|min_length[6]|max_length[10]|matches[new_psw2]');
-            $this->form_validation->set_rules('new_psw2', '新密码确认', 'required|min_length[6]|max_length[10]');
+            $this->form_validation->set_rules('old_psw', '原密码', 'required|min_length[6]|max_length[20]');
+            $this->form_validation->set_rules('new_psw', '新密码', 'required|min_length[6]|max_length[20]|matches[new_psw2]');
+            $this->form_validation->set_rules('new_psw2', '新密码确认', 'required|min_length[6]|max_length[20]');
             
             if($this->form_validation->run()){
                 $session = $this->session->all_userdata();
