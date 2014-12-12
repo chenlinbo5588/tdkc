@@ -77,6 +77,12 @@ class Cron extends CI_Controller {
         $current_year = date("Y");
         $last_year = $current_year - 1;
         
+        
+        if(2015 == $current_year){
+            echo $current_year."已经手工建立过了\n";
+            exit();
+        }
+        
         $this->load->model('Region_Model');
         
         $last_regions = $this->Region_Model->getList(array(
