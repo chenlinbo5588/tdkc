@@ -24,33 +24,45 @@ class Zb_Trans extends TZ_Controller {
         $failedCount = 0;
         $batch_id = date("YmdHis");
 
+        $field_sepchar = $_POST['field_sepchar'];
+
+        if(!$field_sepchar){
+            $field_sepchar = "\t";
+        }
+        
         $totalLine = 0;
         
         if($_POST['orgdata']){
             $ar = explode("\n",$_POST['orgdata']);
-            
             if(is_array($ar)){
                 foreach($ar as $k => $line){
-                    
                     if(trim($line) != ""){
-                        $info = explode(',',$line);
+                        $info = explode($field_sepchar,$line);
+                        
                         $d = array(
-                            'batch_id' => $batch_id,
-                            'fid' => $info[0],
-                            'dkbh' => $info[1],
-                            'x' => $info[3],
-                            'y' => $info[2],
-                            'hash' => md5($info[3].$info[2]),
-                            'mj' => $info[4]
+                            'batch_id' => $batch_id
                         );
-                        if(strpos($line,'@') !== false){
-                            $d['xmmc'] = substr($line,strpos($line,'@') + 1);
+                        
+                        $d['fid'] = empty($info[$_POST['field_fid']  - 1]) ? 0 : $info[$_POST['field_fid'] - 1] ;
+                        $d['dkbh'] = empty($info[$_POST['field_dkbh'] - 1]) ? 0 : $info[$_POST['field_dkbh'] - 1] ;
+                        $d['x'] = empty($info[$_POST['field_x'] - 1]) ? '' : $info[$_POST['field_x'] - 1] ;
+                        $d['y'] = empty($info[$_POST['field_y'] - 1]) ? '' : $info[$_POST['field_y'] - 1] ;
+                        $d['mj'] = empty($info[$_POST['field_mj'] - 1]) ? 0 : $info[$_POST['field_mj'] - 1] ;
+                        
+                        if($d['x'] && $d['y']){
+                            $d['hash'] = md5($d['x'].$d['y']);
                         }else{
-                            $d['xmmc'] = '';
+                            $d['hash'] = md5(uniqid());
+                        }
+                        
+                        $d['xmmc'] = empty($info[$_POST['field_xmmc'] - 1]) ? '' : $info[$_POST['field_xmmc'] - 1] ;
+                        if(substr($d['xmmc'],0,1) == '@'){
+                            $d['xmmc'] = substr($d['xmmc'],1);
                         }
                         
                         $d['xmmc'] = str_replace(array("\n","\r","\r\n"),"",$d['xmmc']);
                         
+                        //print_r($d);
                         $this->Zb_Trans_Model->add($d);
                         
                         $totalLine++;

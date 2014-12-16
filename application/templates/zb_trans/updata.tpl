@@ -36,13 +36,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>X坐标前缀</td>
+                        <td>X坐标添加前缀</td>
                         <td>
                             <input type="text" name="x_pre" value=""/>
                         </td>
                     </tr>
                     <tr>
-                        <td>Y坐标前缀</td>
+                        <td>Y坐标添加前缀</td>
                         <td>
                             <input type="text" name="y_pre" value=""/>
                         </td>
