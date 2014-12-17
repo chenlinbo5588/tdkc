@@ -636,7 +636,8 @@ class Taizhang_Wf extends TZ_Admin_Controller {
                             'fs_time' => $now,
                             'fs_name' => $this->_userProfile['name'],
                             'fs_yj' => $_POST['fs_yj'],
-                            'fs_remark' => $_POST['fs_remark']
+                            'fs_remark' => $_POST['fs_remark'],
+                            'can_revocation' => 1
                         );
                         $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
                         if($return){
