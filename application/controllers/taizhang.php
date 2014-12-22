@@ -452,6 +452,10 @@ class Taizhang extends TZ_Admin_Controller {
                 }
             }
             
+            if(!empty($_GET['sendor'])){
+                $condition['where']['sendor'] = trim($_GET['sendor']);
+            }
+            
             $data = $this->Taizhang_Model->getList($condition);
             $this->assign('page',$data['pager']);
             $this->assign('data',$data);

@@ -50,7 +50,6 @@
                             <td><label><strong>作业组负责人</strong></label></td>
                             <td>
                                 <input type="text" name="pm"  value="{$smarty.get.pm}" placeholder="作业组负责人"/>
-                                
                             </td>
                         </tr>
                         <tr>
@@ -75,6 +74,12 @@
                             <td>
                                 <label><input type="checkbox" name="get_doc[]" value="f0" {if $docGet['f0']}checked{/if}/>未领取</label>
                                 <label><input type="checkbox" name="get_doc[]" value="f1" {if $docGet['f1']}checked{/if}/>已领取</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label><strong>当前操作人</strong></label></td>
+                            <td colspan="7">
+                                <input type="text" name="sendor" value="{$smarty.get.sendor}" data-self="{$userProfile['name']}"/>&nbsp;<input type="button" name="setself" value="填入自己"/>
                             </td>
                         </tr>
                      </table>
@@ -249,6 +254,10 @@
                 }
                 
                 $(function(){
+                    $("input[name=setself]").bind("click",function(e){
+                        $("input[name=sendor]").val($("input[name=sendor]").attr("data-self"));
+                    });
+                    
                     $("a.popwin").bind("click",function(e){
                         var url = $(e.target).attr("data-href");
                         $.jBox("get:" + url,{ title:$(e.target).attr("data-title"),width:800,height:650,buttons:{ "关闭" : 1}});
