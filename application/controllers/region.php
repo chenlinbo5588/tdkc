@@ -142,7 +142,7 @@ class Region extends TZ_Admin_Controller {
     
     
     private function _initYear(){
-        $this->assign('yearList',yearList());
+        $this->assign('yearList',yearList(date("Y") + 1));
     }
     
     private function _initZj(){
