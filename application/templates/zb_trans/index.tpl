@@ -12,80 +12,75 @@
             <form action="{url_path('zb_trans','updata')}" method="post">
             <table>
                 <colgroup>
-                    <col width="250"/>
-                    <col width="600"/>
+                    <col width="80"/>
+                    <col width="80"/>
+                    <col width="80"/>
+                    <col width="80"/>
+                    <col width="80"/>
+                    <col width="80"/>
+                    <col width="80"/>
+                    <col width="80"/>
                 </colgroup>
                 <tbody>
                     <tr>
-                        <td colspan="2"><div class="info">注意列序号从1开始</div></td>
+                        <td colspan="7"><div class="info">注意列序号从1开始</div></td>
                     </tr>
                     <tr>
                         <td>
-                            <label><strong>点号字段列列序号(FID)</strong></label>
+                            <label><strong>项目名称(XMMC)</strong></label>
                         </td>
                         <td>
-                            <input type="text" name="field_fid" value="1"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label><strong>地块编号字段列序号(DKBH)</strong></label>
+                            <label><strong>地块编号(DKBH)</strong></label>
                         </td>
                         <td>
-                            <input type="text" name="field_dkbh" value="2"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label><strong>Y坐标字段列序号(POINT_Y)</strong></label>
+                            <label><strong>点号(FID)</strong></label>
                         </td>
                         <td>
-                            <input type="text" name="field_y" value="3"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label><strong>X坐标字段列序号(POINT_X)</strong></label>
+                            <label><strong>X坐标</strong></label>
                         </td>
                         <td>
-                            <input type="text" name="field_x" value="4"/>
+                            <label><strong>Y坐标</strong></label>
+                        </td>
+                        <td>
+                            <label><strong>面积字段</strong></label>
+                        </td>
+                        <td>
+                            <label><strong>列分隔符(不填默认为TAB)</strong></label>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label><strong>面积字段列序号(Shape_Area)</strong></label>
+                            <label>列<input type="text" name="field_xmmc" style="width:60px;" value="6"/></label>
                         </td>
                         <td>
-                            <input type="text" name="field_mj" value="5"/>
+                            <label>列<input type="text" name="field_dkbh" style="width:60px;" value="2"/></label>
+                        </td>
+                        <td>
+                            <label>列<input type="text" name="field_fid" style="width:60px;" value="1"/></label>
+                        </td>
+                        <td>
+                            <label>列<input type="text" name="field_x" style="width:60px;" value="4"/></label>
+                        </td>
+                        <td>
+                            <label>列<input type="text" name="field_y" style="width:60px;" value="3"/></label>
+                        </td>
+                        <td>
+                            <label>列<input type="text" name="field_mj" style="width:60px;" value="5"/></label>
+                        </td>
+                        <td>
+                            <input type="text" name="field_sepchar" style="width:60px;" value=""/>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label><strong>项目名称字段列序号(XMMC)</strong></label>
-                        </td>
-                        <td>
-                            <input type="text" name="field_xmmc" value="6"/>
+                        <td colspan="7"><div class="info">不包含标题列，请将待转换数据黏贴到文本框中</div></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <textarea name="orgdata" style="width:800px;height:400px;"></textarea>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label><strong>字段分隔符号(不填默认为TAB)</strong></label>
-                        </td>
-                        <td>
-                            <input type="text" name="field_sepchar" value=""/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><div class="info">不包含标题列，请将待转换数据黏贴到文本框中</div></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea name="orgdata" style="width:100%;height:400px;"></textarea>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2"><input type="submit" name="submit" class="btn-orange" value="提交数据"/></td>
+                        <td colspan="7"><input type="submit" name="submit" class="btn-orange" value="提交数据"/></td>
                     </tr>
                 </tbody>
             </table>
