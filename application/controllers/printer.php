@@ -464,8 +464,16 @@ class Printer extends TZ_Controller {
             if($matchCount > 0){
                 $info['name'] = strlen(trim($match3[1])) > 0 ? $match3[1] : $info['name'];
             }
+            
+            //性质参照面积表填写的为准
+            $matchCount = 0;
+            $matchCount = preg_match("/<span class=\"nature\">性质:(.*?)<\/span>/is",$mj['data'][0]['content'],$match4);
+            //print_r($match4);
+            $natureText = trim(strip_tags($match4[1]));
+            if($matchCount > 0 && $natureText){
+                $info['nature'] = $natureText;
+            }
         }
-        
         
         if(!$changeDate){
             $dateInfo['year'] = year_number(date("Y",$dt),'O');
