@@ -262,12 +262,12 @@ class Taizhang_Sh extends TZ_Admin_Controller {
         /**
          * 区域 
          */
-        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => $addYear , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => $addYear),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('regionList',$regionList['data']);
         
         
         $projectTypeList = $this->Project_Type_Model->getList(array(
-           'order' => 'createtime ASC'
+           'order' => 'type ASC,createtime ASC'
         ));
         
         $this->assign('projectTypeList',$projectTypeList['data']);

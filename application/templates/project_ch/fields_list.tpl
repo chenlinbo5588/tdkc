@@ -17,7 +17,7 @@
                     <td>
                         <select name="region_name">
                             {foreach from=$regionList item=item}
-                            <option value="{$item['name']}" {if $info['region_name'] == $item['name']}selected{/if}>{$item['name']}</option>
+                            <option value="{$item['name']}" {if $info['region_name'] == $item['name']}selected{/if}>{$item['name']}({$item['code']})</option>
                             {/foreach}
                         </select>
                     </td>

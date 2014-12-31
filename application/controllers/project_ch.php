@@ -59,7 +59,7 @@ class project_ch extends TZ_Admin_Controller {
         /**
          * 区域 
          */
-        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        $regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") ),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('regionList',$regionList['data']);
         
         
@@ -2056,7 +2056,7 @@ class project_ch extends TZ_Admin_Controller {
         /**
          *项目类型 
          */
-        $projectTypeList = $this->Project_Type_Model->getList(array('order' => 'displayorder DESC ,createtime ASC'));
+        $projectTypeList = $this->Project_Type_Model->getList(array('order' => 'type ASC , displayorder DESC ,createtime ASC'));
         $this->assign('projectTypeList',$projectTypeList['data']);
         
         /**
