@@ -108,8 +108,13 @@ class Cron extends CI_Controller {
     
     public function clean_zb_trans(){
         $this->load->model('Zb_Trans_Model');
+        $this->load->model('Zb_Trans_Gh_Model');
+        
         $this->db->query("TRUNCATE TABLE {$this->Zb_Trans_Model->_tableName}");
         echo "{$this->Zb_Trans_Model->_tableName} TRUNCATE SUCCESS \n";
+        
+        $this->db->query("TRUNCATE TABLE {$this->Zb_Trans_Gh_Model->_tableName}");
+        echo "{$this->Zb_Trans_Gh_Model->_tableName} TRUNCATE SUCCESS \n";
     }
 }
 /* End of file cron.php */

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>坐标转换程序</title>
+        <title>规划数据转换程序</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        {include file="zb_trans/trans_header.tpl"}
+        {include file="zb_trans_gh/trans_header.tpl"}
     </head>
     <body>
         <h1 class="title">数据转换 最后一步 (Step3)</h1>

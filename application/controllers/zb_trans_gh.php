@@ -1,16 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Zb_Trans extends TZ_Controller {
+class Zb_Trans_Gh extends TZ_Controller {
 
     public function __construct(){
         parent::__construct();
-        $this->load->model('Zb_Trans_Model');
+        $this->load->model('Zb_Trans_Gh_Model');
     }
     
     
 	public function index()
 	{
-        $this->Zb_Trans_Model->deleteByWhere(array(
+        $this->Zb_Trans_Gh_Model->deleteByWhere(array(
             'createtime <' => time() - 86400  //删除1天前的数据
         ));
         
@@ -44,16 +44,10 @@ class Zb_Trans extends TZ_Controller {
                         );
                         
                         $d['fid'] = empty($info[$_POST['field_fid']  - 1]) ? 0 : $info[$_POST['field_fid'] - 1] ;
-                        $d['dkbh'] = empty($info[$_POST['field_dkbh'] - 1]) ? 0 : $info[$_POST['field_dkbh'] - 1] ;
-                        $d['x'] = empty($info[$_POST['field_x'] - 1]) ? '' : $info[$_POST['field_x'] - 1] ;
-                        $d['y'] = empty($info[$_POST['field_y'] - 1]) ? '' : $info[$_POST['field_y'] - 1] ;
-                        $d['mj'] = empty($info[$_POST['field_mj'] - 1]) ? 0 : $info[$_POST['field_mj'] - 1] ;
                         
-                        if($d['x'] && $d['y']){
-                            $d['hash'] = md5($d['x'].$d['y']);
-                        }else{
-                            $d['hash'] = md5(uniqid());
-                        }
+                        $d['region_code'] = empty($info[$_POST['field_region_code']  - 1]) ? '' : $info[$_POST['field_region_code'] - 1] ;
+                        $d['viliage'] = empty($info[$_POST['field_viliage']  - 1]) ? '' : $info[$_POST['field_viliage'] - 1] ;
+                        $d['purpose_code'] = empty($info[$_POST['field_purpose_code']  - 1]) ? '' : $info[$_POST['field_purpose_code'] - 1] ;
                         
                         $d['xmmc'] = empty($info[$_POST['field_xmmc'] - 1]) ? '' : $info[$_POST['field_xmmc'] - 1] ;
                         if(substr($d['xmmc'],0,1) == '@'){
@@ -61,15 +55,24 @@ class Zb_Trans extends TZ_Controller {
                         }
                         
                         $d['xmmc'] = str_replace(array("\n","\r","\r\n"),"",$d['xmmc']);
+                        $d['mj'] = empty($info[$_POST['field_mj'] - 1]) ? 0 : $info[$_POST['field_mj'] - 1] ;
+                        $d['dkbh'] = empty($info[$_POST['field_dkbh'] - 1]) ? 0 : $info[$_POST['field_dkbh'] - 1] ;
+                        $d['x'] = empty($info[$_POST['field_x'] - 1]) ? '' : $info[$_POST['field_x'] - 1] ;
+                        $d['y'] = empty($info[$_POST['field_y'] - 1]) ? '' : $info[$_POST['field_y'] - 1] ;
                         
-                        //print_r($d);
-                        $this->Zb_Trans_Model->add($d);
+                        if($d['x'] && $d['y']){
+                            $d['hash'] = md5($d['x'].$d['y']);
+                        }else{
+                            $d['hash'] = md5(uniqid());
+                        }
+                        
+                        $this->Zb_Trans_Gh_Model->add($d);
                         
                         $totalLine++;
                     }
                 }
                 
-                $query = $this->db->query("SELECT COUNT(*) AS NUM FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '{$batch_id}'");
+                $query = $this->db->query("SELECT COUNT(*) AS NUM FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '{$batch_id}'");
                 $rows = $query->result_array();
                 
                 $successCount = $rows[0]['NUM'];
@@ -101,7 +104,7 @@ class Zb_Trans extends TZ_Controller {
          * 首先确定当前批次 有多少个地块
          */
         
-        $query = $this->db->query("SELECT dkbh FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '{$batch_id}' GROUP BY dkbh ORDER BY dkbh ASC");
+        $query = $this->db->query("SELECT dkbh FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '{$batch_id}' GROUP BY dkbh ORDER BY dkbh ASC");
         $result = $query->result_array();
         
         $txt = array();
@@ -120,7 +123,7 @@ class Zb_Trans extends TZ_Controller {
                 /**
                  * 首先看是否有镂空 
                  */
-                $sql = "SELECT COUNT(*) num, hash  FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} GROUP BY hash HAVING num >= 2 ORDER BY fid ASC ";
+                $sql = "SELECT COUNT(*) num, hash  FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} GROUP BY hash HAVING num >= 2 ORDER BY fid ASC ";
                 $lkQuery = $this->db->query($sql);
                 $lkResult = $lkQuery->result_array();
                 
@@ -138,7 +141,7 @@ class Zb_Trans extends TZ_Controller {
                 }
                 
                 if($lkAbnormalBlocks){
-                    $dbAbnormalPoints = $this->Zb_Trans_Model->getList(array(
+                    $dbAbnormalPoints = $this->Zb_Trans_Gh_Model->getList(array(
                         'where' => array(
                             'batch_id' => $batch_id,
                             'dkbh' => $dk
@@ -160,17 +163,17 @@ class Zb_Trans extends TZ_Controller {
                 
                 if(count($lkHash) >= 2){
                     //有镂空
-                    $query = $this->db->query("SELECT COUNT(*) AS NUM FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC ");
+                    $query = $this->db->query("SELECT COUNT(*) AS NUM FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC ");
                     $dkPoints = $query->result_array();
                     
                     //取一条就足够数据标题行内容填充了
-                    $dkQuery = $this->db->query("SELECT * FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC LIMIT 1");
+                    $dkQuery = $this->db->query("SELECT * FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC LIMIT 1");
                     $dkInfo = $dkQuery->result_array();
                     
                     $djMj = sprintf("%.4f",$dkInfo[0]['mj'] / 10000);
                     
-                    $txt[] = $dkPoints[0]['NUM'].",{$djMj},{$dkInfo[0]['xmmc']}{$dk},面,,土地整理项目,,@";
-                    $dbLkBlocks = $this->Zb_Trans_Model->getList(array(
+                    $txt[] = $dkPoints[0]['NUM'].",{$djMj},{$dkInfo[0]['region_code']},{$dkInfo[0]['viliage']},{$dkInfo[0]['purpose_code']},{$dkInfo[0]['xmmc']},面,,,,@";
+                    $dbLkBlocks = $this->Zb_Trans_Gh_Model->getList(array(
                         'where' => array(
                             'batch_id' => $batch_id,
                             'dkbh' => $dk
@@ -189,7 +192,7 @@ class Zb_Trans extends TZ_Controller {
                     
                     foreach($lkHash as $hk => $hv){
                         $fidSting = 'fid >= '.$dbLkBlocks['data'][$hk*2]['fid'] . ' AND  fid <= '.$dbLkBlocks['data'][$hk*2 + 1]['fid'];
-                        $query = $this->db->query("SELECT * FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} AND  {$fidSting} ORDER BY  fid ASC ");
+                        $query = $this->db->query("SELECT * FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} AND  {$fidSting} ORDER BY  fid ASC ");
                         $tempPoints = $query->result_array();
                         //echo $fidSting."<br/>";
                         
@@ -241,10 +244,10 @@ class Zb_Trans extends TZ_Controller {
                     //print_r($recordCounter);
                 }else{
                     //没有镂空
-                    $query = $this->db->query("SELECT * FROM {$this->Zb_Trans_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC ");
+                    $query = $this->db->query("SELECT * FROM {$this->Zb_Trans_Gh_Model->_tableName} WHERE batch_id = '$batch_id' AND dkbh = {$dk} ORDER BY fid ASC ");
                     $dkPoints = $query->result_array();
                     $dkMj = sprintf("%.4f",$dkPoints[0]['mj'] / 10000);
-                    $txt[] = count($dkPoints).",{$dkMj},{$dkPoints[0]['xmmc']}{$dk},面,,土地整理项目,,@";
+                    $txt[] = count($dkPoints).",{$dkMj},{$dkPoints[0]['region_code']},{$dkPoints[0]['viliage']},{$dkPoints[0]['purpose_code']},{$dkPoints[0]['xmmc']},面,,,,@";
                     for($i = 0 ; $i < count($dkPoints); $i++){
                         $point = $dkPoints[$i];
                         
@@ -274,8 +277,5 @@ class Zb_Trans extends TZ_Controller {
         
     }
     
-    
 }
 
-/* End of file printer.php */
-/* Location: ./application/controllers/printer.php */
