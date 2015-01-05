@@ -88,14 +88,14 @@ class Taizhang extends TZ_Admin_Controller {
                 }
 
                 $this->form_validation->set_rules('kh_amount', '考核金额', 'required|numeric');
-                $this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
+                //$this->form_validation->set_rules('ys_amount', '应收金额', 'required|numeric');
                 $this->form_validation->set_rules('ss_amount', '实收金额', 'required|numeric');
 
 
                 //$this->form_validation->set_rules('is_owed', '欠费情况', 'required|is_natural|less_than[2]');
                 //$this->form_validation->set_rules('is_gov', '是否政府挂账', 'required|is_natural|less_than[2]');
                 if(!empty($_POST['fee_type'])){
-                    $this->form_validation->set_rules('fee_type', '收费情况', 'is_natural|less_than[5]');
+                    $this->form_validation->set_rules('fee_type', '收费情况', 'is_natural|less_than[6]');
                 }else{
                     $_POST['fee_type'] = 0;
                 }
@@ -114,7 +114,7 @@ class Taizhang extends TZ_Admin_Controller {
                         'get_owner' => $_POST['get_owner'],
                         'owner_tel' => $_POST['owner_tel'],
                         'kh_amount' => $_POST['kh_amount'],
-                        'ys_amount' => $_POST['ys_amount'],
+                        'ys_amount' => 0,
                         'ss_amount' => $_POST['ss_amount'],
                         //'is_owed' => $_POST['is_owed'],
                         //'is_gov' => $_POST['is_gov'],

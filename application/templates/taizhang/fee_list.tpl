@@ -45,12 +45,14 @@
                         <input type="text" name="kh_amount" value="{$info['kh_amount']}"/>
                     </td>
                 </tr>
+                {*
                 <tr>
                     <td>应收金额</td>
                     <td>
                         <input type="text" name="ys_amount" value="{$info['ys_amount']}"/>
                     </td>
                 </tr>
+                *}
                 <tr>
                     <td>实收金额</td>
                     <td>
@@ -82,6 +84,7 @@
                         <label><input type="radio" name="fee_type" value="2" {if $info['fee_type'] == 2}checked{/if}/>票开款收</label>&nbsp;
                         <label><input type="radio" name="fee_type" value="3" {if $info['fee_type'] == 3}checked{/if}/>票开款未收</label>&nbsp;
                         <label><input type="radio" name="fee_type" value="4" {if $info['fee_type'] == 4}checked{/if}/>票未开款收</label>&nbsp;
+                        <label><input type="radio" name="fee_type" value="5" {if $info['fee_type'] == 5}checked{/if}/>暂挂账</label>&nbsp;
                     </td>
                 </tr>
                 <tr>
@@ -93,14 +96,14 @@
                 <tr>
                     <td></td>
                     <td>
-                        {if $info['category'] == $smarty.const.TAIZHANG_TD || $info['category'] == $smarty.const.TAIZHANG_WF}
-                            {if $info['can_revocation'] == 1}
-                                <input type="submit" name="submit" class="btn btn-orange" value="受理"/>
-                            {else}
-                                <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
-                            {/if}
-                        {else}
+                        {if $info['status'] == '已通过复审' && $info['sendor_id'] == $userProfile['id'] && $info['can_revocation'] == 1}  
+                            <input type="submit" name="submit" class="btn btn-orange" value="受理"/>
+                        {elseif $info['status'] == '已通过复审' && $info['sendor_id'] == $userProfile['id']}
                             <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
+                        {elseif $info['sendor_id'] == $userProfile['id']}
+                            <input type="submit" name="submit" class="btn btn-orange" value="收费"/>
+                        {else}
+                            {auth name="taizhang+fee"}<input type="submit" name="submit" class="btn btn-orange" value="收费"/>{/auth}
                         {/if}
                         <div class="loading" style="display:none;"></div>
                     </td>

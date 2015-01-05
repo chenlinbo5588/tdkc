@@ -60,6 +60,7 @@
                                 <label><input type="checkbox" name="fee_type[]" {if $feeGet['f2']}checked{/if} value="f2"/>票开款收</label>
                                 <label><input type="checkbox" name="fee_type[]" {if $feeGet['f3']}checked{/if} value="f3"/>票开款未收</label>
                                 <label><input type="checkbox" name="fee_type[]" {if $feeGet['f4']}checked{/if} value="f4"/>票未开款收</label>
+                                <label><input type="checkbox" name="fee_type[]" {if $feeGet['f5']}checked{/if} value="f5"/>暂挂账</label>
                             </td>
                             <td><label><strong>项目性质</strong></label></td>
                             <td>
@@ -119,6 +120,7 @@
                             <th>当前经办人</th>
                             <th>经办人</th>
                             <th>收费情况</th>
+                            <th>考核金额</th>
                             <th>成果资料</th>
                             <th>备注</th>
                             <th>操作</th>
@@ -169,10 +171,12 @@
                                 {elseif $item['fee_type'] == 2}票开款收
                                 {elseif $item['fee_type'] == 3}票开款未收
                                 {elseif $item['fee_type'] == 4}票未开款收
+                                {elseif $item['fee_type'] == 5}暂挂账
                                 {/if}
                            </td>
+                           <td>{$item['kh_amount']}</td>
                            <td>{if $item['get_doc'] == 1}已领取{else}未领取{/if}</td>
-                           <td>{$item['descripton']}</td>
+                           <td>{$item['descripton']|escape}</td>
                            <td>
                            {if $action == 'index'}{auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}{/if}
                             </td>
