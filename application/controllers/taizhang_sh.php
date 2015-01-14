@@ -92,6 +92,9 @@ class Taizhang_Sh extends TZ_Admin_Controller {
         
         $this->assign('action','add');
         $this->_initPageData($year);
+        $project_id = (int)gpc('project_id','GP',0);
+        $taizhang_id = (int)gpc('taizhang_id','GP',0);
+        $source_del = (string)gpc('source_del','GP','');
         
         
         if($this->isPostRequest()){
@@ -133,9 +136,38 @@ class Taizhang_Sh extends TZ_Admin_Controller {
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
             
-            $this->_fetchProjectInfo(TAIZHANG_SH);
+            $project_id = (int)gpc('project_id','GP',0);
+            $taizhang_id = (int)gpc('taizhang_id','GP',0);
+            
+            /**
+             * 自动填充信息 
+             */
+            $autoFillInfo = array();
+            
+            if($project_id){
+                $autoFillInfo = $this->_fetchProjectInfo($project_id);
+            }else if($taizhang_id){
+                $autoFillInfo = $this->_fetchTaizhangInfo($taizhang_id);
+            }
+            
+            if($autoFillInfo){
+                $this->assign('info',$autoFillInfo);
+            }
             
         }
+        
+        if($project_id){
+            $this->assign('project_id',$project_id);
+        }
+        
+        if($taizhang_id){
+            $this->assign('taizhang_id',$taizhang_id);
+        }
+        
+        if($source_del){
+            $this->assign('source_del',$source_del);
+        }
+        
         $this->assign('gobackUrl',$gobackUrl);
         $this->_getStep($info);
         $this->display();
@@ -253,6 +285,7 @@ class Taizhang_Sh extends TZ_Admin_Controller {
         
         $this->_getStep($info);
         $this->assign('info',$info);
+        $this->assign('addEntryList',getTaizhangAddEnryLList());
         $this->assign('gobackUrl',$gobackUrl);
         $this->display('add');
     }

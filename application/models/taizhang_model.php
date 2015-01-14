@@ -28,6 +28,7 @@ class Taizhang_Model extends TZ_Model {
             'weight' => $param['weight'],
             'name' => $param['name'],
             'nature' => isset($param['nature']) ? $param['nature'] : '',
+            'point_cnt' => isset($param['point_cnt']) ? intval($param['point_cnt']) : 0,
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
             'contacter_tel' => $param['contacter_tel'],
@@ -40,6 +41,7 @@ class Taizhang_Model extends TZ_Model {
             'sendor' => $param['sendor'],
             'creator' => $param['creator'],
             'updator' => $param['creator'],
+            'project_id' => isset($param['project_id']) ? intval($param['project_id']) : 0,
             'createtime' => $now,
             'updatetime' => $now
         );
@@ -63,7 +65,7 @@ class Taizhang_Model extends TZ_Model {
     public function fake_delete($param){
         
         $where = array(
-            'id' => $param['id']
+            'id' => intval($param['id'])
         );
         
         $data = array(
@@ -87,6 +89,7 @@ class Taizhang_Model extends TZ_Model {
             'weight' => $param['weight'],
             'name' => $param['name'],
             'nature' => isset($param['nature']) ? $param['nature'] : '',
+            'point_cnt' => isset($param['point_cnt']) ? intval($param['point_cnt']) : 0,
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
             'contacter_tel' => $param['contacter_tel'],

@@ -8,6 +8,7 @@
                         <input type="hidden" name="id" value="{$info['id']}"/>
                     {else}
                     <form action="{url_path($tplDir,'add')}" method="post" name="infoform">
+                        {include file="taizhang/hidden_var.tpl"}
                     {/if}
                         <table class="maintain">
                             <colgroup>

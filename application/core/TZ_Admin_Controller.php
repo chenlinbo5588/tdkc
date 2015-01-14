@@ -117,7 +117,19 @@ class TZ_Admin_Controller extends TZ_Controller {
         return $this->_userProfile;
     }
     
-    
+    protected function _fillFeeInfo($dest_id , $source_id){
+        $this->load->model('Taizhang_Model');
+        $data = $this->Taizhang_Model->getById(array(
+            'select' => "fee_type,complete_time,get_doc,get_doctime,get_owner,owner_tel,kh_amount,ys_amount,ss_amount,is_owed,is_gov,collect_date,remark,project_id,files",
+            'where' => array(
+                'id' => $source_id
+            )
+        ));
+        
+        if($data){
+            $this->db->update($this->Taizhang_Model->_tableName, $data, array('id' => $dest_id));
+        }
+    }
     
     protected function _getFiles($param){
         
@@ -417,18 +429,16 @@ class TZ_Admin_Controller extends TZ_Controller {
     }
     
     
-    protected function _fetchProjectInfo($category){
-        $project_id = (int)gpc('project_id','G',0);
-        $projectInfo = array();
+    protected function _fetchProjectInfo($project_id){
+        $info = array();
         
         if($project_id){
             $this->load->model('Project_Model');
-            $projectInfo = $this->Project_Model->queryById($project_id);
+            $info = $this->Project_Model->queryById($project_id);
 
-            if($projectInfo){
-                unset($projectInfo['id'],$projectInfo['status'],$projectInfo['sendor_id']);
-                $projectInfo['ptype_id'] = $projectInfo['type_id']; 
-                $this->assign('info',$projectInfo);
+            if($info){
+                unset($info['id'],$info['status'],$info['sendor_id']);
+                $info['ptype_id'] = $info['type_id']; 
                 
                 /**
                 $dupTips = $this->_getDupList($category,$projectInfo['name']);
@@ -441,7 +451,31 @@ class TZ_Admin_Controller extends TZ_Controller {
             }
         }
         
-        return $projectInfo;
+        return $info;
+    }
+    
+    protected function _fetchTaizhangInfo($taizhang_id){
+        $info = array();
+        
+        if($taizhang_id){
+            $this->load->model('Taizhang_Model');
+            $info = $this->Taizhang_Model->queryById($taizhang_id);
+
+            if($info){
+                unset($info['id'],$info['status'],$info['sendor_id']);
+                
+                /**
+                $dupTips = $this->_getDupList($category,$projectInfo['name']);
+                
+                if($dupTips){
+                    $this->assign('dupTips','<p>名称 '.$projectInfo['name'].' 已入'.$category.'台账，如需新编台账，注意名称问题</p><p>原台账号信息:</p>'.  implode('', $dupTips));
+                }
+                 * 
+                 */
+            }
+        }
+        
+        return $info;
     }
     
     /**

@@ -8,6 +8,7 @@
                         <input type="hidden" name="id" value="{$info['id']}"/>
                     {else}
                     <form action="{url_path($tplDir,'add')}" method="post" name="infoform">
+                        {include file="taizhang/hidden_var.tpl"}
                     {/if}
                         <table class="maintain">
                             <colgroup>
@@ -59,6 +60,12 @@
                                 </tr>
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>作业负责人</strong></label></td><td><input type="text" style="width:300px" name="pm" value="{$info['pm']|escape}" placeholder="请输入作业负责人"/><span class="tip">{form_error('pm')}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="optional"><em></em><strong>联系人名称</strong></label></td><td><input type="text" style="width:300px" name="contacter" id="contacter" value="{$info['contacter']}" placeholder="请输入联系人名称"/><span class="tip">{form_error('contacter')}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="optional"><em></em><strong>联系人号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_mobile" value="{$info['contacter_mobile']}" placeholder="请输入联系人号码"/><span class="tip">{form_error('contacter_mobile')}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>

@@ -25,6 +25,14 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('nature', '用途', 'required' );
         
+        if('竣工' == $_POST['nature']) {
+            $this->form_validation->set_rules('total_area', '总面积', 'required|numeric');
+        }
+        
+        if('放线' == $_POST['nature']) {
+            $this->form_validation->set_rules('point_cnt', '放线点个数', 'required|is_natural_no_zero');
+        }
+        
         if(!empty($_POST['contacter'])){
             $this->form_validation->set_rules('contacter', '联系人名称', 'trim|required|max_length[15]|htmlspecialchars');
         }else{
@@ -90,6 +98,9 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         
         $this->assign('action','add');
         $this->_initPageData($year);
+        $project_id = (int)gpc('project_id','GP',0);
+        $taizhang_id = (int)gpc('taizhang_id','GP',0);
+        $source_del = (string)gpc('source_del','GP','');
         
         
         if($this->isPostRequest()){
@@ -114,7 +125,13 @@ class Taizhang_Fg extends TZ_Admin_Controller {
                     $_POST['category'] = TAIZHANG_FG;
                     $_POST['user_id'] = $this->_userProfile['id'];
                     $_POST['creator'] = $this->_userProfile['name'];
-                    $_POST['total_area'] = 0;
+                    
+                    if('竣工' == $_POST['nature']){
+                        $_POST['total_area'] = $_POST['total_area'];
+                    }else{
+                        $_POST['total_area'] = 0;
+                    }
+                    
                     $_POST['churan_area'] = 0;
                     $_POST['sendor_id'] = $_POST['user_id'] ;
                     $_POST['sendor'] = $_POST['creator'];
@@ -142,9 +159,38 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
             
-            $this->_fetchProjectInfo(TAIZHANG_FG);
+            $project_id = (int)gpc('project_id','GP',0);
+            $taizhang_id = (int)gpc('taizhang_id','GP',0);
+            
+            /**
+             * 自动填充信息 
+             */
+            $autoFillInfo = array();
+            
+            if($project_id){
+                $autoFillInfo = $this->_fetchProjectInfo($project_id);
+            }else if($taizhang_id){
+                $autoFillInfo = $this->_fetchTaizhangInfo($taizhang_id);
+            }
+            
+            if($autoFillInfo){
+                $this->assign('info',$autoFillInfo);
+            }
             
         }
+        
+        if($project_id){
+            $this->assign('project_id',$project_id);
+        }
+        
+        if($taizhang_id){
+            $this->assign('taizhang_id',$taizhang_id);
+        }
+        
+        if($source_del){
+            $this->assign('source_del',$source_del);
+        }
+        
         $this->assign('gobackUrl',$gobackUrl);
         $this->_getStep($info);
         $this->display();

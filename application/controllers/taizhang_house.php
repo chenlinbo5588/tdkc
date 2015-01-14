@@ -92,6 +92,9 @@ class Taizhang_House extends TZ_Admin_Controller {
         
         $this->assign('action','add');
         $this->_initPageData($year);
+        $project_id = (int)gpc('project_id','GP',0);
+        $taizhang_id = (int)gpc('taizhang_id','GP',0);
+        $source_del = (string)gpc('source_del','GP','');
         
         
         if($this->isPostRequest()){
@@ -144,8 +147,37 @@ class Taizhang_House extends TZ_Admin_Controller {
         }else{
             $gobackUrl = $_SERVER['HTTP_REFERER'];
             
-            $this->_fetchProjectInfo(TAIZHANG_HOUSE);
+            $project_id = (int)gpc('project_id','GP',0);
+            $taizhang_id = (int)gpc('taizhang_id','GP',0);
+            
+            /**
+             * 自动填充信息 
+             */
+            $autoFillInfo = array();
+            
+            if($project_id){
+                $autoFillInfo = $this->_fetchProjectInfo($project_id);
+            }else if($taizhang_id){
+                $autoFillInfo = $this->_fetchTaizhangInfo($taizhang_id);
+            }
+            
+            if($autoFillInfo){
+                $this->assign('info',$autoFillInfo);
+            }
         }
+        
+        if($project_id){
+            $this->assign('project_id',$project_id);
+        }
+        
+        if($taizhang_id){
+            $this->assign('taizhang_id',$taizhang_id);
+        }
+        
+        if($source_del){
+            $this->assign('source_del',$source_del);
+        }
+        
         $this->assign('gobackUrl',$gobackUrl);
         $this->_getStep($info);
         $this->display();
@@ -202,6 +234,15 @@ class Taizhang_House extends TZ_Admin_Controller {
         
         if($action == 'add'){
             $insertid = $this->Taizhang_Model->add($_POST);
+            
+            if(!empty($_POST['taizhang_id'])){
+                $this->_fillFeeInfo($insertid,$_POST['taizhang_id']);
+            }
+            
+            if('yes' == strtolower($_POST['source_del'])){
+                $this->Taizhang_Model->fake_delete(array('id' => $_POST['taizhang_id'] , 'updator' => $this->_userProfile['name']));
+            }
+            
             return $insertid;
         }else{
             if($this->_userProfile['id'] != 1){

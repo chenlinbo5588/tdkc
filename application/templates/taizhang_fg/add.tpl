@@ -8,6 +8,7 @@
                         <input type="hidden" name="id" value="{$info['id']}"/>
                     {else}
                     <form action="{url_path($tplDir,'add')}" method="post" name="infoform">
+                        {include file="taizhang/hidden_var.tpl"}
                     {/if}
                         <table class="maintain">
                             <colgroup>
@@ -62,8 +63,21 @@
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>土地坐落</strong></label></td><td><input type="text" style="width:300px" name="address" value="{$info['address']}" placeholder="请输入土地坐落"/><span class="tip">{form_error('address')}</span></td>
                                 </tr>
+                                
+                                <tr id="field_mj" {if $smarty.post.nature == '放线' || $info['nature'] == '放线'}style="display:none;"{/if}>
+                                    <td><label class="required"><em>*</em><strong>总面积</strong></label></td><td><input type="text" style="width:300px" name="total_area" value="{$info['total_area']}" placeholder="请输入总面积"/><span class="tip">M<sup>2</sup>{form_error('total_area')}</span></td>
+                                </tr>
+                                <tr id="field_point" {if $smarty.post.nature == '竣工' || $info['nature'] == '竣工'}style="display:none;"{/if}>
+                                    <td><label class="required"><em>*</em><strong>放线点个数</strong></label></td><td><input type="text" style="width:300px" name="point_cnt" value="{$info['point_cnt']}" placeholder="请输入放线点个数"/><span class="tip">{form_error('point_cnt')}</span></td>
+                                </tr>
                                 <tr>
                                     <td><label class="required"><em>*</em><strong>作业负责人</strong></label></td><td><input type="text" style="width:300px" name="pm" value="{$info['pm']|escape}" placeholder="请输入作业负责人"/><span class="tip">{form_error('pm')}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="optional"><em></em><strong>联系人名称</strong></label></td><td><input type="text" style="width:300px" name="contacter" id="contacter" value="{$info['contacter']}" placeholder="请输入联系人名称"/><span class="tip">{form_error('contacter')}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="optional"><em></em><strong>联系人号码</strong></label></td><td><input type="text" style="width:300px" name="contacter_mobile" value="{$info['contacter_mobile']}" placeholder="请输入联系人号码"/><span class="tip">{form_error('contacter_mobile')}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label class="optional"><em></em><strong>备注</strong></label></td><td><textarea name="descripton" style="width:300px;height:150px;"  placeholder="请输入备注">{$info['descripton']}</textarea><br/><span class="tip">{form_error('descripton')}</span></td>
@@ -96,6 +110,21 @@
                         $("#filelist").delegate("a.df","click",function(e){
                             if(confirm("确定要删除吗")){
                                 $(this).closest("li").remove();
+                            }
+                        });
+                        
+                        $("select[name=nature]").change(function(){
+                            var v = $(this).val();
+                            
+                            if('放线' == v){
+                                $("#field_mj").hide();
+                                $("#field_point").show();
+                            }else if('竣工' == v){
+                                $("#field_mj").show();
+                                $("#field_point").hide();
+                            }else{
+                                $("#field_mj").show();
+                                $("#field_point").show();
                             }
                         });
                         

@@ -1011,5 +1011,26 @@ function getTaizhangList(){
         TAIZHANG_SH => TAIZHANG_SH
     );
 }
+
+function getTaizhangAddEnryLList(){
+    return array(
+        array(
+           'name'=> TAIZHANG_TD, 'url' => url_path('taizhang_ch','add'),
+        ),
+        array(
+           'name'=> TAIZHANG_HOUSE, 'url' => url_path('taizhang_house','add'),
+        ),
+        array(
+           'name'=> TAIZHANG_WF, 'url' => url_path('taizhang_wf','add'),
+        ),
+        array(
+           'name'=> TAIZHANG_OTHER, 'url' => url_path('taizhang_other','add'),
+        ),
+        array(
+           'name'=> TAIZHANG_PERSON,'url' => url_path('taizhang_person','add'),
+        )
+    );
+    
+}
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */
