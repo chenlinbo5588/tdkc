@@ -38,11 +38,11 @@ class Doc extends TZ_Admin_Controller {
             $condition['where']['status'] = '正常';
             
             if(!empty($_GET['sdate'])){
-                $condition['where']['createtime >='] = strtotime($_GET['sdate']);
+                $condition['where']['sign_time >='] = $_GET['sdate'];
             }
             
             if(!empty($_GET['edate'])){
-                $condition['where']['createtime <='] = strtotime($_GET['edate']) + 86400;
+                $condition['where']['sign_time <='] = $_GET['edate'];
             }
             
             $data = $this->Contract_Model->getList($condition);
