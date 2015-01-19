@@ -126,7 +126,7 @@ class reports_reg extends TZ_Admin_Controller {
      */
     public function index(){
         $this->load->helper('download');
-        //$regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y") , 'name !=' => '其他'),'order' => 'displayorder DESC ,createtime ASC'));
+        //$regionList = $this->Region_Model->getList(array('where' => array('status' => '正常','year' => date("Y")),'order' => 'displayorder DESC ,createtime ASC'));
         //$this->assign('regionList',$regionList['data']);
         //$this->assign('projectTypeList',$this->projectTypeList);
         

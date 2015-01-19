@@ -79,8 +79,8 @@ if ( ! function_exists('force_download'))
         header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 		// Generate the server headers
 		if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") !== FALSE){
-            $encoded_filename = urlencode($filename);
-            $encoded_filename = str_replace("+", "%20", $encoded_filename);
+            //$encoded_filename = urlencode($filename);
+            $encoded_filename = str_replace("+", "%20", $filename);
             
 			header('Content-Type: "'.$mime.'"');
 			header('Content-Disposition: attachment; filename="'.$encoded_filename.'"');

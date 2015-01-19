@@ -129,6 +129,7 @@
         <dt onClick='showHide("reports")'><b>数据报表</b></dt>
         <dd style='display:none' class='sitem' id='reports'>
           <ul class='sitemu'>
+            {auth name="reports_taizhang"}<li><a href="{url_path('reports_taizhang')}">台账明细报表</a></li>{/auth}
             {auth name="reports_fault"}<li><a href="{url_path('reports_fault')}">缺陷统计报表</a></li>{/auth}
             {auth name="reports_monthly"}<li><a href="{url_path('reports_monthly')}">项目台账统计报表</a></li>{/auth}
             {auth name="reports_work"}<li><a href="{url_path('reports_work')}">工作量统计报表</a></li>{/auth}
