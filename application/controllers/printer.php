@@ -118,6 +118,12 @@ class Printer extends TZ_Controller {
         $this->assign('dateInfo',$dateInfo);
         
         
+        $cityName = "慈溪市";
+        
+        if($info['region_name'] == '杭州湾新区' || $info['region_name'] == '浙江慈溪滨海经济开发区'){
+            $cityName = "";
+        }
+        
         $this->load->model('Project_Zddj_Model');
         $zddj = $this->Project_Zddj_Model->getList(array(
             'where' => array(
@@ -132,6 +138,7 @@ class Printer extends TZ_Controller {
             $this->assign('zddj',$zddj['data'][0]);
         }
         
+        $this->assign("cityName",$cityName);
         $this->display();
     }
     
