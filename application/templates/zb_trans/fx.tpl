@@ -24,7 +24,7 @@
         <textarea style="width:800px;height:600px;">
 [属性描述]
 格式版本号=
-数据产生单位=慈溪市市国土资源局
+数据产生单位=慈溪市国土资源局
 数据产生日期={$smarty.now|date_format:"Y-n-j"}
 坐标系=80国家大地坐标系
 几度分带=3
