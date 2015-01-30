@@ -112,6 +112,30 @@ class TZ_Admin_Controller extends TZ_Controller {
             return array();
         }
     }
+    
+    /**
+     * 检查权限
+     * @param type $authKey
+     * @return boolean 
+     */
+    public function checkAuth($authKey){
+        
+        if(strpos($authKey,'+') !== false){
+            $url = config_item('controller_trigger').'='.substr($authKey,0,strpos($authKey,'+')).'&'.config_item('function_trigger').'='.substr($authKey,strpos($authKey,'+') + 1);
+        }else{
+            $url = config_item('controller_trigger').'='.$authKey.'&'.config_item('function_trigger').'=index';
+        }
+        
+        if($this->_userProfile['id'] != 1){
+            if(in_array(md5($url),$this->getAuthList())){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
 
     public function getUserProfile(){
         return $this->_userProfile;

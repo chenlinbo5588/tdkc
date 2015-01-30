@@ -100,7 +100,7 @@ class reports_reg extends TZ_Admin_Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$current_row, $p['category_name']);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$current_row, $p['ss_amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, date("Y/m/d",$p['createtime']));
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $p['get_doctime'] == '0000-00-00' ? '' : date("Y/m/d",$p['get_doctime']));
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $p['get_doctime'] == '0000-00-00' ? '' : str_replace('-','/',$p['get_doctime']));
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, '');
             
             $i++;

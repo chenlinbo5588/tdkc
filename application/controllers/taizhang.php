@@ -224,6 +224,8 @@ class Taizhang extends TZ_Admin_Controller {
          */
         $natureList = $this->Project_Nature_Model->getList(array('where' => array('status' => '正常'),'order' => 'displayorder DESC ,createtime ASC'));
         $this->assign('natureList',$natureList['data']);
+        
+        $this->assign('hasFeeAuth',$this->checkAuth("taizhang+fee"));
     }
     
     

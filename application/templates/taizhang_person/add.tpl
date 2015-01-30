@@ -46,6 +46,18 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><label class="required"><em>*</em><strong>用途</strong></label></td>
+                                    <td>
+                                        <select name="nature" style="width:300px">
+                                            <option value="">请选择用途</option>
+                                            {foreach from=$natureList item=item}
+                                            <option value="{$item['name']}" {if $info['nature'] == $item['name']}selected{/if}>{$item['name']}</option>
+                                            {/foreach}
+                                        </select>
+                                        {form_error('nature')}
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><label class="required"><em>*</em><strong>名称</strong></label></td><td><input type="text" style="width:300px" name="name" value="{$info['name']}" placeholder="请输入项目名称"/><span class="tip">{form_error('name')}</span></td>
                                 </tr>
                                 <tr>

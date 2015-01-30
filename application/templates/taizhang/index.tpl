@@ -92,20 +92,14 @@
                 <div class="operator">
                     <a href="javascript:selAll('id[]');" class="coolbg">全选</a>
                     <a href="javascript:noSelAll('id[]');" class="coolbg">取消</a>
-                    {if $action == 'index'}
                     {auth name="taizhang+delete"}<a href="javascript:deleteSelAll('id[]');" class="coolbg">删除</a>{/auth}
-                    {else}
-                    {auth name="taizhang+restore"}<a href="javascript:restoreSelAll('id[]');" class="coolbg">重新启用</a>{/auth}
-                    {/if}
+                    {if $action == 'recyclebin'}{auth name="taizhang+restore"}<a href="javascript:restoreSelAll('id[]');" class="coolbg">重新启用</a>{/auth}{/if}
+                    <a href="javascript:amountSum('id[]');" class="coolbg">金额统计</a>
                 </div>
                 <table class="table" id="listtable" >
                     <thead>
                         <tr>
-                            {if $action == 'index'}
-                            {auth name="taizhang+delete"}<th></th>{/auth}
-                            {else}
-                            {auth name="taizhang+restore"}<th></th>{/auth}
-                            {/if}
+                            <th>勾选</th>
                             <th>时间</th>
                             <th>台账类型</th>
                             <th>镇街</th>
@@ -114,14 +108,15 @@
                             <th>土地坐落</th>
                             <th>用途</th>
                             <th>联系人</th>
-                            <th>联系电话</th>
-                            <th>作业组负责人</th>
+                            <th>联系<br/>电话</th>
+                            <th>作业组<br/>负责人</th>
                             <th>状态</th>
-                            <th>当前经办人</th>
+                            <th>当前<br/>经办人</th>
                             <th>经办人</th>
-                            <th>收费情况</th>
-                            <th>考核金额</th>
-                            <th>成果资料</th>
+                            <th>收费<br/>情况</th>
+                            <th>考核<br/>金额</th>
+                            {if $hasFeeAuth}<th>实收<br/>金额</th>{/if}
+                            <th>成果<br/>资料</th>
                             <th>备注</th>
                             <th>操作</th>
                         </tr>
@@ -129,11 +124,7 @@
                     <tbody>
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
-                           {if $action == 'index'}
-                           {auth name="taizhang+delete"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
-                           {else}
-                           {auth name="taizhang+restore"}<td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>{/auth}
-                           {/if}
+                           <td class="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>
                            <td>{$item['createtime']|date_format:"Y-m-d"}</td>
                            <td>{$item['category']}</td>
                            <td>{$item['region_name']|escape}</td>
@@ -157,7 +148,7 @@
                             {$item['name']|escape}
                            {/if}
                            </td>
-                           <td>{$item['address']|escape}</td>
+                           <td>{$item['address']|escape|cutText:10}</td>
                            <td>{$item['nature']}</td>
                            <td>{$item['contacter']}</td>
                            <td>{$item['contacter_mobile']}</td>
@@ -174,11 +165,12 @@
                                 {elseif $item['fee_type'] == 5}暂挂账
                                 {/if}
                            </td>
-                           <td>{$item['kh_amount']}</td>
+                           <td class="col_amount kh_amount" data-amount-name="kh" data-amount-title="考核金额">{$item['kh_amount']}</td>
+                           {if $hasFeeAuth}<td class="col_amount ss_amount" data-amount-name="ss" data-amount-title="实收金额">{$item['ss_amount']}</td>{/if}
                            <td>{if $item['get_doc'] == 1}已领取{else}未领取{/if}</td>
                            <td>{$item['descripton']|escape}</td>
                            <td>
-                           {if $action == 'index'}{auth name="taizhang+fee"}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/auth}{/if}
+                           {if $action == 'index'}{if $hasFeeAuth}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/if}{/if}
                             </td>
                         </tr>
                         {/foreach}
@@ -254,6 +246,50 @@
                         };
 
                         $.jBox.confirm("确定要删除吗", "提示", submit, { buttons: { '确定': true, '取消': false} });
+                    }
+                }
+                
+                
+                function amountSum(name){
+                    var checked = false;
+                    $("input[name='" +  name + "']").each(function(){
+                        if($(this).prop("checked")){
+                            checked = true;
+                        }
+                    });
+                    
+                    if(!checked){
+                        $.jBox.error('至少选择一条记录', '提示');
+                    }else{
+                        var amount = {};
+                        $("input[name='" +  name + "']").each(function(){
+                            var tr = $(this).closest("tr");
+                            var amount_name = "";
+                            var amount_title = "";
+                            var amount_v = "";
+                            if($(this).prop("checked")){
+                                var amountTd = tr.find(".col_amount");
+                                
+                                $(amountTd).each(function(){
+                                    amount_name = $(this).attr("data-amount-name");
+                                    amount_title = $(this).attr("data-amount-title");
+                                    amount_v = parseFloat($(this).html());
+                                    
+                                    if(typeof(amount[amount_name]) == "undefined"){
+                                        amount[amount_name] = { title: amount_title , amount: amount_v};
+                                    }else{
+                                        amount[amount_name].amount += amount_v;
+                                    }
+                                });
+                            }
+                        });
+                        
+                        var str = "";
+                        for(var a in  amount){
+                            str += amount[a].title + " : " + amount[a].amount + "<br/>";
+                        }
+                        
+                        $.jBox.alert(str, '金额统计');
                     }
                 }
                 

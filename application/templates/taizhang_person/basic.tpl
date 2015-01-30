@@ -11,6 +11,10 @@
                                     <td>{$info['ptype_name']}</td>
                                 </tr>
                                 <tr>
+                                    <td><strong>用途</strong></td>
+                                    <td>{$info['nature']}</td>
+                                </tr>
+                                <tr>
                                     <td><strong>名称</strong></td>
                                     <td>{$info['name']|escape}</td>
                                 </tr>
