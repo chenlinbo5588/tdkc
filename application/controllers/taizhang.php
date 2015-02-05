@@ -390,9 +390,19 @@ class Taizhang extends TZ_Admin_Controller {
                 $condition['where']['id'] = $_GET['id'];
             }
             
+            $categroy = array();
+            
             if(!empty($_GET['category'])){
-                $condition['where']['category'] = $_GET['category'];
+                $condition['where_in'] = array(
+                    array('key' => 'category' , 'value' => $_GET['category'])
+                );
+                
+                foreach($_GET['category'] as $cate){
+                    $categroy[$cate] = true;
+                }
             }
+            
+            $this->assign('category',$categroy);
         
             if(!empty($_GET['status'])){
                 $condition['where']['status'] = $_GET['status'];

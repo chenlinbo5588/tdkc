@@ -9,14 +9,18 @@
                             <td>
                                 <label><strong>业务类型</strong></label>
                             </td>
-                            <td>
-                                <select name="category" >
-                                    <option value="">全部</option>
-                                    {foreach from=$projectTypeList key=key item=item}
-                                    <option value="{$key}" {if $smarty.get.category == $key}selected{/if}>{$item}</option>
-                                    {/foreach}
-                                </select>
+                            <td colspan="5">
+                                {foreach from=$projectTypeList key=key item=item}
+                                 <label><input type="checkbox" name="category[]" value="{$item}" {if empty($category) || $category[$item]}checked="checked"{/if}/>{$item}</label>&nbsp;
+                                {/foreach}
                             </td>
+                            <td colspan="2">
+                                <input type="submit" name="submit" class="btn btn-primary" value="查询"/>&nbsp;
+                                <label><input type="checkbox" name="inc_del" value="delete" {if $smarty.get.inc_del == 'delete'}checked{/if}/><strong>包含已删除</strong></label>
+                                {auth name="taizhang_sh+add"}<a class="addlink" href="{url_path('taizhang_sh','add')}">+添加散活台账</a>{/auth}
+                            </td>
+                        </tr>
+                        <tr>
                             <td><label><strong>镇乡名称</strong></label></td>
                             <td>
                                 <select name="region_name">
@@ -27,13 +31,8 @@
                                 </select>
                             </td>
                             <td><label><strong>编号</strong></label></td>
-                            <td>
+                            <td colspan="5">
                                 <input type="text" name="project_no"  value="{$smarty.get.project_no}" placeholder="请输入台账号"/>
-                            </td>
-                            <td colspan="2">
-                                <input type="submit" name="submit" class="btn btn-primary" value="查询"/>&nbsp;
-                                <label><input type="checkbox" name="inc_del" value="delete" {if $smarty.get.inc_del == 'delete'}checked{/if}/><strong>包含已删除</strong></label>
-                                {auth name="taizhang_sh+add"}<a class="addlink" href="{url_path('taizhang_sh','add')}">+添加散活台账</a>{/auth}
                             </td>
                         </tr>
                         <tr>
@@ -107,8 +106,8 @@
                             <th>单位名称</th>
                             <th>土地坐落</th>
                             <th>用途</th>
-                            <th>联系人</th>
-                            <th>联系<br/>电话</th>
+                            <th>面积</th>
+                            <th>联系人<br/>电话</th>
                             <th>作业组<br/>负责人</th>
                             <th>状态</th>
                             <th>当前<br/>经办人</th>
@@ -116,7 +115,7 @@
                             <th>收费<br/>情况</th>
                             <th>考核<br/>金额</th>
                             {if $hasFeeAuth}<th>实收<br/>金额</th>{/if}
-                            <th>成果<br/>资料</th>
+                            <th>资料<br/>领取</th>
                             <th>备注</th>
                             <th>操作</th>
                         </tr>
@@ -150,8 +149,8 @@
                            </td>
                            <td>{$item['address']|escape|cutText:10}</td>
                            <td>{$item['nature']}</td>
-                           <td>{$item['contacter']}</td>
-                           <td>{$item['contacter_mobile']}</td>
+                           <td>{$item['total_area']}</td>
+                           <td>{$item['contacter']}{if $item['contacter_mobile']}<br/>{$item['contacter_mobile']}{/if}</td>
                            <td>{$item['pm']}</td>
                            <td>{if $item['status'] == '已删除'}<span class="notice">{$item['status']}</span>{else}<span class="success">{$item['status']}</span>{/if}</td>
                            <td>{$item['sendor']}</td>
@@ -168,7 +167,7 @@
                            <td class="col_amount kh_amount" data-amount-name="kh" data-amount-title="考核金额">{$item['kh_amount']}</td>
                            {if $hasFeeAuth}<td class="col_amount ss_amount" data-amount-name="ss" data-amount-title="实收金额">{$item['ss_amount']}</td>{/if}
                            <td>{if $item['get_doc'] == 1}已领取{else}未领取{/if}</td>
-                           <td>{$item['descripton']|escape}</td>
+                           <td><div title="{$item['descripton']|escape}">{$item['descripton']|escape|cutText:8}</div></td>
                            <td>
                            {if $action == 'index'}{if $hasFeeAuth}<a href="javascript:void(0);" class="popwin" data-id="{$item['id']}" data-href="{url_path('taizhang','fee','id=')}{$item['id']}">收费</a>{/if}{/if}
                             </td>
