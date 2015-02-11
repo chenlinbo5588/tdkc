@@ -621,7 +621,7 @@ class Taizhang_Ch extends TZ_Admin_Controller {
     }
     
     /**
-     * 初审
+     * 复审
      */
     public function second_sh(){
         $id = (int)gpc('id','GP',0);

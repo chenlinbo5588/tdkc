@@ -474,7 +474,7 @@ class Printer extends TZ_Controller {
             
             //性质参照面积表填写的为准
             $matchCount = 0;
-            $matchCount = preg_match("/<span class=\"nature\">性质:(.*?)<\/span>/is",$mj['data'][0]['content'],$match4);
+            $matchCount = preg_match("/<span class=\"?nature\"?>性质:(.*?)<\/span>/is",$mj['data'][0]['content'],$match4);
             //print_r($match4);
             $natureText = trim(strip_tags($match4[1]));
             if($matchCount > 0 && $natureText){

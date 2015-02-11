@@ -10,6 +10,7 @@
                                 <label><strong>业务类型</strong></label>
                             </td>
                             <td colspan="5">
+                                <label class="notice"><input type="checkbox" name="category_all"  data-checkall="category[]" {if empty($category) || $smarty.get.category_all}checked="checked"{/if}>全选/取消</label>
                                 {foreach from=$projectTypeList key=key item=item}
                                  <label><input type="checkbox" name="category[]" value="{$item}" {if empty($category) || $category[$item]}checked="checked"{/if}/>{$item}</label>&nbsp;
                                 {/foreach}
@@ -54,6 +55,7 @@
                         <tr>
                             <td><label><strong>收费情况</strong></label></td>
                             <td colspan="3">
+                                <label class="notice"><input type="checkbox" name="fee_type_all" data-checkall="fee_type[]" {if $smarty.get.fee_type_all}checked="checked"{/if}/>全选/取消</label>
                                 <label><input type="checkbox" name="fee_type[]" {if $feeGet['f0']}checked{/if} value="f0"/>未收费</label>
                                 <label><input type="checkbox" name="fee_type[]" {if $feeGet['f1']}checked{/if} value="f1"/>挂账</label>
                                 <label><input type="checkbox" name="fee_type[]" {if $feeGet['f2']}checked{/if} value="f2"/>票开款收</label>
@@ -77,7 +79,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label><strong>当前操作人</strong></label></td>
+                            <td><label><strong>当前经办人为</strong></label></td>
                             <td colspan="7">
                                 <input type="text" name="sendor" value="{$smarty.get.sendor}" data-self="{$userProfile['name']}"/>&nbsp;<input type="button" name="setself" value="填入自己"/>
                             </td>
@@ -293,6 +295,15 @@
                 }
                 
                 $(function(){
+                
+                    $("input[data-checkall]").each(function(){
+                        $(this).bind("click",function(){
+                            var groupname = $(this).attr("data-checkall");
+                            var allcheck = $(this);
+                            $("input[name='" + groupname + "']").prop("checked",$(this).prop("checked"));
+                        });
+                    });
+                    
                     $("input[name=setself]").bind("click",function(e){
                         $("input[name=sendor]").val($("input[name=sendor]").attr("data-self"));
                     });
