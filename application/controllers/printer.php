@@ -124,6 +124,10 @@ class Printer extends TZ_Controller {
             $cityName = "";
         }
         
+        if($info['region_name'] == '浙江慈溪滨海经济开发区'){
+            $info['region_name'] = '龙山镇';
+        }
+        
         $this->load->model('Project_Zddj_Model');
         $zddj = $this->Project_Zddj_Model->getList(array(
             'where' => array(

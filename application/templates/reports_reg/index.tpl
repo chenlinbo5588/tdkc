@@ -11,6 +11,9 @@
                                 <input type="submit" name="submit" class="btn btn-primary" value="导出Excel"/>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="2"><span class="tip">筛选出 {$smarty.const.TAIZHANG_TD}、{$smarty.const.TAIZHANG_FG}、{$smarty.const.TAIZHANG_HOUSE}这些台账中已收费、已领取资料的台账记录</span></td>
+                        </tr>
                         {*
                         
                         <tr>

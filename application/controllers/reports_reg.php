@@ -26,7 +26,7 @@ class reports_reg extends TZ_Admin_Controller {
         
         
         $dataList = $this->Taizhang_Model->getList(array(
-            'select' => "category,name,ptype_name,ss_amount,createtime,get_doctime",
+            'select' => "category,name,nature,ptype_name,ss_amount,createtime,get_doctime",
             'where' => $condition['where'],
             'where_in' => array(
                 array(
