@@ -252,7 +252,8 @@ class reports_employ extends TZ_Admin_Controller {
         );
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename = iconv('UTF-8','GBK', $year.'人事报表.xls');
+        //$filename = iconv('UTF-8','GBK', $year.'人事报表.xls');
+        $filename = $year.'人事报表.xls';
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 

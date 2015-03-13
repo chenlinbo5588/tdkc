@@ -142,7 +142,8 @@ class reports_device extends TZ_Admin_Controller {
         );
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename = iconv('UTF-8','GBK', '设备清单报表.xls');
+        //$filename = iconv('UTF-8','GBK', '设备清单报表.xls');
+        $filename =  '设备清单报表.xls';
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 

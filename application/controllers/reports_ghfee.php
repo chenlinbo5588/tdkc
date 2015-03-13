@@ -244,7 +244,8 @@ class reports_ghfee extends TZ_Admin_Controller {
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         
-        $filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'规划项目费用报表.xls');
+        //$filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'规划项目费用报表.xls');
+        $filename = $_POST['sdate'].'至'.$_POST['edate'].'规划项目费用报表.xls';
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 

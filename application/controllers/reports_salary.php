@@ -208,7 +208,8 @@ class reports_salary extends TZ_Admin_Controller {
         );
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename = iconv('UTF-8','GBK',$param['sdate'].'至'.$param['edate']. '工资表.xls');
+        //$filename = iconv('UTF-8','GBK',$param['sdate'].'至'.$param['edate']. '工资表.xls');
+        $filename = $param['sdate'].'至'.$param['edate']. '工资表.xls';
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 

@@ -172,7 +172,8 @@ class reports_house extends TZ_Admin_Controller {
         );
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'房产台账统计报表.xls');
+        //$filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'房产台账统计报表.xls');
+        $filename = $_POST['sdate'].'至'.$_POST['edate'].'房产台账统计报表.xls';
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 
