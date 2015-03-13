@@ -393,9 +393,7 @@ class Taizhang extends TZ_Admin_Controller {
             $categroy = array();
             
             if(!empty($_GET['category'])){
-                $condition['where_in'] = array(
-                    array('key' => 'category' , 'value' => $_GET['category'])
-                );
+                $condition['where_in'][] = array('key' => 'category' , 'value' => $_GET['category']);
                 
                 foreach($_GET['category'] as $cate){
                     $categroy[$cate] = true;
@@ -442,9 +440,7 @@ class Taizhang extends TZ_Admin_Controller {
                 
                 $this->assign('feeGet',$feeGet);
                 if($feeValue){
-                    $condition['where_in'] = array(
-                        array('key' => 'fee_type' , 'value' => $feeValue)
-                    );
+                    $condition['where_in'][] = array('key' => 'fee_type' , 'value' => $feeValue);
                 }
             }
             
@@ -458,9 +454,7 @@ class Taizhang extends TZ_Admin_Controller {
                 
                 $this->assign('docGet',$docGet);
                 if($docValue){
-                    $condition['where_in'] = array(
-                        array('key' => 'get_doc' , 'value' => $docValue)
-                    );
+                    $condition['where_in'][] = array('key' => 'get_doc' , 'value' => $docValue);
                 }
             }
             
