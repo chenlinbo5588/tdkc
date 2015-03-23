@@ -109,6 +109,16 @@ class Printer extends TZ_Controller {
         }else{
             $info['total_area'] = sprintf("%.2f",$info['total_area']);
         }
+        
+        $cityName = "慈溪市";
+        
+        if($info['region_name'] == '杭州湾新区' || $info['region_name'] == '浙江慈溪滨海经济开发区'){
+            $cityName = "";
+        }
+        if($info['region_name'] == '浙江慈溪滨海经济开发区'){
+            $info['region_name'] = '龙山镇';
+        }
+        
         $this->assign('info',$info);
         
         $this->load->helper('number');
@@ -116,17 +126,6 @@ class Printer extends TZ_Controller {
         $dateInfo['month'] = month_day_number(date("n",$info['createtime']));
         $dateInfo['day'] = month_day_number(date("j",$info['createtime']));
         $this->assign('dateInfo',$dateInfo);
-        
-        
-        $cityName = "慈溪市";
-        
-        if($info['region_name'] == '杭州湾新区' || $info['region_name'] == '浙江慈溪滨海经济开发区'){
-            $cityName = "";
-        }
-        
-        if($info['region_name'] == '浙江慈溪滨海经济开发区'){
-            $info['region_name'] = '龙山镇';
-        }
         
         $this->load->model('Project_Zddj_Model');
         $zddj = $this->Project_Zddj_Model->getList(array(
