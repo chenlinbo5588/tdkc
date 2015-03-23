@@ -32,8 +32,18 @@
                                 </select>
                             </td>
                             <td><label><strong>编号</strong></label></td>
-                            <td colspan="5">
+                            <td>
                                 <input type="text" name="project_no"  value="{$smarty.get.project_no}" placeholder="请输入台账号"/>
+                            </td>
+                            <td><label><strong>状态</strong></label></td>
+                            <td colspan="3">
+                                <select name="status" >
+                                    <option value="" {if $smarty.get.status == ''}selected{/if}>全部</option>
+                                    <option value="新增" {if $smarty.get.status == '新增'}selected{/if}>新增</option>
+                                    <option value="已提交初审" {if $smarty.get.status == '已提交初审'}selected{/if}>已提交初审</option>
+                                    <option value="已提交复审" {if $smarty.get.status == '已提交复审'}selected{/if}>已提交复审</option>
+                                    <option value="已通过复审" {if $smarty.get.status == '已通过复审'}selected{/if}>已通过复审</option>
+                                </select>
                             </td>
                         </tr>
                         <tr>

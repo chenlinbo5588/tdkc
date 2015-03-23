@@ -384,6 +384,10 @@ class Taizhang extends TZ_Admin_Controller {
                 $condition['like']['name'] = trim($_GET['name']);
             }
             
+            if(!empty($_GET['status'])){
+                $status = array_merge(array('status' => $_GET['status']),$status);
+            }
+            
             $condition['where'] = $status;
             
             if(!empty($_GET['id'])){
