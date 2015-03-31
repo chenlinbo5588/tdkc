@@ -3,9 +3,9 @@
                     {include file="taizhang/side_basic.tpl"}
                     
                     <div class="sideitem">
-                        <h2>审核信息</h2>
+                        <h2>业务处理</h2>
                         <ul>
-                            {auth name="taizhang_sh+second_sh"}<li {if $smarty.get.m == 'second_sh'}class="current"{/if}><a href="{url_path($tplDir,'second_sh','id=')}{$info['id']}">复审</a></li>{/auth}
+                            {auth name="taizhang_sh+second_sh"}<li {if $smarty.get.m == 'second_sh'}class="current"{/if}><a href="{url_path($tplDir,'second_sh','id=')}{$info['id']}">递交大厅</a></li>{/auth}
                         </ul>
                     </div>
                         

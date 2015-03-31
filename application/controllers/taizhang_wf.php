@@ -456,7 +456,7 @@ class Taizhang_Wf extends TZ_Admin_Controller {
                     $this->form_validation->set_rules('fault[]', '缺陷信息', 'required');
                 }
                 if($this->form_validation->run()){
-                    $d = $this->_addProjectFault($info,$_POST,0);
+                    $d = $this->_addProjectFault($info,$_POST,0,0);
                     
                     $sendorInfo = $this->User_Model->queryById($info['zc_name'],'name');
                     $data = array(
@@ -608,7 +608,7 @@ class Taizhang_Wf extends TZ_Admin_Controller {
                     $this->form_validation->set_rules('fault[]', '缺陷信息', 'required');
                 }
                 if($this->form_validation->run()){
-                    $d = $this->_addProjectFault($info,$_POST,0);
+                    $d = $this->_addProjectFault($info,$_POST,0,1);
                     
                     $sendorInfo = $this->User_Model->queryById($info['cs_name'],'name');
                     

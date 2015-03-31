@@ -1,4 +1,3 @@
-{if $info['sendor_id'] == $userProfile['id'] && ($info['status'] == '已提交初审' || $info['status'] == '已提交复审')}
 <tr class="fault">
     <td colspan="2">
         <div class="fault_wrapper">
@@ -29,9 +28,9 @@
                         {foreach name="fautlItem" from=$item['list'] item=list}
                             {if trim($list['name']) != ''}
                             <tr class="fault_cate fault_cate_{$list['type']}">
-                                <td><label><input type="checkbox" name="fault[]" value="{$list['code']}"/>{$list['code']}  {$list['name']}</label></td>
+                                <td><label><input type="checkbox" name="fault[]" value="{$list['code']}" {if $userFaultList0[$list['code']]}checked{/if}/>{$list['code']}  {$list['name']}</label></td>
                                 <td>{$list['score']}</td>
-                                <td><input type="text" name="{$list['code']}_remark" style="width:280px;" value="" placeholder="请填写详情"/></td>
+                                <td><input type="text" name="{$list['code']}_remark" style="width:280px;" value="{$userFaultList0[$list['code']]['remark']|escape}" placeholder="请填写详情"/></td>
                             </tr>
                             {/if}
                         {/foreach}
@@ -42,4 +41,3 @@
         </div>
     </td>
 </tr>
-{/if}

@@ -7,7 +7,7 @@
         {/foreach}
         {else}
         {foreach  from=$userSendorList item=item}
-        <label class="item"><input type="radio" name="sendor" value="{$item['sendor_id']}">{$item['sendor']}</label>
+        <label class="item"><input type="radio" name="sendor" value="{$item['sendor_id']}" {if $info['sendor_id'] == $item['sendor_id']}checked{/if}>{$item['sendor']}</label>
         {/foreach}
         {/if}
     </div>

@@ -263,4 +263,15 @@ class TZ_Controller extends CI_Controller {
 
         exit(json_encode($data));
     }
+    
+    protected function getGobackUrl(){
+    	$gobackUrl = '';
+    	if($this->isGetRequest()){
+    		$gobackUrl = $_SERVER['HTTP_REFERER'];
+    	}elseif($this->isPostRequest()){
+    		$gobackUrl = $_POST['gobackUrl'];
+    	}
+    	
+    	return $gobackUrl;
+    }
 }

@@ -164,7 +164,7 @@
                            <td>{$item['total_area']}</td>
                            <td>{$item['contacter']}{if $item['contacter_mobile']}<br/>{$item['contacter_mobile']}{/if}</td>
                            <td>{$item['pm']}</td>
-                           <td>{if $item['status'] == '已删除'}<span class="notice">{$item['status']}</span>{else}<span class="success">{$item['status']}</span>{/if}</td>
+                           <td class="{if $item['status'] == '已删除'}notice{elseif $item['status'] == '已通过复审'}success{/if}">{$item['status']}</td>
                            <td>{$item['sendor']}</td>
                            <td>{$item['creator']} {$item['cs_name']} {$item['fs_name']} </td>
                            <td>

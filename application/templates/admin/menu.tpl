@@ -46,6 +46,7 @@
                 <li><a href="{url_path('taizhang')}">台账查询</a></li>
             {/auth}
             {auth name="taizhang+recyclebin"}<li><a href="{url_path('taizhang','recyclebin')}">台账回收站</a></li>{/auth}
+            {auth name="check_record"}<li><a href="{url_path('check_record')}">检查记录</a></li>{/auth}
             {*
             {auth name="taizhang_ch"}<li><a href="{url_path('taizhang_ch')}">土地勘测登记台账</a></li>{/auth}
             {auth name="taizhang_house"}<li><a href="{url_path('taizhang_house')}">房产项目登记台帐</a></li>{/auth}

@@ -175,6 +175,52 @@ textarea.noborder {
     border:2px solid black;
 }
 
+.border1 .inner_table, .border2 .inner_table {
+    border:0px;
+}
+
+/**
+ * 内嵌表格
+ */
+.inner_table {
+    width:100%;
+}
+
+/** 行 */
+.inner_row_table td {
+    border-left:0;
+    border-right:0;
+    border-top:1px solid black;
+    border-bottom:1px solid black;
+}
+
+.inner_row_table .first_row td {
+    border-top:0;
+}
+
+.inner_row_table .last_row td {
+    border-bottom:0;
+}
+
+
+/**  列 */
+.inner_col_table td {
+    border-left:1px solid black;
+    border-right:1px solid black;
+    border-top:0;
+    border-bottom:0;
+}
+
+.inner_col_table .first_col {
+    border-left:0;
+}
+
+.inner_col_table .last_col {
+    border-right:0;
+}
+
+/** 居中 */
+
 .center, .center th , .center td {
     text-align: center;
     vertical-align: middle;
@@ -209,8 +255,7 @@ textarea.noborder {
     margin: 0 15px 0 65px;
 }
 
-
-.jzb .fulltable, .check .fulltable {
+.jzb .fulltable, .check .fulltable , .check_record .fulltable{
     width:100%;
 }
 

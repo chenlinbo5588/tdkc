@@ -220,6 +220,10 @@ class TZ_Admin_Controller extends TZ_Controller {
     
     /**
      * 添加待办记录
+     * 
+     * @param type $info
+     * @param type $sendorInfo
+     * @param type $project_type 0=测绘 1=规划 2=台账 3=检查记录
      */
     protected function _addPm($info,$sendorInfo,$project_type){
         
@@ -245,11 +249,15 @@ class TZ_Admin_Controller extends TZ_Controller {
                 case 0:
                     $url = url_path('project_ch','index','name='.urlencode($info['name']).'&id='.$info['id']);
                     break;
-                case 1:
-                    $url = url_path('project_gh','index','name='.urlencode($info['name']).'&id='.$info['id']);
-                    break;
                 case 2:
                     $url = url_path('taizhang','index','name='.urlencode($info['name']).'&id='.$info['id']);
+                    break;
+                case 3:
+                    $url = url_path('check_record','index','name='.urlencode($info['name']).'&id='.$info['id']);
+                    break;
+                case 1:
+                    //规划项目比较少， 放到最后减少判断
+                    $url = url_path('project_gh','index','name='.urlencode($info['name']).'&id='.$info['id']);
                     break;
                 default:
                     break;
@@ -282,7 +290,23 @@ class TZ_Admin_Controller extends TZ_Controller {
         $this->assign('userSendorList',$userSendorList['data']);
     }
     
+    /**
+     * 删除文件操作
+     * @param type $files 
+     */
+    protected function _deleteFile($files){
+        $prepath = config_item('filestore_dir');
+        foreach($files as $file){
+            $file_realpath = $prepath.$file['file_store_path'].$file['file_md5'].$file['file_extension'];
+            @unlink($file_realpath);
+        }
+    }
     
+    /**
+     * 将新提交的文件中，在原来的文件列表中不存在的部分 ，从文件系统删除
+     * @param type $current_files  当前拥有的文件
+     * @param type $file_ids       本次提交的文件
+     */
     protected function _cleanFile($current_files , $file_ids){
         $needCleanFile = array();
         
@@ -309,15 +333,9 @@ class TZ_Admin_Controller extends TZ_Controller {
         ///file_put_contents("debug.txt", print_r($needCleanFile,true));
         
         if($needCleanFile){
-            $prepath = config_item('filestore_dir');
-
             $cleanFiles = $this->_getFiles($needCleanFile);
-            foreach($cleanFiles as $file){
-                $file_realpath = $prepath.$file['file_store_path'].$file['file_md5'].$file['file_extension'];
-                @unlink($file_realpath);
-            }
+            $this->_deleteFile($cleanFiles);
         }
-        
     }
     
     /**
@@ -380,16 +398,11 @@ class TZ_Admin_Controller extends TZ_Controller {
     }
     
     
-    protected function _addProjectFault($info,$param,$project_type = 0){
+    protected function _addProjectFault($info,$param,$project_type = 0 , $fault_step = 0){
         $data = array();
         
         if(!empty($param['fault'])){
-            if($info['status'] == '已提交初审'){
-                $fault_step = 0;
-            }else{
-                $fault_step = 1;
-            }
-
+            
             $this->load->model('Project_Fault_Model');
             
             
@@ -399,7 +412,8 @@ class TZ_Admin_Controller extends TZ_Controller {
                 'type' => $fault_step
             ));
             
-            if($project_type == 0){
+            //0 = 测绘项目 1 = 规划项目  2 = 外业检查项目
+            if($project_type == 0 || $project_type == 2){
                 $this->load->model('Fault_Model');
                 
                 $sysFaultList = $this->Fault_Model->getList(array(

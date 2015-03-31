@@ -13,6 +13,73 @@ class Printer extends TZ_Controller {
 		die(0);
 	}
     
+    public function check_record_cover(){
+        $id = (int)gpc('id','GP',0);
+        if(!$id){
+           die('参数错误');
+        }
+        $this->load->helper('number');
+        $this->load->model('Check_Record_Model');
+        
+        $info = $this->Check_Record_Model->queryById($id);
+        
+        $dateInfo['year'] = year_number(date("Y",$info['createtime']),'O');
+        //$dateInfo['month'] = month_day_number(date("n",$info['createtime']));
+        //$dateInfo['day'] = month_day_number(date("j",$info['createtime']));
+        $this->assign('dateInfo',$dateInfo);
+        $this->assign('info',$info);
+        $this->display();
+    }
+    
+    public function check_record(){
+        $id = (int)gpc('id','GP',0);
+        if(!$id){
+           die('参数错误');
+        }
+        
+        $this->load->model('Check_Record_Model');
+        
+        $info = $this->Check_Record_Model->queryById($id);
+        $jdConfig = array(
+           'kzd' => array(
+               'title' => '控制点',
+               'kzd_jd',
+               'kzd_num',
+               'kzd_avg',
+               'kzd_overflow',
+           ),
+           'sbd' => array(
+               'title' => '碎部点',
+               'sbd_jd',
+               'sbd_num',
+               'sbd_avg',
+               'sbd_overflow',
+           ),
+          'bc' => array(
+              'title' => '边长',
+               'bc_jd',
+               'bc_num',
+               'bc_avg',
+               'bc_overflow',
+           ),
+           'jzd' => array(
+               'title' => '界址点',
+               'jzd_jd',
+               'jzd_num',
+               'jzd_avg',
+               'jzd_overflow',
+           ),
+         );
+        
+        $info['type'] = explode('|',$info['type']);
+        $info['method'] = explode('|',$info['method']);
+        
+        $info['remark'] = str_replace("<br />","<p>",nl2br($info['remark']));
+        
+        $this->assign('jdList',$jdConfig);
+        $this->assign('info',$info);
+        $this->display();
+    }
     
     /**
      * 界址表
