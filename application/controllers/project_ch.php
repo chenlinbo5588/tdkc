@@ -134,7 +134,13 @@ class project_ch extends TZ_Admin_Controller {
         $this->display();
     }
     
+	/**
+	 * @deprecated
+	 */
     public function savejzb(){
+
+		die(0);
+		/*
         $project_id = (int)gpc("id",'GP',0);
         
         if($this->isPostRequest() && !empty($_POST['id'])){
@@ -175,7 +181,7 @@ class project_ch extends TZ_Admin_Controller {
         }else{
             $this->sendFormatJson('failed', array('text' => '参数错误,请重新请求'));
         }
-        
+        */
     }
     
     /**
@@ -197,7 +203,7 @@ class project_ch extends TZ_Admin_Controller {
                     break;
                 }
                 if($this->_userProfile['id'] != 1){
-                    if('已提交初审' != $info['status']){
+                    if($info['status'] != '已提交初审'){
                         $message = '保存失败,只有已提交初审状态下才能保存';
                         break;
                     }
@@ -244,6 +250,12 @@ class project_ch extends TZ_Admin_Controller {
                 }
                 
                 if($this->_userProfile['id'] != 1){
+
+                    if('新增' != $info['status']){
+						$message = '保存失败,当前状态不允许保存';
+						break;
+					}
+
                     if($this->_userProfile['name'] != $info['creator']){
                         $message = '保存失败,只有'.$info['creator'].'才能保存';
                         break;
@@ -291,6 +303,13 @@ class project_ch extends TZ_Admin_Controller {
                 }
                 
                 if($this->_userProfile['id'] != 1){
+
+					if('新增' != $info['status']){
+						$message = '保存失败,当前状态不允许保存';
+						break;
+					}
+
+
                     if($this->_userProfile['name'] != $info['creator']){
                         $message = '保存失败,只有'.$info['creator'].'才能保存';
                         break;
@@ -337,22 +356,17 @@ class project_ch extends TZ_Admin_Controller {
                 }
                 
                 if($this->_userProfile['id'] != 1){
+					if('新增' != $info['status']){
+						$message = '保存失败,当前状态不允许保存';
+						break;
+					}
+
                     if($this->_userProfile['name'] != $info['creator']){
                         $message = '保存失败,只有'.$info['creator'].'才能保存';
                         break;
                     }
                 }
                 
-                /*
-                if(!in_array($this->_userProfile['id'] , array($info['worker_id'],$info['pm_id']))){
-                    $message = '保存失败,您无权保存，只有项目负责人和实施人才能保存';
-                    break;
-                }
-                */
-                //if(!preg_match("/<div class=\"mjb\">/", $_POST['mjb'])){
-                    //$message = '保存失败,没有发现面积表';
-                    //break;
-                //}
                 
                 $this->load->model('Project_Area_Model');
                 

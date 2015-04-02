@@ -219,9 +219,11 @@ class Check_Record extends TZ_Admin_Controller {
                     break;
                 }
                 
-                if(!in_array($this->_userProfile['name'], array($info['creator'],$info['sendor']))){
-                    $message = '您不能保存';
-                    break;
+                if($this->_userProfile['id'] != 1){
+                    if(!in_array($this->_userProfile['name'], array($info['creator'],$info['sendor']))){
+                        $message = '您不能保存';
+                        break;
+                    }
                 }
                 
                 $sendorInfo = array();
@@ -452,21 +454,6 @@ class Check_Record extends TZ_Admin_Controller {
             
             if(!empty($_GET['pm'])){
                 $condition['where']['pm'] = trim($_GET['pm']);
-            }
-            
-            
-            if(is_array($_GET['fee_type'])){
-                $feeValue = array();
-                $feeGet = array();
-                foreach($_GET['fee_type'] as $fv){
-                    $feeValue[] = substr($fv,1);
-                    $feeGet[$fv] = 1;
-                }
-                
-                $this->assign('feeGet',$feeGet);
-                if($feeValue){
-                    $condition['where_in'][] = array('key' => 'fee_type' , 'value' => $feeValue);
-                }
             }
             
             if(is_array($_GET['evaluate'])){

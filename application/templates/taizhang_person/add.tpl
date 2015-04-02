@@ -1,5 +1,5 @@
 {include file="common/main_header.tpl"}
-            <div class="row-fluid taizhang_detail">
+            <div class="row-fluid taizhang_detail clearfix">
                 {include file="{$tplDir}/side.tpl"}
                 
                 <div class="mainarea">

@@ -1,5 +1,5 @@
 {include file="common/main_header.tpl"}
-            <div class="row-fluid taizhang_detail">
+            <div class="row-fluid taizhang_detail clearfix">
                 {include file="{$tplDir}/side.tpl"}
                 
                 <div class="mainarea">
@@ -49,7 +49,7 @@
                                     <col width="500"/>
                                 </colgroup>
                              <tbody>
-                                {if $info['status'] == '已提交复审'}
+                                {if $info['status'] == '已提交复审' && $info['can_revocation'] == 0}
                                 <tr>
                                     <td>发送给收费</td>
                                     <td>{include file="project_ch/sendorlist.tpl"}</td>
