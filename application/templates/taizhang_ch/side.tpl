@@ -21,6 +21,14 @@
                             <li><a href="javascript:void(0);" title="">宗地面积成果表（请附件形式上传)</a></li>
                         </ul>
                     </div>
+                    {if $info['nature'] == '临时用地'}
+                    <div class="sideitem">
+                        <h2>{$info['nature']}表格信息</h2>
+                        <ul>
+                            <li><a href="/docs/wbfm.doc" title="五本封面" >五本封面模版.doc</a></li>
+                        </ul>
+                    </div>
+                    {/if}
                     {if $info['ptype_name'] == '新征用地' || $info['ptype_name'] == '供地' || $info['nature'] == '新征'}
                     <div class="sideitem">
                         <h2>新征（或供地)表格信息</h2>

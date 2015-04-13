@@ -238,6 +238,18 @@ class Taizhang extends TZ_Admin_Controller {
         
     }
     
+    public function dating(){
+        $this->assign('action','dating');
+        $this->_initData();
+        
+        if('delete' == $_GET['inc_del']){
+            $this->_getPageData(array( 'status !=' => ''));
+        }else{
+            $this->_getPageData(array( 'status !=' => '已删除'));
+        }
+        
+		$this->display();
+    }
     
     /**
      * 重新启用 

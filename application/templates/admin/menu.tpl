@@ -45,6 +45,7 @@
                 <li><a href="{url_path('taizhang','index','pm=')}{urlencode($userProfile['name'])}">我的台账</a></li>
                 <li><a href="{url_path('taizhang')}">台账查询</a></li>
             {/auth}
+            {auth name="taizhang+dating"}<li><a href="{url_path('taizhang','dating')}">大厅查询</a></li>{/auth}
             {auth name="taizhang+recyclebin"}<li><a href="{url_path('taizhang','recyclebin')}">台账回收站</a></li>{/auth}
             {auth name="check_record"}<li><a href="{url_path('check_record')}">检查记录</a></li>{/auth}
             {*

@@ -89,7 +89,6 @@ class Taizhang_Model extends TZ_Model {
             'weight' => $param['weight'],
             'name' => $param['name'],
             'nature' => isset($param['nature']) ? $param['nature'] : '',
-            'point_cnt' => isset($param['point_cnt']) ? intval($param['point_cnt']) : 0,
             'contacter' => $param['contacter'],
             'contacter_mobile' => $param['contacter_mobile'],
             'contacter_tel' => $param['contacter_tel'],
@@ -104,6 +103,10 @@ class Taizhang_Model extends TZ_Model {
         
         if($param['project_no']){
             $data['project_no'] = $param['project_no'];
+        }
+        
+        if($param['point_cnt']){
+            $data['point_cnt'] = intval($param['point_cnt']);
         }
         
         if(!empty($param['files'])){
