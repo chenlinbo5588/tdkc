@@ -51,7 +51,7 @@ class Taizhang_Fg extends TZ_Admin_Controller {
             $_POST['contacter_tel'] = '';
         }
         
-        $this->form_validation->set_rules('pm', '作业组负责人', 'trim|required|callback_checkname');
+        $this->form_validation->set_rules('pm', '作业组负责人', 'trim|required|callback_checkPm');
         
         if(!empty($_POST['descripton'])){
             $this->form_validation->set_rules('descripton', '备注', 'trim|max_length[300]|htmlspecialchars');
@@ -65,19 +65,6 @@ class Taizhang_Fg extends TZ_Admin_Controller {
         
     }
     
-    
-    public function checkname($name){
-        
-        $this->load->model('User_Model');
-        $count = $this->User_Model->getCount(array('where' => array('name' => $name)));
-        
-        if($count){
-            return true;
-        }else{
-            $this->form_validation->set_message('checkname', '%s 字段参数不正确，没有这个人员');
-            return FALSE;
-        }
-    }
     
     private function _formatProjectNo($year,$masterSerial,$prefix = ''){
         

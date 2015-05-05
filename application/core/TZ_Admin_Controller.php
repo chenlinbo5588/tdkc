@@ -123,6 +123,23 @@ class TZ_Admin_Controller extends TZ_Controller {
         }
     }
     
+    public function checkPm($name){
+        $this->load->model('User_Model');
+        $user = $this->User_Model->queryById($name,'name');
+        
+        if($user){
+            if(!$user['is_pm']){
+                $this->form_validation->set_message('checkPm', '%s 字段参数不正确，你输入的人员不是组长');
+                return false;
+            }
+            
+            return true;
+        }else{
+            $this->form_validation->set_message('checkPm', '%s 字段参数不正确，没有这个人员');
+            return FALSE;
+        }
+    }
+    
     /**
      * 检查权限
      * @param type $authKey
