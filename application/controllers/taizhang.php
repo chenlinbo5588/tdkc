@@ -17,7 +17,7 @@ class Taizhang extends TZ_Admin_Controller {
         $this->load->helper('number');
     }
     
-   
+    
     
     
 	public function index()
@@ -263,8 +263,7 @@ class Taizhang extends TZ_Admin_Controller {
             $failedCnt = 0;
             
             foreach($_POST['restore_id'] as $val){
-                $flag = $this->Taizhang_Model->updateByWhere(
-                    array(
+                $updateData = array(
                         'status' => '新增',
                         'zc_time' => 0,
                         'cs_time' => 0,
@@ -280,7 +279,22 @@ class Taizhang extends TZ_Admin_Controller {
                         'fs_remark' => '',
                         'updatetime' => time(), 
                         'updator' => $this->_userProfile['name']
-                    ),
+                    );
+                
+                $info = $this->Taizhang_Model->queryById($val);
+                $sendorInfo = $this->User_Model->getFirst(array(
+                    'where' => array(
+                        'name' => $info['creator']
+                    )
+                ));
+                
+                if($sendorInfo){
+                    $updateData['sendor_id'] = $sendorInfo['id'];
+                    $updateData['sendor'] = $sendorInfo['name'];
+                }
+                
+                $flag = $this->Taizhang_Model->updateByWhere(
+                    $updateData,
                     array(
                         'id' => $val,
                         'status' => '已删除'

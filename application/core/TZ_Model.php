@@ -90,6 +90,15 @@ class TZ_Model extends CI_Model {
         return $data[0][$field];
     }
     
+    public function getFirst($condition = array()){
+        $d = $this->getList($condition);
+        
+        if(!empty($d['data'])){
+            return $d['data'][0];
+        }
+        
+        return false;
+    }
     
     public function getList($condition = array()){
         

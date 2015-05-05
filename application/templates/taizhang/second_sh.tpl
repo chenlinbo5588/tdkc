@@ -36,7 +36,7 @@
                                 </colgroup>
                                 <tbody>
                                     {include file="taizhang/fault_list.tpl"}
-                                    {if $info['status'] == '已提交复审'}
+                                    {if $info['status'] == '已提交复审' || $info['status'] == '已通过复审'}
                                     {include file="taizhang/fault_standard.tpl"}
                                     {/if}
                                 </tbody>
@@ -65,6 +65,13 @@
                                             <input type="submit" name="submit" class="btn btn-sm btn-orange" style="font-size:13px;" value="通过并提交收费"/>
                                             <input type="submit" name="submit" class="btn btn-sm btn-gray"  value="退回"/>
                                             {/if}
+                                        {/if}
+                                        
+                                        {if $info['status'] == '已通过复审'}
+                                            {auth name="taizhang+redo_workflow"}
+                                            <input type="hidden" name="redo_workflow" value="重新审核"/>
+                                            <input type="submit" name="submit" class="btn btn-sm btn-orange"  value="重新审核"/>
+                                            {/auth}
                                         {/if}
                                         
                                         {if $info['status'] == '已通过复审' && $info['fs_name'] == $userProfile['name'] && $info['can_revocation'] == 1}

@@ -350,8 +350,8 @@ class reports_chanzhi extends TZ_Admin_Controller {
         $objPHPExcel->setActiveSheetIndex(0);
         
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'产值统计报表.xls');
-        //$filename = $_POST['sdate'].'至'.$_POST['edate'].'产值统计报表.xls';
+        //$filename = iconv('UTF-8','GBK', $_POST['sdate'].'至'.$_POST['edate'].'产值统计报表.xls');
+        $filename = $_POST['sdate'].'至'.$_POST['edate'].'产值统计报表.xls';
         $objWriter->save(ROOT_DIR.'/temp/'.$filename);
         $objPHPExcel->disconnectWorksheets(); 
         unset($objPHPExcel,$objWriter); 

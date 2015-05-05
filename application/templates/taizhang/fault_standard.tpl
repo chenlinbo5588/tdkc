@@ -1,4 +1,3 @@
-{if $info['sendor_id'] == $userProfile['id'] && ($info['status'] == '已提交初审' || $info['status'] == '已提交复审')}
 <tr class="fault">
     <td colspan="2">
         <div class="fault_wrapper">
@@ -42,4 +41,3 @@
         </div>
     </td>
 </tr>
-{/if}

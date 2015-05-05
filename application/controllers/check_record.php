@@ -314,7 +314,8 @@ class Check_Record extends TZ_Admin_Controller {
         $this->load->model('Fault_Model');
         $sysFaultList = $this->Fault_Model->getList(array(
             'where' => array(
-                'score >' => 0
+                'score >' => 0,
+                'type' => 7 // 只取外业检查
             ),
             'order' => 'type ASC,code ASC'
         ));

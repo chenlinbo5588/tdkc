@@ -22,8 +22,8 @@
             var op = that.val();
             var cansubmit = true;
             $("input[name=workflow]").val(op);
-            if(op == '退回'){
-                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审') }
+            if(op == '退回' || op == '重新审核'){
+                {if ($info['status'] == '已提交初审' || $info['status'] == '已提交复审' || $info['status'] == '已通过复审') }
                 
                 {*
                 if(cansubmit && $.trim($("textarea[name=reason]").val()).length == 0){
