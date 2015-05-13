@@ -113,9 +113,7 @@ class Taizhang_Fg extends TZ_Admin_Controller {
                     $_POST['user_id'] = $this->_userProfile['id'];
                     $_POST['creator'] = $this->_userProfile['name'];
                     
-                    if('竣工' == $_POST['nature']){
-                        $_POST['total_area'] = $_POST['total_area'];
-                    }else{
+                    if('竣工' != $_POST['nature']){
                         $_POST['total_area'] = 0;
                     }
                     
@@ -258,7 +256,11 @@ class Taizhang_Fg extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['id'] = $info['id'];
-                $_POST['total_area'] = 0;
+                
+                if('竣工' != $_POST['nature']){
+                    $_POST['total_area'] = 0;
+                }
+                
                 $_POST['churan_area'] = 0;
                 
                 $affectRow = $this->_op($info['year'],'edit');

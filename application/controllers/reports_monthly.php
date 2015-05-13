@@ -177,7 +177,7 @@ class reports_monthly extends TZ_Admin_Controller {
                 $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['creator']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $levelText);
                 $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, $p['weight']);
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, "{$p['fault_cnt1']}+{$p['fault_cnt2']}={$p['total_fault']}");
+                $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, "{$p['fault_cnt1']}+{$p['fault_cnt2']}+{$p['fault_cnt3']}={$p['total_fault']}");
                 $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row, $projectCount);
                 
                 $i++;

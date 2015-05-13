@@ -116,6 +116,11 @@ class TZ_Model extends CI_Model {
             $this->db->where($condition['where']);
         }
         
+        
+        if($condition['or_where']){
+            $this->db->or_where($condition['or_where']);
+        }
+        
         if($condition['where_in']){
             foreach($condition['where_in'] as $val){
                 $this->db->where_in($val['key'],$val['value']);

@@ -379,16 +379,22 @@ class TZ_Admin_Controller extends TZ_Controller {
                 'type != ' => 8  // attation the key diff ,there one more black
             );
             
-            if($info['status'] == '已通过复审'){
-                unset($where['type != ']);
-                $where['type'] = 8; // 只取 复审出错 对照表
-            }
-            
             $this->load->model('Fault_Model');
-            $sysFaultList = $this->Fault_Model->getList(array(
-                'where' => $where,
-                'order' => 'type ASC,code ASC'
-            ));
+            if($info['status'] == '已通过复审'){
+                unset($where['type != ']); // 初复试 质检 错误对照表 
+                
+                $sysFaultList = $this->Fault_Model->getList(array(
+                    'where' => $where,
+                    'or_where' => array('type' => 9),
+                    'order' => 'type ASC,code ASC'
+                ));
+                
+            }else{
+                $sysFaultList = $this->Fault_Model->getList(array(
+                    'where' => $where,
+                    'order' => 'type ASC,code ASC'
+                ));
+            }
             
             $tmpFaultList = array();
             foreach($sysFaultList['data'] as $v){

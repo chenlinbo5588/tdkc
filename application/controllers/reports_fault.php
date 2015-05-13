@@ -12,105 +12,69 @@ class reports_fault extends TZ_Admin_Controller {
         $this->load->helper('number');
     }
     
+    
+    private function _getStepFaultList($param){
+        
+        $faults = array();
+        
+        // 0=初审 1=复审 2=质检
+        foreach(array(0,1,2) as $value){
+            $key = $value + 1;
+            $faults[$value] = array();
+            
+            //先取出台账
+            $temp = $this->Taizhang_Model->getList(array(
+                'where' => array(
+                    "fault_cnt{$key} >"  => 0 ,
+                    'createtime >= ' => strtotime($param['sdate']),
+                    'createtime < ' => strtotime($param['edate']) + 86400
+                ),
+                'where_in' => array(
+                    array(
+                        'key' => 'status','value' => array('已通过复审','已收费')
+                    )
+                )
+            ));
+
+
+            if($temp['data']){
+                foreach($temp['data'] as $p){
+                    $faults[$value][$p['id']] = $p;
+                }
+                
+                // 取出台账 审核错误记录
+                $f1  = $this->Project_Fault_Model->getList(array(
+                    'where' => array(
+                        'project_type' => 0,
+                        'type' => $value,   //当前循环值
+                        'status' => 0
+                    ),
+                    'where_in' => array(
+                        array(
+                            'key' => 'project_id', 'value' => array_keys($faults[$value]))
+                        )
+                    )
+                );
+
+                if($f1['data']){
+                    foreach($f1['data'] as $v){
+                        $faults[$value][$v['project_id']]['fault_list'][] = $v;
+                    }
+                }
+                unset($f1);
+            }
+            
+        }
+        
+        return $faults;
+    }
+    
+    
     private function _report_faults(){
         require_once PHPExcel_PATH.'PHPExcel.php';
         
-        $projectList1 = array();
-        $projectList2 = array();
+        $projectList = $this->_getStepFaultList($_POST);
         
-        
-        //初审错误
-        $faultList1 = $this->Taizhang_Model->getList(array(
-            'where' => array(
-                'fault_cnt1 > ' => 0 ,
-                'createtime >= ' => strtotime($_POST['sdate']),
-                'createtime < ' => strtotime($_POST['edate']) + 86400
-             ),
-            'where_in' => array(
-                array(
-                    'key' => 'status','value' => array('已通过复审','已收费')
-                )
-            )
-        ));
-        
-        
-        if($faultList1['data']){
-            $projectId = array();
-            
-            foreach($faultList1['data'] as $p){
-                $projectId[] = $p['id'];
-                $projectList1[$p['id']] = $p;
-            }
-            
-            $f1  = $this->Project_Fault_Model->getList(array(
-                'where' => array(
-                    'project_type' => 0,
-                    'type' => 0,
-                    'status' => 0
-                ),
-                'where_in' => array(
-                    array(
-                        'key' => 'project_id', 'value' => $projectId)
-                    )
-                )
-            );
-            
-            if($f1['data']){
-                foreach($f1['data'] as $v){
-                    $projectList1[$v['project_id']]['fault_list'][] = $v;
-                }
-            }
-            unset($f1);
-        }
-        
-        unset($faultList1);
-        
-        $faultList2 = $this->Taizhang_Model->getList(array(
-            'where' => array(
-                'fault_cnt2 > ' => 0 ,
-                'createtime >= ' => strtotime($_POST['sdate']),
-                'createtime < ' => strtotime($_POST['edate']) + 86400
-             ),
-            'where_in' => array(
-                array(
-                    'key' => 'status','value' => array('已通过复审','已收费')
-                )
-            )
-        ));
-        
-        if($faultList2['data']){
-            $projectId = array();
-            
-            foreach($faultList2['data'] as $p){
-                $projectId[] = $p['id'];
-                $projectList2[$p['id']] = $p;
-            }
-            
-            //复审错误
-            $f2  = $this->Project_Fault_Model->getList(array(
-                'where' => array(
-                    'project_type' => 0,
-                    'type' => 1,
-                    'status' => 0
-                ),
-                'where_in' => array(
-                    array(
-                        'key' => 'project_id', 'value' => $projectId)
-                    )
-                )
-            );
-            
-            if($f2['data']){
-                foreach($f2['data'] as $v){
-                    $projectList2[$v['project_id']]['fault_list'][] = $v;
-                }
-            }
-            
-            unset($f2);
-        }
-        unset($faultList2);
-        
-
         $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_discISAM; 
         $cacheSettings = array( 'dir'  => ROOT_DIR.'/temp' );
         PHPExcel_Settings::setLocale('zh_CN');
@@ -157,15 +121,12 @@ class reports_fault extends TZ_Admin_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(12);
         
         
-        //print_r($projectList1);
-        //print_r($projectList2);
-        
         $i = 0;
         $j = 0;
         $row_start = 3;
         $jump = $row_start;
-        //print_r($projectList1);
-        foreach($projectList1 as $p){
+
+        foreach($projectList[0] as $p){
             $j = 0;
             
             $current_row_start = $jump;
@@ -202,11 +163,11 @@ class reports_fault extends TZ_Admin_Controller {
             $i++;
         }
         
-        
+        //初审最后一行行号
         $chushen_row_end = $jump - 1 ;
         
-        //print_r($projectList2);
-        foreach($projectList2 as $p){
+        //复审
+        foreach($projectList[1] as $p){
             $j = 0;
             $current_row_start = $jump;
             $current_row_end = $current_row_start + $p['fault_cnt2'] - 1;
@@ -242,6 +203,47 @@ class reports_fault extends TZ_Admin_Controller {
             $i++;
         }
         
+        //复审最后一行行号
+        $fushen_row_end = $jump - 1;
+        
+        // 质检（重新审核勾选的错误)
+        foreach($projectList[2] as $p){
+            $j = 0;
+            $current_row_start = $jump;
+            $current_row_end = $current_row_start + $p['fault_cnt3'] - 1;
+            
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$jump,$i + 1 );
+            if($p['fault_cnt3'] != 0){
+                foreach($p['fault_list'] as $fault){
+                    $inner_current_row = $current_row_start + $j; 
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$inner_current_row,date("Y-m-d",$p['cs_time']));
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$inner_current_row, $p['project_no']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$inner_current_row, $p['name']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$inner_current_row, $p['ptype_name']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$inner_current_row, $p['pm']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$inner_current_row, $p['pm']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$inner_current_row, $fault['score']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$inner_current_row, $fault['fault_code']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$inner_current_row, $fault['remark']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$inner_current_row, '');
+                    
+                    $j++;
+                }
+                
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$current_row_start.':A'.$current_row_end);
+                $objPHPExcel->getActiveSheet()->mergeCells('B'.$current_row_start.':B'.$current_row_end);
+                $objPHPExcel->getActiveSheet()->mergeCells('C'.$current_row_start.':C'.$current_row_end);
+                $objPHPExcel->getActiveSheet()->mergeCells('D'.$current_row_start.':D'.$current_row_end);
+                $objPHPExcel->getActiveSheet()->mergeCells('E'.$current_row_start.':E'.$current_row_end);
+                $objPHPExcel->getActiveSheet()->mergeCells('F'.$current_row_start.':F'.$current_row_end);
+                $objPHPExcel->getActiveSheet()->mergeCells('G'.$current_row_start.':G'.$current_row_end);
+            }
+            
+            $jump += $p['fault_cnt3'];
+            $i++;
+        }
+        
+        //最后一行行号
         $data_end_row = $jump - 1;
         
         
@@ -274,7 +276,7 @@ class reports_fault extends TZ_Admin_Controller {
                 )
         );
             
-        if(count($projectList1) || count($projectList2)){
+        if(count($projectList[0]) || count($projectList[1]) || count($projectList[2])){
             
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$jump,'合计');
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$jump,'');
@@ -291,7 +293,7 @@ class reports_fault extends TZ_Admin_Controller {
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$jump.':B'.$jump);
 
             $objPHPExcel->getActiveSheet()->setCellValue('K'.($chushen_row_end + 1), '按《测绘质量管理细则》第6条规定，复审检查出的错误加倍扣分到小组。');
-            $objPHPExcel->getActiveSheet()->mergeCells('K'.($chushen_row_end + 1).':K'.($jump -1));
+            $objPHPExcel->getActiveSheet()->mergeCells('K'.($chushen_row_end + 1).':K'.$fushen_row_end);
 
             $jump++;
 
@@ -329,7 +331,22 @@ class reports_fault extends TZ_Admin_Controller {
                         )
                     )
             );
-
+            
+            //质检
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.($jump + 6), '质量检查。');
+            $objPHPExcel->getActiveSheet()->getStyle('I'.($jump + 6))->applyFromArray(
+                    array(
+                        'fill' => array(
+                            'type'       => PHPExcel_Style_Fill::FILL_PATTERN_LIGHTGRAY,
+                            'startcolor' => array(
+                                'argb' => 'FFF188AE'
+                            ),
+                            'endcolor'   => array(
+                                'argb' => 'FFF188AE'
+                            )
+                        )
+                    )
+            );
 
             
 
@@ -346,9 +363,8 @@ class reports_fault extends TZ_Admin_Controller {
                         )
                     )
             );
-
-
-            $objPHPExcel->getActiveSheet()->getStyle('A'.($chushen_row_end + 1) .':K'.$data_end_row)->applyFromArray(
+            
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($chushen_row_end + 1) .':K'.$fushen_row_end)->applyFromArray(
                     array(
                         'fill' => array(
                             'type'       => PHPExcel_Style_Fill::FILL_PATTERN_LIGHTGRAY,
@@ -361,6 +377,21 @@ class reports_fault extends TZ_Admin_Controller {
                         )
                     )
             );
+            
+            $objPHPExcel->getActiveSheet()->getStyle('A'.($fushen_row_end + 1) .':K'.$data_end_row)->applyFromArray(
+                    array(
+                        'fill' => array(
+                            'type'       => PHPExcel_Style_Fill::FILL_PATTERN_LIGHTGRAY,
+                            'startcolor' => array(
+                                'argb' => 'FFF188AE'
+                            ),
+                            'endcolor'   => array(
+                                'argb' => 'FFF188AE'
+                            )
+                        )
+                    )
+            );
+            
 
             $objPHPExcel->getActiveSheet()->getStyle('A1:K'.($jump - 1))->applyFromArray(
                     array(
