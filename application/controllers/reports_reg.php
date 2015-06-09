@@ -88,11 +88,11 @@ class reports_reg extends TZ_Admin_Controller {
                     continue;
                 }
                 
-                $p['category_name'] = '地籍测量';
+                $p['category_name'] = '地籍测绘';
             }else if(TAIZHANG_FG == $p['category']){
                 $p['category_name'] = '工程测量';
             }else if(TAIZHANG_HOUSE == $p['category']){
-                $p['category_name'] = '房产测量';
+                $p['category_name'] = '房产测绘';
             }
             
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$current_row,$p['name']);
