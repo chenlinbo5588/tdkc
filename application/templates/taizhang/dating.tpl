@@ -90,8 +90,12 @@
                         </tr>
                         <tr>
                             <td><label><strong>当前经办人为</strong></label></td>
-                            <td colspan="7">
+                            <td colspan="3">
                                 <input type="text" name="sendor" value="{$smarty.get.sendor}" data-self="{$userProfile['name']}"/>&nbsp;<input type="button" name="setself" value="填入自己"/>
+                            </td>
+                            <td><label><strong>收费备注</strong></label></td>
+                            <td colspan="3">
+                                <input type="text" name="remark" value="{$smarty.get.remark}"/>
                             </td>
                         </tr>
                      </table>

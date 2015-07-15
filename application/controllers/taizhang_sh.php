@@ -305,28 +305,6 @@ class Taizhang_Sh extends TZ_Admin_Controller {
         $info = $this->Taizhang_Model->queryById($id);
         $now = time();
         
-        if('新增' == $info['status'] && $this->isGetRequest()){
-            /**
-             * 更新到已提交复审状态 
-             */
-            $data = array(
-                'zc_time' => $now,
-                'zc_name' => $this->_userProfile['name'],
-                'zc_remark' => '',
-                'cs_time' => $now,
-                'cs_name' => $this->_userProfile['name'],
-                'cs_remark' => '',
-                'status' => '已提交复审',
-                'updator' => $this->_userProfile['name'],
-                'updatetime' => $now,
-                'can_revocation' => 0
-            );
-            $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
-            
-            $info = $this->Taizhang_Model->queryById($id);
-        }
-        
-        
         if($this->isPostRequest() && !empty($_POST['id'])){
             $gobackUrl = $_POST['gobackUrl'];
             
@@ -370,21 +348,23 @@ class Taizhang_Sh extends TZ_Admin_Controller {
                 }
                 */
             }else{
-                if('通过并提交收费' == $_POST['submit']){
-                    if(!empty($_POST['fs_yj'])){
-                        $this->form_validation->set_rules('fs_yj', '复审意见', 'max_length[300]');
+                if('递交大厅' == $_POST['submit']){
+                    
+                    if(!empty($_POST['zc_yj'])){
+                        $this->form_validation->set_rules('zc_yj', '自查意见', 'max_length[300]');
                     }else{
-                        $_POST['fs_yj'] = '经查资料齐全，合格。';
+                        $_POST['zc_yj'] = '合格';
                     }
-                    if(!empty($_POST['fs_remark'])){
-                        $this->form_validation->set_rules('fs_remark', '复审修改和处理意见', 'max_length[300]');
+                    if(!empty($_POST['zc_remark'])){
+                        $this->form_validation->set_rules('zc_remark', '自查修改和处理意见', 'max_length[300]');
                     }else{
-                        $_POST['fs_remark'] = '合格';
+                        $_POST['zc_remark'] = '合格';
                     }
 
-                    $this->form_validation->set_rules('sendor', '发送给', 'required|is_natural_no_zero');
+                    $this->form_validation->set_rules('sendor', '发送给大厅人员', 'required|is_natural_no_zero');
+                    
                     if($this->form_validation->run()){
-                        $op = '通过复审';
+                        $op = '递交未受理';
 
                         $sendorInfo = $this->User_Model->queryById($_POST['sendor']);
                         $data = array(
@@ -393,13 +373,15 @@ class Taizhang_Sh extends TZ_Admin_Controller {
                             'status' => '已'.$op,
                             'updator' => $this->_userProfile['name'],
                             'updatetime' => $now,
-                            'fs_time' => $now,
-                            'fs_name' => $this->_userProfile['name'],
-                            'fs_yj' => $_POST['fs_yj'],
-                            'fs_remark' => $_POST['fs_remark'],
+                            'zc_time' => $now,
+                            'zc_name' => $this->_userProfile['name'],
+                            'zc_yj' => $_POST['zc_yj'],
+                            'zc_remark' => $_POST['zc_remark'],
                             'can_revocation' => 1
                         );
-                        $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审','sendor_id' => $this->_userProfile['id']));
+                        
+                        $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '新增','sendor_id' => $this->_userProfile['id']));
+                        
                         if($return){
                             $this->_addPm($info,$sendorInfo,2);
                             $message = $_POST['submit'].'成功';
@@ -412,14 +394,23 @@ class Taizhang_Sh extends TZ_Admin_Controller {
                         $message = str_replace(array('"',"'","\n"),array('','','<br/>'),strip_tags(validation_errors()));
                     }
                 }elseif('受理' ==  $_POST['submit']){
+                    //
                     $data = array(
+                        'status' => '已通过复审',
+                        'cs_time' => $now,
+                        'cs_name' => $this->_userProfile['name'],
+                        'cs_yj' => '按规范要求测量，报告符合要求。',
+                        'cs_remark' => '合格',
+                        'fs_time' => $now,
+                        'fs_name' => $this->_userProfile['name'],
+                        'fs_yj' => '经查资料齐全，合格。',
+                        'fs_remark' => '合格',
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => $now,
                         'can_revocation' => 0
                     );
                     
-                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已提交复审' , 'can_revocation' => 1 ));
-
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已递交未受理' , 'can_revocation' => 1 ));
                     if($return){
                         $message = $_POST['submit'].'成功';
                         $info = $this->Taizhang_Model->queryById($info['id']);
@@ -428,17 +419,17 @@ class Taizhang_Sh extends TZ_Admin_Controller {
                     }
                     
                 }elseif('撤销' ==  $_POST['submit']){
-                    $op = '已提交复审';
+                    $op = '新增';
                     $data = array(
                         'sendor_id' => $this->_userProfile['id'],
                         'sendor' => $this->_userProfile['name'],
                         'status' => $op,
                         'updator' => $this->_userProfile['name'],
                         'updatetime' => $now,
-                        'fs_name' => ''
+                        'can_revocation' => 0
                     );
                     
-                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已通过复审' , 'can_revocation' => 1 ));
+                    $return = $this->Taizhang_Model->updateByWhere($data,array('id' => $info['id'], 'status' => '已递交未受理' , 'can_revocation' => 1 ));
 
                     if($return){
                         $message = $_POST['submit'].'成功';
@@ -469,4 +460,49 @@ class Taizhang_Sh extends TZ_Admin_Controller {
         $this->display();
     }
     
+    
+    
+    protected function _getStep($info){
+        $status = array(
+            '新增' , '递交未受理','通过复审'
+        );
+        
+        $names = array(
+            '新增' => 'creator',
+            '递交未受理' => 'zc_name',
+            '通过初审' => 'cs_name',
+            '提交复审' => 'cs_name',
+            '通过复审' => 'fs_name'
+        );
+        
+        $statusKey = array_keys($status);
+        $currentKey = 0;
+        
+        //print_r($statusKey);
+        foreach($statusKey as $v){
+            if($status[$v] == str_replace('已','',$info['status'])){
+                $currentKey = $v + 1;
+            }
+        }
+
+        $statusHtml = array();
+        foreach($status as $k => $v){
+            if($info[$names[$v]]){
+                $v = $v.'('.$info[$names[$v]].')';
+            }
+            
+            if($k < $currentKey){
+                $statusHtml[] = '<span class="status statusover">'.$v."</span>";
+                
+            }elseif($k == $currentKey){
+                $statusHtml[] = '<span class="status current">'.$v."</span>";
+            }else{
+                $statusHtml[] = '<span class="status">'.$v."</span>";
+            }
+        }
+        
+        $this->assign('statusHtml',$statusHtml);
+    }
+    
+      
 }

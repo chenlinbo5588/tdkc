@@ -1,5 +1,5 @@
 {include file="common/main_header.tpl"}
-            <div class="row-fluid taizhang_detail">
+            <div class="row-fluid taizhang_detail clearfix">
                 {include file="{$tplDir}/side.tpl"}
                 
                 <div class="mainarea">
@@ -28,7 +28,8 @@
                                 {include file="taizhang/fs.tpl"}
                             </tbody>
                          </table>
-                            {*
+                            
+                         {*
                          <table class="maintain">
                              <caption>缺陷信息</caption>
                                 <colgroup>
@@ -37,12 +38,13 @@
                                 </colgroup>
                                 <tbody>
                                     {include file="taizhang/fault_list.tpl"}
-                                    {if $info['status'] == '已提交复审'}
+                                    {if $info['status'] == '已提交初审'}
                                     {include file="taizhang/fault_standard.tpl"}
                                     {/if}
                                 </tbody>
                          </table>
-                            *}
+                          *}
+                          
                          <table class="maintain">
                              <caption>操作区域</caption>
                              <colgroup>
@@ -50,27 +52,30 @@
                                     <col width="500"/>
                                 </colgroup>
                              <tbody>
-                                {if $info['status'] == '已提交复审'}
+                                {if $info['status'] == '新增' && $info['can_revocation'] == 0}
                                 <tr>
-                                    <td>发送给收费</td>
+                                    <td>发送给大厅人员</td>
                                     <td>{include file="project_ch/sendorlist.tpl"}</td>
                                 </tr>
                                 {/if}
                                 <tr>
                                     <td></td>
                                     <td>
-                                        {if $info['status'] == '已提交复审' && $info['sendor_id'] == $userProfile['id']}
+                                        {if $info['status'] == '新增' && $info['sendor_id'] == $userProfile['id']}
+                                            <input type="submit" name="submit" class="btn btn-sm btn-orange" style="font-size:13px;" value="递交大厅"/>
+                                        {/if}
+                                        
+                                        {if $info['status'] == '已递交未受理' && $info['sendor_id'] == $userProfile['id']}
                                             {if $info['can_revocation'] == 1}
-                                            <input type="submit" name="submit" class="btn btn-sm btn-orange"  value="受理"/>
-                                            {else}
-                                            <input type="submit" name="submit" class="btn btn-sm btn-orange" style="font-size:13px;" value="通过并提交收费"/>
+                                            <div class="notice">受理后 资料状态为已通过复审</div><input type="submit" name="submit" class="btn btn-sm btn-orange" value="受理"/>
                                             {/if}
                                         {/if}
                                         
-                                        {if $info['status'] == '已通过复审' && $info['fs_name'] == $userProfile['name'] && $info['can_revocation'] == 1}
-                                        <input type="submit" name="submit" class="btn btn-sm btn-orange" value="撤销"/>
+                                        {if $info['status'] == '已递交未受理' && $info['creator'] == $userProfile['name']}
+                                            {if $info['can_revocation'] == 1}
+                                            <input type="submit" name="submit" class="btn btn-sm btn-orange" value="撤销"/>
+                                            {/if}
                                         {/if}
-                                        
                                         <span id="loading" style="display: none;"><img src="/img/loading.gif"/></span>
                                         {if $gobackUrl }<input type="hidden" name="gobackUrl" value="{$gobackUrl}"/><a class="goback" href="{$gobackUrl}">返回</a>{/if}
                                     </td>

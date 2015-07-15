@@ -492,6 +492,10 @@ class Taizhang extends TZ_Admin_Controller {
                 $condition['where']['sendor'] = trim($_GET['sendor']);
             }
             
+            if(!empty($_GET['remark'])){
+                $condition['like']['remark'] = trim($_GET['remark']);
+            }
+            
             $data = $this->Taizhang_Model->getList($condition);
             $this->assign('page',$data['pager']);
             $this->assign('data',$data);

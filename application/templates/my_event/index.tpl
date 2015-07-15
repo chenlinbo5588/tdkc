@@ -32,14 +32,16 @@
                 <table class="table">
                     <colgroup>
                         <col width="30px"/>
+                        <col width="70px"/>
                         <col width="200px"/>
                         <col width="100px"/>
-                        <col width="100px"/>
+                        <col width="80px"/>
                         <col width="150px"/>
                     </colgroup>
                     <thead>
                         <tr>
                             <th></th>
+                            <th>类型</th>
                             <th>标题</th>
                             <th>状态</th>
                             <th>创建人</th>
@@ -50,6 +52,7 @@
                         {foreach from=$data['data'] item=item}
                         <tr id="row_{$item['id']}">
                            <td align="center"><input type="checkbox" name="id[]" value="{$item['id']}"/></td>
+                           <td>{$projectTypeName[$item['project_type']]}{if $item['project_type'] == 2}&gt;&gt;{$projectList[$item['project_id']]['status']}({$projectList[$item['project_id']]['sendor']}){/if}</td>
                            <td><a href="{$item['url']}&event_id={$item['id']}">{$item['title']}</a></td>
                            <td>{$item['status']}</td>
                            <td>{$item['creator']}</td>

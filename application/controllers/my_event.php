@@ -50,6 +50,37 @@ class My_event extends TZ_Admin_Controller {
             }
             
             $data = $this->User_Event_Model->getList($condition);
+            
+            $projectIds = array();
+            foreach($data['data'] as $item){
+                //测绘台账 显示进度
+                if($item['project_type'] == 2){
+                    $projectIds[] = $item['project_id'];
+                }
+            }
+            
+            if($projectIds){
+                $this->load->model('Taizhang_Model');
+                $list = $this->Taizhang_Model->getList(array(
+                    'select' => 'id,status,sendor',
+                    'where_in' => array(
+                        array(
+                            'key' => 'id' , 'value' =>  $projectIds
+                        )
+                    )
+                ));
+                
+                $projectList = array();
+                
+                foreach($list['data'] as $p){
+                    $projectList[$p['id']] = $p;
+                }
+                
+                //print_r($projectList);
+                $this->assign('projectList',$projectList);
+            }
+            
+            $this->assign('projectTypeName' , array('测绘','规划','台账','检查记录'));
             $this->assign('page',$data['pager']);
             $this->assign('data',$data);
             

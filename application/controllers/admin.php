@@ -53,9 +53,10 @@ class Admin extends TZ_Admin_Controller {
         $this->load->model('Project_Model');
         $projectList = $this->Project_Model->getList(array(
             'where' => array(
-                'user_id' => $this->_userProfile['id'],
-                'status != ' => '已实施',
-                'status !=' => '已删除'
+                'user_id' => $this->_userProfile['id']
+            ),
+            'where_in' => array(
+                array('key' => 'status' , 'value' => array('新增','已发送','已布置'))
             ),
             'order' => 'createtime DESC'
         ));
