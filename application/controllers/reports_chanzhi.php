@@ -93,7 +93,13 @@ class reports_chanzhi extends TZ_Admin_Controller {
                 $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['nature']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $p['complete_time']);
                 $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, $p['address']);
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['total_area']);
+                
+                if($p['category'] == '放线竣工' && $p['nature'] == '放线'){
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['point_cnt']);
+                }else{
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['total_area']);
+                }
+                
                 $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row, $p['get_doctime']);
                 $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_row, $this->_feeTypeName[$p['fee_type']]);
                 $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_row, $p['kh_amount']);

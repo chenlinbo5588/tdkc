@@ -1021,6 +1021,9 @@ function getTaizhangAddEnryLList(){
            'name'=> TAIZHANG_HOUSE, 'url' => url_path('taizhang_house','add'),
         ),
         array(
+           'name'=> TAIZHANG_FG, 'url' => url_path('taizhang_fg','add'),
+        ),
+        array(
            'name'=> TAIZHANG_WF, 'url' => url_path('taizhang_wf','add'),
         ),
         array(

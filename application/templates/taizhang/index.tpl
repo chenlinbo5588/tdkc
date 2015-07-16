@@ -118,7 +118,7 @@
                             <th>单位名称</th>
                             <th>土地坐落</th>
                             <th>用途</th>
-                            <th>面积</th>
+                            <th>面积(m2)<br/>或点数</th>
                             <th>联系人<br/>电话</th>
                             <th>作业组<br/>负责人</th>
                             <th>状态</th>
@@ -161,7 +161,7 @@
                            </td>
                            <td>{$item['address']|escape|cutText:10}</td>
                            <td>{$item['nature']}</td>
-                           <td>{$item['total_area']}</td>
+                           <td>{if $item['nature'] == '放线'}{$item['point_cnt']}个点{else}{$item['total_area']}{/if}</td>
                            <td>{$item['contacter']}{if $item['contacter_mobile']}<br/>{$item['contacter_mobile']}{/if}</td>
                            <td>{$item['pm']}</td>
                            <td class="{if $item['status'] == '已删除'}notice{elseif $item['status'] == '已通过复审'}success{/if}">{$item['status']}</td>
