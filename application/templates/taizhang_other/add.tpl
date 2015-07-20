@@ -64,6 +64,9 @@
                                     <td><label class="required"><em>*</em><strong>土地坐落</strong></label></td><td><input type="text" style="width:300px" name="address" value="{$info['address']}" placeholder="请输入土地坐落"/><span class="tip">{form_error('address')}</span></td>
                                 </tr>
                                 <tr>
+                                    <td><label class="required"><em>*</em><strong>总面积</strong></label></td><td><input type="text" style="width:300px" name="total_area" value="{$info['total_area']}" placeholder="请输入总面积"/><span class="tip">M<sup>2</sup>{form_error('total_area')}</span></td>
+                                </tr>
+                                <tr>
                                     <td><label class="required"><em>*</em><strong>作业负责人</strong></label></td><td><input type="text" style="width:300px" name="pm" value="{$info['pm']|escape}" placeholder="请输入作业负责人"/><span class="tip">{form_error('pm')}</span></td>
                                 </tr>
                                 <tr>

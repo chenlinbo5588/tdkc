@@ -23,6 +23,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
         $this->form_validation->set_rules('region_name', '区域', 'required');
         $this->form_validation->set_rules('name', '单位名称', 'trim|required|max_length[200]|htmlspecialchars');
         $this->form_validation->set_rules('address', '土地坐落', 'trim|required|max_length[200]|htmlspecialchars');
+        $this->form_validation->set_rules('total_area', '总面积', 'required|numeric');
         $this->form_validation->set_rules('nature', '用途', 'required' );
         
         if(!empty($_POST['contacter'])){
@@ -126,7 +127,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
                     $_POST['category'] = TAIZHANG_OTHER;
                     $_POST['user_id'] = $this->_userProfile['id'];
                     $_POST['creator'] = $this->_userProfile['name'];
-                    $_POST['total_area'] = 0;
+                    
                     $_POST['churan_area'] = 0;
                     $_POST['sendor_id'] = $_POST['user_id'] ;
                     $_POST['sendor'] = $_POST['creator'];
@@ -267,7 +268,7 @@ class Taizhang_Other extends TZ_Admin_Controller {
             if($this->form_validation->run()){
                 $_POST['updator'] = $this->_userProfile['name'];
                 $_POST['id'] = $info['id'];
-                $_POST['total_area'] = 0;
+                
                 $_POST['churan_area'] = 0;
                 
                 $affectRow = $this->_op($info['year'],'edit');
