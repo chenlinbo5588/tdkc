@@ -277,10 +277,14 @@ class Taizhang extends TZ_Admin_Controller {
                         'zc_remark' => '',
                         'cs_remark' => '',
                         'fs_remark' => '',
+                        'sendor_id' => $this->_userProfile['id'],
+                        'sendor' => $this->_userProfile['name'],
+                        'creator' => $this->_userProfile['name'],
                         'updatetime' => time(), 
                         'updator' => $this->_userProfile['name']
                     );
-                
+                //谁重新启用的 就归谁
+                /*
                 $info = $this->Taizhang_Model->queryById($val);
                 $sendorInfo = $this->User_Model->getFirst(array(
                     'where' => array(
@@ -292,6 +296,7 @@ class Taizhang extends TZ_Admin_Controller {
                     $updateData['sendor_id'] = $sendorInfo['id'];
                     $updateData['sendor'] = $sendorInfo['name'];
                 }
+                */
                 
                 $flag = $this->Taizhang_Model->updateByWhere(
                     $updateData,
