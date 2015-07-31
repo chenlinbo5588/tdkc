@@ -5,10 +5,19 @@
                     <input type="hidden" value="index" name="{config_item('function_trigger')}"/>
                     <ul>
                         <li>
+                            <label><strong>排序</strong>
+                                <select name="sort">
+                                    <option value="title ASC" {if $smarty.get.sort == 'title ASC'}selected{/if}>名称</option>
+                                    <option value="title DESC" {if $smarty.get.sort == 'title DESC'}selected{/if}>名称倒序</option>
+                                    <option value="sign_time ASC" {if $smarty.get.sort == 'sign_time ASC'}selected{/if}>签订时间</option>
+                                    <option value="sign_time DESC" {if $smarty.get.sort == 'sign_time DESC'}selected{/if}>签订时间倒序</option>
+                                </select>
+                            </label>
                             <label><strong>开始日期</strong><input type="text" name="sdate" id="sdate" class="Wdate" readonly {literal}onclick="WdatePicker({maxDate:'#F{$dp.$D(\'edate\')}'})"{/literal} value="{$smarty.get.sdate}"/></label>
                             <label><strong>结束日期</strong><input type="text" name="edate" id="edate" class="Wdate" readonly {literal}onclick="WdatePicker({minDate:'#F{$dp.$D(\'sdate\')}'})"{/literal} value="{$smarty.get.edate}"/></label>
                             <label><strong>项目名称</strong><input type="text" name="title" value="{$smarty.get.title|escape}"/></label>
                             <input type="submit" name="submit" class="btn btn-primary" value="查询"/>
+                            <input type="submit" name="excel" class="btn btn-primary" value="导出Excel"/>
                             {auth name="doc+add"}<a class="addlink" href="{url_path('doc','add')}">添加合同</a>{/auth}
                         </li>
                      </ul>

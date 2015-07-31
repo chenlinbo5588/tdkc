@@ -38,7 +38,7 @@
                                         <input type="text" name="file_name" readonly value="{$info['file_name']}"/>
                                         <span class="uploader"></span>
                                         <a class="upload-button" href="javascript:void(0);"><span id="UploaderPlaceholder_1"></span></a>
-                                        <span class="Uploader" data-url="{url_path('attachment','upload')}"  data-queue="1" data-allowsize="20Mb" data-allowfile="*.*" ><storeng class="notice">请选择文件,单文件大小20Mb以下</strong></span>
+                                        <span class="Uploader" data-url="{url_path('attachment','upload')}"  data-queue="1" data-allowsize="20Mb" data-allowfile="*.pdf" ><storeng class="notice">请选择 pdf 文件,单文件大小20Mb以下</strong></span>
                                     </div>
                                     <div class="field-box">
                                         <div id="UploaderProgress_1"></div>
