@@ -96,7 +96,7 @@ class reports_monthly extends TZ_Admin_Controller {
         
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $_POST['sdate'].'至'.$_POST['edate'].'项目台账统计报表');
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:M1');
         
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '序号');
         $objPHPExcel->getActiveSheet()->setCellValue('B2', '勘测流水号');
@@ -105,11 +105,12 @@ class reports_monthly extends TZ_Admin_Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('E2', '项目主要完成人');
         $objPHPExcel->getActiveSheet()->setCellValue('F2', '质量等级');
         $objPHPExcel->getActiveSheet()->setCellValue('G2', '权重');
-        $objPHPExcel->getActiveSheet()->setCellValue('H2', '缺陷扣分×处');
-        $objPHPExcel->getActiveSheet()->setCellValue('I2', '项目个数');
-        $objPHPExcel->getActiveSheet()->setCellValue('J2', '优秀率');
-        $objPHPExcel->getActiveSheet()->setCellValue('K2', '总权重');
-        $objPHPExcel->getActiveSheet()->setCellValue('L2', '质量之星');
+        $objPHPExcel->getActiveSheet()->setCellValue('H2', '权重得分');
+        $objPHPExcel->getActiveSheet()->setCellValue('I2', '缺陷扣分×处');
+        $objPHPExcel->getActiveSheet()->setCellValue('J2', '项目个数');
+        $objPHPExcel->getActiveSheet()->setCellValue('K2', '优秀率');
+        $objPHPExcel->getActiveSheet()->setCellValue('L2', '总权重');
+        $objPHPExcel->getActiveSheet()->setCellValue('M2', '质量之星');
         
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
@@ -118,11 +119,12 @@ class reports_monthly extends TZ_Admin_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(17);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(14);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(14);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(14);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(12);
         
         
         $workerProjectList = array();
@@ -177,8 +179,21 @@ class reports_monthly extends TZ_Admin_Controller {
                 $objPHPExcel->getActiveSheet()->setCellValue('E'.$current_row, $p['creator']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F'.$current_row, $levelText);
                 $objPHPExcel->getActiveSheet()->setCellValue('G'.$current_row, $p['weight']);
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, "{$p['fault_cnt1']}+{$p['fault_cnt2']}+{$p['fault_cnt3']}={$p['total_fault']}");
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row, $projectCount);
+                
+                if(1 == $p['total_fault']){
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['weight'] * 0.7);
+                }else if(2 == $p['total_fault']){
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['weight'] * 0.4);
+                }else if($p['total_fault'] > 2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, 0);
+                }else{
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$current_row, $p['weight']);
+                }
+                
+                //$objPHPExcel->getActiveSheet()->getStyle('H'.$current_row)->getNumberFormat() ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+                
+                $objPHPExcel->getActiveSheet()->setCellValue('I'.$current_row, "{$p['fault_cnt1']}+{$p['fault_cnt2']}+{$p['fault_cnt3']}={$p['total_fault']}");
+                $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_row, $projectCount);
                 
                 $i++;
             }
@@ -190,14 +205,20 @@ class reports_monthly extends TZ_Admin_Controller {
                 $star_worker = $worker;
                 $star_worker_row = $current_start;
             }
+            if($excellent_rate < 1){
+                $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_start, number_format($excellent_rate * 100, 2).'%');
+            }else{
+                $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_start, number_format($excellent_rate * 100,0).'%');
+            }
             
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$current_start, ($excellent_rate * 100).'%');
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$current_start, $totalWeight);
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$current_start, "");
-            $objPHPExcel->getActiveSheet()->mergeCells('I'.$current_start.':I'.$current_end);
+            //$objPHPExcel->getActiveSheet()->getStyle('K'.$current_start)->getNumberFormat() ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+            
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$current_start, $totalWeight);
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.$current_start, "");
             $objPHPExcel->getActiveSheet()->mergeCells('J'.$current_start.':J'.$current_end);
             $objPHPExcel->getActiveSheet()->mergeCells('K'.$current_start.':K'.$current_end);
             $objPHPExcel->getActiveSheet()->mergeCells('L'.$current_start.':L'.$current_end);
+            $objPHPExcel->getActiveSheet()->mergeCells('M'.$current_start.':M'.$current_end);
          
             
             if($counter % 2 == 0){
@@ -222,10 +243,10 @@ class reports_monthly extends TZ_Admin_Controller {
         }
         
         //质量之星设置
-        $objPHPExcel->getActiveSheet()->setCellValue('L'.$star_worker_row, '质量之星★');
-        $objPHPExcel->getActiveSheet()->getStyle('L'.$star_worker_row)->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_RED);
+        $objPHPExcel->getActiveSheet()->setCellValue('M'.$star_worker_row, '质量之星★');
+        $objPHPExcel->getActiveSheet()->getStyle('M'.$star_worker_row)->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_RED);
         
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A1:M1')->applyFromArray(
                 array(
                     'font'    => array(
                         'bold'      => true,
@@ -235,7 +256,7 @@ class reports_monthly extends TZ_Admin_Controller {
                 )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A2:L2')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:M2')->applyFromArray(
                 array(
                     'font'    => array(
                         'bold'      => true,
@@ -254,7 +275,7 @@ class reports_monthly extends TZ_Admin_Controller {
                 )
         );
         
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L'.(count($projectList['data']) + 2))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A1:M'.(count($projectList['data']) + 2))->applyFromArray(
                 array(
                     'alignment' => array(
                         'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,

@@ -474,7 +474,7 @@ class TZ_Admin_Controller extends TZ_Controller {
                 
                 $sysFaultList = $this->Fault_Model->getList(array(
                     'where_in' => array(
-                        array('key' => 'code','value' => $_POST['fault'])
+                        array('key' => 'code','value' => $param['fault'])
                     )
                 ));
                 
@@ -482,15 +482,19 @@ class TZ_Admin_Controller extends TZ_Controller {
                 $this->load->model('Gh_Fault_Model');
                 $sysFaultList = $this->Gh_Fault_Model->getList(array(
                     'where_in' => array(
-                        array('key' => 'code','value' => $_POST['fault'])
+                        array('key' => 'code','value' => $param['fault'])
                     )
                 ));
             }
             
-
+            $zeroScoreFault = array();
             $insertData = array();
 
-            foreach($sysFaultList['data'] as $fkey => $fvalue){
+            foreach($sysFaultList['data'] as $fvalue){
+                if($fvalue['score'] < 0.01){
+                    $zeroScoreFault[] = $fvalue['code'];
+                }
+                
                 $insertTime = time();
                 $insertData[] = array(
                     'project_type' => $project_type,
@@ -507,14 +511,22 @@ class TZ_Admin_Controller extends TZ_Controller {
                 );
             }
 
+            //扣分为0 的 不计错误次数
+            $decreseFaultCount = 0;
+            foreach($param['fault'] as $fv){
+                if(in_array($fv,$zeroScoreFault)){
+                    $decreseFaultCount++;
+                }
+            }
+            
             if($fault_step == 0){
-                $data['fault_cnt1'] = count($param['fault']);
+                $data['fault_cnt1'] = count($param['fault']) - $decreseFaultCount;
                 $data['total_fault'] = $data['fault_cnt1'] + $info['fault_cnt2'];
             }else if($fault_step == 1){
-                $data['fault_cnt2'] = count($param['fault']);
+                $data['fault_cnt2'] = count($param['fault']) - $decreseFaultCount;
                 $data['total_fault'] = $data['fault_cnt2'] + $info['fault_cnt1'];
             }else if($fault_step == 2){
-                $data['fault_cnt3'] = count($param['fault']);
+                $data['fault_cnt3'] = count($param['fault']) - $decreseFaultCount;
                 $data['total_fault'] = $data['fault_cnt3'] + $data['fault_cnt2'] + $info['fault_cnt1'];
             }
 
